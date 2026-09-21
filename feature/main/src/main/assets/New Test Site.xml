@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.landxml.org/schema/LandXML-1.2 http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd" date="2025-08-14" time="20:10:07" version="1.2" language="English" readOnly="false">
+	<Units>
+		<Metric areaUnit="squareMeter" linearUnit="meter" volumeUnit="cubicMeter" temperatureUnit="celsius" pressureUnit="milliBars" diameterUnit="millimeter" angularUnit="decimal degrees" directionUnit="decimal degrees"></Metric>
+	</Units>
+	<Project name="C:\Users\joy.zhang\AppData\Local\Temp\Drawing1_1_9247_d7d189b4.sv$"></Project>
+	<Application name="Autodesk Civil 3D" desc="Civil 3D" manufacturer="Autodesk, Inc." version="2020" manufacturerURL="www.autodesk.com/civil" timeStamp="2025-08-14T20:10:07"></Application>
+	<CgPoints>
+		<CgPoint name="1">3360977.882559437305 539041.301977667958 34.</CgPoint>
+		<CgPoint name="2">3361017.259000000078 539057.189000000013 34.</CgPoint>
+		<CgPoint name="4">3361101.286605229601 539051.222687530681 34.</CgPoint>
+		<CgPoint name="8">3361002.020029487554 538993.229340164573 34.</CgPoint>
+		<CgPoint name="9">3361023.351241623983 539043.353217556374 34.</CgPoint>
+		<CgPoint name="10">3361090.804110942874 539078.619882697007 34.</CgPoint>
+	</CgPoints>
+	<Surfaces>
+		<Surface name="Surface1" desc="描述">
+			<SourceData></SourceData>
+			<Definition surfType="TIN" area2DSurf="4416.580989594603" area3DSurf="4416.580989594603" elevMax="34." elevMin="34.">
+				<Pnts>
+					<P id="5">3361023.351241623983 539043.353217556374 34.</P>
+					<P id="6">3360977.882559437305 539041.301977667958 34.</P>
+					<P id="7">3361090.804110942874 539078.619882697007 34.</P>
+					<P id="8">3361017.259000000078 539057.189000000013 34.</P>
+					<P id="9">3361101.286605229601 539051.222687530681 34.</P>
+					<P id="10">3361002.020029487554 538993.229340164573 34.</P>
+				</Pnts>
+				<Faces>
+					<F n="5 2 0">10 5 9</F>
+					<F n="1 3 0">9 5 7</F>
+					<F i="1" n="0 2 4">8 7 5</F>
+					<F n="3 5 0">8 5 6</F>
+					<F n="0 4 1">10 6 5</F>
+				</Faces>
+			</Definition>
+		</Surface>
+	</Surfaces>
+</LandXML>

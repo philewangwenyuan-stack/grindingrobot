@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">connect</string>
+    <string name="connect_app_title">精灵魔盒</string>
+    <string name="connect_robot_title">地坪研磨机器人</string>
+    <string name="connect_add_device">添加设备</string>
+    <string name="connect_back_icon">←</string>
+    <string name="connect_back_home">返回主页</string>
+    <string name="connect_not_found_device">未发现设备</string>
+    <string name="connect_found_device">发现设备</string>
+    <string name="connect_nearby_device">附近设备</string>
+    <string name="connect_fixed_ip">固定IP连接</string>
+    <string name="connect_ip_hint">请输入IP</string>
+    <string name="connect_not_found_tips">你可以尝试以下操作:\n1、确认设备已开机并且 WIFI 已打开并将手机靠近设备;\n2、将设备重启后再次尝试连接</string>
+    <string name="connect_refresh">刷 新</string>
+    <string name="connect_connecting">连接中</string>
+    <string name="connect_connected">已连接</string>
+    <string name="connect_connect">连接</string>
+    <string name="connect_robot_illustration">机器人示意图</string>
+</resources>

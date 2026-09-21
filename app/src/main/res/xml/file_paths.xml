@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 内部缓存目录 -->
+    <cache-path name="ota_apk_cache" path="." />
+    <!-- 内部 files 目录，若文件存放于 files 下 -->
+    <files-path name="ota_apk_files" path="." />
+    <!-- 外部缓存目录（如 getExternalCacheDir） -->
+    <external-cache-path name="ota_apk_ext_cache" path="." />
+    <!-- 外部 files 目录（如 getExternalFilesDir） -->
+    <external-files-path name="ota_apk_ext_files" path="." />
+</paths>

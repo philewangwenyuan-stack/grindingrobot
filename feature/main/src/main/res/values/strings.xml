@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">首页</string>
+    <string name="home_app_title">精灵魔盒</string>
+    <string name="home_close_content_description">首页关闭</string>
+    <string name="home_emergency_stop">紧急制动</string>
+    <string name="home_module_placeholder">该模块内容待接入</string>
+    <string name="home_disconnect_confirm_title">确定断开设备连接？</string>
+    <string name="home_disconnect_confirm_message">机器人将停止工作，原地待命。</string>
+    <string name="home_emergency_confirm_title">确定执行紧急制动？</string>
+    <string name="home_emergency_confirm_message">机器人将立即停止工作，请确认操作。</string>
+    <string name="common_confirm">确定</string>
+    <string name="common_cancel">取消</string>
+</resources>
