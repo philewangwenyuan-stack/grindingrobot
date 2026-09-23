@@ -74,7 +74,7 @@ Compose 页面 / ViewModel
 ## 重要修改规则
 
 1. 修改设备协议前，先确认 Android 与嵌入式端的消息 ID、组件 ID、字段顺序、字节序、长度和 CRC 约定。
-2. `core/sllink/src/message_gen/` 是协议生成代码，不要直接手改。应从协议源重新生成，并同步验证解析测试。
+2. `core/sllink/src/message_gen/` 是协议生成代码，不要直接手改。协议源位于 `core/sllink/proto/sl_link.proto`；使用 protoc 25.1 和 `core/sllink/scripts/generate-proto.ps1` 重新生成，并同步验证解析测试。
 3. `SlFrameParser` 支持分片和粘包；改帧格式、CRC 或解析状态机时，必须覆盖半帧、多帧、错误 CRC、错误尾字节和恢复解析。
 4. `SlMessageBuilder` 使用小端序，序列号为 16 位循环值。新增消息构建函数时保持现有命名和 `Raw` API 风格。
 5. 全局设备状态集中在 `core:data`/`AppState` 的 StateFlow/SharedFlow 中。新增状态时同时检查更新、清理、断线重置和页面收集逻辑。
@@ -130,4 +130,3 @@ OTA 修改后至少检查：
 - 若修改导航、构建、协议、公共状态或依赖，运行更大范围的构建/测试。
 - 检查是否引入明文密钥、固定设备标识、生产地址或不应提交的构建产物。
 - 在最终说明中列出修改内容、验证命令和因环境限制未执行的验证。
-

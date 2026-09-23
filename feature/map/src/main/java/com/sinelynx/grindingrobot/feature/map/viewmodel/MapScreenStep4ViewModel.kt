@@ -346,6 +346,15 @@ class MapScreenStep4ViewModel @Inject constructor(
             val persistSuccess = todoPersistSaveMapDraft(draft)
             _uiState.update { it.copy(isSaving = false) }
             if (persistSuccess) {
+                val stopResult = if (response.mappingStopped) "建图节点已停止" else "建图停止未确认"
+                val localizationResult = if (response.localizationStarted) "定位模式已启动" else "定位模式需单独启动"
+                val revision = response.assetRevision.takeIf { it.isNotBlank() }
+                    ?.let { "（revision ${it.take(12)}）" }
+                    .orEmpty()
+                val residuals = response.residualNodes.takeIf { it.isNotEmpty() }
+                    ?.joinToString(prefix = "；残留节点：")
+                    .orEmpty()
+                ToastUtils.show("地图已保存$revision；$stopResult；$localizationResult$residuals")
                 // 设备保存和本地持久化都成功后结束建图会话，防止下次建图继承旧图片和角度。
                 MapBuildSessionStream.clear()
                 onSave(draft)
@@ -391,7 +400,7 @@ class MapScreenStep4ViewModel @Inject constructor(
             LogUtils.d("MapScreenStep4ViewModel", "insert mapTask success: $draft")
         }.onFailure { throwable ->
             LogUtils.e("MapScreenStep4ViewModel", "insert mapTask failed, ${throwable.message}")
-            ToastUtils.show("地图数据保存失败")
+            ToastUtils.show("设备地图已保存，但 APP 本地地图记录保存失败")
         }.getOrDefault(false)
     }
 }

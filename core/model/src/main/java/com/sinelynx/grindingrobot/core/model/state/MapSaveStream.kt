@@ -11,7 +11,12 @@ class MapSavePayload(
     val mapId: String,
     val mapYamlPath: String,
     val mapImagePath: String,
-    val navigationMapReloaded: Boolean
+    val navigationMapReloaded: Boolean,
+    val assetRevision: String = "",
+    val lifecycleState: String = "",
+    val mappingStopped: Boolean = false,
+    val localizationStarted: Boolean = false,
+    val residualNodes: List<String> = emptyList()
 )
 
 object MapSaveStream {

@@ -30,4 +30,23 @@ class MapModeProtocolTest {
         assertTrue(decoded.enabled)
         assertEquals(0, decoded.mapKind)
     }
+
+    @Test
+    fun localizationResponseCarriesActiveMapAndLifecycle() {
+        val response = SlLink.MapModeResponse.newBuilder()
+            .setResult(SlLink.ResultCode.RESULT_SUCCESS)
+            .setMode(SlLink.MapModeType.MAP_MODE_LOCALIZATION)
+            .setEnabled(true)
+            .setLifecycleState("LOCALIZING")
+            .setMapId("map-002")
+            .setMapRevision("c".repeat(64))
+            .build()
+
+        val decoded = SlLink.MapModeResponse.parseFrom(response.toByteArray())
+        assertEquals(SlLink.MapModeType.MAP_MODE_LOCALIZATION, decoded.mode)
+        assertTrue(decoded.enabled)
+        assertEquals("LOCALIZING", decoded.lifecycleState)
+        assertEquals("map-002", decoded.mapId)
+        assertEquals("c".repeat(64), decoded.mapRevision)
+    }
 }

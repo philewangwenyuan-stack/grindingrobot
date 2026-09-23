@@ -12,6 +12,7 @@ import com.sinelynx.grindingrobot.core.model.state.MapImagePayload
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPointPayload
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPointStream
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
+import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineStart

@@ -12,7 +12,8 @@ class MapCatalogItemPayload(
     val totalWorkAreaM2: Float,
     val estimatedTimeS: Float,
     val base64Image: String,
-    val saveAt: Long
+    val saveAt: Long,
+    val mapRevision: String = ""
 )
 
 class MapCatalogPayload(

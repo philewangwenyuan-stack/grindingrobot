@@ -7,7 +7,17 @@ import kotlinx.coroutines.flow.asSharedFlow
 
 data class RadarRelocalizationStatusPayload(
     val rawStatus: String,
-    val timestampNs: Long
+    val timestampNs: Long,
+    val lifecycleState: String = "",
+    val detail: String = "",
+    val mapId: String = "",
+    val mapRevision: String = "",
+    val goodFrames: Int = 0,
+    val requiredFrames: Int = 0,
+    val registrationQualityValid: Boolean = false,
+    val registrationFitness: Float = Float.NaN,
+    val registrationInlierRatio: Float = Float.NaN,
+    val residualNodes: List<String> = emptyList()
 )
 
 object RadarRelocalizationStatusStream {

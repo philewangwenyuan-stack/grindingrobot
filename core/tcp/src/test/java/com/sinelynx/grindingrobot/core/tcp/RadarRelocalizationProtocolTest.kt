@@ -12,6 +12,8 @@ class RadarRelocalizationProtocolTest {
     @Test
     fun initialPoseRequestUses052AAndPreservesPoseFields() {
         val request = SlLink.RadarRelocalizationRequest.newBuilder()
+            .setMapId("map-001")
+            .setMapRevision("a".repeat(64))
             .setInitialPoseAvailable(true)
             .setInitialPose(
                 SlLink.Pose2D.newBuilder()
@@ -39,11 +41,39 @@ class RadarRelocalizationProtocolTest {
         assertEquals(0x08, frame.compId.toInt())
 
         val decoded = SlLink.RadarRelocalizationRequest.parseFrom(frame.payload)
+        assertEquals("map-001", decoded.mapId)
+        assertEquals("a".repeat(64), decoded.mapRevision)
         assertTrue(decoded.initialPoseAvailable)
         assertEquals(1.2f, decoded.initialPose.x, 0.0001f)
         assertEquals(-0.5f, decoded.initialPose.y, 0.0001f)
         assertEquals(30f, decoded.initialPose.headingDeg, 0.0001f)
         assertTrue(decoded.initialPoseCovariance.valid)
         assertEquals(0.25f, decoded.initialPoseCovariance.xVariance, 0.0001f)
+    }
+
+    @Test
+    fun readinessStatusCarriesLifecycleQualityAndMapIdentity() {
+        val response = SlLink.RadarRelocalizationStatusResponse.newBuilder()
+            .setRawStatus("RelocalizationSuccess")
+            .setLifecycleState("READY")
+            .setDetail("localization ready")
+            .setMapId("map-001")
+            .setMapRevision("b".repeat(64))
+            .setGoodFrames(8)
+            .setRequiredFrames(8)
+            .setRegistrationQualityValid(true)
+            .setRegistrationFitness(0.02f)
+            .setRegistrationInlierRatio(0.82f)
+            .build()
+
+        val decoded = SlLink.RadarRelocalizationStatusResponse.parseFrom(response.toByteArray())
+        assertEquals("READY", decoded.lifecycleState)
+        assertEquals("map-001", decoded.mapId)
+        assertEquals("b".repeat(64), decoded.mapRevision)
+        assertEquals(8, decoded.goodFrames)
+        assertEquals(8, decoded.requiredFrames)
+        assertTrue(decoded.registrationQualityValid)
+        assertEquals(0.02f, decoded.registrationFitness, 0.0001f)
+        assertEquals(0.82f, decoded.registrationInlierRatio, 0.0001f)
     }
 }

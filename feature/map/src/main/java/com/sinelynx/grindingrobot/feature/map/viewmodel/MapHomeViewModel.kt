@@ -21,6 +21,7 @@ import com.sinelynx.grindingrobot.core.model.state.TaskPathStream
 import com.sinelynx.grindingrobot.core.model.state.TaskMapDisplayStream
 import com.sinelynx.grindingrobot.core.model.state.RadarMapSyncResponseStream
 import com.sinelynx.grindingrobot.core.model.state.RadarRelocalizationResponseStream
+import com.sinelynx.grindingrobot.core.model.state.RadarRelocalizationStatusPayload
 import com.sinelynx.grindingrobot.core.model.state.RadarRelocalizationStatusStream
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.TaskObstacleRegionConfig
@@ -67,6 +68,13 @@ data class MapHomeUiState(
     val isRelocalizationDialogVisible: Boolean = false,
     val isRelocalizationSuccessful: Boolean = false,
     val relocalizationRawStatus: String = "",
+    val relocalizationLifecycleState: String = "",
+    val relocalizationMapId: String = "",
+    val relocalizationMapRevision: String = "",
+    val relocalizationGoodFrames: Int = 0,
+    val relocalizationRequiredFrames: Int = 0,
+    val relocalizationFitness: Float = Float.NaN,
+    val relocalizationResidualNodes: List<String> = emptyList(),
     val relocalizationRunSpeed: Float = 0.15f,
     val relocalizationTurnSpeed: Int = 70,
     val relocalizationTurnCount: Int = 0,
@@ -81,8 +89,16 @@ enum class MapModeStartEvent {
     Ready
 }
 
-internal fun isRelocalizationStatusSucceeded(rawStatus: String): Boolean =
-    rawStatus == RADAR_RELOCALIZATION_SUCCEEDED_STATUS
+internal fun isRelocalizationStatusSucceeded(
+    status: RadarRelocalizationStatusPayload,
+    expectedMapId: String,
+    expectedMapRevision: String
+): Boolean = status.lifecycleState == "READY" &&
+    status.mapId == expectedMapId &&
+    status.mapRevision.equals(expectedMapRevision, ignoreCase = true) &&
+    status.requiredFrames > 0 &&
+    status.goodFrames >= status.requiredFrames &&
+    status.registrationQualityValid
 
 internal data class PendingRadarResponseResult(
     val remainingCount: Int,
@@ -158,7 +174,8 @@ data class MapHomeListItem(
     val estimatedTimeS: Float?,
     val createTime: String?,
     val mapArea: Float?,
-    val base64Image: String
+    val base64Image: String,
+    val mapRevision: String = ""
 )
 
 data class MapWorkspaceMetricsItem(
@@ -314,6 +331,7 @@ class MapHomeViewModel @Inject constructor(
         }
     )
     private var radarStatusPollingJob: Job? = null
+    private var relocalizationStartJob: Job? = null
     private var robotControlSendJob: Job? = null
     private var relocalizationSettingsReadJob: Job? = null
     private var pendingRadarMapSyncResponses: Int = 0
@@ -356,10 +374,69 @@ class MapHomeViewModel @Inject constructor(
                 if (!state.isRelocalizationDialogVisible || state.isRelocalizationSuccessful) {
                     return@collect
                 }
-                if (isRelocalizationStatusSucceeded(response.rawStatus)) {
+                if (response.lifecycleState in setOf("ERROR", "TIMEOUT", "UNAVAILABLE", "IDLE")) {
+                    val detail = response.detail.ifBlank { response.rawStatus }
+                    val residuals = response.residualNodes.takeIf { it.isNotEmpty() }
+                        ?.joinToString(prefix = "；残留节点：")
+                        .orEmpty()
+                    failRelocalization(
+                        "${response.lifecycleState}：$detail$residuals",
+                        stopLocalization = false,
+                        residualNodes = response.residualNodes,
+                        lifecycleState = response.lifecycleState
+                    )
+                    return@collect
+                }
+                if (response.mapId != state.relocalizationMapId ||
+                    !response.mapRevision.equals(state.relocalizationMapRevision, ignoreCase = true)
+                ) {
+                    failRelocalization(
+                        "设备当前地图版本与所选地图不一致，已停止定位请求",
+                        stopLocalization = true
+                    )
+                    return@collect
+                }
+                if (isRelocalizationStatusSucceeded(
+                        response,
+                        expectedMapId = state.relocalizationMapId,
+                        expectedMapRevision = state.relocalizationMapRevision
+                    )
+                ) {
+                    _uiState.update {
+                        it.copy(
+                            relocalizationLifecycleState = response.lifecycleState,
+                            relocalizationGoodFrames = response.goodFrames,
+                            relocalizationRequiredFrames = response.requiredFrames,
+                            relocalizationFitness = response.registrationFitness,
+                            relocalizationRawStatus = "READY：配准质量达标（${response.goodFrames}/${response.requiredFrames} 帧）"
+                        )
+                    }
                     completeRelocalization()
                 } else {
-                    _uiState.update { it.copy(relocalizationRawStatus = response.rawStatus) }
+                    val progress = when (response.lifecycleState) {
+                        "LOCALIZING" -> "定位模式启动中"
+                        "RELOCALIZING" -> "定位质量确认中（${response.goodFrames}/${response.requiredFrames} 帧）"
+                        "READY" -> "定位帧数或配准质量尚未达标"
+                        else -> response.lifecycleState.ifBlank { response.rawStatus.ifBlank { "等待定位状态" } }
+                    }
+                    val fitness = response.registrationFitness
+                        .takeIf { it.isFinite() }
+                        ?.let { "，fitness=${it}" }
+                        .orEmpty()
+                    val detail = response.detail.takeIf { it.isNotBlank() }?.let { "：$it" }.orEmpty()
+                    val residuals = response.residualNodes.takeIf { it.isNotEmpty() }
+                        ?.joinToString(prefix = "；残留节点：")
+                        .orEmpty()
+                    _uiState.update {
+                        it.copy(
+                            relocalizationLifecycleState = response.lifecycleState,
+                            relocalizationGoodFrames = response.goodFrames,
+                            relocalizationRequiredFrames = response.requiredFrames,
+                            relocalizationFitness = response.registrationFitness,
+                            relocalizationResidualNodes = response.residualNodes,
+                            relocalizationRawStatus = "$progress$fitness$detail$residuals"
+                        )
+                    }
                 }
             }
         }
@@ -378,14 +455,38 @@ class MapHomeViewModel @Inject constructor(
         }
         viewModelScope.launch {
             RadarRelocalizationResponseStream.responses.collect { response ->
+                val state = _uiState.value
+                val pendingBefore = pendingRadarRelocalizationResponses
                 val result = consumePendingRadarResponse(
-                    pendingCount = pendingRadarRelocalizationResponses,
-                    isDialogVisible = _uiState.value.isRelocalizationDialogVisible,
+                    pendingCount = pendingBefore,
+                    isDialogVisible = state.isRelocalizationDialogVisible,
                     isResponseSuccessful = response.isSuccess
                 )
                 pendingRadarRelocalizationResponses = result.remainingCount
                 if (result.shouldShowSuccess) {
-                    ToastUtils.showReplacingSuccess("重定位指令已下发")
+                    if (response.mapId != state.relocalizationMapId ||
+                        !response.mapRevision.equals(state.relocalizationMapRevision, ignoreCase = true)
+                    ) {
+                        failRelocalization(
+                            "设备拒绝了不同地图版本的初始位姿",
+                            stopLocalization = true
+                        )
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                relocalizationLifecycleState = response.lifecycleState.ifBlank { "RELOCALIZING" },
+                                relocalizationRawStatus = response.message.ifBlank {
+                                    "初始位姿已接受，正在等待配准质量达标"
+                                }
+                            )
+                        }
+                        ToastUtils.showReplacingSuccess("初始位姿已接受，定位仍在进行")
+                    }
+                } else if (pendingBefore > 0 && state.isRelocalizationDialogVisible) {
+                    failRelocalization(
+                        response.message.ifBlank { "设备未接受初始位姿" },
+                        stopLocalization = false
+                    )
                 }
             }
         }
@@ -410,7 +511,8 @@ class MapHomeViewModel @Inject constructor(
                         estimatedTimeS = item.estimatedTimeS,
                         createTime = item.createdAt,
                         mapArea = item.totalWorkAreaM2,
-                        base64Image = item.base64Image
+                        base64Image = item.base64Image,
+                        mapRevision = item.mapRevision
                     )
                 }
                 _uiState.update { it.copy(maps = items, isMapCatalogLoading = false) }
@@ -516,21 +618,113 @@ class MapHomeViewModel @Inject constructor(
 
     }
 
-    fun startRelocalization() {
+    fun startRelocalization(mapId: String) {
+        if (relocalizationStartJob?.isActive == true) return
         stopRelocalizationJobs(sendStop = false)
         clearPendingRadarOperationResponses()
+        val normalizedMapId = mapId.trim()
+        val mapRevision = _uiState.value.maps
+            .firstOrNull { it.mapId == normalizedMapId }
+            ?.mapRevision
+            .orEmpty()
+            .trim()
+            .lowercase()
         _uiState.update {
             it.copy(
                 isRelocalizationDialogVisible = true,
                 isRelocalizationSuccessful = false,
-                relocalizationRawStatus = "",
+                relocalizationRawStatus = "正在启动所选地图的定位模式",
+                relocalizationLifecycleState = "STARTING",
+                relocalizationMapId = normalizedMapId,
+                relocalizationMapRevision = mapRevision,
+                relocalizationGoodFrames = 0,
+                relocalizationRequiredFrames = 0,
+                relocalizationFitness = Float.NaN,
+                relocalizationResidualNodes = emptyList(),
                 relocalizationSettingsLoadState = RelocalizationSettingsLoadState.Loading,
                 relocalizationSettingsError = "",
                 relocalizationCommand = DirectionCommand.Stop,
                 relocalizationPosition = JoystickPosition(0f, 0f, 0f, 0f, 0f)
             )
         }
+        if (normalizedMapId.isEmpty() || !mapRevision.matches(Regex("[0-9a-f]{64}"))) {
+            failRelocalization("所选地图缺少有效 map_id/map_revision，请刷新地图目录", stopLocalization = false)
+            return
+        }
         requestRelocalizationSettings()
+        relocalizationStartJob = viewModelScope.launch {
+            MapModeStream.reset()
+            val sent = tcpManager.requestMapMode(
+                mode = SlLink.MapModeType.MAP_MODE_LOCALIZATION,
+                enabled = true,
+                mapKind = 0
+            )
+            if (!sent) {
+                failRelocalization("定位模式请求发送失败", stopLocalization = false)
+                return@launch
+            }
+            val modeResponse = withTimeoutOrNull(MAP_MODE_REQUEST_TIMEOUT_MS) {
+                MapModeStream.payload.filterNotNull().first {
+                    it.modeValue == SlLink.MapModeType.MAP_MODE_LOCALIZATION.number && it.enabled
+                }
+            }
+            if (modeResponse == null) {
+                failRelocalization("启动定位模式超时", stopLocalization = false)
+                return@launch
+            }
+            if (!modeResponse.isSuccess ||
+                modeResponse.modeValue != SlLink.MapModeType.MAP_MODE_LOCALIZATION.number ||
+                !modeResponse.enabled
+            ) {
+                failRelocalization(
+                    buildString {
+                        append(modeResponse.message.ifBlank { "设备未能启动定位模式" })
+                        if (modeResponse.residualNodes.isNotEmpty()) {
+                            append("；残留节点：")
+                            append(modeResponse.residualNodes.joinToString())
+                        }
+                    },
+                    stopLocalization = false,
+                    residualNodes = modeResponse.residualNodes,
+                    lifecycleState = modeResponse.lifecycleState.takeIf {
+                        it in setOf("ERROR", "TIMEOUT")
+                    } ?: "ERROR"
+                )
+                return@launch
+            }
+            if (modeResponse.activeMapId != normalizedMapId ||
+                !modeResponse.activeMapRevision.equals(mapRevision, ignoreCase = true)
+            ) {
+                failRelocalization(
+                    "设备启动了不同地图版本的定位，已请求停止该定位模式",
+                    stopLocalization = true
+                )
+                return@launch
+            }
+            if (modeResponse.lifecycleState !in setOf("LOCALIZING", "RELOCALIZING", "READY")) {
+                failRelocalization(
+                    modeResponse.message.ifBlank { "定位模式未进入可用状态：${modeResponse.lifecycleState}" },
+                    stopLocalization = false,
+                    residualNodes = modeResponse.residualNodes,
+                    lifecycleState = modeResponse.lifecycleState
+                )
+                return@launch
+            }
+            _uiState.update {
+                it.copy(
+                    relocalizationLifecycleState = modeResponse.lifecycleState,
+                    relocalizationRawStatus = "定位模式已启动，请确认初始位置后等待 READY"
+                )
+            }
+            startRadarStatusPolling()
+            relocalizationStartJob = null
+        }
+    }
+
+    private fun startRadarStatusPolling() {
+        radarStatusPollingJob?.cancel()
+        radarStatusRequestInFlight = false
+        radarStatusRequestSentAtMs = 0L
         radarStatusPollingJob = viewModelScope.launch {
             while (isActive) {
                 val state = _uiState.value
@@ -549,6 +743,33 @@ class MapHomeViewModel @Inject constructor(
                 delay(RADAR_STATUS_POLL_INTERVAL_MS)
             }
         }
+    }
+
+    private fun failRelocalization(
+        message: String,
+        stopLocalization: Boolean,
+        residualNodes: List<String> = emptyList(),
+        lifecycleState: String = "ERROR"
+    ) {
+        radarStatusPollingJob?.cancel()
+        radarStatusPollingJob = null
+        radarStatusRequestInFlight = false
+        _uiState.update {
+            it.copy(
+                isRelocalizationSuccessful = false,
+                relocalizationLifecycleState = lifecycleState,
+                relocalizationRawStatus = message,
+                relocalizationResidualNodes = residualNodes
+            )
+        }
+        if (stopLocalization) {
+            tcpManager.requestMapMode(
+                mode = SlLink.MapModeType.MAP_MODE_LOCALIZATION,
+                enabled = false,
+                mapKind = 0
+            )
+        }
+        ToastUtils.showError(message)
     }
 
     fun retryRelocalizationSettingsRead() {
@@ -609,9 +830,14 @@ class MapHomeViewModel @Inject constructor(
         yMeters: Float,
         headingDegrees: Float
     ) {
-        if (!_uiState.value.isRelocalizationDialogVisible) return
+        val state = _uiState.value
+        if (!state.isRelocalizationDialogVisible ||
+            state.relocalizationLifecycleState !in setOf("LOCALIZING", "RELOCALIZING", "READY")
+        ) return
         if (pendingRadarRelocalizationResponses > 0) return
         val sent = tcpManager.requestRadarRelocalization(
+            mapId = state.relocalizationMapId,
+            mapRevision = state.relocalizationMapRevision,
             xMeters = xMeters,
             yMeters = yMeters,
             headingDegrees = headingDegrees
@@ -626,13 +852,31 @@ class MapHomeViewModel @Inject constructor(
     }
 
     fun dismissRelocalization() {
+        val lifecycleState = _uiState.value.relocalizationLifecycleState
+        val shouldStopLocalization = lifecycleState in setOf("STARTING", "LOCALIZING", "RELOCALIZING")
+        relocalizationStartJob?.cancel()
+        relocalizationStartJob = null
         stopRelocalizationJobs(sendStop = true)
         clearPendingRadarOperationResponses()
+        if (shouldStopLocalization) {
+            tcpManager.requestMapMode(
+                mode = SlLink.MapModeType.MAP_MODE_LOCALIZATION,
+                enabled = false,
+                mapKind = 0
+            )
+        }
         _uiState.update {
             it.copy(
                 isRelocalizationDialogVisible = false,
                 isRelocalizationSuccessful = false,
                 relocalizationRawStatus = "",
+                relocalizationLifecycleState = "",
+                relocalizationMapId = "",
+                relocalizationMapRevision = "",
+                relocalizationGoodFrames = 0,
+                relocalizationRequiredFrames = 0,
+                relocalizationFitness = Float.NaN,
+                relocalizationResidualNodes = emptyList(),
                 relocalizationSettingsLoadState = RelocalizationSettingsLoadState.Idle,
                 relocalizationSettingsError = "",
                 relocalizationCommand = DirectionCommand.Stop,
@@ -1180,6 +1424,8 @@ class MapHomeViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        relocalizationStartJob?.cancel()
+        relocalizationStartJob = null
         stopRelocalizationJobs(sendStop = true)
         mapCatalogTimeoutJob?.cancel()
         mapPreviewTimeoutJob?.cancel()

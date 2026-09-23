@@ -30,7 +30,10 @@ data class RadarRelocalizationResponsePayload(
     val isSuccess: Boolean,
     val message: String,
     val accepted: Boolean,
-    val status: String
+    val status: String,
+    val lifecycleState: String = "",
+    val mapId: String = "",
+    val mapRevision: String = ""
 )
 
 object RadarRelocalizationResponseStream {

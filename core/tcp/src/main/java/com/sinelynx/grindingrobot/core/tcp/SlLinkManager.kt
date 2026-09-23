@@ -451,7 +451,11 @@ class SlLinkManager @Inject constructor(
                     message = response.message,
                     modeValue = response.modeValue,
                     enabled = response.enabled,
-                    mapKind = response.mapKind
+                    mapKind = response.mapKind,
+                    lifecycleState = response.lifecycleState,
+                    activeMapId = response.mapId,
+                    activeMapRevision = response.mapRevision,
+                    residualNodes = response.residualNodesList
                 )
             )
         } catch (e: Exception) {
@@ -862,7 +866,12 @@ class SlLinkManager @Inject constructor(
                     mapId = response.mapId,
                     mapYamlPath = response.mapYamlPath,
                     mapImagePath = response.mapImagePath,
-                    navigationMapReloaded = response.navigationMapReloaded
+                    navigationMapReloaded = response.navigationMapReloaded,
+                    assetRevision = response.mapRevision,
+                    lifecycleState = response.lifecycleState,
+                    mappingStopped = response.mappingStopped,
+                    localizationStarted = response.localizationStarted,
+                    residualNodes = response.residualNodesList
                 )
             )
         } catch (e: Exception) {
@@ -899,7 +908,8 @@ class SlLinkManager @Inject constructor(
                             totalWorkAreaM2 = it.totalWorkAreaM2,
                             estimatedTimeS = it.estimatedTimeS,
                             base64Image = it.thumbnailImageB64 ?: "",
-                            saveAt = it.savedAt
+                            saveAt = it.savedAt,
+                            mapRevision = it.mapRevision
                         )
                     }
                 )
@@ -1413,7 +1423,10 @@ class SlLinkManager @Inject constructor(
                     isSuccess = response.result == SlLink.ResultCode.RESULT_SUCCESS && response.accepted,
                     message = response.message,
                     accepted = response.accepted,
-                    status = response.status
+                    status = response.status,
+                    lifecycleState = response.lifecycleState,
+                    mapId = response.mapId,
+                    mapRevision = response.mapRevision
                 )
             )
         } catch (e: Exception) {
@@ -1439,7 +1452,17 @@ class SlLinkManager @Inject constructor(
             RadarRelocalizationStatusStream.publish(
                 RadarRelocalizationStatusPayload(
                     rawStatus = response.rawStatus,
-                    timestampNs = response.timestampNs
+                    timestampNs = response.timestampNs,
+                    lifecycleState = response.lifecycleState,
+                    detail = response.detail,
+                    mapId = response.mapId,
+                    mapRevision = response.mapRevision,
+                    goodFrames = response.goodFrames,
+                    requiredFrames = response.requiredFrames,
+                    registrationQualityValid = response.registrationQualityValid,
+                    registrationFitness = response.registrationFitness,
+                    registrationInlierRatio = response.registrationInlierRatio,
+                    residualNodes = response.residualNodesList
                 )
             )
         } catch (e: Exception) {

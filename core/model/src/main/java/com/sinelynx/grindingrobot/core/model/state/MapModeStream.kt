@@ -16,7 +16,11 @@ data class MapModeResponsePayload(
     val message: String,
     val modeValue: Int,
     val enabled: Boolean,
-    val mapKind: Int
+    val mapKind: Int,
+    val lifecycleState: String = "",
+    val activeMapId: String = "",
+    val activeMapRevision: String = "",
+    val residualNodes: List<String> = emptyList()
 )
 
 object MapModeStream {

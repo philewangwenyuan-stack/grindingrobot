@@ -3063,7 +3063,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         ssid_ = s;
@@ -3079,7 +3079,7 @@ public final class SlLink {
         getSsidBytes() {
       java.lang.Object ref = ssid_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         ssid_ = b;
@@ -3102,7 +3102,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         password_ = s;
@@ -3118,7 +3118,7 @@ public final class SlLink {
         getPasswordBytes() {
       java.lang.Object ref = password_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         password_ = b;
@@ -3503,7 +3503,7 @@ public final class SlLink {
           getSsidBytes() {
         java.lang.Object ref = ssid_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           ssid_ = b;
@@ -3575,7 +3575,7 @@ public final class SlLink {
           getPasswordBytes() {
         java.lang.Object ref = password_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           password_ = b;
@@ -3780,7 +3780,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -3796,7 +3796,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -4232,7 +4232,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -4913,7 +4913,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonPoint points = 2;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonPoint> 
+    java.util.List<sl_link.SlLink.PolygonPoint>
         getPointsList();
     /**
      * <code>repeated .sl_link.PolygonPoint points = 2;</code>
@@ -4926,7 +4926,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonPoint points = 2;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
         getPointsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonPoint points = 2;</code>
@@ -5056,7 +5056,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         name_ = s;
@@ -5072,7 +5072,7 @@ public final class SlLink {
         getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         name_ = b;
@@ -5096,7 +5096,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonPoint points = 2;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
         getPointsOrBuilderList() {
       return points_;
     }
@@ -5136,7 +5136,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionId_ = s;
@@ -5152,7 +5152,7 @@ public final class SlLink {
         getRegionIdBytes() {
       java.lang.Object ref = regionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionId_ = b;
@@ -5242,7 +5242,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         globalDirection_ = s;
@@ -5263,7 +5263,7 @@ public final class SlLink {
         getGlobalDirectionBytes() {
       java.lang.Object ref = globalDirection_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         globalDirection_ = b;
@@ -5706,7 +5706,7 @@ public final class SlLink {
               pointsBuilder_ = null;
               points_ = other.points_;
               bitField0_ = (bitField0_ & ~0x00000002);
-              pointsBuilder_ = 
+              pointsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getPointsFieldBuilder() : null;
             } else {
@@ -5860,7 +5860,7 @@ public final class SlLink {
           getNameBytes() {
         java.lang.Object ref = name_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           name_ = b;
@@ -6102,7 +6102,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonPoint points = 2;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
            getPointsOrBuilderList() {
         if (pointsBuilder_ != null) {
           return pointsBuilder_.getMessageOrBuilderList();
@@ -6128,12 +6128,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonPoint points = 2;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonPoint.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonPoint.Builder>
            getPointsBuilderList() {
         return getPointsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonPoint, sl_link.SlLink.PolygonPoint.Builder, sl_link.SlLink.PolygonPointOrBuilder> 
+          sl_link.SlLink.PolygonPoint, sl_link.SlLink.PolygonPoint.Builder, sl_link.SlLink.PolygonPointOrBuilder>
           getPointsFieldBuilder() {
         if (pointsBuilder_ == null) {
           pointsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -6172,7 +6172,7 @@ public final class SlLink {
           getRegionIdBytes() {
         java.lang.Object ref = regionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionId_ = b;
@@ -6435,7 +6435,7 @@ public final class SlLink {
           getGlobalDirectionBytes() {
         java.lang.Object ref = globalDirection_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           globalDirection_ = b;
@@ -7455,7 +7455,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonRegion> 
+    java.util.List<sl_link.SlLink.PolygonRegion>
         getObstacleRegionsList();
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
@@ -7468,7 +7468,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getObstacleRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
@@ -7479,7 +7479,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonRegion> 
+    java.util.List<sl_link.SlLink.PolygonRegion>
         getWorkRegionsList();
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
@@ -7492,7 +7492,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getWorkRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
@@ -7508,7 +7508,7 @@ public final class SlLink {
      *
      * <code>repeated .sl_link.PolygonPoint footprint = 9;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonPoint> 
+    java.util.List<sl_link.SlLink.PolygonPoint>
         getFootprintList();
     /**
      * <pre>
@@ -7536,7 +7536,7 @@ public final class SlLink {
      *
      * <code>repeated .sl_link.PolygonPoint footprint = 9;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
         getFootprintOrBuilderList();
     /**
      * <pre>
@@ -7785,7 +7785,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getObstacleRegionsOrBuilderList() {
       return obstacleRegions_;
     }
@@ -7826,7 +7826,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getWorkRegionsOrBuilderList() {
       return workRegions_;
     }
@@ -7877,7 +7877,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonPoint footprint = 9;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
         getFootprintOrBuilderList() {
       return footprint_;
     }
@@ -8844,7 +8844,7 @@ public final class SlLink {
               obstacleRegionsBuilder_ = null;
               obstacleRegions_ = other.obstacleRegions_;
               bitField0_ = (bitField0_ & ~0x00000040);
-              obstacleRegionsBuilder_ = 
+              obstacleRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getObstacleRegionsFieldBuilder() : null;
             } else {
@@ -8870,7 +8870,7 @@ public final class SlLink {
               workRegionsBuilder_ = null;
               workRegions_ = other.workRegions_;
               bitField0_ = (bitField0_ & ~0x00000080);
-              workRegionsBuilder_ = 
+              workRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getWorkRegionsFieldBuilder() : null;
             } else {
@@ -8896,7 +8896,7 @@ public final class SlLink {
               footprintBuilder_ = null;
               footprint_ = other.footprint_;
               bitField0_ = (bitField0_ & ~0x00000100);
-              footprintBuilder_ = 
+              footprintBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getFootprintFieldBuilder() : null;
             } else {
@@ -9499,7 +9499,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
            getObstacleRegionsOrBuilderList() {
         if (obstacleRegionsBuilder_ != null) {
           return obstacleRegionsBuilder_.getMessageOrBuilderList();
@@ -9525,12 +9525,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion obstacle_regions = 7;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonRegion.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonRegion.Builder>
            getObstacleRegionsBuilderList() {
         return getObstacleRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getObstacleRegionsFieldBuilder() {
         if (obstacleRegionsBuilder_ == null) {
           obstacleRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -9739,7 +9739,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
            getWorkRegionsOrBuilderList() {
         if (workRegionsBuilder_ != null) {
           return workRegionsBuilder_.getMessageOrBuilderList();
@@ -9765,12 +9765,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion work_regions = 8;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonRegion.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonRegion.Builder>
            getWorkRegionsBuilderList() {
         return getWorkRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getWorkRegionsFieldBuilder() {
         if (workRegionsBuilder_ == null) {
           workRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -10054,7 +10054,7 @@ public final class SlLink {
        *
        * <code>repeated .sl_link.PolygonPoint footprint = 9;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
            getFootprintOrBuilderList() {
         if (footprintBuilder_ != null) {
           return footprintBuilder_.getMessageOrBuilderList();
@@ -10095,12 +10095,12 @@ public final class SlLink {
        *
        * <code>repeated .sl_link.PolygonPoint footprint = 9;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonPoint.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonPoint.Builder>
            getFootprintBuilderList() {
         return getFootprintFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonPoint, sl_link.SlLink.PolygonPoint.Builder, sl_link.SlLink.PolygonPointOrBuilder> 
+          sl_link.SlLink.PolygonPoint, sl_link.SlLink.PolygonPoint.Builder, sl_link.SlLink.PolygonPointOrBuilder>
           getFootprintFieldBuilder() {
         if (footprintBuilder_ == null) {
           footprintBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -15715,7 +15715,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -15731,7 +15731,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -16397,7 +16397,7 @@ public final class SlLink {
        * <code>.sl_link.ChassisSettings chassis = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.ChassisSettings, sl_link.SlLink.ChassisSettings.Builder, sl_link.SlLink.ChassisSettingsOrBuilder> 
+          sl_link.SlLink.ChassisSettings, sl_link.SlLink.ChassisSettings.Builder, sl_link.SlLink.ChassisSettingsOrBuilder>
           getChassisFieldBuilder() {
         if (chassisBuilder_ == null) {
           chassisBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -16518,7 +16518,7 @@ public final class SlLink {
        * <code>.sl_link.MapSettings map = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.MapSettings, sl_link.SlLink.MapSettings.Builder, sl_link.SlLink.MapSettingsOrBuilder> 
+          sl_link.SlLink.MapSettings, sl_link.SlLink.MapSettings.Builder, sl_link.SlLink.MapSettingsOrBuilder>
           getMapFieldBuilder() {
         if (mapBuilder_ == null) {
           mapBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -16556,7 +16556,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -16711,7 +16711,7 @@ public final class SlLink {
        * <code>.sl_link.RppSettings rpp = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.RppSettings, sl_link.SlLink.RppSettings.Builder, sl_link.SlLink.RppSettingsOrBuilder> 
+          sl_link.SlLink.RppSettings, sl_link.SlLink.RppSettings.Builder, sl_link.SlLink.RppSettingsOrBuilder>
           getRppFieldBuilder() {
         if (rppBuilder_ == null) {
           rppBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -17624,7 +17624,7 @@ public final class SlLink {
        * <code>.sl_link.ChassisSettings chassis = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.ChassisSettings, sl_link.SlLink.ChassisSettings.Builder, sl_link.SlLink.ChassisSettingsOrBuilder> 
+          sl_link.SlLink.ChassisSettings, sl_link.SlLink.ChassisSettings.Builder, sl_link.SlLink.ChassisSettingsOrBuilder>
           getChassisFieldBuilder() {
         if (chassisBuilder_ == null) {
           chassisBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -17745,7 +17745,7 @@ public final class SlLink {
        * <code>.sl_link.MapSettings map = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.MapSettings, sl_link.SlLink.MapSettings.Builder, sl_link.SlLink.MapSettingsOrBuilder> 
+          sl_link.SlLink.MapSettings, sl_link.SlLink.MapSettings.Builder, sl_link.SlLink.MapSettingsOrBuilder>
           getMapFieldBuilder() {
         if (mapBuilder_ == null) {
           mapBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -17866,7 +17866,7 @@ public final class SlLink {
        * <code>.sl_link.RppSettings rpp = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.RppSettings, sl_link.SlLink.RppSettings.Builder, sl_link.SlLink.RppSettingsOrBuilder> 
+          sl_link.SlLink.RppSettings, sl_link.SlLink.RppSettings.Builder, sl_link.SlLink.RppSettingsOrBuilder>
           getRppFieldBuilder() {
         if (rppBuilder_ == null) {
           rppBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -18227,7 +18227,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -18243,7 +18243,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -18983,7 +18983,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -19138,7 +19138,7 @@ public final class SlLink {
        * <code>.sl_link.ChassisSettings chassis = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.ChassisSettings, sl_link.SlLink.ChassisSettings.Builder, sl_link.SlLink.ChassisSettingsOrBuilder> 
+          sl_link.SlLink.ChassisSettings, sl_link.SlLink.ChassisSettings.Builder, sl_link.SlLink.ChassisSettingsOrBuilder>
           getChassisFieldBuilder() {
         if (chassisBuilder_ == null) {
           chassisBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -19259,7 +19259,7 @@ public final class SlLink {
        * <code>.sl_link.MapSettings map = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.MapSettings, sl_link.SlLink.MapSettings.Builder, sl_link.SlLink.MapSettingsOrBuilder> 
+          sl_link.SlLink.MapSettings, sl_link.SlLink.MapSettings.Builder, sl_link.SlLink.MapSettingsOrBuilder>
           getMapFieldBuilder() {
         if (mapBuilder_ == null) {
           mapBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -19380,7 +19380,7 @@ public final class SlLink {
        * <code>.sl_link.RppSettings rpp = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.RppSettings, sl_link.SlLink.RppSettings.Builder, sl_link.SlLink.RppSettingsOrBuilder> 
+          sl_link.SlLink.RppSettings, sl_link.SlLink.RppSettings.Builder, sl_link.SlLink.RppSettingsOrBuilder>
           getRppFieldBuilder() {
         if (rppBuilder_ == null) {
           rppBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -21637,7 +21637,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         radarSystemStatus_ = s;
@@ -21653,7 +21653,7 @@ public final class SlLink {
         getRadarSystemStatusBytes() {
       java.lang.Object ref = radarSystemStatus_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         radarSystemStatus_ = b;
@@ -23000,7 +23000,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D position = 11;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getPositionFieldBuilder() {
         if (positionBuilder_ == null) {
           positionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -23185,7 +23185,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance localization_covariance = 14;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getLocalizationCovarianceFieldBuilder() {
         if (localizationCovarianceBuilder_ == null) {
           localizationCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -23375,7 +23375,7 @@ public final class SlLink {
           getRadarSystemStatusBytes() {
         java.lang.Object ref = radarSystemStatus_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           radarSystemStatus_ = b;
@@ -25206,7 +25206,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -25227,7 +25227,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -25709,7 +25709,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -26167,7 +26167,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         frameId_ = s;
@@ -26183,7 +26183,7 @@ public final class SlLink {
         getFrameIdBytes() {
       java.lang.Object ref = frameId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         frameId_ = b;
@@ -27475,7 +27475,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D origin = 10;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getOriginFieldBuilder() {
         if (originBuilder_ == null) {
           originBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -27513,7 +27513,7 @@ public final class SlLink {
           getFrameIdBytes() {
         java.lang.Object ref = frameId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           frameId_ = b;
@@ -27732,7 +27732,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance localization_covariance = 14;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getLocalizationCovarianceFieldBuilder() {
         if (localizationCovarianceBuilder_ == null) {
           localizationCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -28059,7 +28059,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         pathType_ = s;
@@ -28075,7 +28075,7 @@ public final class SlLink {
         getPathTypeBytes() {
       java.lang.Object ref = pathType_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         pathType_ = b;
@@ -28550,7 +28550,7 @@ public final class SlLink {
           getPathTypeBytes() {
         java.lang.Object ref = pathType_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           pathType_ = b;
@@ -28731,7 +28731,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionId_ = s;
@@ -28747,7 +28747,7 @@ public final class SlLink {
         getRegionIdBytes() {
       java.lang.Object ref = regionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionId_ = b;
@@ -29142,7 +29142,7 @@ public final class SlLink {
           getRegionIdBytes() {
         java.lang.Object ref = regionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionId_ = b;
@@ -29303,7 +29303,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonRegion> 
+    java.util.List<sl_link.SlLink.PolygonRegion>
         getWorkRegionsList();
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
@@ -29316,7 +29316,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getWorkRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
@@ -29327,7 +29327,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonRegion> 
+    java.util.List<sl_link.SlLink.PolygonRegion>
         getObstacleRegionsList();
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
@@ -29340,7 +29340,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getObstacleRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
@@ -29412,7 +29412,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
      */
-    java.util.List<sl_link.SlLink.RegionRepeatItem> 
+    java.util.List<sl_link.SlLink.RegionRepeatItem>
         getRegionRepeatsList();
     /**
      * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
@@ -29425,7 +29425,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
      */
-    java.util.List<? extends sl_link.SlLink.RegionRepeatItemOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.RegionRepeatItemOrBuilder>
         getRegionRepeatsOrBuilderList();
     /**
      * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
@@ -29488,7 +29488,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -29504,7 +29504,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -29528,7 +29528,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getWorkRegionsOrBuilderList() {
       return workRegions_;
     }
@@ -29569,7 +29569,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getObstacleRegionsOrBuilderList() {
       return obstacleRegions_;
     }
@@ -29653,7 +29653,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -29669,7 +29669,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -29730,7 +29730,7 @@ public final class SlLink {
      * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.RegionRepeatItemOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.RegionRepeatItemOrBuilder>
         getRegionRepeatsOrBuilderList() {
       return regionRepeats_;
     }
@@ -30249,7 +30249,7 @@ public final class SlLink {
               workRegionsBuilder_ = null;
               workRegions_ = other.workRegions_;
               bitField0_ = (bitField0_ & ~0x00000002);
-              workRegionsBuilder_ = 
+              workRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getWorkRegionsFieldBuilder() : null;
             } else {
@@ -30275,7 +30275,7 @@ public final class SlLink {
               obstacleRegionsBuilder_ = null;
               obstacleRegions_ = other.obstacleRegions_;
               bitField0_ = (bitField0_ & ~0x00000004);
-              obstacleRegionsBuilder_ = 
+              obstacleRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getObstacleRegionsFieldBuilder() : null;
             } else {
@@ -30328,7 +30328,7 @@ public final class SlLink {
               regionRepeatsBuilder_ = null;
               regionRepeats_ = other.regionRepeats_;
               bitField0_ = (bitField0_ & ~0x00000200);
-              regionRepeatsBuilder_ = 
+              regionRepeatsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getRegionRepeatsFieldBuilder() : null;
             } else {
@@ -30479,7 +30479,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -30721,7 +30721,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
            getWorkRegionsOrBuilderList() {
         if (workRegionsBuilder_ != null) {
           return workRegionsBuilder_.getMessageOrBuilderList();
@@ -30747,12 +30747,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion work_regions = 2;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonRegion.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonRegion.Builder>
            getWorkRegionsBuilderList() {
         return getWorkRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getWorkRegionsFieldBuilder() {
         if (workRegionsBuilder_ == null) {
           workRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -30961,7 +30961,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
            getObstacleRegionsOrBuilderList() {
         if (obstacleRegionsBuilder_ != null) {
           return obstacleRegionsBuilder_.getMessageOrBuilderList();
@@ -30987,12 +30987,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion obstacle_regions = 3;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonRegion.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonRegion.Builder>
            getObstacleRegionsBuilderList() {
         return getObstacleRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getObstacleRegionsFieldBuilder() {
         if (obstacleRegionsBuilder_ == null) {
           obstacleRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -31159,7 +31159,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -31512,7 +31512,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.RegionRepeatItemOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.RegionRepeatItemOrBuilder>
            getRegionRepeatsOrBuilderList() {
         if (regionRepeatsBuilder_ != null) {
           return regionRepeatsBuilder_.getMessageOrBuilderList();
@@ -31538,12 +31538,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.RegionRepeatItem region_repeats = 10;</code>
        */
-      public java.util.List<sl_link.SlLink.RegionRepeatItem.Builder> 
+      public java.util.List<sl_link.SlLink.RegionRepeatItem.Builder>
            getRegionRepeatsBuilderList() {
         return getRegionRepeatsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.RegionRepeatItem, sl_link.SlLink.RegionRepeatItem.Builder, sl_link.SlLink.RegionRepeatItemOrBuilder> 
+          sl_link.SlLink.RegionRepeatItem, sl_link.SlLink.RegionRepeatItem.Builder, sl_link.SlLink.RegionRepeatItemOrBuilder>
           getRegionRepeatsFieldBuilder() {
         if (regionRepeatsBuilder_ == null) {
           regionRepeatsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -31728,7 +31728,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -31744,7 +31744,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -31767,7 +31767,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -31783,7 +31783,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -32243,7 +32243,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -32315,7 +32315,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -32502,7 +32502,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -32518,7 +32518,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -32919,7 +32919,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -33190,7 +33190,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -33206,7 +33206,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -33229,7 +33229,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -33245,7 +33245,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -33705,7 +33705,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -33777,7 +33777,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -34087,7 +34087,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -34103,7 +34103,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -34166,7 +34166,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -34182,7 +34182,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -34297,7 +34297,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         currentRegionId_ = s;
@@ -34313,7 +34313,7 @@ public final class SlLink {
         getCurrentRegionIdBytes() {
       java.lang.Object ref = currentRegionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         currentRegionId_ = b;
@@ -35150,7 +35150,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -35339,7 +35339,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -35494,7 +35494,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D position = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getPositionFieldBuilder() {
         if (positionBuilder_ == null) {
           positionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -35724,7 +35724,7 @@ public final class SlLink {
           getCurrentRegionIdBytes() {
         java.lang.Object ref = currentRegionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           currentRegionId_ = b;
@@ -35975,7 +35975,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance localization_covariance = 17;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getLocalizationCovarianceFieldBuilder() {
         if (localizationCovarianceBuilder_ == null) {
           localizationCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -36241,7 +36241,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -36262,7 +36262,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -36296,7 +36296,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         requestId_ = s;
@@ -36312,7 +36312,7 @@ public final class SlLink {
         getRequestIdBytes() {
       java.lang.Object ref = requestId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         requestId_ = b;
@@ -36414,7 +36414,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         globalDirection_ = s;
@@ -36434,7 +36434,7 @@ public final class SlLink {
         getGlobalDirectionBytes() {
       java.lang.Object ref = globalDirection_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         globalDirection_ = b;
@@ -36461,7 +36461,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -36481,7 +36481,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -37054,7 +37054,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -37173,7 +37173,7 @@ public final class SlLink {
           getRequestIdBytes() {
         java.lang.Object ref = requestId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           requestId_ = b;
@@ -37396,7 +37396,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D start_pose = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getStartPoseFieldBuilder() {
         if (startPoseBuilder_ == null) {
           startPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -37517,7 +37517,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D end_pose = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getEndPoseFieldBuilder() {
         if (endPoseBuilder_ == null) {
           endPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -37563,7 +37563,7 @@ public final class SlLink {
           getGlobalDirectionBytes() {
         java.lang.Object ref = globalDirection_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           globalDirection_ = b;
@@ -37655,7 +37655,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -37967,7 +37967,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -37983,7 +37983,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -38050,7 +38050,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         requestId_ = s;
@@ -38066,7 +38066,7 @@ public final class SlLink {
         getRequestIdBytes() {
       java.lang.Object ref = requestId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         requestId_ = b;
@@ -38089,7 +38089,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -38105,7 +38105,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -38146,7 +38146,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -38162,7 +38162,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -38251,7 +38251,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         frameId_ = s;
@@ -38267,7 +38267,7 @@ public final class SlLink {
         getFrameIdBytes() {
       java.lang.Object ref = frameId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         frameId_ = b;
@@ -38983,7 +38983,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -39183,7 +39183,7 @@ public final class SlLink {
           getRequestIdBytes() {
         java.lang.Object ref = requestId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           requestId_ = b;
@@ -39255,7 +39255,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -39380,7 +39380,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -39644,7 +39644,7 @@ public final class SlLink {
           getFrameIdBytes() {
         java.lang.Object ref = frameId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           frameId_ = b;
@@ -39855,7 +39855,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         imageFormat_ = s;
@@ -39871,7 +39871,7 @@ public final class SlLink {
         getImageFormatBytes() {
       java.lang.Object ref = imageFormat_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         imageFormat_ = b;
@@ -39905,7 +39905,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -39921,7 +39921,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -40385,7 +40385,7 @@ public final class SlLink {
           getImageFormatBytes() {
         java.lang.Object ref = imageFormat_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           imageFormat_ = b;
@@ -40489,7 +40489,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -40743,6 +40743,38 @@ public final class SlLink {
      * @return The rotationAlignmentDeltaDeg.
      */
     float getRotationAlignmentDeltaDeg();
+
+    /**
+     * <code>string map_id = 17;</code>
+     * @return The mapId.
+     */
+    java.lang.String getMapId();
+    /**
+     * <code>string map_id = 17;</code>
+     * @return The bytes for mapId.
+     */
+    com.google.protobuf.ByteString
+        getMapIdBytes();
+
+    /**
+     * <pre>
+     * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+     * </pre>
+     *
+     * <code>string map_revision = 18;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <pre>
+     * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+     * </pre>
+     *
+     * <code>string map_revision = 18;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
   }
   /**
    * Protobuf type {@code sl_link.MapPreviewResponse}
@@ -40762,6 +40794,8 @@ public final class SlLink {
       frameId_ = "";
       imageData_ = com.google.protobuf.ByteString.EMPTY;
       overlayJson_ = "";
+      mapId_ = "";
+      mapRevision_ = "";
     }
 
     @java.lang.Override
@@ -40816,7 +40850,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -40832,7 +40866,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -40925,7 +40959,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         frameId_ = s;
@@ -40941,7 +40975,7 @@ public final class SlLink {
         getFrameIdBytes() {
       java.lang.Object ref = frameId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         frameId_ = b;
@@ -40975,7 +41009,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         overlayJson_ = s;
@@ -40991,7 +41025,7 @@ public final class SlLink {
         getOverlayJsonBytes() {
       java.lang.Object ref = overlayJson_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         overlayJson_ = b;
@@ -41086,6 +41120,92 @@ public final class SlLink {
       return rotationAlignmentDeltaDeg_;
     }
 
+    public static final int MAP_ID_FIELD_NUMBER = 17;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapId_ = "";
+    /**
+     * <code>string map_id = 17;</code>
+     * @return The mapId.
+     */
+    @java.lang.Override
+    public java.lang.String getMapId() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_id = 17;</code>
+     * @return The bytes for mapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapIdBytes() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 18;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <pre>
+     * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+     * </pre>
+     *
+     * <code>string map_revision = 18;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+     * </pre>
+     *
+     * <code>string map_revision = 18;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -41147,6 +41267,12 @@ public final class SlLink {
       }
       if (java.lang.Float.floatToRawIntBits(rotationAlignmentDeltaDeg_) != 0) {
         output.writeFloat(16, rotationAlignmentDeltaDeg_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 17, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 18, mapRevision_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -41218,6 +41344,12 @@ public final class SlLink {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(16, rotationAlignmentDeltaDeg_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(17, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(18, mapRevision_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -41276,6 +41408,10 @@ public final class SlLink {
       if (java.lang.Float.floatToIntBits(getRotationAlignmentDeltaDeg())
           != java.lang.Float.floatToIntBits(
               other.getRotationAlignmentDeltaDeg())) return false;
+      if (!getMapId()
+          .equals(other.getMapId())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -41329,6 +41465,10 @@ public final class SlLink {
       hash = (37 * hash) + ROTATION_ALIGNMENT_DELTA_DEG_FIELD_NUMBER;
       hash = (53 * hash) + java.lang.Float.floatToIntBits(
           getRotationAlignmentDeltaDeg());
+      hash = (37 * hash) + MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getMapId().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -41491,6 +41631,8 @@ public final class SlLink {
         alignmentYawDeg_ = 0F;
         appRotationDeg_ = 0F;
         rotationAlignmentDeltaDeg_ = 0F;
+        mapId_ = "";
+        mapRevision_ = "";
         return this;
       }
 
@@ -41578,6 +41720,12 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00008000) != 0)) {
           result.rotationAlignmentDeltaDeg_ = rotationAlignmentDeltaDeg_;
+        }
+        if (((from_bitField0_ & 0x00010000) != 0)) {
+          result.mapId_ = mapId_;
+        }
+        if (((from_bitField0_ & 0x00020000) != 0)) {
+          result.mapRevision_ = mapRevision_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -41679,6 +41827,16 @@ public final class SlLink {
         }
         if (other.getRotationAlignmentDeltaDeg() != 0F) {
           setRotationAlignmentDeltaDeg(other.getRotationAlignmentDeltaDeg());
+        }
+        if (!other.getMapId().isEmpty()) {
+          mapId_ = other.mapId_;
+          bitField0_ |= 0x00010000;
+          onChanged();
+        }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00020000;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -41790,6 +41948,16 @@ public final class SlLink {
                 bitField0_ |= 0x00008000;
                 break;
               } // case 133
+              case 138: {
+                mapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00010000;
+                break;
+              } // case 138
+              case 146: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00020000;
+                break;
+              } // case 146
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -41885,7 +42053,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -42168,7 +42336,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D origin = 7;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getOriginFieldBuilder() {
         if (originBuilder_ == null) {
           originBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -42206,7 +42374,7 @@ public final class SlLink {
           getFrameIdBytes() {
         java.lang.Object ref = frameId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           frameId_ = b;
@@ -42310,7 +42478,7 @@ public final class SlLink {
           getOverlayJsonBytes() {
         java.lang.Object ref = overlayJson_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           overlayJson_ = b;
@@ -42529,7 +42697,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance localization_covariance = 13;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getLocalizationCovarianceFieldBuilder() {
         if (localizationCovarianceBuilder_ == null) {
           localizationCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -42646,6 +42814,170 @@ public final class SlLink {
       public Builder clearRotationAlignmentDeltaDeg() {
         bitField0_ = (bitField0_ & ~0x00008000);
         rotationAlignmentDeltaDeg_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapId_ = "";
+      /**
+       * <code>string map_id = 17;</code>
+       * @return The mapId.
+       */
+      public java.lang.String getMapId() {
+        java.lang.Object ref = mapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 17;</code>
+       * @return The bytes for mapId.
+       */
+      public com.google.protobuf.ByteString
+          getMapIdBytes() {
+        java.lang.Object ref = mapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 17;</code>
+       * @param value The mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapId_ = value;
+        bitField0_ |= 0x00010000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 17;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapId() {
+        mapId_ = getDefaultInstance().getMapId();
+        bitField0_ = (bitField0_ & ~0x00010000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 17;</code>
+       * @param value The bytes for mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapId_ = value;
+        bitField0_ |= 0x00010000;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <pre>
+       * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+       * </pre>
+       *
+       * <code>string map_revision = 18;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+       * </pre>
+       *
+       * <code>string map_revision = 18;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+       * </pre>
+       *
+       * <code>string map_revision = 18;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00020000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+       * </pre>
+       *
+       * <code>string map_revision = 18;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00020000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * SHA-256 revision of immutable saved assets; distinct from map_version (region edits).
+       * </pre>
+       *
+       * <code>string map_revision = 18;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00020000;
         onChanged();
         return this;
       }
@@ -42794,7 +43126,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -42814,7 +43146,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -43187,7 +43519,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -44085,7 +44417,7 @@ public final class SlLink {
        * <code>.sl_link.PolygonRegion region = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getRegionFieldBuilder() {
         if (regionBuilder_ == null) {
           regionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -44238,7 +44570,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D start_pose = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getStartPoseFieldBuilder() {
         if (startPoseBuilder_ == null) {
           startPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -44391,7 +44723,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D end_pose = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getEndPoseFieldBuilder() {
         if (endPoseBuilder_ == null) {
           endPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -44515,7 +44847,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
      */
-    java.util.List<sl_link.SlLink.WorkRegionPointInfo> 
+    java.util.List<sl_link.SlLink.WorkRegionPointInfo>
         getWorkRegionsList();
     /**
      * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
@@ -44528,7 +44860,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
      */
-    java.util.List<? extends sl_link.SlLink.WorkRegionPointInfoOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.WorkRegionPointInfoOrBuilder>
         getWorkRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
@@ -44539,7 +44871,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonRegion> 
+    java.util.List<sl_link.SlLink.PolygonRegion>
         getObstacleRegionsList();
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
@@ -44552,7 +44884,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getObstacleRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
@@ -44563,7 +44895,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonRegion> 
+    java.util.List<sl_link.SlLink.PolygonRegion>
         getEraseRegionsList();
     /**
      * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
@@ -44576,7 +44908,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getEraseRegionsOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
@@ -44678,7 +45010,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -44694,7 +45026,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -44717,7 +45049,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -44733,7 +45065,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -44768,7 +45100,7 @@ public final class SlLink {
      * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.WorkRegionPointInfoOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.WorkRegionPointInfoOrBuilder>
         getWorkRegionsOrBuilderList() {
       return workRegions_;
     }
@@ -44809,7 +45141,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getObstacleRegionsOrBuilderList() {
       return obstacleRegions_;
     }
@@ -44850,7 +45182,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
         getEraseRegionsOrBuilderList() {
       return eraseRegions_;
     }
@@ -45409,7 +45741,7 @@ public final class SlLink {
               workRegionsBuilder_ = null;
               workRegions_ = other.workRegions_;
               bitField0_ = (bitField0_ & ~0x00000010);
-              workRegionsBuilder_ = 
+              workRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getWorkRegionsFieldBuilder() : null;
             } else {
@@ -45435,7 +45767,7 @@ public final class SlLink {
               obstacleRegionsBuilder_ = null;
               obstacleRegions_ = other.obstacleRegions_;
               bitField0_ = (bitField0_ & ~0x00000020);
-              obstacleRegionsBuilder_ = 
+              obstacleRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getObstacleRegionsFieldBuilder() : null;
             } else {
@@ -45461,7 +45793,7 @@ public final class SlLink {
               eraseRegionsBuilder_ = null;
               eraseRegions_ = other.eraseRegions_;
               bitField0_ = (bitField0_ & ~0x00000040);
-              eraseRegionsBuilder_ = 
+              eraseRegionsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getEraseRegionsFieldBuilder() : null;
             } else {
@@ -45667,7 +45999,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -45739,7 +46071,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -46013,7 +46345,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.WorkRegionPointInfoOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.WorkRegionPointInfoOrBuilder>
            getWorkRegionsOrBuilderList() {
         if (workRegionsBuilder_ != null) {
           return workRegionsBuilder_.getMessageOrBuilderList();
@@ -46039,12 +46371,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.WorkRegionPointInfo work_regions = 5;</code>
        */
-      public java.util.List<sl_link.SlLink.WorkRegionPointInfo.Builder> 
+      public java.util.List<sl_link.SlLink.WorkRegionPointInfo.Builder>
            getWorkRegionsBuilderList() {
         return getWorkRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.WorkRegionPointInfo, sl_link.SlLink.WorkRegionPointInfo.Builder, sl_link.SlLink.WorkRegionPointInfoOrBuilder> 
+          sl_link.SlLink.WorkRegionPointInfo, sl_link.SlLink.WorkRegionPointInfo.Builder, sl_link.SlLink.WorkRegionPointInfoOrBuilder>
           getWorkRegionsFieldBuilder() {
         if (workRegionsBuilder_ == null) {
           workRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -46253,7 +46585,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
            getObstacleRegionsOrBuilderList() {
         if (obstacleRegionsBuilder_ != null) {
           return obstacleRegionsBuilder_.getMessageOrBuilderList();
@@ -46279,12 +46611,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion obstacle_regions = 6;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonRegion.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonRegion.Builder>
            getObstacleRegionsBuilderList() {
         return getObstacleRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getObstacleRegionsFieldBuilder() {
         if (obstacleRegionsBuilder_ == null) {
           obstacleRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -46493,7 +46825,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonRegionOrBuilder>
            getEraseRegionsOrBuilderList() {
         if (eraseRegionsBuilder_ != null) {
           return eraseRegionsBuilder_.getMessageOrBuilderList();
@@ -46519,12 +46851,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonRegion erase_regions = 7;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonRegion.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonRegion.Builder>
            getEraseRegionsBuilderList() {
         return getEraseRegionsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getEraseRegionsFieldBuilder() {
         if (eraseRegionsBuilder_ == null) {
           eraseRegionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -46678,7 +47010,7 @@ public final class SlLink {
        * <code>.sl_link.PolygonRegion crop_region = 9;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getCropRegionFieldBuilder() {
         if (cropRegionBuilder_ == null) {
           cropRegionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -46811,7 +47143,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
      */
-    java.util.List<sl_link.SlLink.PolygonPoint> 
+    java.util.List<sl_link.SlLink.PolygonPoint>
         getPolygonList();
     /**
      * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
@@ -46824,7 +47156,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
      */
-    java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
         getPolygonOrBuilderList();
     /**
      * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
@@ -46977,7 +47309,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         editId_ = s;
@@ -46993,7 +47325,7 @@ public final class SlLink {
         getEditIdBytes() {
       java.lang.Object ref = editId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         editId_ = b;
@@ -47034,7 +47366,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionName_ = s;
@@ -47050,7 +47382,7 @@ public final class SlLink {
         getRegionNameBytes() {
       java.lang.Object ref = regionName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionName_ = b;
@@ -47100,7 +47432,7 @@ public final class SlLink {
      * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
         getPolygonOrBuilderList() {
       return polygon_;
     }
@@ -47162,7 +47494,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         targetRegionId_ = s;
@@ -47178,7 +47510,7 @@ public final class SlLink {
         getTargetRegionIdBytes() {
       java.lang.Object ref = targetRegionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         targetRegionId_ = b;
@@ -47293,7 +47625,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -47309,7 +47641,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -47884,7 +48216,7 @@ public final class SlLink {
               polygonBuilder_ = null;
               polygon_ = other.polygon_;
               bitField0_ = (bitField0_ & ~0x00000010);
-              polygonBuilder_ = 
+              polygonBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getPolygonFieldBuilder() : null;
             } else {
@@ -48075,7 +48407,7 @@ public final class SlLink {
           getEditIdBytes() {
         java.lang.Object ref = editId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           editId_ = b;
@@ -48200,7 +48532,7 @@ public final class SlLink {
           getRegionNameBytes() {
         java.lang.Object ref = regionName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionName_ = b;
@@ -48355,7 +48687,7 @@ public final class SlLink {
        * <code>.sl_link.PolygonRegion region = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder> 
+          sl_link.SlLink.PolygonRegion, sl_link.SlLink.PolygonRegion.Builder, sl_link.SlLink.PolygonRegionOrBuilder>
           getRegionFieldBuilder() {
         if (regionBuilder_ == null) {
           regionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -48563,7 +48895,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.PolygonPointOrBuilder>
            getPolygonOrBuilderList() {
         if (polygonBuilder_ != null) {
           return polygonBuilder_.getMessageOrBuilderList();
@@ -48589,12 +48921,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.PolygonPoint polygon = 5;</code>
        */
-      public java.util.List<sl_link.SlLink.PolygonPoint.Builder> 
+      public java.util.List<sl_link.SlLink.PolygonPoint.Builder>
            getPolygonBuilderList() {
         return getPolygonFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.PolygonPoint, sl_link.SlLink.PolygonPoint.Builder, sl_link.SlLink.PolygonPointOrBuilder> 
+          sl_link.SlLink.PolygonPoint, sl_link.SlLink.PolygonPoint.Builder, sl_link.SlLink.PolygonPointOrBuilder>
           getPolygonFieldBuilder() {
         if (polygonBuilder_ == null) {
           polygonBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -48697,7 +49029,7 @@ public final class SlLink {
           getTargetRegionIdBytes() {
         java.lang.Object ref = targetRegionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           targetRegionId_ = b;
@@ -48969,7 +49301,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D start_pose = 12;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getStartPoseFieldBuilder() {
         if (startPoseBuilder_ == null) {
           startPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -49090,7 +49422,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D end_pose = 13;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getEndPoseFieldBuilder() {
         if (endPoseBuilder_ == null) {
           endPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -49128,7 +49460,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -49339,7 +49671,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -49355,7 +49687,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -49825,7 +50157,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -50066,7 +50398,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -50082,7 +50414,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -50554,7 +50886,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -51286,7 +51618,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -51302,7 +51634,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -51325,7 +51657,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         streamUrl_ = s;
@@ -51341,7 +51673,7 @@ public final class SlLink {
         getStreamUrlBytes() {
       java.lang.Object ref = streamUrl_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         streamUrl_ = b;
@@ -51364,7 +51696,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         codec_ = s;
@@ -51380,7 +51712,7 @@ public final class SlLink {
         getCodecBytes() {
       java.lang.Object ref = codec_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         codec_ = b;
@@ -52001,7 +52333,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -52073,7 +52405,7 @@ public final class SlLink {
           getStreamUrlBytes() {
         java.lang.Object ref = streamUrl_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           streamUrl_ = b;
@@ -52145,7 +52477,7 @@ public final class SlLink {
           getCodecBytes() {
         java.lang.Object ref = codec_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           codec_ = b;
@@ -52552,7 +52884,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         requestId_ = s;
@@ -52568,7 +52900,7 @@ public final class SlLink {
         getRequestIdBytes() {
       java.lang.Object ref = requestId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         requestId_ = b;
@@ -52591,7 +52923,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -52607,7 +52939,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -52719,7 +53051,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         globalDirection_ = s;
@@ -52739,7 +53071,7 @@ public final class SlLink {
         getGlobalDirectionBytes() {
       java.lang.Object ref = globalDirection_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         globalDirection_ = b;
@@ -52766,7 +53098,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -52786,7 +53118,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -53373,7 +53705,7 @@ public final class SlLink {
           getRequestIdBytes() {
         java.lang.Object ref = requestId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           requestId_ = b;
@@ -53445,7 +53777,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -53696,7 +54028,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D start_pose = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getStartPoseFieldBuilder() {
         if (startPoseBuilder_ == null) {
           startPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -53817,7 +54149,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D end_pose = 7;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getEndPoseFieldBuilder() {
         if (endPoseBuilder_ == null) {
           endPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -53863,7 +54195,7 @@ public final class SlLink {
           getGlobalDirectionBytes() {
         java.lang.Object ref = globalDirection_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           globalDirection_ = b;
@@ -53955,7 +54287,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -54362,7 +54694,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -54378,7 +54710,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -54401,7 +54733,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         requestId_ = s;
@@ -54417,7 +54749,7 @@ public final class SlLink {
         getRequestIdBytes() {
       java.lang.Object ref = requestId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         requestId_ = b;
@@ -54440,7 +54772,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -54456,7 +54788,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -54556,7 +54888,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         previewFormat_ = s;
@@ -54572,7 +54904,7 @@ public final class SlLink {
         getPreviewFormatBytes() {
       java.lang.Object ref = previewFormat_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         previewFormat_ = b;
@@ -54654,7 +54986,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         frameId_ = s;
@@ -54670,7 +55002,7 @@ public final class SlLink {
         getFrameIdBytes() {
       java.lang.Object ref = frameId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         frameId_ = b;
@@ -55803,7 +56135,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -55875,7 +56207,7 @@ public final class SlLink {
           getRequestIdBytes() {
         java.lang.Object ref = requestId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           requestId_ = b;
@@ -55947,7 +56279,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -56243,7 +56575,7 @@ public final class SlLink {
           getPreviewFormatBytes() {
         java.lang.Object ref = previewFormat_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           previewFormat_ = b;
@@ -56494,7 +56826,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D origin = 16;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getOriginFieldBuilder() {
         if (originBuilder_ == null) {
           originBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -56532,7 +56864,7 @@ public final class SlLink {
           getFrameIdBytes() {
         java.lang.Object ref = frameId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           frameId_ = b;
@@ -56815,7 +57147,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance localization_covariance = 22;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getLocalizationCovarianceFieldBuilder() {
         if (localizationCovarianceBuilder_ == null) {
           localizationCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -57118,7 +57450,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -57140,7 +57472,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -57623,7 +57955,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -57846,6 +58178,18 @@ public final class SlLink {
         getMapNameBytes();
 
     /**
+     * <code>string map_revision = 9;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 9;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
+
+    /**
      * <code>string map_yaml_path = 5;</code>
      * @return The mapYamlPath.
      */
@@ -57874,6 +58218,18 @@ public final class SlLink {
      * @return The navigationMapReloaded.
      */
     boolean getNavigationMapReloaded();
+
+    /**
+     * <code>string lifecycle_state = 10;</code>
+     * @return The lifecycleState.
+     */
+    java.lang.String getLifecycleState();
+    /**
+     * <code>string lifecycle_state = 10;</code>
+     * @return The bytes for lifecycleState.
+     */
+    com.google.protobuf.ByteString
+        getLifecycleStateBytes();
   }
   /**
    * Protobuf type {@code sl_link.MapSyncResponse}
@@ -57893,8 +58249,10 @@ public final class SlLink {
       operation_ = 0;
       mapId_ = "";
       mapName_ = "";
+      mapRevision_ = "";
       mapYamlPath_ = "";
       mapImagePath_ = "";
+      lifecycleState_ = "";
     }
 
     @java.lang.Override
@@ -57948,7 +58306,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -57964,7 +58322,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -58005,7 +58363,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -58021,7 +58379,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -58044,7 +58402,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapName_ = s;
@@ -58060,10 +58418,49 @@ public final class SlLink {
         getMapNameBytes() {
       java.lang.Object ref = mapName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 9;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 9;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 9;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -58083,7 +58480,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapYamlPath_ = s;
@@ -58099,7 +58496,7 @@ public final class SlLink {
         getMapYamlPathBytes() {
       java.lang.Object ref = mapYamlPath_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapYamlPath_ = b;
@@ -58122,7 +58519,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapImagePath_ = s;
@@ -58138,7 +58535,7 @@ public final class SlLink {
         getMapImagePathBytes() {
       java.lang.Object ref = mapImagePath_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapImagePath_ = b;
@@ -58157,6 +58554,45 @@ public final class SlLink {
     @java.lang.Override
     public boolean getNavigationMapReloaded() {
       return navigationMapReloaded_;
+    }
+
+    public static final int LIFECYCLE_STATE_FIELD_NUMBER = 10;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lifecycleState_ = "";
+    /**
+     * <code>string lifecycle_state = 10;</code>
+     * @return The lifecycleState.
+     */
+    @java.lang.Override
+    public java.lang.String getLifecycleState() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifecycleState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string lifecycle_state = 10;</code>
+     * @return The bytes for lifecycleState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLifecycleStateBytes() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifecycleState_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -58197,6 +58633,12 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapName_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 8, mapName_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 10, lifecycleState_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -58233,6 +58675,12 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapName_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, mapName_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, lifecycleState_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -58256,12 +58704,16 @@ public final class SlLink {
           .equals(other.getMapId())) return false;
       if (!getMapName()
           .equals(other.getMapName())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
       if (!getMapYamlPath()
           .equals(other.getMapYamlPath())) return false;
       if (!getMapImagePath()
           .equals(other.getMapImagePath())) return false;
       if (getNavigationMapReloaded()
           != other.getNavigationMapReloaded()) return false;
+      if (!getLifecycleState()
+          .equals(other.getLifecycleState())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -58283,6 +58735,8 @@ public final class SlLink {
       hash = (53 * hash) + getMapId().hashCode();
       hash = (37 * hash) + MAP_NAME_FIELD_NUMBER;
       hash = (53 * hash) + getMapName().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
       hash = (37 * hash) + MAP_YAML_PATH_FIELD_NUMBER;
       hash = (53 * hash) + getMapYamlPath().hashCode();
       hash = (37 * hash) + MAP_IMAGE_PATH_FIELD_NUMBER;
@@ -58290,6 +58744,8 @@ public final class SlLink {
       hash = (37 * hash) + NAVIGATION_MAP_RELOADED_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getNavigationMapReloaded());
+      hash = (37 * hash) + LIFECYCLE_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getLifecycleState().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -58426,9 +58882,11 @@ public final class SlLink {
         operation_ = 0;
         mapId_ = "";
         mapName_ = "";
+        mapRevision_ = "";
         mapYamlPath_ = "";
         mapImagePath_ = "";
         navigationMapReloaded_ = false;
+        lifecycleState_ = "";
         return this;
       }
 
@@ -58478,13 +58936,19 @@ public final class SlLink {
           result.mapName_ = mapName_;
         }
         if (((from_bitField0_ & 0x00000020) != 0)) {
-          result.mapYamlPath_ = mapYamlPath_;
+          result.mapRevision_ = mapRevision_;
         }
         if (((from_bitField0_ & 0x00000040) != 0)) {
-          result.mapImagePath_ = mapImagePath_;
+          result.mapYamlPath_ = mapYamlPath_;
         }
         if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.mapImagePath_ = mapImagePath_;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
           result.navigationMapReloaded_ = navigationMapReloaded_;
+        }
+        if (((from_bitField0_ & 0x00000200) != 0)) {
+          result.lifecycleState_ = lifecycleState_;
         }
       }
 
@@ -58553,18 +59017,28 @@ public final class SlLink {
           bitField0_ |= 0x00000010;
           onChanged();
         }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000020;
+          onChanged();
+        }
         if (!other.getMapYamlPath().isEmpty()) {
           mapYamlPath_ = other.mapYamlPath_;
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           onChanged();
         }
         if (!other.getMapImagePath().isEmpty()) {
           mapImagePath_ = other.mapImagePath_;
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000080;
           onChanged();
         }
         if (other.getNavigationMapReloaded() != false) {
           setNavigationMapReloaded(other.getNavigationMapReloaded());
+        }
+        if (!other.getLifecycleState().isEmpty()) {
+          lifecycleState_ = other.lifecycleState_;
+          bitField0_ |= 0x00000200;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -58614,17 +59088,17 @@ public final class SlLink {
               } // case 34
               case 42: {
                 mapYamlPath_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000020;
+                bitField0_ |= 0x00000040;
                 break;
               } // case 42
               case 50: {
                 mapImagePath_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000040;
+                bitField0_ |= 0x00000080;
                 break;
               } // case 50
               case 56: {
                 navigationMapReloaded_ = input.readBool();
-                bitField0_ |= 0x00000080;
+                bitField0_ |= 0x00000100;
                 break;
               } // case 56
               case 66: {
@@ -58632,6 +59106,16 @@ public final class SlLink {
                 bitField0_ |= 0x00000010;
                 break;
               } // case 66
+              case 74: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 74
+              case 82: {
+                lifecycleState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000200;
+                break;
+              } // case 82
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -58727,7 +59211,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -58852,7 +59336,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -58924,7 +59408,7 @@ public final class SlLink {
           getMapNameBytes() {
         java.lang.Object ref = mapName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapName_ = b;
@@ -58971,6 +59455,78 @@ public final class SlLink {
         return this;
       }
 
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 9;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 9;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 9;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 9;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+
       private java.lang.Object mapYamlPath_ = "";
       /**
        * <code>string map_yaml_path = 5;</code>
@@ -58996,7 +59552,7 @@ public final class SlLink {
           getMapYamlPathBytes() {
         java.lang.Object ref = mapYamlPath_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapYamlPath_ = b;
@@ -59014,7 +59570,7 @@ public final class SlLink {
           java.lang.String value) {
         if (value == null) { throw new NullPointerException(); }
         mapYamlPath_ = value;
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -59024,7 +59580,7 @@ public final class SlLink {
        */
       public Builder clearMapYamlPath() {
         mapYamlPath_ = getDefaultInstance().getMapYamlPath();
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
@@ -59038,7 +59594,7 @@ public final class SlLink {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         mapYamlPath_ = value;
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -59068,7 +59624,7 @@ public final class SlLink {
           getMapImagePathBytes() {
         java.lang.Object ref = mapImagePath_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapImagePath_ = b;
@@ -59086,7 +59642,7 @@ public final class SlLink {
           java.lang.String value) {
         if (value == null) { throw new NullPointerException(); }
         mapImagePath_ = value;
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
@@ -59096,7 +59652,7 @@ public final class SlLink {
        */
       public Builder clearMapImagePath() {
         mapImagePath_ = getDefaultInstance().getMapImagePath();
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         onChanged();
         return this;
       }
@@ -59110,7 +59666,7 @@ public final class SlLink {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         mapImagePath_ = value;
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
@@ -59132,7 +59688,7 @@ public final class SlLink {
       public Builder setNavigationMapReloaded(boolean value) {
 
         navigationMapReloaded_ = value;
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
@@ -59141,8 +59697,80 @@ public final class SlLink {
        * @return This builder for chaining.
        */
       public Builder clearNavigationMapReloaded() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         navigationMapReloaded_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object lifecycleState_ = "";
+      /**
+       * <code>string lifecycle_state = 10;</code>
+       * @return The lifecycleState.
+       */
+      public java.lang.String getLifecycleState() {
+        java.lang.Object ref = lifecycleState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          lifecycleState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 10;</code>
+       * @return The bytes for lifecycleState.
+       */
+      public com.google.protobuf.ByteString
+          getLifecycleStateBytes() {
+        java.lang.Object ref = lifecycleState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lifecycleState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 10;</code>
+       * @param value The lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 10;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLifecycleState() {
+        lifecycleState_ = getDefaultInstance().getLifecycleState();
+        bitField0_ = (bitField0_ & ~0x00000200);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 10;</code>
+       * @param value The bytes for lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -59275,7 +59903,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -59291,7 +59919,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -59652,7 +60280,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -59818,6 +60446,30 @@ public final class SlLink {
      * @return The imported.
      */
     boolean getImported();
+
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
+
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The lifecycleState.
+     */
+    java.lang.String getLifecycleState();
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The bytes for lifecycleState.
+     */
+    com.google.protobuf.ByteString
+        getLifecycleStateBytes();
   }
   /**
    * Protobuf type {@code sl_link.MapImportToRadarResponse}
@@ -59836,6 +60488,8 @@ public final class SlLink {
       message_ = "";
       mapId_ = "";
       mapName_ = "";
+      mapRevision_ = "";
+      lifecycleState_ = "";
     }
 
     @java.lang.Override
@@ -59889,7 +60543,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -59905,7 +60559,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -59928,7 +60582,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -59944,7 +60598,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -59967,7 +60621,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapName_ = s;
@@ -59983,7 +60637,7 @@ public final class SlLink {
         getMapNameBytes() {
       java.lang.Object ref = mapName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapName_ = b;
@@ -60002,6 +60656,84 @@ public final class SlLink {
     @java.lang.Override
     public boolean getImported() {
       return imported_;
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 6;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int LIFECYCLE_STATE_FIELD_NUMBER = 7;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lifecycleState_ = "";
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The lifecycleState.
+     */
+    @java.lang.Override
+    public java.lang.String getLifecycleState() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifecycleState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The bytes for lifecycleState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLifecycleStateBytes() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifecycleState_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -60033,6 +60765,12 @@ public final class SlLink {
       if (imported_ != false) {
         output.writeBool(5, imported_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, lifecycleState_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -60059,6 +60797,12 @@ public final class SlLink {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, imported_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, lifecycleState_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -60083,6 +60827,10 @@ public final class SlLink {
           .equals(other.getMapName())) return false;
       if (getImported()
           != other.getImported()) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
+      if (!getLifecycleState()
+          .equals(other.getLifecycleState())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -60105,6 +60853,10 @@ public final class SlLink {
       hash = (37 * hash) + IMPORTED_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getImported());
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
+      hash = (37 * hash) + LIFECYCLE_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getLifecycleState().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -60241,6 +60993,8 @@ public final class SlLink {
         mapId_ = "";
         mapName_ = "";
         imported_ = false;
+        mapRevision_ = "";
+        lifecycleState_ = "";
         return this;
       }
 
@@ -60288,6 +61042,12 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
           result.imported_ = imported_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.mapRevision_ = mapRevision_;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.lifecycleState_ = lifecycleState_;
         }
       }
 
@@ -60356,6 +61116,16 @@ public final class SlLink {
         if (other.getImported() != false) {
           setImported(other.getImported());
         }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000020;
+          onChanged();
+        }
+        if (!other.getLifecycleState().isEmpty()) {
+          lifecycleState_ = other.lifecycleState_;
+          bitField0_ |= 0x00000040;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -60407,6 +61177,16 @@ public final class SlLink {
                 bitField0_ |= 0x00000010;
                 break;
               } // case 40
+              case 50: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 50
+              case 58: {
+                lifecycleState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 58
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -60502,7 +61282,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -60574,7 +61354,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -60646,7 +61426,7 @@ public final class SlLink {
           getMapNameBytes() {
         java.lang.Object ref = mapName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapName_ = b;
@@ -60721,6 +61501,150 @@ public final class SlLink {
       public Builder clearImported() {
         bitField0_ = (bitField0_ & ~0x00000010);
         imported_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 6;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object lifecycleState_ = "";
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @return The lifecycleState.
+       */
+      public java.lang.String getLifecycleState() {
+        java.lang.Object ref = lifecycleState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          lifecycleState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @return The bytes for lifecycleState.
+       */
+      public com.google.protobuf.ByteString
+          getLifecycleStateBytes() {
+        java.lang.Object ref = lifecycleState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lifecycleState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @param value The lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLifecycleState() {
+        lifecycleState_ = getDefaultInstance().getLifecycleState();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @param value The bytes for lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -61491,6 +62415,67 @@ public final class SlLink {
      * @return The mapKind.
      */
     int getMapKind();
+
+    /**
+     * <code>string lifecycle_state = 6;</code>
+     * @return The lifecycleState.
+     */
+    java.lang.String getLifecycleState();
+    /**
+     * <code>string lifecycle_state = 6;</code>
+     * @return The bytes for lifecycleState.
+     */
+    com.google.protobuf.ByteString
+        getLifecycleStateBytes();
+
+    /**
+     * <code>string map_id = 7;</code>
+     * @return The mapId.
+     */
+    java.lang.String getMapId();
+    /**
+     * <code>string map_id = 7;</code>
+     * @return The bytes for mapId.
+     */
+    com.google.protobuf.ByteString
+        getMapIdBytes();
+
+    /**
+     * <code>string map_revision = 8;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 8;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
+
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @return A list containing the residualNodes.
+     */
+    java.util.List<java.lang.String>
+        getResidualNodesList();
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @return The count of residualNodes.
+     */
+    int getResidualNodesCount();
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @param index The index of the element to return.
+     * @return The residualNodes at the given index.
+     */
+    java.lang.String getResidualNodes(int index);
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the residualNodes at the given index.
+     */
+    com.google.protobuf.ByteString
+        getResidualNodesBytes(int index);
   }
   /**
    * Protobuf type {@code sl_link.MapModeResponse}
@@ -61508,6 +62493,11 @@ public final class SlLink {
       result_ = 0;
       message_ = "";
       mode_ = 0;
+      lifecycleState_ = "";
+      mapId_ = "";
+      mapRevision_ = "";
+      residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     @java.lang.Override
@@ -61561,7 +62551,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -61577,7 +62567,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -61627,6 +62617,160 @@ public final class SlLink {
       return mapKind_;
     }
 
+    public static final int LIFECYCLE_STATE_FIELD_NUMBER = 6;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lifecycleState_ = "";
+    /**
+     * <code>string lifecycle_state = 6;</code>
+     * @return The lifecycleState.
+     */
+    @java.lang.Override
+    public java.lang.String getLifecycleState() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifecycleState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string lifecycle_state = 6;</code>
+     * @return The bytes for lifecycleState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLifecycleStateBytes() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifecycleState_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_ID_FIELD_NUMBER = 7;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapId_ = "";
+    /**
+     * <code>string map_id = 7;</code>
+     * @return The mapId.
+     */
+    @java.lang.Override
+    public java.lang.String getMapId() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_id = 7;</code>
+     * @return The bytes for mapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapIdBytes() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 8;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 8;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 8;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int RESIDUAL_NODES_FIELD_NUMBER = 9;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.LazyStringArrayList residualNodes_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @return A list containing the residualNodes.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getResidualNodesList() {
+      return residualNodes_;
+    }
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @return The count of residualNodes.
+     */
+    public int getResidualNodesCount() {
+      return residualNodes_.size();
+    }
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @param index The index of the element to return.
+     * @return The residualNodes at the given index.
+     */
+    public java.lang.String getResidualNodes(int index) {
+      return residualNodes_.get(index);
+    }
+    /**
+     * <code>repeated string residual_nodes = 9;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the residualNodes at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getResidualNodesBytes(int index) {
+      return residualNodes_.getByteString(index);
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -61656,6 +62800,18 @@ public final class SlLink {
       if (mapKind_ != 0) {
         output.writeInt32(5, mapKind_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, lifecycleState_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, mapRevision_);
+      }
+      for (int i = 0; i < residualNodes_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, residualNodes_.getRaw(i));
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -61684,6 +62840,23 @@ public final class SlLink {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, mapKind_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, lifecycleState_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, mapRevision_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < residualNodes_.size(); i++) {
+          dataSize += computeStringSizeNoTag(residualNodes_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getResidualNodesList().size();
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -61707,6 +62880,14 @@ public final class SlLink {
           != other.getEnabled()) return false;
       if (getMapKind()
           != other.getMapKind()) return false;
+      if (!getLifecycleState()
+          .equals(other.getLifecycleState())) return false;
+      if (!getMapId()
+          .equals(other.getMapId())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
+      if (!getResidualNodesList()
+          .equals(other.getResidualNodesList())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -61729,6 +62910,16 @@ public final class SlLink {
           getEnabled());
       hash = (37 * hash) + MAP_KIND_FIELD_NUMBER;
       hash = (53 * hash) + getMapKind();
+      hash = (37 * hash) + LIFECYCLE_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getLifecycleState().hashCode();
+      hash = (37 * hash) + MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getMapId().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
+      if (getResidualNodesCount() > 0) {
+        hash = (37 * hash) + RESIDUAL_NODES_FIELD_NUMBER;
+        hash = (53 * hash) + getResidualNodesList().hashCode();
+      }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -61865,6 +63056,11 @@ public final class SlLink {
         mode_ = 0;
         enabled_ = false;
         mapKind_ = 0;
+        lifecycleState_ = "";
+        mapId_ = "";
+        mapRevision_ = "";
+        residualNodes_ =
+            com.google.protobuf.LazyStringArrayList.emptyList();
         return this;
       }
 
@@ -61912,6 +63108,19 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
           result.mapKind_ = mapKind_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.lifecycleState_ = lifecycleState_;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.mapId_ = mapId_;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.mapRevision_ = mapRevision_;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          residualNodes_.makeImmutable();
+          result.residualNodes_ = residualNodes_;
         }
       }
 
@@ -61976,6 +63185,31 @@ public final class SlLink {
         if (other.getMapKind() != 0) {
           setMapKind(other.getMapKind());
         }
+        if (!other.getLifecycleState().isEmpty()) {
+          lifecycleState_ = other.lifecycleState_;
+          bitField0_ |= 0x00000020;
+          onChanged();
+        }
+        if (!other.getMapId().isEmpty()) {
+          mapId_ = other.mapId_;
+          bitField0_ |= 0x00000040;
+          onChanged();
+        }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000080;
+          onChanged();
+        }
+        if (!other.residualNodes_.isEmpty()) {
+          if (residualNodes_.isEmpty()) {
+            residualNodes_ = other.residualNodes_;
+            bitField0_ |= 0x00000100;
+          } else {
+            ensureResidualNodesIsMutable();
+            residualNodes_.addAll(other.residualNodes_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -62027,6 +63261,27 @@ public final class SlLink {
                 bitField0_ |= 0x00000010;
                 break;
               } // case 40
+              case 50: {
+                lifecycleState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 50
+              case 58: {
+                mapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 58
+              case 66: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 66
+              case 74: {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureResidualNodesIsMutable();
+                residualNodes_.add(s);
+                break;
+              } // case 74
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -62122,7 +63377,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -62285,6 +63540,333 @@ public final class SlLink {
         onChanged();
         return this;
       }
+
+      private java.lang.Object lifecycleState_ = "";
+      /**
+       * <code>string lifecycle_state = 6;</code>
+       * @return The lifecycleState.
+       */
+      public java.lang.String getLifecycleState() {
+        java.lang.Object ref = lifecycleState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          lifecycleState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 6;</code>
+       * @return The bytes for lifecycleState.
+       */
+      public com.google.protobuf.ByteString
+          getLifecycleStateBytes() {
+        java.lang.Object ref = lifecycleState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lifecycleState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 6;</code>
+       * @param value The lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLifecycleState() {
+        lifecycleState_ = getDefaultInstance().getLifecycleState();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 6;</code>
+       * @param value The bytes for lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapId_ = "";
+      /**
+       * <code>string map_id = 7;</code>
+       * @return The mapId.
+       */
+      public java.lang.String getMapId() {
+        java.lang.Object ref = mapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 7;</code>
+       * @return The bytes for mapId.
+       */
+      public com.google.protobuf.ByteString
+          getMapIdBytes() {
+        java.lang.Object ref = mapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 7;</code>
+       * @param value The mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapId_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapId() {
+        mapId_ = getDefaultInstance().getMapId();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 7;</code>
+       * @param value The bytes for mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapId_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 8;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 8;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 8;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 8;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringArrayList residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+      private void ensureResidualNodesIsMutable() {
+        if (!residualNodes_.isModifiable()) {
+          residualNodes_ = new com.google.protobuf.LazyStringArrayList(residualNodes_);
+        }
+        bitField0_ |= 0x00000100;
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @return A list containing the residualNodes.
+       */
+      public com.google.protobuf.ProtocolStringList
+          getResidualNodesList() {
+        residualNodes_.makeImmutable();
+        return residualNodes_;
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @return The count of residualNodes.
+       */
+      public int getResidualNodesCount() {
+        return residualNodes_.size();
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @param index The index of the element to return.
+       * @return The residualNodes at the given index.
+       */
+      public java.lang.String getResidualNodes(int index) {
+        return residualNodes_.get(index);
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the residualNodes at the given index.
+       */
+      public com.google.protobuf.ByteString
+          getResidualNodesBytes(int index) {
+        return residualNodes_.getByteString(index);
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @param index The index to set the value at.
+       * @param value The residualNodes to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResidualNodes(
+          int index, java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureResidualNodesIsMutable();
+        residualNodes_.set(index, value);
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @param value The residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addResidualNodes(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureResidualNodesIsMutable();
+        residualNodes_.add(value);
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @param values The residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllResidualNodes(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureResidualNodesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, residualNodes_);
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResidualNodes() {
+        residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000100);;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 9;</code>
+       * @param value The bytes of the residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addResidualNodesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        ensureResidualNodesIsMutable();
+        residualNodes_.add(value);
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -62426,7 +64008,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -62442,7 +64024,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -62845,7 +64427,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -63137,7 +64719,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -63153,7 +64735,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -63176,7 +64758,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -63192,7 +64774,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -63796,7 +65378,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -63868,7 +65450,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -64602,6 +66184,18 @@ public final class SlLink {
      */
     com.google.protobuf.ByteString
         getCreatedAtBytes();
+
+    /**
+     * <code>string map_revision = 12;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 12;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
   }
   /**
    * Protobuf type {@code sl_link.MapCatalogItem}
@@ -64621,6 +66215,7 @@ public final class SlLink {
       thumbnailFormat_ = "";
       thumbnailImageB64_ = "";
       createdAt_ = "";
+      mapRevision_ = "";
     }
 
     @java.lang.Override
@@ -64656,7 +66251,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -64672,7 +66267,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -64695,7 +66290,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         name_ = s;
@@ -64711,7 +66306,7 @@ public final class SlLink {
         getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         name_ = b;
@@ -64778,7 +66373,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         thumbnailFormat_ = s;
@@ -64794,7 +66389,7 @@ public final class SlLink {
         getThumbnailFormatBytes() {
       java.lang.Object ref = thumbnailFormat_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         thumbnailFormat_ = b;
@@ -64839,7 +66434,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         thumbnailImageB64_ = s;
@@ -64855,7 +66450,7 @@ public final class SlLink {
         getThumbnailImageB64Bytes() {
       java.lang.Object ref = thumbnailImageB64_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         thumbnailImageB64_ = b;
@@ -64878,7 +66473,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         createdAt_ = s;
@@ -64894,10 +66489,49 @@ public final class SlLink {
         getCreatedAtBytes() {
       java.lang.Object ref = createdAt_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         createdAt_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 12;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 12;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 12;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -64951,6 +66585,9 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(createdAt_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 11, createdAt_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, mapRevision_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -64999,6 +66636,9 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(createdAt_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, createdAt_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, mapRevision_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -65038,6 +66678,8 @@ public final class SlLink {
           .equals(other.getThumbnailImageB64())) return false;
       if (!getCreatedAt()
           .equals(other.getCreatedAt())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -65075,6 +66717,8 @@ public final class SlLink {
       hash = (53 * hash) + getThumbnailImageB64().hashCode();
       hash = (37 * hash) + CREATED_AT_FIELD_NUMBER;
       hash = (53 * hash) + getCreatedAt().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -65217,6 +66861,7 @@ public final class SlLink {
         thumbnailHeight_ = 0;
         thumbnailImageB64_ = "";
         createdAt_ = "";
+        mapRevision_ = "";
         return this;
       }
 
@@ -65282,6 +66927,9 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000400) != 0)) {
           result.createdAt_ = createdAt_;
+        }
+        if (((from_bitField0_ & 0x00000800) != 0)) {
+          result.mapRevision_ = mapRevision_;
         }
       }
 
@@ -65372,6 +67020,11 @@ public final class SlLink {
           bitField0_ |= 0x00000400;
           onChanged();
         }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000800;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -65453,6 +67106,11 @@ public final class SlLink {
                 bitField0_ |= 0x00000400;
                 break;
               } // case 90
+              case 98: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000800;
+                break;
+              } // case 98
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -65495,7 +67153,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -65567,7 +67225,7 @@ public final class SlLink {
           getNameBytes() {
         java.lang.Object ref = name_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           name_ = b;
@@ -65767,7 +67425,7 @@ public final class SlLink {
           getThumbnailFormatBytes() {
         java.lang.Object ref = thumbnailFormat_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           thumbnailFormat_ = b;
@@ -65903,7 +67561,7 @@ public final class SlLink {
           getThumbnailImageB64Bytes() {
         java.lang.Object ref = thumbnailImageB64_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           thumbnailImageB64_ = b;
@@ -65975,7 +67633,7 @@ public final class SlLink {
           getCreatedAtBytes() {
         java.lang.Object ref = createdAt_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           createdAt_ = b;
@@ -66018,6 +67676,78 @@ public final class SlLink {
         checkByteStringIsUtf8(value);
         createdAt_ = value;
         bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 12;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 12;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 12;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000800);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 12;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -66121,7 +67851,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
      */
-    java.util.List<sl_link.SlLink.MapCatalogItem> 
+    java.util.List<sl_link.SlLink.MapCatalogItem>
         getItemsList();
     /**
      * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
@@ -66134,7 +67864,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
      */
-    java.util.List<? extends sl_link.SlLink.MapCatalogItemOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.MapCatalogItemOrBuilder>
         getItemsOrBuilderList();
     /**
      * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
@@ -66211,7 +67941,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -66227,7 +67957,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -66262,7 +67992,7 @@ public final class SlLink {
      * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.MapCatalogItemOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.MapCatalogItemOrBuilder>
         getItemsOrBuilderList() {
       return items_;
     }
@@ -66653,7 +68383,7 @@ public final class SlLink {
               itemsBuilder_ = null;
               items_ = other.items_;
               bitField0_ = (bitField0_ & ~0x00000008);
-              itemsBuilder_ = 
+              itemsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getItemsFieldBuilder() : null;
             } else {
@@ -66810,7 +68540,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -67084,7 +68814,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.MapCatalogItemOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.MapCatalogItemOrBuilder>
            getItemsOrBuilderList() {
         if (itemsBuilder_ != null) {
           return itemsBuilder_.getMessageOrBuilderList();
@@ -67110,12 +68840,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.MapCatalogItem items = 4;</code>
        */
-      public java.util.List<sl_link.SlLink.MapCatalogItem.Builder> 
+      public java.util.List<sl_link.SlLink.MapCatalogItem.Builder>
            getItemsBuilderList() {
         return getItemsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.MapCatalogItem, sl_link.SlLink.MapCatalogItem.Builder, sl_link.SlLink.MapCatalogItemOrBuilder> 
+          sl_link.SlLink.MapCatalogItem, sl_link.SlLink.MapCatalogItem.Builder, sl_link.SlLink.MapCatalogItemOrBuilder>
           getItemsFieldBuilder() {
         if (itemsBuilder_ == null) {
           itemsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -67257,7 +68987,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -67273,7 +69003,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -67634,7 +69364,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -67889,7 +69619,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -67905,7 +69635,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -67928,7 +69658,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -67944,7 +69674,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -67967,7 +69697,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapName_ = s;
@@ -67983,7 +69713,7 @@ public final class SlLink {
         getMapNameBytes() {
       java.lang.Object ref = mapName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapName_ = b;
@@ -68607,7 +70337,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -68679,7 +70409,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -68751,7 +70481,7 @@ public final class SlLink {
           getMapNameBytes() {
         java.lang.Object ref = mapName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapName_ = b;
@@ -69085,7 +70815,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapName_ = s;
@@ -69101,7 +70831,7 @@ public final class SlLink {
         getMapNameBytes() {
       java.lang.Object ref = mapName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapName_ = b;
@@ -69124,7 +70854,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -69140,7 +70870,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -69602,7 +71332,7 @@ public final class SlLink {
           getMapNameBytes() {
         java.lang.Object ref = mapName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapName_ = b;
@@ -69674,7 +71404,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -69970,6 +71700,67 @@ public final class SlLink {
      */
     com.google.protobuf.ByteString
         getCreatedAtBytes();
+
+    /**
+     * <code>string map_revision = 11;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 11;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
+
+    /**
+     * <code>string lifecycle_state = 12;</code>
+     * @return The lifecycleState.
+     */
+    java.lang.String getLifecycleState();
+    /**
+     * <code>string lifecycle_state = 12;</code>
+     * @return The bytes for lifecycleState.
+     */
+    com.google.protobuf.ByteString
+        getLifecycleStateBytes();
+
+    /**
+     * <code>bool mapping_stopped = 13;</code>
+     * @return The mappingStopped.
+     */
+    boolean getMappingStopped();
+
+    /**
+     * <code>bool localization_started = 14;</code>
+     * @return The localizationStarted.
+     */
+    boolean getLocalizationStarted();
+
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @return A list containing the residualNodes.
+     */
+    java.util.List<java.lang.String>
+        getResidualNodesList();
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @return The count of residualNodes.
+     */
+    int getResidualNodesCount();
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @param index The index of the element to return.
+     * @return The residualNodes at the given index.
+     */
+    java.lang.String getResidualNodes(int index);
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the residualNodes at the given index.
+     */
+    com.google.protobuf.ByteString
+        getResidualNodesBytes(int index);
   }
   /**
    * Protobuf type {@code sl_link.MapSaveResponse}
@@ -69991,6 +71782,10 @@ public final class SlLink {
       mapYamlPath_ = "";
       mapImagePath_ = "";
       createdAt_ = "";
+      mapRevision_ = "";
+      lifecycleState_ = "";
+      residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     @java.lang.Override
@@ -70044,7 +71839,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -70060,7 +71855,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -70083,7 +71878,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -70099,7 +71894,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -70122,7 +71917,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapName_ = s;
@@ -70138,7 +71933,7 @@ public final class SlLink {
         getMapNameBytes() {
       java.lang.Object ref = mapName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapName_ = b;
@@ -70161,7 +71956,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapYamlPath_ = s;
@@ -70177,7 +71972,7 @@ public final class SlLink {
         getMapYamlPathBytes() {
       java.lang.Object ref = mapYamlPath_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapYamlPath_ = b;
@@ -70200,7 +71995,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapImagePath_ = s;
@@ -70216,7 +72011,7 @@ public final class SlLink {
         getMapImagePathBytes() {
       java.lang.Object ref = mapImagePath_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapImagePath_ = b;
@@ -70272,7 +72067,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         createdAt_ = s;
@@ -70288,7 +72083,7 @@ public final class SlLink {
         getCreatedAtBytes() {
       java.lang.Object ref = createdAt_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         createdAt_ = b;
@@ -70296,6 +72091,143 @@ public final class SlLink {
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 11;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 11;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 11;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int LIFECYCLE_STATE_FIELD_NUMBER = 12;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lifecycleState_ = "";
+    /**
+     * <code>string lifecycle_state = 12;</code>
+     * @return The lifecycleState.
+     */
+    @java.lang.Override
+    public java.lang.String getLifecycleState() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifecycleState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string lifecycle_state = 12;</code>
+     * @return The bytes for lifecycleState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLifecycleStateBytes() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifecycleState_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAPPING_STOPPED_FIELD_NUMBER = 13;
+    private boolean mappingStopped_ = false;
+    /**
+     * <code>bool mapping_stopped = 13;</code>
+     * @return The mappingStopped.
+     */
+    @java.lang.Override
+    public boolean getMappingStopped() {
+      return mappingStopped_;
+    }
+
+    public static final int LOCALIZATION_STARTED_FIELD_NUMBER = 14;
+    private boolean localizationStarted_ = false;
+    /**
+     * <code>bool localization_started = 14;</code>
+     * @return The localizationStarted.
+     */
+    @java.lang.Override
+    public boolean getLocalizationStarted() {
+      return localizationStarted_;
+    }
+
+    public static final int RESIDUAL_NODES_FIELD_NUMBER = 15;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.LazyStringArrayList residualNodes_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @return A list containing the residualNodes.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getResidualNodesList() {
+      return residualNodes_;
+    }
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @return The count of residualNodes.
+     */
+    public int getResidualNodesCount() {
+      return residualNodes_.size();
+    }
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @param index The index of the element to return.
+     * @return The residualNodes at the given index.
+     */
+    public java.lang.String getResidualNodes(int index) {
+      return residualNodes_.get(index);
+    }
+    /**
+     * <code>repeated string residual_nodes = 15;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the residualNodes at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getResidualNodesBytes(int index) {
+      return residualNodes_.getByteString(index);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -70342,6 +72274,21 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(createdAt_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 10, createdAt_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, lifecycleState_);
+      }
+      if (mappingStopped_ != false) {
+        output.writeBool(13, mappingStopped_);
+      }
+      if (localizationStarted_ != false) {
+        output.writeBool(14, localizationStarted_);
+      }
+      for (int i = 0; i < residualNodes_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 15, residualNodes_.getRaw(i));
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -70385,6 +72332,28 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(createdAt_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, createdAt_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, lifecycleState_);
+      }
+      if (mappingStopped_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(13, mappingStopped_);
+      }
+      if (localizationStarted_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(14, localizationStarted_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < residualNodes_.size(); i++) {
+          dataSize += computeStringSizeNoTag(residualNodes_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getResidualNodesList().size();
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -70421,6 +72390,16 @@ public final class SlLink {
               other.getEstimatedTimeS())) return false;
       if (!getCreatedAt()
           .equals(other.getCreatedAt())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
+      if (!getLifecycleState()
+          .equals(other.getLifecycleState())) return false;
+      if (getMappingStopped()
+          != other.getMappingStopped()) return false;
+      if (getLocalizationStarted()
+          != other.getLocalizationStarted()) return false;
+      if (!getResidualNodesList()
+          .equals(other.getResidualNodesList())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -70455,6 +72434,20 @@ public final class SlLink {
           getEstimatedTimeS());
       hash = (37 * hash) + CREATED_AT_FIELD_NUMBER;
       hash = (53 * hash) + getCreatedAt().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
+      hash = (37 * hash) + LIFECYCLE_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getLifecycleState().hashCode();
+      hash = (37 * hash) + MAPPING_STOPPED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getMappingStopped());
+      hash = (37 * hash) + LOCALIZATION_STARTED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getLocalizationStarted());
+      if (getResidualNodesCount() > 0) {
+        hash = (37 * hash) + RESIDUAL_NODES_FIELD_NUMBER;
+        hash = (53 * hash) + getResidualNodesList().hashCode();
+      }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -70596,6 +72589,12 @@ public final class SlLink {
         totalWorkAreaM2_ = 0F;
         estimatedTimeS_ = 0F;
         createdAt_ = "";
+        mapRevision_ = "";
+        lifecycleState_ = "";
+        mappingStopped_ = false;
+        localizationStarted_ = false;
+        residualNodes_ =
+            com.google.protobuf.LazyStringArrayList.emptyList();
         return this;
       }
 
@@ -70658,6 +72657,22 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000200) != 0)) {
           result.createdAt_ = createdAt_;
+        }
+        if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.mapRevision_ = mapRevision_;
+        }
+        if (((from_bitField0_ & 0x00000800) != 0)) {
+          result.lifecycleState_ = lifecycleState_;
+        }
+        if (((from_bitField0_ & 0x00001000) != 0)) {
+          result.mappingStopped_ = mappingStopped_;
+        }
+        if (((from_bitField0_ & 0x00002000) != 0)) {
+          result.localizationStarted_ = localizationStarted_;
+        }
+        if (((from_bitField0_ & 0x00004000) != 0)) {
+          residualNodes_.makeImmutable();
+          result.residualNodes_ = residualNodes_;
         }
       }
 
@@ -70747,6 +72762,32 @@ public final class SlLink {
           bitField0_ |= 0x00000200;
           onChanged();
         }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000400;
+          onChanged();
+        }
+        if (!other.getLifecycleState().isEmpty()) {
+          lifecycleState_ = other.lifecycleState_;
+          bitField0_ |= 0x00000800;
+          onChanged();
+        }
+        if (other.getMappingStopped() != false) {
+          setMappingStopped(other.getMappingStopped());
+        }
+        if (other.getLocalizationStarted() != false) {
+          setLocalizationStarted(other.getLocalizationStarted());
+        }
+        if (!other.residualNodes_.isEmpty()) {
+          if (residualNodes_.isEmpty()) {
+            residualNodes_ = other.residualNodes_;
+            bitField0_ |= 0x00004000;
+          } else {
+            ensureResidualNodesIsMutable();
+            residualNodes_.addAll(other.residualNodes_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -70823,6 +72864,32 @@ public final class SlLink {
                 bitField0_ |= 0x00000200;
                 break;
               } // case 82
+              case 90: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000400;
+                break;
+              } // case 90
+              case 98: {
+                lifecycleState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000800;
+                break;
+              } // case 98
+              case 104: {
+                mappingStopped_ = input.readBool();
+                bitField0_ |= 0x00001000;
+                break;
+              } // case 104
+              case 112: {
+                localizationStarted_ = input.readBool();
+                bitField0_ |= 0x00002000;
+                break;
+              } // case 112
+              case 122: {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureResidualNodesIsMutable();
+                residualNodes_.add(s);
+                break;
+              } // case 122
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -70918,7 +72985,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -70990,7 +73057,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -71062,7 +73129,7 @@ public final class SlLink {
           getMapNameBytes() {
         java.lang.Object ref = mapName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapName_ = b;
@@ -71134,7 +73201,7 @@ public final class SlLink {
           getMapYamlPathBytes() {
         java.lang.Object ref = mapYamlPath_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapYamlPath_ = b;
@@ -71206,7 +73273,7 @@ public final class SlLink {
           getMapImagePathBytes() {
         java.lang.Object ref = mapImagePath_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapImagePath_ = b;
@@ -71374,7 +73441,7 @@ public final class SlLink {
           getCreatedAtBytes() {
         java.lang.Object ref = createdAt_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           createdAt_ = b;
@@ -71417,6 +73484,325 @@ public final class SlLink {
         checkByteStringIsUtf8(value);
         createdAt_ = value;
         bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 11;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 11;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 11;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 11;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000400);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 11;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object lifecycleState_ = "";
+      /**
+       * <code>string lifecycle_state = 12;</code>
+       * @return The lifecycleState.
+       */
+      public java.lang.String getLifecycleState() {
+        java.lang.Object ref = lifecycleState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          lifecycleState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 12;</code>
+       * @return The bytes for lifecycleState.
+       */
+      public com.google.protobuf.ByteString
+          getLifecycleStateBytes() {
+        java.lang.Object ref = lifecycleState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lifecycleState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 12;</code>
+       * @param value The lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLifecycleState() {
+        lifecycleState_ = getDefaultInstance().getLifecycleState();
+        bitField0_ = (bitField0_ & ~0x00000800);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 12;</code>
+       * @param value The bytes for lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+
+      private boolean mappingStopped_ ;
+      /**
+       * <code>bool mapping_stopped = 13;</code>
+       * @return The mappingStopped.
+       */
+      @java.lang.Override
+      public boolean getMappingStopped() {
+        return mappingStopped_;
+      }
+      /**
+       * <code>bool mapping_stopped = 13;</code>
+       * @param value The mappingStopped to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMappingStopped(boolean value) {
+
+        mappingStopped_ = value;
+        bitField0_ |= 0x00001000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool mapping_stopped = 13;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMappingStopped() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        mappingStopped_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean localizationStarted_ ;
+      /**
+       * <code>bool localization_started = 14;</code>
+       * @return The localizationStarted.
+       */
+      @java.lang.Override
+      public boolean getLocalizationStarted() {
+        return localizationStarted_;
+      }
+      /**
+       * <code>bool localization_started = 14;</code>
+       * @param value The localizationStarted to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLocalizationStarted(boolean value) {
+
+        localizationStarted_ = value;
+        bitField0_ |= 0x00002000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool localization_started = 14;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLocalizationStarted() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        localizationStarted_ = false;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringArrayList residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+      private void ensureResidualNodesIsMutable() {
+        if (!residualNodes_.isModifiable()) {
+          residualNodes_ = new com.google.protobuf.LazyStringArrayList(residualNodes_);
+        }
+        bitField0_ |= 0x00004000;
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @return A list containing the residualNodes.
+       */
+      public com.google.protobuf.ProtocolStringList
+          getResidualNodesList() {
+        residualNodes_.makeImmutable();
+        return residualNodes_;
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @return The count of residualNodes.
+       */
+      public int getResidualNodesCount() {
+        return residualNodes_.size();
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @param index The index of the element to return.
+       * @return The residualNodes at the given index.
+       */
+      public java.lang.String getResidualNodes(int index) {
+        return residualNodes_.get(index);
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the residualNodes at the given index.
+       */
+      public com.google.protobuf.ByteString
+          getResidualNodesBytes(int index) {
+        return residualNodes_.getByteString(index);
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @param index The index to set the value at.
+       * @param value The residualNodes to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResidualNodes(
+          int index, java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureResidualNodesIsMutable();
+        residualNodes_.set(index, value);
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @param value The residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addResidualNodes(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureResidualNodesIsMutable();
+        residualNodes_.add(value);
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @param values The residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllResidualNodes(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureResidualNodesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, residualNodes_);
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResidualNodes() {
+        residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+        bitField0_ = (bitField0_ & ~0x00004000);;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 15;</code>
+       * @param value The bytes of the residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addResidualNodesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        ensureResidualNodesIsMutable();
+        residualNodes_.add(value);
+        bitField0_ |= 0x00004000;
         onChanged();
         return this;
       }
@@ -71549,7 +73935,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -71565,7 +73951,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -71926,7 +74312,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -72132,7 +74518,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionId_ = s;
@@ -72148,7 +74534,7 @@ public final class SlLink {
         getRegionIdBytes() {
       java.lang.Object ref = regionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionId_ = b;
@@ -72171,7 +74557,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionName_ = s;
@@ -72187,7 +74573,7 @@ public final class SlLink {
         getRegionNameBytes() {
       java.lang.Object ref = regionName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionName_ = b;
@@ -72678,7 +75064,7 @@ public final class SlLink {
           getRegionIdBytes() {
         java.lang.Object ref = regionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionId_ = b;
@@ -72750,7 +75136,7 @@ public final class SlLink {
           getRegionNameBytes() {
         java.lang.Object ref = regionName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionName_ = b;
@@ -73010,7 +75396,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
      */
-    java.util.List<sl_link.SlLink.RegionMetricsItem> 
+    java.util.List<sl_link.SlLink.RegionMetricsItem>
         getRegionMetricsList();
     /**
      * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
@@ -73023,7 +75409,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
      */
-    java.util.List<? extends sl_link.SlLink.RegionMetricsItemOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.RegionMetricsItemOrBuilder>
         getRegionMetricsOrBuilderList();
     /**
      * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
@@ -73102,7 +75488,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -73118,7 +75504,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -73141,7 +75527,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -73157,7 +75543,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -73180,7 +75566,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapName_ = s;
@@ -73196,7 +75582,7 @@ public final class SlLink {
         getMapNameBytes() {
       java.lang.Object ref = mapName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapName_ = b;
@@ -73220,7 +75606,7 @@ public final class SlLink {
      * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.RegionMetricsItemOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.RegionMetricsItemOrBuilder>
         getRegionMetricsOrBuilderList() {
       return regionMetrics_;
     }
@@ -73631,7 +76017,7 @@ public final class SlLink {
               regionMetricsBuilder_ = null;
               regionMetrics_ = other.regionMetrics_;
               bitField0_ = (bitField0_ & ~0x00000010);
-              regionMetricsBuilder_ = 
+              regionMetricsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getRegionMetricsFieldBuilder() : null;
             } else {
@@ -73793,7 +76179,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -73865,7 +76251,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -73937,7 +76323,7 @@ public final class SlLink {
           getMapNameBytes() {
         java.lang.Object ref = mapName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapName_ = b;
@@ -74179,7 +76565,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.RegionMetricsItemOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.RegionMetricsItemOrBuilder>
            getRegionMetricsOrBuilderList() {
         if (regionMetricsBuilder_ != null) {
           return regionMetricsBuilder_.getMessageOrBuilderList();
@@ -74205,12 +76591,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.RegionMetricsItem region_metrics = 5;</code>
        */
-      public java.util.List<sl_link.SlLink.RegionMetricsItem.Builder> 
+      public java.util.List<sl_link.SlLink.RegionMetricsItem.Builder>
            getRegionMetricsBuilderList() {
         return getRegionMetricsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.RegionMetricsItem, sl_link.SlLink.RegionMetricsItem.Builder, sl_link.SlLink.RegionMetricsItemOrBuilder> 
+          sl_link.SlLink.RegionMetricsItem, sl_link.SlLink.RegionMetricsItem.Builder, sl_link.SlLink.RegionMetricsItemOrBuilder>
           getRegionMetricsFieldBuilder() {
         if (regionMetricsBuilder_ == null) {
           regionMetricsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -74371,7 +76757,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -74387,7 +76773,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -74410,7 +76796,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -74426,7 +76812,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -74845,7 +77231,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -74917,7 +77303,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -75168,7 +77554,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionId_ = s;
@@ -75184,7 +77570,7 @@ public final class SlLink {
         getRegionIdBytes() {
       java.lang.Object ref = regionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionId_ = b;
@@ -75207,7 +77593,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regionName_ = s;
@@ -75223,7 +77609,7 @@ public final class SlLink {
         getRegionNameBytes() {
       java.lang.Object ref = regionName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         regionName_ = b;
@@ -75279,7 +77665,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         unfinishedReason_ = s;
@@ -75295,7 +77681,7 @@ public final class SlLink {
         getUnfinishedReasonBytes() {
       java.lang.Object ref = unfinishedReason_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         unfinishedReason_ = b;
@@ -75774,7 +78160,7 @@ public final class SlLink {
           getRegionIdBytes() {
         java.lang.Object ref = regionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionId_ = b;
@@ -75846,7 +78232,7 @@ public final class SlLink {
           getRegionNameBytes() {
         java.lang.Object ref = regionName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionName_ = b;
@@ -76014,7 +78400,7 @@ public final class SlLink {
           getUnfinishedReasonBytes() {
         java.lang.Object ref = unfinishedReason_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           unfinishedReason_ = b;
@@ -76282,7 +78668,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         executionId_ = s;
@@ -76298,7 +78684,7 @@ public final class SlLink {
         getExecutionIdBytes() {
       java.lang.Object ref = executionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         executionId_ = b;
@@ -76321,7 +78707,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -76337,7 +78723,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -76360,7 +78746,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -76376,7 +78762,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -76417,7 +78803,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         stopReason_ = s;
@@ -76433,7 +78819,7 @@ public final class SlLink {
         getStopReasonBytes() {
       java.lang.Object ref = stopReason_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         stopReason_ = b;
@@ -77135,7 +79521,7 @@ public final class SlLink {
           getExecutionIdBytes() {
         java.lang.Object ref = executionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           executionId_ = b;
@@ -77207,7 +79593,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -77279,7 +79665,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -77404,7 +79790,7 @@ public final class SlLink {
           getStopReasonBytes() {
         java.lang.Object ref = stopReason_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           stopReason_ = b;
@@ -77888,7 +80274,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
      */
-    java.util.List<sl_link.SlLink.TaskResultRegionItem> 
+    java.util.List<sl_link.SlLink.TaskResultRegionItem>
         getRegionResultsList();
     /**
      * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
@@ -77901,7 +80287,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
      */
-    java.util.List<? extends sl_link.SlLink.TaskResultRegionItemOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.TaskResultRegionItemOrBuilder>
         getRegionResultsOrBuilderList();
     /**
      * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
@@ -77985,7 +80371,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
      */
-    java.util.List<sl_link.SlLink.TaskExecutionRecord> 
+    java.util.List<sl_link.SlLink.TaskExecutionRecord>
         getExecutionRecordsList();
     /**
      * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
@@ -77998,7 +80384,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
      */
-    java.util.List<? extends sl_link.SlLink.TaskExecutionRecordOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.TaskExecutionRecordOrBuilder>
         getExecutionRecordsOrBuilderList();
     /**
      * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
@@ -78086,7 +80472,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -78102,7 +80488,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -78125,7 +80511,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -78141,7 +80527,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -78164,7 +80550,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -78180,7 +80566,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -78232,7 +80618,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         stopReason_ = s;
@@ -78248,7 +80634,7 @@ public final class SlLink {
         getStopReasonBytes() {
       java.lang.Object ref = stopReason_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         stopReason_ = b;
@@ -78282,7 +80668,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         imageFormat_ = s;
@@ -78298,7 +80684,7 @@ public final class SlLink {
         getImageFormatBytes() {
       java.lang.Object ref = imageFormat_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         imageFormat_ = b;
@@ -78403,7 +80789,7 @@ public final class SlLink {
      * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.TaskResultRegionItemOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.TaskResultRegionItemOrBuilder>
         getRegionResultsOrBuilderList() {
       return regionResults_;
     }
@@ -78506,7 +80892,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         executionId_ = s;
@@ -78522,7 +80908,7 @@ public final class SlLink {
         getExecutionIdBytes() {
       java.lang.Object ref = executionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         executionId_ = b;
@@ -78590,7 +80976,7 @@ public final class SlLink {
      * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.TaskExecutionRecordOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.TaskExecutionRecordOrBuilder>
         getExecutionRecordsOrBuilderList() {
       return executionRecords_;
     }
@@ -79397,7 +81783,7 @@ public final class SlLink {
               regionResultsBuilder_ = null;
               regionResults_ = other.regionResults_;
               bitField0_ = (bitField0_ & ~0x00004000);
-              regionResultsBuilder_ = 
+              regionResultsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getRegionResultsFieldBuilder() : null;
             } else {
@@ -79452,7 +81838,7 @@ public final class SlLink {
               executionRecordsBuilder_ = null;
               executionRecords_ = other.executionRecords_;
               bitField0_ = (bitField0_ & ~0x01000000);
-              executionRecordsBuilder_ = 
+              executionRecordsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getExecutionRecordsFieldBuilder() : null;
             } else {
@@ -79725,7 +82111,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -79797,7 +82183,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -79869,7 +82255,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -80026,7 +82412,7 @@ public final class SlLink {
           getStopReasonBytes() {
         java.lang.Object ref = stopReason_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           stopReason_ = b;
@@ -80130,7 +82516,7 @@ public final class SlLink {
           getImageFormatBytes() {
         java.lang.Object ref = imageFormat_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           imageFormat_ = b;
@@ -80611,7 +82997,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.TaskResultRegionItemOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.TaskResultRegionItemOrBuilder>
            getRegionResultsOrBuilderList() {
         if (regionResultsBuilder_ != null) {
           return regionResultsBuilder_.getMessageOrBuilderList();
@@ -80637,12 +83023,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.TaskResultRegionItem region_results = 15;</code>
        */
-      public java.util.List<sl_link.SlLink.TaskResultRegionItem.Builder> 
+      public java.util.List<sl_link.SlLink.TaskResultRegionItem.Builder>
            getRegionResultsBuilderList() {
         return getRegionResultsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.TaskResultRegionItem, sl_link.SlLink.TaskResultRegionItem.Builder, sl_link.SlLink.TaskResultRegionItemOrBuilder> 
+          sl_link.SlLink.TaskResultRegionItem, sl_link.SlLink.TaskResultRegionItem.Builder, sl_link.SlLink.TaskResultRegionItemOrBuilder>
           getRegionResultsFieldBuilder() {
         if (regionResultsBuilder_ == null) {
           regionResultsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -80764,7 +83150,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance localization_covariance = 16;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getLocalizationCovarianceFieldBuilder() {
         if (localizationCovarianceBuilder_ == null) {
           localizationCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -80910,7 +83296,7 @@ public final class SlLink {
           getExecutionIdBytes() {
         java.lang.Object ref = executionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           executionId_ = b;
@@ -81280,7 +83666,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.TaskExecutionRecordOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.TaskExecutionRecordOrBuilder>
            getExecutionRecordsOrBuilderList() {
         if (executionRecordsBuilder_ != null) {
           return executionRecordsBuilder_.getMessageOrBuilderList();
@@ -81306,12 +83692,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.TaskExecutionRecord execution_records = 25;</code>
        */
-      public java.util.List<sl_link.SlLink.TaskExecutionRecord.Builder> 
+      public java.util.List<sl_link.SlLink.TaskExecutionRecord.Builder>
            getExecutionRecordsBuilderList() {
         return getExecutionRecordsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.TaskExecutionRecord, sl_link.SlLink.TaskExecutionRecord.Builder, sl_link.SlLink.TaskExecutionRecordOrBuilder> 
+          sl_link.SlLink.TaskExecutionRecord, sl_link.SlLink.TaskExecutionRecord.Builder, sl_link.SlLink.TaskExecutionRecordOrBuilder>
           getExecutionRecordsFieldBuilder() {
         if (executionRecordsBuilder_ == null) {
           executionRecordsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -81488,7 +83874,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -81504,7 +83890,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -81527,7 +83913,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -81543,7 +83929,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -82036,7 +84422,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -82108,7 +84494,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -82458,7 +84844,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -82474,7 +84860,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -83116,7 +85502,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -83495,7 +85881,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         executionId_ = s;
@@ -83515,7 +85901,7 @@ public final class SlLink {
         getExecutionIdBytes() {
       java.lang.Object ref = executionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         executionId_ = b;
@@ -83884,7 +86270,7 @@ public final class SlLink {
           getExecutionIdBytes() {
         java.lang.Object ref = executionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           executionId_ = b;
@@ -84152,7 +86538,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -84168,7 +86554,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -84191,7 +86577,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         executionId_ = s;
@@ -84207,7 +86593,7 @@ public final class SlLink {
         getExecutionIdBytes() {
       java.lang.Object ref = executionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         executionId_ = b;
@@ -84230,7 +86616,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -84246,7 +86632,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -84269,7 +86655,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -84285,7 +86671,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -84863,7 +87249,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -84935,7 +87321,7 @@ public final class SlLink {
           getExecutionIdBytes() {
         java.lang.Object ref = executionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           executionId_ = b;
@@ -85007,7 +87393,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -85079,7 +87465,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -85383,7 +87769,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         executionId_ = s;
@@ -85403,7 +87789,7 @@ public final class SlLink {
         getExecutionIdBytes() {
       java.lang.Object ref = executionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         executionId_ = b;
@@ -85426,7 +87812,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -85442,7 +87828,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -86045,7 +88431,7 @@ public final class SlLink {
           getExecutionIdBytes() {
         java.lang.Object ref = executionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           executionId_ = b;
@@ -86129,7 +88515,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -87784,7 +90170,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
      */
-    java.util.List<sl_link.SlLink.TaskTrajectoryPoint> 
+    java.util.List<sl_link.SlLink.TaskTrajectoryPoint>
         getPointsList();
     /**
      * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
@@ -87797,7 +90183,7 @@ public final class SlLink {
     /**
      * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
      */
-    java.util.List<? extends sl_link.SlLink.TaskTrajectoryPointOrBuilder> 
+    java.util.List<? extends sl_link.SlLink.TaskTrajectoryPointOrBuilder>
         getPointsOrBuilderList();
     /**
      * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
@@ -88073,7 +90459,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -88089,7 +90475,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -88112,7 +90498,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         executionId_ = s;
@@ -88128,7 +90514,7 @@ public final class SlLink {
         getExecutionIdBytes() {
       java.lang.Object ref = executionId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         executionId_ = b;
@@ -88240,7 +90626,7 @@ public final class SlLink {
      * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
      */
     @java.lang.Override
-    public java.util.List<? extends sl_link.SlLink.TaskTrajectoryPointOrBuilder> 
+    public java.util.List<? extends sl_link.SlLink.TaskTrajectoryPointOrBuilder>
         getPointsOrBuilderList() {
       return points_;
     }
@@ -88280,7 +90666,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         taskId_ = s;
@@ -88296,7 +90682,7 @@ public final class SlLink {
         getTaskIdBytes() {
       java.lang.Object ref = taskId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         taskId_ = b;
@@ -88319,7 +90705,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapId_ = s;
@@ -88335,7 +90721,7 @@ public final class SlLink {
         getMapIdBytes() {
       java.lang.Object ref = mapId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapId_ = b;
@@ -88402,7 +90788,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapMessage_ = s;
@@ -88418,7 +90804,7 @@ public final class SlLink {
         getMapMessageBytes() {
       java.lang.Object ref = mapMessage_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapMessage_ = b;
@@ -88515,7 +90901,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapFrameId_ = s;
@@ -88531,7 +90917,7 @@ public final class SlLink {
         getMapFrameIdBytes() {
       java.lang.Object ref = mapFrameId_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapFrameId_ = b;
@@ -88554,7 +90940,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         mapImageFormat_ = s;
@@ -88570,7 +90956,7 @@ public final class SlLink {
         getMapImageFormatBytes() {
       java.lang.Object ref = mapImageFormat_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mapImageFormat_ = b;
@@ -89602,7 +91988,7 @@ public final class SlLink {
               pointsBuilder_ = null;
               points_ = other.points_;
               bitField0_ = (bitField0_ & ~0x00000800);
-              pointsBuilder_ = 
+              pointsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getPointsFieldBuilder() : null;
             } else {
@@ -90004,7 +92390,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -90076,7 +92462,7 @@ public final class SlLink {
           getExecutionIdBytes() {
         java.lang.Object ref = executionId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           executionId_ = b;
@@ -90574,7 +92960,7 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
        */
-      public java.util.List<? extends sl_link.SlLink.TaskTrajectoryPointOrBuilder> 
+      public java.util.List<? extends sl_link.SlLink.TaskTrajectoryPointOrBuilder>
            getPointsOrBuilderList() {
         if (pointsBuilder_ != null) {
           return pointsBuilder_.getMessageOrBuilderList();
@@ -90600,12 +92986,12 @@ public final class SlLink {
       /**
        * <code>repeated .sl_link.TaskTrajectoryPoint points = 12;</code>
        */
-      public java.util.List<sl_link.SlLink.TaskTrajectoryPoint.Builder> 
+      public java.util.List<sl_link.SlLink.TaskTrajectoryPoint.Builder>
            getPointsBuilderList() {
         return getPointsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sl_link.SlLink.TaskTrajectoryPoint, sl_link.SlLink.TaskTrajectoryPoint.Builder, sl_link.SlLink.TaskTrajectoryPointOrBuilder> 
+          sl_link.SlLink.TaskTrajectoryPoint, sl_link.SlLink.TaskTrajectoryPoint.Builder, sl_link.SlLink.TaskTrajectoryPointOrBuilder>
           getPointsFieldBuilder() {
         if (pointsBuilder_ == null) {
           pointsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
@@ -90644,7 +93030,7 @@ public final class SlLink {
           getTaskIdBytes() {
         java.lang.Object ref = taskId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           taskId_ = b;
@@ -90716,7 +93102,7 @@ public final class SlLink {
           getMapIdBytes() {
         java.lang.Object ref = mapId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapId_ = b;
@@ -90916,7 +93302,7 @@ public final class SlLink {
           getMapMessageBytes() {
         java.lang.Object ref = mapMessage_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapMessage_ = b;
@@ -91211,7 +93597,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D map_origin = 24;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getMapOriginFieldBuilder() {
         if (mapOriginBuilder_ == null) {
           mapOriginBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -91249,7 +93635,7 @@ public final class SlLink {
           getMapFrameIdBytes() {
         java.lang.Object ref = mapFrameId_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapFrameId_ = b;
@@ -91321,7 +93707,7 @@ public final class SlLink {
           getMapImageFormatBytes() {
         java.lang.Object ref = mapImageFormat_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mapImageFormat_ = b;
@@ -92255,7 +94641,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -92271,7 +94657,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -92707,7 +95093,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -93591,7 +95977,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -93607,7 +95993,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -94250,7 +96636,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -95044,7 +97430,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -95060,7 +97446,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -95496,7 +97882,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -96123,7 +98509,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -96139,7 +98525,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -96173,7 +98559,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         status_ = s;
@@ -96189,7 +98575,7 @@ public final class SlLink {
         getStatusBytes() {
       java.lang.Object ref = status_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         status_ = b;
@@ -96708,7 +99094,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -96812,7 +99198,7 @@ public final class SlLink {
           getStatusBytes() {
         java.lang.Object ref = status_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           status_ = b;
@@ -97452,7 +99838,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -97468,7 +99854,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -97939,7 +100325,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -98140,6 +100526,38 @@ public final class SlLink {
      * <code>.sl_link.LocalizationCovariance initial_pose_covariance = 3;</code>
      */
     sl_link.SlLink.LocalizationCovarianceOrBuilder getInitialPoseCovarianceOrBuilder();
+
+    /**
+     * <pre>
+     * Must match the currently active immutable saved map.
+     * </pre>
+     *
+     * <code>string map_id = 4;</code>
+     * @return The mapId.
+     */
+    java.lang.String getMapId();
+    /**
+     * <pre>
+     * Must match the currently active immutable saved map.
+     * </pre>
+     *
+     * <code>string map_id = 4;</code>
+     * @return The bytes for mapId.
+     */
+    com.google.protobuf.ByteString
+        getMapIdBytes();
+
+    /**
+     * <code>string map_revision = 5;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 5;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
   }
   /**
    * Protobuf type {@code sl_link.RadarRelocalizationRequest}
@@ -98154,6 +100572,8 @@ public final class SlLink {
       super(builder);
     }
     private RadarRelocalizationRequest() {
+      mapId_ = "";
+      mapRevision_ = "";
     }
 
     @java.lang.Override
@@ -98260,6 +100680,92 @@ public final class SlLink {
       return initialPoseCovariance_ == null ? sl_link.SlLink.LocalizationCovariance.getDefaultInstance() : initialPoseCovariance_;
     }
 
+    public static final int MAP_ID_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapId_ = "";
+    /**
+     * <pre>
+     * Must match the currently active immutable saved map.
+     * </pre>
+     *
+     * <code>string map_id = 4;</code>
+     * @return The mapId.
+     */
+    @java.lang.Override
+    public java.lang.String getMapId() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Must match the currently active immutable saved map.
+     * </pre>
+     *
+     * <code>string map_id = 4;</code>
+     * @return The bytes for mapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapIdBytes() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 5;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 5;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 5;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -98283,6 +100789,12 @@ public final class SlLink {
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeMessage(3, getInitialPoseCovariance());
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, mapRevision_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -98303,6 +100815,12 @@ public final class SlLink {
       if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getInitialPoseCovariance());
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, mapRevision_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -98331,6 +100849,10 @@ public final class SlLink {
         if (!getInitialPoseCovariance()
             .equals(other.getInitialPoseCovariance())) return false;
       }
+      if (!getMapId()
+          .equals(other.getMapId())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -98353,6 +100875,10 @@ public final class SlLink {
         hash = (37 * hash) + INITIAL_POSE_COVARIANCE_FIELD_NUMBER;
         hash = (53 * hash) + getInitialPoseCovariance().hashCode();
       }
+      hash = (37 * hash) + MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getMapId().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -98502,6 +101028,8 @@ public final class SlLink {
           initialPoseCovarianceBuilder_.dispose();
           initialPoseCovarianceBuilder_ = null;
         }
+        mapId_ = "";
+        mapRevision_ = "";
         return this;
       }
 
@@ -98550,6 +101078,12 @@ public final class SlLink {
               ? initialPoseCovariance_
               : initialPoseCovarianceBuilder_.build();
           to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.mapId_ = mapId_;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.mapRevision_ = mapRevision_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -98607,6 +101141,16 @@ public final class SlLink {
         if (other.hasInitialPoseCovariance()) {
           mergeInitialPoseCovariance(other.getInitialPoseCovariance());
         }
+        if (!other.getMapId().isEmpty()) {
+          mapId_ = other.mapId_;
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000010;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -98652,6 +101196,16 @@ public final class SlLink {
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
+              case 34: {
+                mapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              case 42: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -98824,7 +101378,7 @@ public final class SlLink {
        * <code>.sl_link.Pose2D initial_pose = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder> 
+          sl_link.SlLink.Pose2D, sl_link.SlLink.Pose2D.Builder, sl_link.SlLink.Pose2DOrBuilder>
           getInitialPoseFieldBuilder() {
         if (initialPoseBuilder_ == null) {
           initialPoseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -98990,7 +101544,7 @@ public final class SlLink {
        * <code>.sl_link.LocalizationCovariance initial_pose_covariance = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder> 
+          sl_link.SlLink.LocalizationCovariance, sl_link.SlLink.LocalizationCovariance.Builder, sl_link.SlLink.LocalizationCovarianceOrBuilder>
           getInitialPoseCovarianceFieldBuilder() {
         if (initialPoseCovarianceBuilder_ == null) {
           initialPoseCovarianceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -99001,6 +101555,170 @@ public final class SlLink {
           initialPoseCovariance_ = null;
         }
         return initialPoseCovarianceBuilder_;
+      }
+
+      private java.lang.Object mapId_ = "";
+      /**
+       * <pre>
+       * Must match the currently active immutable saved map.
+       * </pre>
+       *
+       * <code>string map_id = 4;</code>
+       * @return The mapId.
+       */
+      public java.lang.String getMapId() {
+        java.lang.Object ref = mapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Must match the currently active immutable saved map.
+       * </pre>
+       *
+       * <code>string map_id = 4;</code>
+       * @return The bytes for mapId.
+       */
+      public com.google.protobuf.ByteString
+          getMapIdBytes() {
+        java.lang.Object ref = mapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Must match the currently active immutable saved map.
+       * </pre>
+       *
+       * <code>string map_id = 4;</code>
+       * @param value The mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapId_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Must match the currently active immutable saved map.
+       * </pre>
+       *
+       * <code>string map_id = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapId() {
+        mapId_ = getDefaultInstance().getMapId();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Must match the currently active immutable saved map.
+       * </pre>
+       *
+       * <code>string map_id = 4;</code>
+       * @param value The bytes for mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapId_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 5;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 5;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 5;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 5;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -99114,6 +101832,42 @@ public final class SlLink {
      */
     com.google.protobuf.ByteString
         getStatusBytes();
+
+    /**
+     * <code>string map_id = 5;</code>
+     * @return The mapId.
+     */
+    java.lang.String getMapId();
+    /**
+     * <code>string map_id = 5;</code>
+     * @return The bytes for mapId.
+     */
+    com.google.protobuf.ByteString
+        getMapIdBytes();
+
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
+
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The lifecycleState.
+     */
+    java.lang.String getLifecycleState();
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The bytes for lifecycleState.
+     */
+    com.google.protobuf.ByteString
+        getLifecycleStateBytes();
   }
   /**
    * Protobuf type {@code sl_link.RadarRelocalizationResponse}
@@ -99131,6 +101885,9 @@ public final class SlLink {
       result_ = 0;
       message_ = "";
       status_ = "";
+      mapId_ = "";
+      mapRevision_ = "";
+      lifecycleState_ = "";
     }
 
     @java.lang.Override
@@ -99184,7 +101941,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -99200,7 +101957,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -99238,7 +101995,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         status_ = s;
@@ -99254,10 +102011,127 @@ public final class SlLink {
         getStatusBytes() {
       java.lang.Object ref = status_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         status_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_ID_FIELD_NUMBER = 5;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapId_ = "";
+    /**
+     * <code>string map_id = 5;</code>
+     * @return The mapId.
+     */
+    @java.lang.Override
+    public java.lang.String getMapId() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_id = 5;</code>
+     * @return The bytes for mapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapIdBytes() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 6;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 6;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int LIFECYCLE_STATE_FIELD_NUMBER = 7;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lifecycleState_ = "";
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The lifecycleState.
+     */
+    @java.lang.Override
+    public java.lang.String getLifecycleState() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifecycleState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string lifecycle_state = 7;</code>
+     * @return The bytes for lifecycleState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLifecycleStateBytes() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifecycleState_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -99290,6 +102164,15 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(status_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, status_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, lifecycleState_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -99313,6 +102196,15 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(status_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, status_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, mapRevision_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, lifecycleState_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -99335,6 +102227,12 @@ public final class SlLink {
           != other.getAccepted()) return false;
       if (!getStatus()
           .equals(other.getStatus())) return false;
+      if (!getMapId()
+          .equals(other.getMapId())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
+      if (!getLifecycleState()
+          .equals(other.getLifecycleState())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -99355,6 +102253,12 @@ public final class SlLink {
           getAccepted());
       hash = (37 * hash) + STATUS_FIELD_NUMBER;
       hash = (53 * hash) + getStatus().hashCode();
+      hash = (37 * hash) + MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getMapId().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
+      hash = (37 * hash) + LIFECYCLE_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getLifecycleState().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -99490,6 +102394,9 @@ public final class SlLink {
         message_ = "";
         accepted_ = false;
         status_ = "";
+        mapId_ = "";
+        mapRevision_ = "";
+        lifecycleState_ = "";
         return this;
       }
 
@@ -99534,6 +102441,15 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
           result.status_ = status_;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.mapId_ = mapId_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.mapRevision_ = mapRevision_;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.lifecycleState_ = lifecycleState_;
         }
       }
 
@@ -99597,6 +102513,21 @@ public final class SlLink {
           bitField0_ |= 0x00000008;
           onChanged();
         }
+        if (!other.getMapId().isEmpty()) {
+          mapId_ = other.mapId_;
+          bitField0_ |= 0x00000010;
+          onChanged();
+        }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000020;
+          onChanged();
+        }
+        if (!other.getLifecycleState().isEmpty()) {
+          lifecycleState_ = other.lifecycleState_;
+          bitField0_ |= 0x00000040;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -99643,6 +102574,21 @@ public final class SlLink {
                 bitField0_ |= 0x00000008;
                 break;
               } // case 34
+              case 42: {
+                mapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
+              case 50: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 50
+              case 58: {
+                lifecycleState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 58
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -99738,7 +102684,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -99854,7 +102800,7 @@ public final class SlLink {
           getStatusBytes() {
         java.lang.Object ref = status_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           status_ = b;
@@ -99897,6 +102843,222 @@ public final class SlLink {
         checkByteStringIsUtf8(value);
         status_ = value;
         bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapId_ = "";
+      /**
+       * <code>string map_id = 5;</code>
+       * @return The mapId.
+       */
+      public java.lang.String getMapId() {
+        java.lang.Object ref = mapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 5;</code>
+       * @return The bytes for mapId.
+       */
+      public com.google.protobuf.ByteString
+          getMapIdBytes() {
+        java.lang.Object ref = mapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 5;</code>
+       * @param value The mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapId_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapId() {
+        mapId_ = getDefaultInstance().getMapId();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 5;</code>
+       * @param value The bytes for mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapId_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 6;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 6;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object lifecycleState_ = "";
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @return The lifecycleState.
+       */
+      public java.lang.String getLifecycleState() {
+        java.lang.Object ref = lifecycleState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          lifecycleState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @return The bytes for lifecycleState.
+       */
+      public com.google.protobuf.ByteString
+          getLifecycleStateBytes() {
+        java.lang.Object ref = lifecycleState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lifecycleState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @param value The lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLifecycleState() {
+        lifecycleState_ = getDefaultInstance().getLifecycleState();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 7;</code>
+       * @param value The bytes for lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -100382,6 +103544,109 @@ public final class SlLink {
      * @return The timestampNs.
      */
     long getTimestampNs();
+
+    /**
+     * <code>string lifecycle_state = 11;</code>
+     * @return The lifecycleState.
+     */
+    java.lang.String getLifecycleState();
+    /**
+     * <code>string lifecycle_state = 11;</code>
+     * @return The bytes for lifecycleState.
+     */
+    com.google.protobuf.ByteString
+        getLifecycleStateBytes();
+
+    /**
+     * <code>string detail = 12;</code>
+     * @return The detail.
+     */
+    java.lang.String getDetail();
+    /**
+     * <code>string detail = 12;</code>
+     * @return The bytes for detail.
+     */
+    com.google.protobuf.ByteString
+        getDetailBytes();
+
+    /**
+     * <code>string map_id = 13;</code>
+     * @return The mapId.
+     */
+    java.lang.String getMapId();
+    /**
+     * <code>string map_id = 13;</code>
+     * @return The bytes for mapId.
+     */
+    com.google.protobuf.ByteString
+        getMapIdBytes();
+
+    /**
+     * <code>string map_revision = 14;</code>
+     * @return The mapRevision.
+     */
+    java.lang.String getMapRevision();
+    /**
+     * <code>string map_revision = 14;</code>
+     * @return The bytes for mapRevision.
+     */
+    com.google.protobuf.ByteString
+        getMapRevisionBytes();
+
+    /**
+     * <code>uint32 good_frames = 15;</code>
+     * @return The goodFrames.
+     */
+    int getGoodFrames();
+
+    /**
+     * <code>uint32 required_frames = 16;</code>
+     * @return The requiredFrames.
+     */
+    int getRequiredFrames();
+
+    /**
+     * <code>bool registration_quality_valid = 17;</code>
+     * @return The registrationQualityValid.
+     */
+    boolean getRegistrationQualityValid();
+
+    /**
+     * <code>float registration_fitness = 18;</code>
+     * @return The registrationFitness.
+     */
+    float getRegistrationFitness();
+
+    /**
+     * <code>float registration_inlier_ratio = 19;</code>
+     * @return The registrationInlierRatio.
+     */
+    float getRegistrationInlierRatio();
+
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @return A list containing the residualNodes.
+     */
+    java.util.List<java.lang.String>
+        getResidualNodesList();
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @return The count of residualNodes.
+     */
+    int getResidualNodesCount();
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @param index The index of the element to return.
+     * @return The residualNodes at the given index.
+     */
+    java.lang.String getResidualNodes(int index);
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the residualNodes at the given index.
+     */
+    com.google.protobuf.ByteString
+        getResidualNodesBytes(int index);
   }
   /**
    * Protobuf type {@code sl_link.RadarRelocalizationStatusResponse}
@@ -100397,6 +103662,12 @@ public final class SlLink {
     }
     private RadarRelocalizationStatusResponse() {
       rawStatus_ = "";
+      lifecycleState_ = "";
+      detail_ = "";
+      mapId_ = "";
+      mapRevision_ = "";
+      residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     @java.lang.Override
@@ -100432,7 +103703,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         rawStatus_ = s;
@@ -100448,7 +103719,7 @@ public final class SlLink {
         getRawStatusBytes() {
       java.lang.Object ref = rawStatus_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         rawStatus_ = b;
@@ -100467,6 +103738,254 @@ public final class SlLink {
     @java.lang.Override
     public long getTimestampNs() {
       return timestampNs_;
+    }
+
+    public static final int LIFECYCLE_STATE_FIELD_NUMBER = 11;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lifecycleState_ = "";
+    /**
+     * <code>string lifecycle_state = 11;</code>
+     * @return The lifecycleState.
+     */
+    @java.lang.Override
+    public java.lang.String getLifecycleState() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifecycleState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string lifecycle_state = 11;</code>
+     * @return The bytes for lifecycleState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLifecycleStateBytes() {
+      java.lang.Object ref = lifecycleState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifecycleState_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int DETAIL_FIELD_NUMBER = 12;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object detail_ = "";
+    /**
+     * <code>string detail = 12;</code>
+     * @return The detail.
+     */
+    @java.lang.Override
+    public java.lang.String getDetail() {
+      java.lang.Object ref = detail_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        detail_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string detail = 12;</code>
+     * @return The bytes for detail.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getDetailBytes() {
+      java.lang.Object ref = detail_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        detail_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_ID_FIELD_NUMBER = 13;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapId_ = "";
+    /**
+     * <code>string map_id = 13;</code>
+     * @return The mapId.
+     */
+    @java.lang.Override
+    public java.lang.String getMapId() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_id = 13;</code>
+     * @return The bytes for mapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapIdBytes() {
+      java.lang.Object ref = mapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAP_REVISION_FIELD_NUMBER = 14;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object mapRevision_ = "";
+    /**
+     * <code>string map_revision = 14;</code>
+     * @return The mapRevision.
+     */
+    @java.lang.Override
+    public java.lang.String getMapRevision() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mapRevision_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string map_revision = 14;</code>
+     * @return The bytes for mapRevision.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMapRevisionBytes() {
+      java.lang.Object ref = mapRevision_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mapRevision_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int GOOD_FRAMES_FIELD_NUMBER = 15;
+    private int goodFrames_ = 0;
+    /**
+     * <code>uint32 good_frames = 15;</code>
+     * @return The goodFrames.
+     */
+    @java.lang.Override
+    public int getGoodFrames() {
+      return goodFrames_;
+    }
+
+    public static final int REQUIRED_FRAMES_FIELD_NUMBER = 16;
+    private int requiredFrames_ = 0;
+    /**
+     * <code>uint32 required_frames = 16;</code>
+     * @return The requiredFrames.
+     */
+    @java.lang.Override
+    public int getRequiredFrames() {
+      return requiredFrames_;
+    }
+
+    public static final int REGISTRATION_QUALITY_VALID_FIELD_NUMBER = 17;
+    private boolean registrationQualityValid_ = false;
+    /**
+     * <code>bool registration_quality_valid = 17;</code>
+     * @return The registrationQualityValid.
+     */
+    @java.lang.Override
+    public boolean getRegistrationQualityValid() {
+      return registrationQualityValid_;
+    }
+
+    public static final int REGISTRATION_FITNESS_FIELD_NUMBER = 18;
+    private float registrationFitness_ = 0F;
+    /**
+     * <code>float registration_fitness = 18;</code>
+     * @return The registrationFitness.
+     */
+    @java.lang.Override
+    public float getRegistrationFitness() {
+      return registrationFitness_;
+    }
+
+    public static final int REGISTRATION_INLIER_RATIO_FIELD_NUMBER = 19;
+    private float registrationInlierRatio_ = 0F;
+    /**
+     * <code>float registration_inlier_ratio = 19;</code>
+     * @return The registrationInlierRatio.
+     */
+    @java.lang.Override
+    public float getRegistrationInlierRatio() {
+      return registrationInlierRatio_;
+    }
+
+    public static final int RESIDUAL_NODES_FIELD_NUMBER = 20;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.LazyStringArrayList residualNodes_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @return A list containing the residualNodes.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getResidualNodesList() {
+      return residualNodes_;
+    }
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @return The count of residualNodes.
+     */
+    public int getResidualNodesCount() {
+      return residualNodes_.size();
+    }
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @param index The index of the element to return.
+     * @return The residualNodes at the given index.
+     */
+    public java.lang.String getResidualNodes(int index) {
+      return residualNodes_.get(index);
+    }
+    /**
+     * <code>repeated string residual_nodes = 20;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the residualNodes at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getResidualNodesBytes(int index) {
+      return residualNodes_.getByteString(index);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -100489,6 +104008,36 @@ public final class SlLink {
       if (timestampNs_ != 0L) {
         output.writeUInt64(10, timestampNs_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, lifecycleState_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(detail_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, detail_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 13, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, mapRevision_);
+      }
+      if (goodFrames_ != 0) {
+        output.writeUInt32(15, goodFrames_);
+      }
+      if (requiredFrames_ != 0) {
+        output.writeUInt32(16, requiredFrames_);
+      }
+      if (registrationQualityValid_ != false) {
+        output.writeBool(17, registrationQualityValid_);
+      }
+      if (java.lang.Float.floatToRawIntBits(registrationFitness_) != 0) {
+        output.writeFloat(18, registrationFitness_);
+      }
+      if (java.lang.Float.floatToRawIntBits(registrationInlierRatio_) != 0) {
+        output.writeFloat(19, registrationInlierRatio_);
+      }
+      for (int i = 0; i < residualNodes_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 20, residualNodes_.getRaw(i));
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -100504,6 +104053,46 @@ public final class SlLink {
       if (timestampNs_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(10, timestampNs_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lifecycleState_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, lifecycleState_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(detail_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, detail_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, mapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(mapRevision_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, mapRevision_);
+      }
+      if (goodFrames_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(15, goodFrames_);
+      }
+      if (requiredFrames_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(16, requiredFrames_);
+      }
+      if (registrationQualityValid_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(17, registrationQualityValid_);
+      }
+      if (java.lang.Float.floatToRawIntBits(registrationFitness_) != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(18, registrationFitness_);
+      }
+      if (java.lang.Float.floatToRawIntBits(registrationInlierRatio_) != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(19, registrationInlierRatio_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < residualNodes_.size(); i++) {
+          dataSize += computeStringSizeNoTag(residualNodes_.getRaw(i));
+        }
+        size += dataSize;
+        size += 2 * getResidualNodesList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -100524,6 +104113,28 @@ public final class SlLink {
           .equals(other.getRawStatus())) return false;
       if (getTimestampNs()
           != other.getTimestampNs()) return false;
+      if (!getLifecycleState()
+          .equals(other.getLifecycleState())) return false;
+      if (!getDetail()
+          .equals(other.getDetail())) return false;
+      if (!getMapId()
+          .equals(other.getMapId())) return false;
+      if (!getMapRevision()
+          .equals(other.getMapRevision())) return false;
+      if (getGoodFrames()
+          != other.getGoodFrames()) return false;
+      if (getRequiredFrames()
+          != other.getRequiredFrames()) return false;
+      if (getRegistrationQualityValid()
+          != other.getRegistrationQualityValid()) return false;
+      if (java.lang.Float.floatToIntBits(getRegistrationFitness())
+          != java.lang.Float.floatToIntBits(
+              other.getRegistrationFitness())) return false;
+      if (java.lang.Float.floatToIntBits(getRegistrationInlierRatio())
+          != java.lang.Float.floatToIntBits(
+              other.getRegistrationInlierRatio())) return false;
+      if (!getResidualNodesList()
+          .equals(other.getResidualNodesList())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -100540,6 +104151,31 @@ public final class SlLink {
       hash = (37 * hash) + TIMESTAMP_NS_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getTimestampNs());
+      hash = (37 * hash) + LIFECYCLE_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getLifecycleState().hashCode();
+      hash = (37 * hash) + DETAIL_FIELD_NUMBER;
+      hash = (53 * hash) + getDetail().hashCode();
+      hash = (37 * hash) + MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getMapId().hashCode();
+      hash = (37 * hash) + MAP_REVISION_FIELD_NUMBER;
+      hash = (53 * hash) + getMapRevision().hashCode();
+      hash = (37 * hash) + GOOD_FRAMES_FIELD_NUMBER;
+      hash = (53 * hash) + getGoodFrames();
+      hash = (37 * hash) + REQUIRED_FRAMES_FIELD_NUMBER;
+      hash = (53 * hash) + getRequiredFrames();
+      hash = (37 * hash) + REGISTRATION_QUALITY_VALID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getRegistrationQualityValid());
+      hash = (37 * hash) + REGISTRATION_FITNESS_FIELD_NUMBER;
+      hash = (53 * hash) + java.lang.Float.floatToIntBits(
+          getRegistrationFitness());
+      hash = (37 * hash) + REGISTRATION_INLIER_RATIO_FIELD_NUMBER;
+      hash = (53 * hash) + java.lang.Float.floatToIntBits(
+          getRegistrationInlierRatio());
+      if (getResidualNodesCount() > 0) {
+        hash = (37 * hash) + RESIDUAL_NODES_FIELD_NUMBER;
+        hash = (53 * hash) + getResidualNodesList().hashCode();
+      }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -100673,6 +104309,17 @@ public final class SlLink {
         bitField0_ = 0;
         rawStatus_ = "";
         timestampNs_ = 0L;
+        lifecycleState_ = "";
+        detail_ = "";
+        mapId_ = "";
+        mapRevision_ = "";
+        goodFrames_ = 0;
+        requiredFrames_ = 0;
+        registrationQualityValid_ = false;
+        registrationFitness_ = 0F;
+        registrationInlierRatio_ = 0F;
+        residualNodes_ =
+            com.google.protobuf.LazyStringArrayList.emptyList();
         return this;
       }
 
@@ -100711,6 +104358,37 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
           result.timestampNs_ = timestampNs_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.lifecycleState_ = lifecycleState_;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.detail_ = detail_;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.mapId_ = mapId_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.mapRevision_ = mapRevision_;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.goodFrames_ = goodFrames_;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.requiredFrames_ = requiredFrames_;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          result.registrationQualityValid_ = registrationQualityValid_;
+        }
+        if (((from_bitField0_ & 0x00000200) != 0)) {
+          result.registrationFitness_ = registrationFitness_;
+        }
+        if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.registrationInlierRatio_ = registrationInlierRatio_;
+        }
+        if (((from_bitField0_ & 0x00000800) != 0)) {
+          residualNodes_.makeImmutable();
+          result.residualNodes_ = residualNodes_;
         }
       }
 
@@ -100766,6 +104444,51 @@ public final class SlLink {
         if (other.getTimestampNs() != 0L) {
           setTimestampNs(other.getTimestampNs());
         }
+        if (!other.getLifecycleState().isEmpty()) {
+          lifecycleState_ = other.lifecycleState_;
+          bitField0_ |= 0x00000004;
+          onChanged();
+        }
+        if (!other.getDetail().isEmpty()) {
+          detail_ = other.detail_;
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        if (!other.getMapId().isEmpty()) {
+          mapId_ = other.mapId_;
+          bitField0_ |= 0x00000010;
+          onChanged();
+        }
+        if (!other.getMapRevision().isEmpty()) {
+          mapRevision_ = other.mapRevision_;
+          bitField0_ |= 0x00000020;
+          onChanged();
+        }
+        if (other.getGoodFrames() != 0) {
+          setGoodFrames(other.getGoodFrames());
+        }
+        if (other.getRequiredFrames() != 0) {
+          setRequiredFrames(other.getRequiredFrames());
+        }
+        if (other.getRegistrationQualityValid() != false) {
+          setRegistrationQualityValid(other.getRegistrationQualityValid());
+        }
+        if (other.getRegistrationFitness() != 0F) {
+          setRegistrationFitness(other.getRegistrationFitness());
+        }
+        if (other.getRegistrationInlierRatio() != 0F) {
+          setRegistrationInlierRatio(other.getRegistrationInlierRatio());
+        }
+        if (!other.residualNodes_.isEmpty()) {
+          if (residualNodes_.isEmpty()) {
+            residualNodes_ = other.residualNodes_;
+            bitField0_ |= 0x00000800;
+          } else {
+            ensureResidualNodesIsMutable();
+            residualNodes_.addAll(other.residualNodes_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -100802,6 +104525,57 @@ public final class SlLink {
                 bitField0_ |= 0x00000002;
                 break;
               } // case 80
+              case 90: {
+                lifecycleState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 90
+              case 98: {
+                detail_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 98
+              case 106: {
+                mapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 106
+              case 114: {
+                mapRevision_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 114
+              case 120: {
+                goodFrames_ = input.readUInt32();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 120
+              case 128: {
+                requiredFrames_ = input.readUInt32();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 128
+              case 136: {
+                registrationQualityValid_ = input.readBool();
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 136
+              case 149: {
+                registrationFitness_ = input.readFloat();
+                bitField0_ |= 0x00000200;
+                break;
+              } // case 149
+              case 157: {
+                registrationInlierRatio_ = input.readFloat();
+                bitField0_ |= 0x00000400;
+                break;
+              } // case 157
+              case 162: {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureResidualNodesIsMutable();
+                residualNodes_.add(s);
+                break;
+              } // case 162
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -100844,7 +104618,7 @@ public final class SlLink {
           getRawStatusBytes() {
         java.lang.Object ref = rawStatus_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           rawStatus_ = b;
@@ -100919,6 +104693,565 @@ public final class SlLink {
       public Builder clearTimestampNs() {
         bitField0_ = (bitField0_ & ~0x00000002);
         timestampNs_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object lifecycleState_ = "";
+      /**
+       * <code>string lifecycle_state = 11;</code>
+       * @return The lifecycleState.
+       */
+      public java.lang.String getLifecycleState() {
+        java.lang.Object ref = lifecycleState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          lifecycleState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 11;</code>
+       * @return The bytes for lifecycleState.
+       */
+      public com.google.protobuf.ByteString
+          getLifecycleStateBytes() {
+        java.lang.Object ref = lifecycleState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lifecycleState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string lifecycle_state = 11;</code>
+       * @param value The lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 11;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLifecycleState() {
+        lifecycleState_ = getDefaultInstance().getLifecycleState();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string lifecycle_state = 11;</code>
+       * @param value The bytes for lifecycleState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLifecycleStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        lifecycleState_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object detail_ = "";
+      /**
+       * <code>string detail = 12;</code>
+       * @return The detail.
+       */
+      public java.lang.String getDetail() {
+        java.lang.Object ref = detail_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          detail_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string detail = 12;</code>
+       * @return The bytes for detail.
+       */
+      public com.google.protobuf.ByteString
+          getDetailBytes() {
+        java.lang.Object ref = detail_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          detail_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string detail = 12;</code>
+       * @param value The detail to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDetail(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        detail_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string detail = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDetail() {
+        detail_ = getDefaultInstance().getDetail();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string detail = 12;</code>
+       * @param value The bytes for detail to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDetailBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        detail_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapId_ = "";
+      /**
+       * <code>string map_id = 13;</code>
+       * @return The mapId.
+       */
+      public java.lang.String getMapId() {
+        java.lang.Object ref = mapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 13;</code>
+       * @return The bytes for mapId.
+       */
+      public com.google.protobuf.ByteString
+          getMapIdBytes() {
+        java.lang.Object ref = mapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_id = 13;</code>
+       * @param value The mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapId_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 13;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapId() {
+        mapId_ = getDefaultInstance().getMapId();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_id = 13;</code>
+       * @param value The bytes for mapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapId_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object mapRevision_ = "";
+      /**
+       * <code>string map_revision = 14;</code>
+       * @return The mapRevision.
+       */
+      public java.lang.String getMapRevision() {
+        java.lang.Object ref = mapRevision_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mapRevision_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 14;</code>
+       * @return The bytes for mapRevision.
+       */
+      public com.google.protobuf.ByteString
+          getMapRevisionBytes() {
+        java.lang.Object ref = mapRevision_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mapRevision_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string map_revision = 14;</code>
+       * @param value The mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevision(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 14;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMapRevision() {
+        mapRevision_ = getDefaultInstance().getMapRevision();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string map_revision = 14;</code>
+       * @param value The bytes for mapRevision to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMapRevisionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        mapRevision_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+
+      private int goodFrames_ ;
+      /**
+       * <code>uint32 good_frames = 15;</code>
+       * @return The goodFrames.
+       */
+      @java.lang.Override
+      public int getGoodFrames() {
+        return goodFrames_;
+      }
+      /**
+       * <code>uint32 good_frames = 15;</code>
+       * @param value The goodFrames to set.
+       * @return This builder for chaining.
+       */
+      public Builder setGoodFrames(int value) {
+
+        goodFrames_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 good_frames = 15;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearGoodFrames() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        goodFrames_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int requiredFrames_ ;
+      /**
+       * <code>uint32 required_frames = 16;</code>
+       * @return The requiredFrames.
+       */
+      @java.lang.Override
+      public int getRequiredFrames() {
+        return requiredFrames_;
+      }
+      /**
+       * <code>uint32 required_frames = 16;</code>
+       * @param value The requiredFrames to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRequiredFrames(int value) {
+
+        requiredFrames_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 required_frames = 16;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRequiredFrames() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        requiredFrames_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean registrationQualityValid_ ;
+      /**
+       * <code>bool registration_quality_valid = 17;</code>
+       * @return The registrationQualityValid.
+       */
+      @java.lang.Override
+      public boolean getRegistrationQualityValid() {
+        return registrationQualityValid_;
+      }
+      /**
+       * <code>bool registration_quality_valid = 17;</code>
+       * @param value The registrationQualityValid to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRegistrationQualityValid(boolean value) {
+
+        registrationQualityValid_ = value;
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool registration_quality_valid = 17;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRegistrationQualityValid() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        registrationQualityValid_ = false;
+        onChanged();
+        return this;
+      }
+
+      private float registrationFitness_ ;
+      /**
+       * <code>float registration_fitness = 18;</code>
+       * @return The registrationFitness.
+       */
+      @java.lang.Override
+      public float getRegistrationFitness() {
+        return registrationFitness_;
+      }
+      /**
+       * <code>float registration_fitness = 18;</code>
+       * @param value The registrationFitness to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRegistrationFitness(float value) {
+
+        registrationFitness_ = value;
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>float registration_fitness = 18;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRegistrationFitness() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        registrationFitness_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private float registrationInlierRatio_ ;
+      /**
+       * <code>float registration_inlier_ratio = 19;</code>
+       * @return The registrationInlierRatio.
+       */
+      @java.lang.Override
+      public float getRegistrationInlierRatio() {
+        return registrationInlierRatio_;
+      }
+      /**
+       * <code>float registration_inlier_ratio = 19;</code>
+       * @param value The registrationInlierRatio to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRegistrationInlierRatio(float value) {
+
+        registrationInlierRatio_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>float registration_inlier_ratio = 19;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRegistrationInlierRatio() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        registrationInlierRatio_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringArrayList residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+      private void ensureResidualNodesIsMutable() {
+        if (!residualNodes_.isModifiable()) {
+          residualNodes_ = new com.google.protobuf.LazyStringArrayList(residualNodes_);
+        }
+        bitField0_ |= 0x00000800;
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @return A list containing the residualNodes.
+       */
+      public com.google.protobuf.ProtocolStringList
+          getResidualNodesList() {
+        residualNodes_.makeImmutable();
+        return residualNodes_;
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @return The count of residualNodes.
+       */
+      public int getResidualNodesCount() {
+        return residualNodes_.size();
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @param index The index of the element to return.
+       * @return The residualNodes at the given index.
+       */
+      public java.lang.String getResidualNodes(int index) {
+        return residualNodes_.get(index);
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the residualNodes at the given index.
+       */
+      public com.google.protobuf.ByteString
+          getResidualNodesBytes(int index) {
+        return residualNodes_.getByteString(index);
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @param index The index to set the value at.
+       * @param value The residualNodes to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResidualNodes(
+          int index, java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureResidualNodesIsMutable();
+        residualNodes_.set(index, value);
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @param value The residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addResidualNodes(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureResidualNodesIsMutable();
+        residualNodes_.add(value);
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @param values The residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllResidualNodes(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureResidualNodesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, residualNodes_);
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResidualNodes() {
+        residualNodes_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000800);;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string residual_nodes = 20;</code>
+       * @param value The bytes of the residualNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addResidualNodesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        ensureResidualNodesIsMutable();
+        residualNodes_.add(value);
+        bitField0_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -105422,7 +109755,7 @@ public final class SlLink {
        * <code>.sl_link.DiscLiftControl disc_lift = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.DiscLiftControl, sl_link.SlLink.DiscLiftControl.Builder, sl_link.SlLink.DiscLiftControlOrBuilder> 
+          sl_link.SlLink.DiscLiftControl, sl_link.SlLink.DiscLiftControl.Builder, sl_link.SlLink.DiscLiftControlOrBuilder>
           getDiscLiftFieldBuilder() {
         if (discLiftBuilder_ == null) {
           if (!(commandCase_ == 1)) {
@@ -105564,7 +109897,7 @@ public final class SlLink {
        * <code>.sl_link.LightingControl lighting = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.LightingControl, sl_link.SlLink.LightingControl.Builder, sl_link.SlLink.LightingControlOrBuilder> 
+          sl_link.SlLink.LightingControl, sl_link.SlLink.LightingControl.Builder, sl_link.SlLink.LightingControlOrBuilder>
           getLightingFieldBuilder() {
         if (lightingBuilder_ == null) {
           if (!(commandCase_ == 2)) {
@@ -105706,7 +110039,7 @@ public final class SlLink {
        * <code>.sl_link.ManualDriveControl manual_drive = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.ManualDriveControl, sl_link.SlLink.ManualDriveControl.Builder, sl_link.SlLink.ManualDriveControlOrBuilder> 
+          sl_link.SlLink.ManualDriveControl, sl_link.SlLink.ManualDriveControl.Builder, sl_link.SlLink.ManualDriveControlOrBuilder>
           getManualDriveFieldBuilder() {
         if (manualDriveBuilder_ == null) {
           if (!(commandCase_ == 3)) {
@@ -105848,7 +110181,7 @@ public final class SlLink {
        * <code>.sl_link.ChassisPowerControl chassis_power = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.ChassisPowerControl, sl_link.SlLink.ChassisPowerControl.Builder, sl_link.SlLink.ChassisPowerControlOrBuilder> 
+          sl_link.SlLink.ChassisPowerControl, sl_link.SlLink.ChassisPowerControl.Builder, sl_link.SlLink.ChassisPowerControlOrBuilder>
           getChassisPowerFieldBuilder() {
         if (chassisPowerBuilder_ == null) {
           if (!(commandCase_ == 4)) {
@@ -105990,7 +110323,7 @@ public final class SlLink {
        * <code>.sl_link.DiscControl disc_control = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.DiscControl, sl_link.SlLink.DiscControl.Builder, sl_link.SlLink.DiscControlOrBuilder> 
+          sl_link.SlLink.DiscControl, sl_link.SlLink.DiscControl.Builder, sl_link.SlLink.DiscControlOrBuilder>
           getDiscControlFieldBuilder() {
         if (discControlBuilder_ == null) {
           if (!(commandCase_ == 5)) {
@@ -106132,7 +110465,7 @@ public final class SlLink {
        * <code>.sl_link.EmergencyStopControl emergency_stop = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.EmergencyStopControl, sl_link.SlLink.EmergencyStopControl.Builder, sl_link.SlLink.EmergencyStopControlOrBuilder> 
+          sl_link.SlLink.EmergencyStopControl, sl_link.SlLink.EmergencyStopControl.Builder, sl_link.SlLink.EmergencyStopControlOrBuilder>
           getEmergencyStopFieldBuilder() {
         if (emergencyStopBuilder_ == null) {
           if (!(commandCase_ == 6)) {
@@ -106324,7 +110657,7 @@ public final class SlLink {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         message_ = s;
@@ -106340,7 +110673,7 @@ public final class SlLink {
         getMessageBytes() {
       java.lang.Object ref = message_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         message_ = b;
@@ -106847,7 +111180,7 @@ public final class SlLink {
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
@@ -107002,7 +111335,7 @@ public final class SlLink {
        * <code>.sl_link.ControlCommand applied_command = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          sl_link.SlLink.ControlCommand, sl_link.SlLink.ControlCommand.Builder, sl_link.SlLink.ControlCommandOrBuilder> 
+          sl_link.SlLink.ControlCommand, sl_link.SlLink.ControlCommand.Builder, sl_link.SlLink.ControlCommandOrBuilder>
           getAppliedCommandFieldBuilder() {
         if (appliedCommandBuilder_ == null) {
           appliedCommandBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -107102,452 +111435,452 @@ public final class SlLink {
         null);
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_WifiConfig_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_WifiConfig_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_WifiStatusReport_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_WifiStatusReport_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PolygonPoint_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PolygonPoint_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PolygonRegion_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PolygonRegion_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_ChassisSettings_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_ChassisSettings_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapSettings_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapSettings_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RppSettings_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RppSettings_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_SettingsReadRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_SettingsReadRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_SettingsReadResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_SettingsReadResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_SettingsWriteRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_SettingsWriteRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_SettingsWriteResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_SettingsWriteResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_Pose2D_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_Pose2D_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_LocalizationCovariance_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_LocalizationCovariance_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_DeviceStatusReport_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_DeviceStatusReport_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_CameraFrameRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_CameraFrameRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_CameraFrameChunk_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_CameraFrameChunk_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapChunk_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapChunk_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PathPoint2D_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PathPoint2D_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RegionRepeatItem_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RegionRepeatItem_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskConfig_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskConfig_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskConfigResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskConfigResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskCommand_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskCommand_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskCommandResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskCommandResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskStatusReport_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskStatusReport_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PathPointPlanRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PathPointPlanRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PathPointPlanResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PathPointPlanResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapPreviewRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapPreviewRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapPreviewResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapPreviewResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapRegionPointRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapRegionPointRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_WorkRegionPointInfo_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_WorkRegionPointInfo_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapRegionPointResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapRegionPointResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapEditCommand_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapEditCommand_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapEditResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapEditResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapEditStatusReport_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapEditStatusReport_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_VideoStreamInfoRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_VideoStreamInfoRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_VideoStreamInfoResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_VideoStreamInfoResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PathPlanRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PathPlanRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_PathPlanResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_PathPlanResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapSyncRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapSyncRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapSyncResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapSyncResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapImportToRadarRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapImportToRadarRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapImportToRadarResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapImportToRadarResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapModeRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapModeRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapModeResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapModeResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapAlignmentRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapAlignmentRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapAlignmentResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapAlignmentResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapCatalogRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapCatalogRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapCatalogItem_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapCatalogItem_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapCatalogResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapCatalogResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapDeleteRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapDeleteRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapDeleteResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapDeleteResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapSaveRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapSaveRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapSaveResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapSaveResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapMetricsRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapMetricsRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RegionMetricsItem_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RegionMetricsItem_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapMetricsResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_MapMetricsResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskResultRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskResultRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskResultRegionItem_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskResultRegionItem_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskExecutionRecord_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskExecutionRecord_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskResultResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskResultResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskExecutionHistoryRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskExecutionHistoryRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskExecutionHistoryChunk_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskExecutionHistoryChunk_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskExecutionDeleteRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskExecutionDeleteRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskExecutionDeleteResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskExecutionDeleteResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskTrajectoryRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskTrajectoryRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskTrajectoryPoint_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskTrajectoryPoint_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_TaskTrajectoryChunk_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_TaskTrajectoryChunk_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_LiveMapCacheClearRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_LiveMapCacheClearRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_LiveMapCacheClearResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_LiveMapCacheClearResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_SystemCacheClearRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_SystemCacheClearRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_SystemCacheClearResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_SystemCacheClearResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarMapCacheClearRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarMapCacheClearRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarMapCacheClearResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarMapCacheClearResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarSystemStatusRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarSystemStatusRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarSystemStatusResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarSystemStatusResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarMapSyncRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarMapSyncRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarMapSyncResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarMapSyncResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarRelocalizationRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarRelocalizationRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarRelocalizationResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarRelocalizationResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarRelocalizationStatusRequest_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarRelocalizationStatusRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_RadarRelocalizationStatusResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_RadarRelocalizationStatusResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_DiscLiftControl_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_DiscLiftControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_LightingControl_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_LightingControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_ChassisPowerControl_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_ChassisPowerControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_DiscControl_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_DiscControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_EmergencyStopControl_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_EmergencyStopControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_ManualDriveControl_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_ManualDriveControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_ControlCommand_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_ControlCommand_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_ControlCommandResponse_descriptor;
-  private static final 
+  private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_ControlCommandResponse_fieldAccessorTable;
 
@@ -107783,7 +112116,7 @@ public final class SlLink {
       "\000\360?\022\020\n\010frame_id\030\020 \001(\t\"d\n\021MapPreviewReque" +
       "st\022\020\n\010max_edge\030\001 \001(\r\022\024\n\014image_format\030\002 \001" +
       "(\t\022\027\n\017include_overlay\030\003 \001(\010\022\016\n\006map_id\030\004 " +
-      "\001(\t\"\276\003\n\022MapPreviewResponse\022#\n\006result\030\001 \001" +
+      "\001(\t\"\344\003\n\022MapPreviewResponse\022#\n\006result\030\001 \001" +
       "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
       "\022\023\n\013map_version\030\003 \001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006" +
       "height\030\005 \001(\r\022\022\n\nresolution\030\006 \001(\002\022\037\n\006orig" +
@@ -107794,390 +112127,408 @@ public final class SlLink {
       "ce\030\r \001(\0132\037.sl_link.LocalizationCovarianc" +
       "e\022\031\n\021alignment_yaw_deg\030\016 \001(\002\022\030\n\020app_rota" +
       "tion_deg\030\017 \001(\002\022$\n\034rotation_alignment_del" +
-      "ta_deg\030\020 \001(\002\"\'\n\025MapRegionPointRequest\022\016\n" +
-      "\006map_id\030\001 \001(\t\"\277\001\n\023WorkRegionPointInfo\022&\n" +
-      "\006region\030\001 \001(\0132\026.sl_link.PolygonRegion\022\034\n" +
-      "\024start_pose_available\030\002 \001(\010\022#\n\nstart_pos" +
-      "e\030\003 \001(\0132\017.sl_link.Pose2D\022\032\n\022end_pose_ava" +
-      "ilable\030\004 \001(\010\022!\n\010end_pose\030\005 \001(\0132\017.sl_link" +
-      ".Pose2D\"\324\002\n\026MapRegionPointResponse\022#\n\006re" +
-      "sult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messa" +
-      "ge\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\023\n\013map_version\030" +
-      "\004 \001(\r\0222\n\014work_regions\030\005 \003(\0132\034.sl_link.Wo" +
-      "rkRegionPointInfo\0220\n\020obstacle_regions\030\006 " +
-      "\003(\0132\026.sl_link.PolygonRegion\022-\n\rerase_reg" +
-      "ions\030\007 \003(\0132\026.sl_link.PolygonRegion\022\035\n\025cr" +
-      "op_region_available\030\010 \001(\010\022+\n\013crop_region" +
-      "\030\t \001(\0132\026.sl_link.PolygonRegion\"\261\003\n\016MapEd" +
-      "itCommand\022\017\n\007edit_id\030\001 \001(\t\022,\n\toperation\030" +
-      "\002 \001(\0162\031.sl_link.MapEditOperation\022\023\n\013regi" +
-      "on_name\030\003 \001(\t\022&\n\006region\030\004 \001(\0132\026.sl_link." +
-      "PolygonRegion\022&\n\007polygon\030\005 \003(\0132\025.sl_link" +
-      ".PolygonPoint\022\024\n\014brush_radius\030\006 \001(\002\022\023\n\013p" +
-      "aint_value\030\007 \001(\005\022\030\n\020target_region_id\030\010 \001" +
-      "(\t\022/\n\022target_region_type\030\t \001(\0162\023.sl_link" +
-      ".RegionType\022\034\n\024expected_map_version\030\n \001(" +
-      "\r\022\017\n\007dry_run\030\013 \001(\010\022#\n\nstart_pose\030\014 \001(\0132\017" +
-      ".sl_link.Pose2D\022!\n\010end_pose\030\r \001(\0132\017.sl_l" +
-      "ink.Pose2D\022\016\n\006map_id\030\016 \001(\t\"\\\n\017MapEditRes" +
-      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
-      "de\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version\030\003 \001(\r" +
-      "\"W\n\023MapEditStatusReport\022\023\n\013map_version\030\001" +
-      " \001(\r\022\032\n\022applied_to_planner\030\002 \001(\010\022\017\n\007mess" +
-      "age\030\003 \001(\t\"/\n\026VideoStreamInfoRequest\022\025\n\ri" +
-      "nclude_debug\030\001 \001(\010\"\263\001\n\027VideoStreamInfoRe" +
-      "sponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultC" +
-      "ode\022\017\n\007message\030\002 \001(\t\022\022\n\nstream_url\030\003 \001(\t" +
-      "\022\r\n\005codec\030\004 \001(\t\022\r\n\005width\030\005 \001(\r\022\016\n\006height" +
-      "\030\006 \001(\r\022\016\n\006online\030\007 \001(\010\022\020\n\010utc_time\030\010 \001(\r" +
-      "\"\362\001\n\017PathPlanRequest\022\022\n\nrequest_id\030\001 \001(\t" +
-      "\022\017\n\007task_id\030\002 \001(\t\022\024\n\014force_replan\030\003 \001(\010\022" +
-      "\032\n\022return_path_chunks\030\004 \001(\010\022\026\n\016max_chunk" +
-      "_size\030\005 \001(\r\022#\n\nstart_pose\030\006 \001(\0132\017.sl_lin" +
-      "k.Pose2D\022!\n\010end_pose\030\007 \001(\0132\017.sl_link.Pos" +
-      "e2D\022\030\n\020global_direction\030\010 \001(\t\022\016\n\006map_id\030" +
-      "\t \001(\t\"\257\005\n\020PathPlanResponse\022#\n\006result\030\001 \001" +
-      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
-      "\022\022\n\nrequest_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\023\n" +
-      "\013map_version\030\005 \001(\r\022\024\n\014path_version\030\006 \001(\r" +
-      "\022\030\n\020path_point_count\030\007 \001(\r\022\025\n\rpath_lengt" +
-      "h_m\030\010 \001(\002\022\017\n\007planned\030\t \001(\010\022\024\n\014path_chunk" +
-      "ed\030\n \001(\010\022\025\n\rpreview_image\030\013 \001(\014\022\026\n\016previ" +
-      "ew_format\030\014 \001(\t\022\r\n\005width\030\r \001(\r\022\016\n\006height" +
-      "\030\016 \001(\r\022\022\n\nresolution\030\017 \001(\002\022\037\n\006origin\030\020 \001" +
-      "(\0132\017.sl_link.Pose2D\022\020\n\010frame_id\030\021 \001(\t\022\027\n" +
-      "\017preview_scale_x\030\022 \001(\002\022\027\n\017preview_scale_" +
-      "y\030\023 \001(\002\022-\n\022total_work_area_m2\030\024 \001(\002B\021\212\265\030" +
-      "\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030\025 \001(\002" +
-      "B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022@\n\027localization_covar" +
-      "iance\030\026 \001(\0132\037.sl_link.LocalizationCovari" +
-      "ance\022\031\n\021alignment_yaw_deg\030\027 \001(\002\022\030\n\020app_r" +
-      "otation_deg\030\030 \001(\002\022$\n\034rotation_alignment_" +
-      "delta_deg\030\031 \001(\002\"m\n\016MapSyncRequest\022,\n\tope" +
-      "ration\030\001 \001(\0162\031.sl_link.MapSyncOperation\022" +
-      "\016\n\006map_id\030\002 \001(\t\022\035\n\025update_navigation_map" +
-      "\030\003 \001(\010\"\347\001\n\017MapSyncResponse\022#\n\006result\030\001 \001" +
-      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
-      "\022,\n\toperation\030\003 \001(\0162\031.sl_link.MapSyncOpe" +
-      "ration\022\016\n\006map_id\030\004 \001(\t\022\020\n\010map_name\030\010 \001(\t" +
-      "\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016map_image_pat" +
-      "h\030\006 \001(\t\022\037\n\027navigation_map_reloaded\030\007 \001(\010" +
-      "\")\n\027MapImportToRadarRequest\022\016\n\006map_id\030\001 " +
-      "\001(\t\"\204\001\n\030MapImportToRadarResponse\022#\n\006resu" +
+      "ta_deg\030\020 \001(\002\022\016\n\006map_id\030\021 \001(\t\022\024\n\014map_revi" +
+      "sion\030\022 \001(\t\"\'\n\025MapRegionPointRequest\022\016\n\006m" +
+      "ap_id\030\001 \001(\t\"\277\001\n\023WorkRegionPointInfo\022&\n\006r" +
+      "egion\030\001 \001(\0132\026.sl_link.PolygonRegion\022\034\n\024s" +
+      "tart_pose_available\030\002 \001(\010\022#\n\nstart_pose\030" +
+      "\003 \001(\0132\017.sl_link.Pose2D\022\032\n\022end_pose_avail" +
+      "able\030\004 \001(\010\022!\n\010end_pose\030\005 \001(\0132\017.sl_link.P" +
+      "ose2D\"\324\002\n\026MapRegionPointResponse\022#\n\006resu" +
       "lt\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
-      "\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t" +
-      "\022\020\n\010imported\030\005 \001(\010\"W\n\016MapModeRequest\022\"\n\004" +
-      "mode\030\001 \001(\0162\024.sl_link.MapModeType\022\017\n\007enab" +
-      "led\030\002 \001(\010\022\020\n\010map_kind\030\003 \001(\005\"\216\001\n\017MapModeR" +
-      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
-      "Code\022\017\n\007message\030\002 \001(\t\022\"\n\004mode\030\003 \001(\0162\024.sl" +
-      "_link.MapModeType\022\017\n\007enabled\030\004 \001(\010\022\020\n\010ma" +
-      "p_kind\030\005 \001(\005\";\n\023MapAlignmentRequest\022\016\n\006m" +
-      "ap_id\030\001 \001(\t\022\024\n\014rotation_deg\030\002 \001(\002\"\311\001\n\024Ma" +
-      "pAlignmentResponse\022#\n\006result\030\001 \001(\0162\023.sl_" +
-      "link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_" +
-      "id\030\003 \001(\t\022\024\n\014rotation_deg\030\004 \001(\002\022\024\n\014rotati" +
-      "on_rad\030\005 \001(\002\022\031\n\021alignment_yaw_deg\030\006 \001(\002\022" +
-      "$\n\034rotation_alignment_delta_deg\030\007 \001(\002\"\023\n" +
-      "\021MapCatalogRequest\"\255\002\n\016MapCatalogItem\022\016\n" +
-      "\006map_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\022\n\nsize_byte" +
-      "s\030\003 \001(\004\022\020\n\010saved_at\030\004 \001(\004\022-\n\022total_work_" +
-      "area_m2\030\005 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020esti" +
-      "mated_time_s\030\006 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030\n\020" +
-      "thumbnail_format\030\007 \001(\t\022\027\n\017thumbnail_widt" +
-      "h\030\010 \001(\r\022\030\n\020thumbnail_height\030\t \001(\r\022\033\n\023thu" +
-      "mbnail_image_b64\030\n \001(\t\022\022\n\ncreated_at\030\013 \001" +
-      "(\t\"\207\001\n\022MapCatalogResponse\022#\n\006result\030\001 \001(" +
-      "\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022" +
-      "\023\n\013total_count\030\003 \001(\r\022&\n\005items\030\004 \003(\0132\027.sl" +
-      "_link.MapCatalogItem\"\"\n\020MapDeleteRequest" +
-      "\022\016\n\006map_id\030\001 \001(\t\"\312\001\n\021MapDeleteResponse\022#" +
-      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
-      "essage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name" +
-      "\030\004 \001(\t\022\017\n\007deleted\030\005 \001(\010\022\025\n\rlocal_deleted" +
-      "\030\006 \001(\010\022\026\n\016remote_deleted\030\007 \001(\010\022\035\n\025remote" +
-      "_delete_pending\030\010 \001(\010\"b\n\016MapSaveRequest\022" +
-      "\020\n\010map_name\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\030\n\020has" +
-      "_rotation_deg\030\003 \001(\010\022\024\n\014rotation_deg\030\004 \001(" +
-      "\002\"\250\002\n\017MapSaveResponse\022#\n\006result\030\001 \001(\0162\023." +
-      "sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006m" +
-      "ap_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\025\n\rmap_yam" +
-      "l_path\030\005 \001(\t\022\026\n\016map_image_path\030\006 \001(\t\022\037\n\027" +
-      "navigation_map_reloaded\030\007 \001(\010\022-\n\022total_w" +
-      "ork_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020" +
-      "estimated_time_s\030\t \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?" +
-      "\022\022\n\ncreated_at\030\n \001(\t\"#\n\021MapMetricsReques" +
-      "t\022\016\n\006map_id\030\001 \001(\t\"\233\001\n\021RegionMetricsItem\022" +
-      "\021\n\tregion_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022" +
-      "\016\n\006repeat\030\003 \001(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2" +
-      "\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_h\030\005 \001(\002B\020\212" +
-      "\265\030\001h\221\265\030\000\000\000\000\000\000\360?\"\240\001\n\022MapMetricsResponse\022#" +
-      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
-      "essage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name" +
-      "\030\004 \001(\t\0222\n\016region_metrics\030\005 \003(\0132\032.sl_link" +
-      ".RegionMetricsItem\"S\n\021TaskResultRequest\022" +
-      "\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_" +
-      "execution_records\030\003 \001(\r\"\234\001\n\024TaskResultRe" +
-      "gionItem\022\021\n\tregion_id\030\001 \001(\t\022\023\n\013region_na" +
-      "me\030\002 \001(\t\022\025\n\rtarget_repeat\030\003 \001(\r\022\027\n\017execu" +
-      "ted_repeat\030\004 \001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021u" +
-      "nfinished_reason\030\006 \001(\t\"\341\002\n\023TaskExecution" +
-      "Record\022\024\n\014execution_id\030\001 \001(\t\022\016\n\006map_id\030\002" +
-      " \001(\t\022\017\n\007task_id\030\003 \001(\t\022\'\n\013final_state\030\004 \001" +
-      "(\0162\022.sl_link.TaskState\022\023\n\013stop_reason\030\005 " +
-      "\001(\t\022\022\n\nstarted_at\030\006 \001(\004\022\023\n\013finished_at\030\007" +
-      " \001(\004\022*\n\017planned_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030" +
-      "\000\000\000\000\000\000\360?\022+\n\020executed_area_m2\030\t \001(\002B\021\212\265\030\002" +
-      "m2\221\265\030\000\000\000\000\000\000\360?\022&\n\010progress\030\n \001(\002B\024\212\265\030\005rat" +
-      "io\221\265\030\000\000\000\000\000\000\360?\022\024\n\014path_version\030\013 \001(\r\022\025\n\ra" +
-      "ll_completed\030\014 \001(\010\"\244\006\n\022TaskResultRespons" +
-      "e\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017" +
-      "\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_" +
-      "id\030\004 \001(\t\022\'\n\013final_state\030\005 \001(\0162\022.sl_link." +
-      "TaskState\022\025\n\rall_completed\030\006 \001(\010\022\023\n\013stop" +
-      "_reason\030\007 \001(\t\022\024\n\014path_version\030\010 \001(\r\022\024\n\014i" +
-      "mage_format\030\t \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n" +
-      "\013image_width\030\013 \001(\r\022\024\n\014image_height\030\014 \001(\r" +
-      "\022\023\n\013finished_at\030\r \001(\004\022 \n\030selected_work_r" +
-      "egion_ids\030\016 \003(\t\0225\n\016region_results\030\017 \003(\0132" +
-      "\035.sl_link.TaskResultRegionItem\022@\n\027locali" +
-      "zation_covariance\030\020 \001(\0132\037.sl_link.Locali" +
-      "zationCovariance\022\031\n\021alignment_yaw_deg\030\021 " +
-      "\001(\002\022\030\n\020app_rotation_deg\030\022 \001(\002\022$\n\034rotatio" +
-      "n_alignment_delta_deg\030\023 \001(\002\022\024\n\014execution" +
-      "_id\030\024 \001(\t\022\022\n\nstarted_at\030\025 \001(\004\022*\n\017planned" +
-      "_area_m2\030\026 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020exe" +
-      "cuted_area_m2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220" +
-      "\n\022execution_progress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030" +
-      "\000\000\000\000\000\000\360?\0227\n\021execution_records\030\031 \003(\0132\034.sl" +
-      "_link.TaskExecutionRecord\"|\n\033TaskExecuti" +
-      "onHistoryRequest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task" +
-      "_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010end_tim" +
-      "e\030\004 \001(\004\022\026\n\016max_chunk_size\030\005 \001(\r\"\314\001\n\031Task" +
-      "ExecutionHistoryChunk\022#\n\006result\030\001 \001(\0162\023." +
-      "sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013c" +
-      "hunk_index\030\003 \001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032" +
-      "\n\022total_record_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014" +
-      "\022\022\n\nstart_time\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2",
-      "\n\032TaskExecutionDeleteRequest\022\024\n\014executio" +
-      "n_id\030\001 \001(\t\"\274\001\n\033TaskExecutionDeleteRespon" +
-      "se\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022" +
-      "\017\n\007message\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017" +
-      "\n\007task_id\030\004 \001(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007delet" +
-      "ed\030\006 \001(\010\022\037\n\027execution_files_deleted\030\007 \001(" +
-      "\010\"\272\001\n\025TaskTrajectoryRequest\022\024\n\014execution" +
-      "_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\022\n\nstart_time" +
-      "\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\023\n\013start_index\030" +
-      "\005 \001(\r\022\022\n\nmax_points\030\006 \001(\r\022\023\n\013sample_step" +
-      "\030\007 \001(\r\022\026\n\016max_chunk_size\030\010 \001(\r\"\221\002\n\023TaskT" +
-      "rajectoryPoint\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_" +
-      "ms\030\002 \001(\r\022\014\n\004x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014" +
-      "heading_mdeg\030\005 \001(\021\022\031\n\021linear_speed_mmps\030" +
-      "\006 \001(\021\022\034\n\024angular_speed_mradps\030\007 \001(\021\022\026\n\016d" +
-      "isc_speed_rpm\030\010 \001(\r\022\027\n\017speed_available\030\t" +
-      " \001(\010\022\024\n\014disc_enabled\030\n \001(\010\022&\n\ntask_state" +
-      "\030\013 \001(\0162\022.sl_link.TaskState\"\243\007\n\023TaskTraje" +
-      "ctoryChunk\022#\n\006result\030\001 \001(\0162\023.sl_link.Res" +
-      "ultCode\022\017\n\007message\030\002 \001(\t\022\024\n\014execution_id" +
-      "\030\003 \001(\t\022\023\n\013chunk_index\030\004 \001(\r\022\024\n\014total_chu" +
-      "nks\030\005 \001(\r\022\031\n\021total_point_count\030\006 \001(\r\022\034\n\024" +
-      "returned_point_count\030\007 \001(\r\022\023\n\013start_inde" +
-      "x\030\010 \001(\r\022\022\n\nnext_index\030\t \001(\r\022\020\n\010has_more\030" +
-      "\n \001(\010\022\025\n\rstarted_at_ms\030\013 \001(\004\022,\n\006points\030\014" +
-      " \003(\0132\034.sl_link.TaskTrajectoryPoint\022\017\n\007ta" +
-      "sk_id\030\r \001(\t\022\016\n\006map_id\030\016 \001(\t\022\022\n\nstart_tim" +
-      "e\030\017 \001(\004\022\020\n\010end_time\030\020 \001(\004\022\023\n\013sample_step" +
-      "\030\021 \001(\r\022\025\n\rmap_available\030\022 \001(\010\022\023\n\013map_mes" +
-      "sage\030\023 \001(\t\022\023\n\013map_version\030\024 \001(\r\022\030\n\020map_s" +
-      "ource_width\030\025 \001(\r\022\031\n\021map_source_height\030\026" +
-      " \001(\r\022\026\n\016map_resolution\030\027 \001(\002\022#\n\nmap_orig" +
-      "in\030\030 \001(\0132\017.sl_link.Pose2D\022\024\n\014map_frame_i" +
-      "d\030\031 \001(\t\022\030\n\020map_image_format\030\032 \001(\t\022\027\n\017map" +
-      "_image_width\030\033 \001(\r\022\030\n\020map_image_height\030\034" +
-      " \001(\r\022\033\n\023map_preview_scale_x\030\035 \001(\002\022\033\n\023map" +
-      "_preview_scale_y\030\036 \001(\002\022\026\n\016map_image_data" +
-      "\030\037 \001(\014\022\035\n\025map_image_chunk_index\030  \001(\r\022\036\n" +
-      "\026map_image_total_chunks\030! \001(\r\022\031\n\021alignme" +
-      "nt_yaw_deg\030\" \001(\002\022\030\n\020app_rotation_deg\030# \001" +
-      "(\002\022$\n\034rotation_alignment_delta_deg\030$ \001(\002" +
-      "\"\032\n\030LiveMapCacheClearRequest\"Q\n\031LiveMapC" +
-      "acheClearResponse\022#\n\006result\030\001 \001(\0162\023.sl_l" +
-      "ink.ResultCode\022\017\n\007message\030\002 \001(\t\"h\n\027Syste" +
-      "mCacheClearRequest\022\032\n\022clear_memory_cache" +
-      "\030\001 \001(\010\022\035\n\025clear_temporary_files\030\002 \001(\010\022\022\n" +
-      "\nclear_logs\030\003 \001(\010\"\376\001\n\030SystemCacheClearRe" +
-      "sponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultC" +
-      "ode\022\017\n\007message\030\002 \001(\t\022\034\n\024memory_cache_cle" +
-      "ared\030\003 \001(\010\022\037\n\027temporary_files_cleared\030\004 " +
-      "\001(\r\022 \n\030temporary_bytes_released\030\005 \001(\004\022\031\n" +
-      "\021log_files_cleared\030\006 \001(\r\022\032\n\022log_bytes_re" +
-      "leased\030\007 \001(\004\022\024\n\014failed_items\030\010 \001(\r\"\033\n\031Ra" +
-      "darMapCacheClearRequest\"R\n\032RadarMapCache" +
-      "ClearResponse\022#\n\006result\030\001 \001(\0162\023.sl_link." +
-      "ResultCode\022\017\n\007message\030\002 \001(\t\"\032\n\030RadarSyst" +
-      "emStatusRequest\"\212\001\n\031RadarSystemStatusRes" +
-      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
-      "de\022\017\n\007message\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016" +
-      "\n\006status\030\004 \001(\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023" +
-      "RadarMapSyncRequest\"Z\n\024RadarMapSyncRespo" +
+      "\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\023\n\013map_version\030\004 " +
+      "\001(\r\0222\n\014work_regions\030\005 \003(\0132\034.sl_link.Work" +
+      "RegionPointInfo\0220\n\020obstacle_regions\030\006 \003(" +
+      "\0132\026.sl_link.PolygonRegion\022-\n\rerase_regio" +
+      "ns\030\007 \003(\0132\026.sl_link.PolygonRegion\022\035\n\025crop" +
+      "_region_available\030\010 \001(\010\022+\n\013crop_region\030\t" +
+      " \001(\0132\026.sl_link.PolygonRegion\"\261\003\n\016MapEdit" +
+      "Command\022\017\n\007edit_id\030\001 \001(\t\022,\n\toperation\030\002 " +
+      "\001(\0162\031.sl_link.MapEditOperation\022\023\n\013region" +
+      "_name\030\003 \001(\t\022&\n\006region\030\004 \001(\0132\026.sl_link.Po" +
+      "lygonRegion\022&\n\007polygon\030\005 \003(\0132\025.sl_link.P" +
+      "olygonPoint\022\024\n\014brush_radius\030\006 \001(\002\022\023\n\013pai" +
+      "nt_value\030\007 \001(\005\022\030\n\020target_region_id\030\010 \001(\t" +
+      "\022/\n\022target_region_type\030\t \001(\0162\023.sl_link.R" +
+      "egionType\022\034\n\024expected_map_version\030\n \001(\r\022" +
+      "\017\n\007dry_run\030\013 \001(\010\022#\n\nstart_pose\030\014 \001(\0132\017.s" +
+      "l_link.Pose2D\022!\n\010end_pose\030\r \001(\0132\017.sl_lin" +
+      "k.Pose2D\022\016\n\006map_id\030\016 \001(\t\"\\\n\017MapEditRespo" +
       "nse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode" +
-      "\022\017\n\007message\030\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\245\001\n\032Rada" +
-      "rRelocalizationRequest\022\036\n\026initial_pose_a" +
-      "vailable\030\001 \001(\010\022%\n\014initial_pose\030\002 \001(\0132\017.s" +
-      "l_link.Pose2D\022@\n\027initial_pose_covariance" +
-      "\030\003 \001(\0132\037.sl_link.LocalizationCovariance\"" +
-      "u\n\033RadarRelocalizationResponse\022#\n\006result" +
-      "\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002" +
-      " \001(\t\022\020\n\010accepted\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\"\"" +
-      "\n RadarRelocalizationStatusRequest\"\361\001\n!R" +
-      "adarRelocalizationStatusResponse\022\022\n\nraw_" +
-      "status\030\005 \001(\t\022\024\n\014timestamp_ns\030\n \001(\004J\004\010\001\020\002" +
-      "J\004\010\002\020\003J\004\010\003\020\004J\004\010\004\020\005J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t" +
-      "\020\nR\006resultR\007messageR\tavailableR\006statusR\r" +
-      "system_statusR\016odom_availableR\025odom_line" +
-      "ar_speed_mpsR\030odom_angular_speed_radps\"<" +
-      "\n\017DiscLiftControl\022)\n\007command\030\001 \001(\0162\030.sl_" +
-      "link.DiscLiftCommand\"\"\n\017LightingControl\022" +
-      "\017\n\007enabled\030\001 \001(\010\"&\n\023ChassisPowerControl\022" +
-      "\017\n\007enabled\030\001 \001(\010\"1\n\013DiscControl\022\017\n\007enabl" +
-      "ed\030\001 \001(\010\022\021\n\tspeed_rpm\030\002 \001(\r\"\'\n\024Emergency" +
-      "StopControl\022\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualD" +
-      "riveControl\022,\n\006motion\030\001 \001(\0162\034.sl_link.Ma" +
-      "nualMotionCommand\022\023\n\013speed_ratio\030\002 \001(\002\022\020" +
-      "\n\010remote_x\030\003 \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rma" +
-      "x_speed_mps\030\005 \001(\002\022\034\n\024max_turn_speed_rati" +
-      "o\030\006 \001(\002\"\313\002\n\016ControlCommand\022-\n\tdisc_lift\030" +
-      "\001 \001(\0132\030.sl_link.DiscLiftControlH\000\022,\n\010lig" +
-      "hting\030\002 \001(\0132\030.sl_link.LightingControlH\000\022" +
-      "3\n\014manual_drive\030\003 \001(\0132\033.sl_link.ManualDr" +
-      "iveControlH\000\0225\n\rchassis_power\030\004 \001(\0132\034.sl" +
-      "_link.ChassisPowerControlH\000\022,\n\014disc_cont" +
-      "rol\030\005 \001(\0132\024.sl_link.DiscControlH\000\0227\n\016eme" +
-      "rgency_stop\030\006 \001(\0132\035.sl_link.EmergencySto" +
-      "pControlH\000B\t\n\007command\"\200\001\n\026ControlCommand" +
+      "\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version\030\003 \001(\r\"W" +
+      "\n\023MapEditStatusReport\022\023\n\013map_version\030\001 \001" +
+      "(\r\022\032\n\022applied_to_planner\030\002 \001(\010\022\017\n\007messag" +
+      "e\030\003 \001(\t\"/\n\026VideoStreamInfoRequest\022\025\n\rinc" +
+      "lude_debug\030\001 \001(\010\"\263\001\n\027VideoStreamInfoResp" +
+      "onse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCod" +
+      "e\022\017\n\007message\030\002 \001(\t\022\022\n\nstream_url\030\003 \001(\t\022\r" +
+      "\n\005codec\030\004 \001(\t\022\r\n\005width\030\005 \001(\r\022\016\n\006height\030\006" +
+      " \001(\r\022\016\n\006online\030\007 \001(\010\022\020\n\010utc_time\030\010 \001(\r\"\362" +
+      "\001\n\017PathPlanRequest\022\022\n\nrequest_id\030\001 \001(\t\022\017" +
+      "\n\007task_id\030\002 \001(\t\022\024\n\014force_replan\030\003 \001(\010\022\032\n" +
+      "\022return_path_chunks\030\004 \001(\010\022\026\n\016max_chunk_s" +
+      "ize\030\005 \001(\r\022#\n\nstart_pose\030\006 \001(\0132\017.sl_link." +
+      "Pose2D\022!\n\010end_pose\030\007 \001(\0132\017.sl_link.Pose2" +
+      "D\022\030\n\020global_direction\030\010 \001(\t\022\016\n\006map_id\030\t " +
+      "\001(\t\"\257\005\n\020PathPlanResponse\022#\n\006result\030\001 \001(\016" +
+      "2\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\022" +
+      "\n\nrequest_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\023\n\013m" +
+      "ap_version\030\005 \001(\r\022\024\n\014path_version\030\006 \001(\r\022\030" +
+      "\n\020path_point_count\030\007 \001(\r\022\025\n\rpath_length_" +
+      "m\030\010 \001(\002\022\017\n\007planned\030\t \001(\010\022\024\n\014path_chunked" +
+      "\030\n \001(\010\022\025\n\rpreview_image\030\013 \001(\014\022\026\n\016preview" +
+      "_format\030\014 \001(\t\022\r\n\005width\030\r \001(\r\022\016\n\006height\030\016" +
+      " \001(\r\022\022\n\nresolution\030\017 \001(\002\022\037\n\006origin\030\020 \001(\013" +
+      "2\017.sl_link.Pose2D\022\020\n\010frame_id\030\021 \001(\t\022\027\n\017p" +
+      "review_scale_x\030\022 \001(\002\022\027\n\017preview_scale_y\030" +
+      "\023 \001(\002\022-\n\022total_work_area_m2\030\024 \001(\002B\021\212\265\030\002m" +
+      "2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030\025 \001(\002B\020" +
+      "\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022@\n\027localization_covaria" +
+      "nce\030\026 \001(\0132\037.sl_link.LocalizationCovarian" +
+      "ce\022\031\n\021alignment_yaw_deg\030\027 \001(\002\022\030\n\020app_rot" +
+      "ation_deg\030\030 \001(\002\022$\n\034rotation_alignment_de" +
+      "lta_deg\030\031 \001(\002\"m\n\016MapSyncRequest\022,\n\topera" +
+      "tion\030\001 \001(\0162\031.sl_link.MapSyncOperation\022\016\n" +
+      "\006map_id\030\002 \001(\t\022\035\n\025update_navigation_map\030\003" +
+      " \001(\010\"\226\002\n\017MapSyncResponse\022#\n\006result\030\001 \001(\016" +
+      "2\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022," +
+      "\n\toperation\030\003 \001(\0162\031.sl_link.MapSyncOpera" +
+      "tion\022\016\n\006map_id\030\004 \001(\t\022\020\n\010map_name\030\010 \001(\t\022\024" +
+      "\n\014map_revision\030\t \001(\t\022\025\n\rmap_yaml_path\030\005 " +
+      "\001(\t\022\026\n\016map_image_path\030\006 \001(\t\022\037\n\027navigatio" +
+      "n_map_reloaded\030\007 \001(\010\022\027\n\017lifecycle_state\030" +
+      "\n \001(\t\")\n\027MapImportToRadarRequest\022\016\n\006map_" +
+      "id\030\001 \001(\t\"\263\001\n\030MapImportToRadarResponse\022#\n" +
+      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
+      "ssage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030" +
+      "\004 \001(\t\022\020\n\010imported\030\005 \001(\010\022\024\n\014map_revision\030" +
+      "\006 \001(\t\022\027\n\017lifecycle_state\030\007 \001(\t\"W\n\016MapMod" +
+      "eRequest\022\"\n\004mode\030\001 \001(\0162\024.sl_link.MapMode" +
+      "Type\022\017\n\007enabled\030\002 \001(\010\022\020\n\010map_kind\030\003 \001(\005\"" +
+      "\345\001\n\017MapModeResponse\022#\n\006result\030\001 \001(\0162\023.sl" +
+      "_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\"\n\004mod" +
+      "e\030\003 \001(\0162\024.sl_link.MapModeType\022\017\n\007enabled" +
+      "\030\004 \001(\010\022\020\n\010map_kind\030\005 \001(\005\022\027\n\017lifecycle_st" +
+      "ate\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022\024\n\014map_revisio" +
+      "n\030\010 \001(\t\022\026\n\016residual_nodes\030\t \003(\t\";\n\023MapAl" +
+      "ignmentRequest\022\016\n\006map_id\030\001 \001(\t\022\024\n\014rotati" +
+      "on_deg\030\002 \001(\002\"\311\001\n\024MapAlignmentResponse\022#\n" +
+      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
+      "ssage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\024\n\014rotation_" +
+      "deg\030\004 \001(\002\022\024\n\014rotation_rad\030\005 \001(\002\022\031\n\021align" +
+      "ment_yaw_deg\030\006 \001(\002\022$\n\034rotation_alignment" +
+      "_delta_deg\030\007 \001(\002\"\023\n\021MapCatalogRequest\"\303\002" +
+      "\n\016MapCatalogItem\022\016\n\006map_id\030\001 \001(\t\022\014\n\004name" +
+      "\030\002 \001(\t\022\022\n\nsize_bytes\030\003 \001(\004\022\020\n\010saved_at\030\004" +
+      " \001(\004\022-\n\022total_work_area_m2\030\005 \001(\002B\021\212\265\030\002m2" +
+      "\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030\006 \001(\002B\020\212" +
+      "\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030\n\020thumbnail_format\030\007 \001(" +
+      "\t\022\027\n\017thumbnail_width\030\010 \001(\r\022\030\n\020thumbnail_" +
+      "height\030\t \001(\r\022\033\n\023thumbnail_image_b64\030\n \001(" +
+      "\t\022\022\n\ncreated_at\030\013 \001(\t\022\024\n\014map_revision\030\014 " +
+      "\001(\t\"\207\001\n\022MapCatalogResponse\022#\n\006result\030\001 \001" +
+      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
+      "\022\023\n\013total_count\030\003 \001(\r\022&\n\005items\030\004 \003(\0132\027.s" +
+      "l_link.MapCatalogItem\"\"\n\020MapDeleteReques" +
+      "t\022\016\n\006map_id\030\001 \001(\t\"\312\001\n\021MapDeleteResponse\022" +
+      "#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007" +
+      "message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_nam" +
+      "e\030\004 \001(\t\022\017\n\007deleted\030\005 \001(\010\022\025\n\rlocal_delete" +
+      "d\030\006 \001(\010\022\026\n\016remote_deleted\030\007 \001(\010\022\035\n\025remot" +
+      "e_delete_pending\030\010 \001(\010\"b\n\016MapSaveRequest" +
+      "\022\020\n\010map_name\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\030\n\020ha" +
+      "s_rotation_deg\030\003 \001(\010\022\024\n\014rotation_deg\030\004 \001" +
+      "(\002\"\246\003\n\017MapSaveResponse\022#\n\006result\030\001 \001(\0162\023" +
+      ".sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006" +
+      "map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\025\n\rmap_ya" +
+      "ml_path\030\005 \001(\t\022\026\n\016map_image_path\030\006 \001(\t\022\037\n" +
+      "\027navigation_map_reloaded\030\007 \001(\010\022-\n\022total_" +
+      "work_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n" +
+      "\020estimated_time_s\030\t \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360" +
+      "?\022\022\n\ncreated_at\030\n \001(\t\022\024\n\014map_revision\030\013 " +
+      "\001(\t\022\027\n\017lifecycle_state\030\014 \001(\t\022\027\n\017mapping_" +
+      "stopped\030\r \001(\010\022\034\n\024localization_started\030\016 " +
+      "\001(\010\022\026\n\016residual_nodes\030\017 \003(\t\"#\n\021MapMetric" +
+      "sRequest\022\016\n\006map_id\030\001 \001(\t\"\233\001\n\021RegionMetri" +
+      "csItem\022\021\n\tregion_id\030\001 \001(\t\022\023\n\013region_name" +
+      "\030\002 \001(\t\022\016\n\006repeat\030\003 \001(\r\022\"\n\007area_m2\030\004 \001(\002B" +
+      "\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_h\030\005" +
+      " \001(\002B\020\212\265\030\001h\221\265\030\000\000\000\000\000\000\360?\"\240\001\n\022MapMetricsRes" +
+      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
+      "de\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010m" +
+      "ap_name\030\004 \001(\t\0222\n\016region_metrics\030\005 \003(\0132\032." +
+      "sl_link.RegionMetricsItem\"S\n\021TaskResultR" +
+      "equest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022" +
+      "\035\n\025max_execution_records\030\003 \001(\r\"\234\001\n\024TaskR" +
+      "esultRegionItem\022\021\n\tregion_id\030\001 \001(\t\022\023\n\013re" +
+      "gion_name\030\002 \001(\t\022\025\n\rtarget_repeat\030\003 \001(\r\022\027" +
+      "\n\017executed_repeat\030\004 \001(\r\022\021\n\tcompleted\030\005 \001" +
+      "(\010\022\031\n\021unfinished_reason\030\006 \001(\t\"\341\002\n\023TaskEx" +
+      "ecutionRecord\022\024\n\014execution_id\030\001 \001(\t\022\016\n\006m" +
+      "ap_id\030\002 \001(\t\022\017\n\007task_id\030\003 \001(\t\022\'\n\013final_st" +
+      "ate\030\004 \001(\0162\022.sl_link.TaskState\022\023\n\013stop_re" +
+      "ason\030\005 \001(\t\022\022\n\nstarted_at\030\006 \001(\004\022\023\n\013finish" +
+      "ed_at\030\007 \001(\004\022*\n\017planned_area_m2\030\010 \001(\002B\021\212\265" +
+      "\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020executed_area_m2\030\t \001(" +
+      "\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022&\n\010progress\030\n \001(\002B\024" +
+      "\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\022\024\n\014path_version\030\013 \001" +
+      "(\r\022\025\n\rall_completed\030\014 \001(\010\"\244\006\n\022TaskResult" +
       "Response\022#\n\006result\030\001 \001(\0162\023.sl_link.Resul" +
-      "tCode\022\017\n\007message\030\002 \001(\t\0220\n\017applied_comman" +
-      "d\030\003 \001(\0132\027.sl_link.ControlCommand*\302\023\n\tMes" +
-      "sageId\022\022\n\016MSG_ID_UNKNOWN\020\000\022\027\n\022MSG_ID_WIF" +
-      "I_CONFIG\020\201\004\022\036\n\031MSG_ID_WIFI_STATUS_REPORT" +
-      "\020\202\004\022!\n\034MSG_ID_SETTINGS_READ_REQUEST\020\203\004\022\"" +
-      "\n\035MSG_ID_SETTINGS_READ_RESPONSE\020\204\004\022\"\n\035MS" +
-      "G_ID_SETTINGS_WRITE_REQUEST\020\205\004\022#\n\036MSG_ID" +
-      "_SETTINGS_WRITE_RESPONSE\020\206\004\022 \n\033MSG_ID_DE" +
-      "VICE_STATUS_REPORT\020\201\006\022 \n\033MSG_ID_CAMERA_F" +
-      "RAME_REQUEST\020\202\006\022\036\n\031MSG_ID_CAMERA_FRAME_C" +
-      "HUNK\020\203\006\022\027\n\022MSG_ID_MAP_REQUEST\020\204\006\022\025\n\020MSG_" +
-      "ID_MAP_CHUNK\020\205\006\022\033\n\026MSG_ID_CONTROL_COMMAN" +
-      "D\020\201\010\022$\n\037MSG_ID_CONTROL_COMMAND_RESPONSE\020" +
-      "\202\010\022\027\n\022MSG_ID_TASK_CONFIG\020\200\n\022 \n\033MSG_ID_TA" +
-      "SK_CONFIG_RESPONSE\020\201\n\022\030\n\023MSG_ID_TASK_COM" +
-      "MAND\020\202\n\022!\n\034MSG_ID_TASK_COMMAND_RESPONSE\020" +
-      "\203\n\022\036\n\031MSG_ID_TASK_STATUS_REPORT\020\204\n\022#\n\036MS" +
-      "G_ID_PATH_POINT_PLAN_REQUEST\020\205\n\022$\n\037MSG_I" +
-      "D_PATH_POINT_PLAN_RESPONSE\020\206\n\022\037\n\032MSG_ID_" +
-      "MAP_PREVIEW_REQUEST\020\207\n\022 \n\033MSG_ID_MAP_PRE" +
-      "VIEW_RESPONSE\020\210\n\022\034\n\027MSG_ID_MAP_EDIT_COMM" +
-      "AND\020\211\n\022\035\n\030MSG_ID_MAP_EDIT_RESPONSE\020\212\n\022\"\n" +
-      "\035MSG_ID_MAP_EDIT_STATUS_REPORT\020\213\n\022%\n MSG" +
-      "_ID_VIDEO_STREAM_INFO_REQUEST\020\214\n\022&\n!MSG_" +
-      "ID_VIDEO_STREAM_INFO_RESPONSE\020\215\n\022\035\n\030MSG_" +
-      "ID_PATH_PLAN_REQUEST\020\216\n\022\036\n\031MSG_ID_PATH_P" +
-      "LAN_RESPONSE\020\217\n\022\034\n\027MSG_ID_MAP_SYNC_REQUE" +
-      "ST\020\220\n\022\035\n\030MSG_ID_MAP_SYNC_RESPONSE\020\221\n\022\034\n\027" +
-      "MSG_ID_MAP_MODE_REQUEST\020\222\n\022\035\n\030MSG_ID_MAP" +
-      "_MODE_RESPONSE\020\223\n\022\037\n\032MSG_ID_MAP_CATALOG_" +
-      "REQUEST\020\224\n\022 \n\033MSG_ID_MAP_CATALOG_RESPONS" +
-      "E\020\225\n\022\036\n\031MSG_ID_MAP_DELETE_REQUEST\020\226\n\022\037\n\032" +
-      "MSG_ID_MAP_DELETE_RESPONSE\020\227\n\022\034\n\027MSG_ID_" +
-      "MAP_SAVE_REQUEST\020\230\n\022\035\n\030MSG_ID_MAP_SAVE_R" +
-      "ESPONSE\020\231\n\022\037\n\032MSG_ID_MAP_METRICS_REQUEST" +
-      "\020\232\n\022 \n\033MSG_ID_MAP_METRICS_RESPONSE\020\233\n\022\037\n" +
-      "\032MSG_ID_TASK_RESULT_REQUEST\020\234\n\022 \n\033MSG_ID" +
-      "_TASK_RESULT_RESPONSE\020\235\n\022(\n#MSG_ID_LIVE_" +
-      "MAP_CACHE_CLEAR_REQUEST\020\236\n\022)\n$MSG_ID_LIV" +
-      "E_MAP_CACHE_CLEAR_RESPONSE\020\237\n\022)\n$MSG_ID_" +
-      "RADAR_MAP_CACHE_CLEAR_REQUEST\020\240\n\022*\n%MSG_" +
-      "ID_RADAR_MAP_CACHE_CLEAR_RESPONSE\020\241\n\022\'\n\"" +
-      "MSG_ID_MAP_IMPORT_TO_RADAR_REQUEST\020\242\n\022(\n" +
-      "#MSG_ID_MAP_IMPORT_TO_RADAR_RESPONSE\020\243\n\022" +
-      "!\n\034MSG_ID_MAP_ALIGNMENT_REQUEST\020\244\n\022\"\n\035MS" +
-      "G_ID_MAP_ALIGNMENT_RESPONSE\020\245\n\022\'\n\"MSG_ID" +
-      "_RADAR_SYSTEM_STATUS_REQUEST\020\246\n\022(\n#MSG_I" +
-      "D_RADAR_SYSTEM_STATUS_RESPONSE\020\247\n\022\"\n\035MSG" +
-      "_ID_RADAR_MAP_SYNC_REQUEST\020\250\n\022#\n\036MSG_ID_" +
-      "RADAR_MAP_SYNC_RESPONSE\020\251\n\022(\n#MSG_ID_RAD" +
-      "AR_RELOCALIZATION_REQUEST\020\252\n\022)\n$MSG_ID_R" +
-      "ADAR_RELOCALIZATION_RESPONSE\020\253\n\022/\n*MSG_I" +
-      "D_RADAR_RELOCALIZATION_STATUS_REQUEST\020\254\n" +
-      "\0220\n+MSG_ID_RADAR_RELOCALIZATION_STATUS_R" +
-      "ESPONSE\020\255\n\022$\n\037MSG_ID_MAP_REGION_POINT_RE" +
-      "QUEST\020\256\n\022%\n MSG_ID_MAP_REGION_POINT_RESP" +
-      "ONSE\020\257\n\022*\n%MSG_ID_TASK_EXECUTION_HISTORY" +
-      "_REQUEST\020\260\n\022(\n#MSG_ID_TASK_EXECUTION_HIS" +
-      "TORY_CHUNK\020\261\n\022#\n\036MSG_ID_TASK_TRAJECTORY_" +
-      "REQUEST\020\262\n\022!\n\034MSG_ID_TASK_TRAJECTORY_CHU" +
-      "NK\020\263\n\022)\n$MSG_ID_TASK_EXECUTION_DELETE_RE" +
-      "QUEST\020\264\n\022*\n%MSG_ID_TASK_EXECUTION_DELETE" +
-      "_RESPONSE\020\265\n\022&\n!MSG_ID_SYSTEM_CACHE_CLEA" +
-      "R_REQUEST\020\266\n\022\'\n\"MSG_ID_SYSTEM_CACHE_CLEA" +
-      "R_RESPONSE\020\267\n*X\n\010DeviceId\022\023\n\017DEVICE_RESE" +
-      "RVED\020\000\022\016\n\nDEVICE_APP\020\001\022\020\n\014DEVICE_LOWER\020\020" +
-      "\022\025\n\020DEVICE_BROADCAST\020\377\001*v\n\013ComponentId\022\017" +
-      "\n\013COMP_SYSTEM\020\000\022\r\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_S" +
-      "ETTINGS\020\005\022\016\n\nCOMP_MEDIA\020\006\022\020\n\014COMP_CONTRO" +
-      "L\020\007\022\022\n\016COMP_SCHEDULER\020\010*v\n\nResultCode\022\022\n" +
-      "\016RESULT_SUCCESS\020\000\022\030\n\024RESULT_INVALID_PARA" +
-      "M\020\001\022\026\n\022RESULT_UNSUPPORTED\020\002\022\017\n\013RESULT_BU" +
-      "SY\020\003\022\021\n\rRESULT_FAILED\020\004*;\n\014SystemStatus\022" +
-      "\025\n\021SYS_STATUS_NORMAL\020\000\022\024\n\020SYS_STATUS_ERR" +
-      "OR\020\001*Q\n\nWifiResult\022\020\n\014WIFI_PENDING\020\000\022\020\n\014" +
-      "WIFI_SUCCESS\020\001\022\r\n\tWIFI_FAIL\020\002\022\020\n\014WIFI_TI" +
-      "MEOUT\020\003*s\n\010WorkMode\022\025\n\021WORK_MODE_UNKNOWN" +
-      "\020\000\022\024\n\020WORK_MODE_MANUAL\020\001\022\022\n\016WORK_MODE_AU" +
-      "TO\020\002\022\022\n\016WORK_MODE_EDGE\020\003\022\022\n\016WORK_MODE_DO" +
-      "CK\020\004*z\n\rDiscLiftState\022\033\n\027DISC_LIFT_STATE" +
-      "_UNKNOWN\020\000\022\026\n\022DISC_LIFT_STATE_UP\020\001\022\030\n\024DI" +
-      "SC_LIFT_STATE_DOWN\020\002\022\032\n\026DISC_LIFT_STATE_" +
-      "MOVING\020\003*W\n\017DiscLiftCommand\022\026\n\022DISC_LIFT" +
-      "_CMD_STOP\020\000\022\024\n\020DISC_LIFT_CMD_UP\020\001\022\026\n\022DIS" +
-      "C_LIFT_CMD_DOWN\020\002*\350\001\n\023ManualMotionComman" +
-      "d\022\026\n\022MANUAL_MOTION_STOP\020\000\022\031\n\025MANUAL_MOTI" +
-      "ON_FORWARD\020\001\022\032\n\026MANUAL_MOTION_BACKWARD\020\002" +
-      "\022\036\n\032MANUAL_MOTION_FORWARD_LEFT\020\003\022\037\n\033MANU" +
-      "AL_MOTION_FORWARD_RIGHT\020\004\022\037\n\033MANUAL_MOTI" +
-      "ON_BACKWARD_LEFT\020\005\022 \n\034MANUAL_MOTION_BACK" +
-      "WARD_RIGHT\020\006*;\n\013CameraCodec\022\025\n\021CAMERA_CO" +
-      "DEC_JPEG\020\000\022\025\n\021CAMERA_CODEC_H264\020\001*[\n\013Map" +
-      "Encoding\022\037\n\033MAP_ENCODING_OCCUPANCY_GRID\020" +
-      "\000\022\024\n\020MAP_ENCODING_PNG\020\001\022\025\n\021MAP_ENCODING_" +
-      "JSON\020\002*\202\001\n\nRegionType\022\027\n\023REGION_TYPE_UNK" +
-      "NOWN\020\000\022\024\n\020REGION_TYPE_WORK\020\001\022\030\n\024REGION_T" +
-      "YPE_OBSTACLE\020\002\022\025\n\021REGION_TYPE_ERASE\020\003\022\024\n" +
-      "\020REGION_TYPE_CROP\020\004*\306\001\n\tTaskState\022\023\n\017TAS" +
-      "K_STATE_IDLE\020\000\022\024\n\020TASK_STATE_READY\020\001\022\027\n\023" +
-      "TASK_STATE_PLANNING\020\002\022\026\n\022TASK_STATE_RUNN" +
-      "ING\020\003\022\025\n\021TASK_STATE_PAUSED\020\004\022\030\n\024TASK_STA" +
-      "TE_COMPLETED\020\005\022\026\n\022TASK_STATE_STOPPED\020\006\022\024" +
-      "\n\020TASK_STATE_ERROR\020\007*a\n\017TaskCommandType\022" +
-      "\022\n\016TASK_CMD_START\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022" +
-      "\023\n\017TASK_CMD_RESUME\020\002\022\021\n\rTASK_CMD_STOP\020\003*" +
-      "\337\002\n\020MapEditOperation\022\027\n\023MAP_EDIT_OP_UNKN" +
-      "OWN\020\000\022\"\n\036MAP_EDIT_OP_UPSERT_WORK_REGION\020" +
-      "\001\022&\n\"MAP_EDIT_OP_UPSERT_OBSTACLE_REGION\020" +
-      "\002\022\035\n\031MAP_EDIT_OP_DELETE_REGION\020\003\022\032\n\026MAP_" +
-      "EDIT_OP_PAINT_FREE\020\004\022\036\n\032MAP_EDIT_OP_PAIN" +
-      "T_OCCUPIED\020\005\022\035\n\031MAP_EDIT_OP_PAINT_UNKNOW" +
-      "N\020\006\022#\n\037MAP_EDIT_OP_CLEAR_OVERLAY_PATCH\020\007" +
-      "\022#\n\037MAP_EDIT_OP_UPSERT_ERASE_REGION\020\010\022\"\n" +
-      "\036MAP_EDIT_OP_UPSERT_CROP_REGION\020\t*s\n\020Map" +
-      "SyncOperation\022\027\n\023MAP_SYNC_OP_UNKNOWN\020\000\022$" +
-      "\n MAP_SYNC_OP_DOWNLOAD_FROM_AURORA\020\001\022 \n\034" +
-      "MAP_SYNC_OP_UPLOAD_TO_AURORA\020\002*T\n\013MapMod" +
-      "eType\022\024\n\020MAP_MODE_UNKNOWN\020\000\022\024\n\020MAP_MODE_" +
-      "MAPPING\020\001\022\031\n\025MAP_MODE_LOCALIZATION\020\002:-\n\004" +
-      "unit\022\035.google.protobuf.FieldOptions\030\321\206\003 " +
-      "\001(\t:.\n\005scale\022\035.google.protobuf.FieldOpti" +
-      "ons\030\322\206\003 \001(\001b\006proto3"
+      "tCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\017" +
+      "\n\007task_id\030\004 \001(\t\022\'\n\013final_state\030\005 \001(\0162\022.s" +
+      "l_link.TaskState\022\025\n\rall_completed\030\006 \001(\010\022" +
+      "\023\n\013stop_reason\030\007 \001(\t\022\024\n\014path_version\030\010 \001" +
+      "(\r\022\024\n\014image_format\030\t \001(\t\022\022\n\nimage_data\030\n" +
+      " \001(\014\022\023\n\013image_width\030\013 \001(\r\022\024\n\014image_heigh" +
+      "t\030\014 \001(\r\022\023\n\013finished_at\030\r \001(\004\022 \n\030selected" +
+      "_work_region_ids\030\016 \003(\t\0225\n\016region_results" +
+      "\030\017 \003(\0132\035.sl_link.TaskResultRegionItem\022@\n" +
+      "\027localization_covariance\030\020 \001(\0132\037.sl_link" +
+      ".LocalizationCovariance\022\031\n\021alignment_yaw" +
+      "_deg\030\021 \001(\002\022\030\n\020app_rotation_deg\030\022 \001(\002\022$\n\034" +
+      "rotation_alignment_delta_deg\030\023 \001(\002\022\024\n\014ex" +
+      "ecution_id\030\024 \001(\t\022\022\n\nstarted_at\030\025 \001(\004\022*\n\017" +
+      "planned_area_m2\030\026 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?" +
+      "\022+\n\020executed_area_m2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000" +
+      "\000\000\000\360?\0220\n\022execution_progress\030\030 \001(\002B\024\212\265\030\005r" +
+      "atio\221\265\030\000\000\000\000\000\000\360?\0227\n\021execution_records\030\031 \003",
+      "(\0132\034.sl_link.TaskExecutionRecord\"|\n\033Task" +
+      "ExecutionHistoryRequest\022\016\n\006map_id\030\001 \001(\t\022" +
+      "\017\n\007task_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010" +
+      "end_time\030\004 \001(\004\022\026\n\016max_chunk_size\030\005 \001(\r\"\314" +
+      "\001\n\031TaskExecutionHistoryChunk\022#\n\006result\030\001" +
+      " \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001" +
+      "(\t\022\023\n\013chunk_index\030\003 \001(\r\022\024\n\014total_chunks\030" +
+      "\004 \001(\r\022\032\n\022total_record_count\030\005 \001(\r\022\014\n\004dat" +
+      "a\030\006 \001(\014\022\022\n\nstart_time\030\007 \001(\004\022\020\n\010end_time\030" +
+      "\010 \001(\004\"2\n\032TaskExecutionDeleteRequest\022\024\n\014e" +
+      "xecution_id\030\001 \001(\t\"\274\001\n\033TaskExecutionDelet" +
+      "eResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
+      "ltCode\022\017\n\007message\030\002 \001(\t\022\024\n\014execution_id\030" +
+      "\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\016\n\006map_id\030\005 \001(\t\022\017" +
+      "\n\007deleted\030\006 \001(\010\022\037\n\027execution_files_delet" +
+      "ed\030\007 \001(\010\"\272\001\n\025TaskTrajectoryRequest\022\024\n\014ex" +
+      "ecution_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\022\n\nsta" +
+      "rt_time\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\023\n\013start" +
+      "_index\030\005 \001(\r\022\022\n\nmax_points\030\006 \001(\r\022\023\n\013samp" +
+      "le_step\030\007 \001(\r\022\026\n\016max_chunk_size\030\010 \001(\r\"\221\002" +
+      "\n\023TaskTrajectoryPoint\022\r\n\005index\030\001 \001(\r\022\021\n\t" +
+      "offset_ms\030\002 \001(\r\022\014\n\004x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 " +
+      "\001(\021\022\024\n\014heading_mdeg\030\005 \001(\021\022\031\n\021linear_spee" +
+      "d_mmps\030\006 \001(\021\022\034\n\024angular_speed_mradps\030\007 \001" +
+      "(\021\022\026\n\016disc_speed_rpm\030\010 \001(\r\022\027\n\017speed_avai" +
+      "lable\030\t \001(\010\022\024\n\014disc_enabled\030\n \001(\010\022&\n\ntas" +
+      "k_state\030\013 \001(\0162\022.sl_link.TaskState\"\243\007\n\023Ta" +
+      "skTrajectoryChunk\022#\n\006result\030\001 \001(\0162\023.sl_l" +
+      "ink.ResultCode\022\017\n\007message\030\002 \001(\t\022\024\n\014execu" +
+      "tion_id\030\003 \001(\t\022\023\n\013chunk_index\030\004 \001(\r\022\024\n\014to" +
+      "tal_chunks\030\005 \001(\r\022\031\n\021total_point_count\030\006 " +
+      "\001(\r\022\034\n\024returned_point_count\030\007 \001(\r\022\023\n\013sta" +
+      "rt_index\030\010 \001(\r\022\022\n\nnext_index\030\t \001(\r\022\020\n\010ha" +
+      "s_more\030\n \001(\010\022\025\n\rstarted_at_ms\030\013 \001(\004\022,\n\006p" +
+      "oints\030\014 \003(\0132\034.sl_link.TaskTrajectoryPoin" +
+      "t\022\017\n\007task_id\030\r \001(\t\022\016\n\006map_id\030\016 \001(\t\022\022\n\nst" +
+      "art_time\030\017 \001(\004\022\020\n\010end_time\030\020 \001(\004\022\023\n\013samp" +
+      "le_step\030\021 \001(\r\022\025\n\rmap_available\030\022 \001(\010\022\023\n\013" +
+      "map_message\030\023 \001(\t\022\023\n\013map_version\030\024 \001(\r\022\030" +
+      "\n\020map_source_width\030\025 \001(\r\022\031\n\021map_source_h" +
+      "eight\030\026 \001(\r\022\026\n\016map_resolution\030\027 \001(\002\022#\n\nm" +
+      "ap_origin\030\030 \001(\0132\017.sl_link.Pose2D\022\024\n\014map_" +
+      "frame_id\030\031 \001(\t\022\030\n\020map_image_format\030\032 \001(\t" +
+      "\022\027\n\017map_image_width\030\033 \001(\r\022\030\n\020map_image_h" +
+      "eight\030\034 \001(\r\022\033\n\023map_preview_scale_x\030\035 \001(\002" +
+      "\022\033\n\023map_preview_scale_y\030\036 \001(\002\022\026\n\016map_ima" +
+      "ge_data\030\037 \001(\014\022\035\n\025map_image_chunk_index\030 " +
+      " \001(\r\022\036\n\026map_image_total_chunks\030! \001(\r\022\031\n\021" +
+      "alignment_yaw_deg\030\" \001(\002\022\030\n\020app_rotation_" +
+      "deg\030# \001(\002\022$\n\034rotation_alignment_delta_de" +
+      "g\030$ \001(\002\"\032\n\030LiveMapCacheClearRequest\"Q\n\031L" +
+      "iveMapCacheClearResponse\022#\n\006result\030\001 \001(\016" +
+      "2\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\"h" +
+      "\n\027SystemCacheClearRequest\022\032\n\022clear_memor" +
+      "y_cache\030\001 \001(\010\022\035\n\025clear_temporary_files\030\002" +
+      " \001(\010\022\022\n\nclear_logs\030\003 \001(\010\"\376\001\n\030SystemCache" +
+      "ClearResponse\022#\n\006result\030\001 \001(\0162\023.sl_link." +
+      "ResultCode\022\017\n\007message\030\002 \001(\t\022\034\n\024memory_ca" +
+      "che_cleared\030\003 \001(\010\022\037\n\027temporary_files_cle" +
+      "ared\030\004 \001(\r\022 \n\030temporary_bytes_released\030\005" +
+      " \001(\004\022\031\n\021log_files_cleared\030\006 \001(\r\022\032\n\022log_b" +
+      "ytes_released\030\007 \001(\004\022\024\n\014failed_items\030\010 \001(" +
+      "\r\"\033\n\031RadarMapCacheClearRequest\"R\n\032RadarM" +
+      "apCacheClearResponse\022#\n\006result\030\001 \001(\0162\023.s" +
+      "l_link.ResultCode\022\017\n\007message\030\002 \001(\t\"\032\n\030Ra" +
+      "darSystemStatusRequest\"\212\001\n\031RadarSystemSt" +
+      "atusResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.R" +
+      "esultCode\022\017\n\007message\030\002 \001(\t\022\021\n\tavailable\030" +
+      "\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\024\n\014timestamp_ns\030\005 " +
+      "\001(\004\"\025\n\023RadarMapSyncRequest\"Z\n\024RadarMapSy" +
+      "ncResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Res" +
+      "ultCode\022\017\n\007message\030\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\313" +
+      "\001\n\032RadarRelocalizationRequest\022\036\n\026initial" +
+      "_pose_available\030\001 \001(\010\022%\n\014initial_pose\030\002 " +
+      "\001(\0132\017.sl_link.Pose2D\022@\n\027initial_pose_cov" +
+      "ariance\030\003 \001(\0132\037.sl_link.LocalizationCova" +
+      "riance\022\016\n\006map_id\030\004 \001(\t\022\024\n\014map_revision\030\005" +
+      " \001(\t\"\264\001\n\033RadarRelocalizationResponse\022#\n\006" +
+      "result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mes" +
+      "sage\030\002 \001(\t\022\020\n\010accepted\030\003 \001(\010\022\016\n\006status\030\004" +
+      " \001(\t\022\016\n\006map_id\030\005 \001(\t\022\024\n\014map_revision\030\006 \001" +
+      "(\t\022\027\n\017lifecycle_state\030\007 \001(\t\"\"\n RadarRelo" +
+      "calizationStatusRequest\"\353\003\n!RadarRelocal" +
+      "izationStatusResponse\022\022\n\nraw_status\030\005 \001(" +
+      "\t\022\024\n\014timestamp_ns\030\n \001(\004\022\027\n\017lifecycle_sta" +
+      "te\030\013 \001(\t\022\016\n\006detail\030\014 \001(\t\022\016\n\006map_id\030\r \001(\t" +
+      "\022\024\n\014map_revision\030\016 \001(\t\022\023\n\013good_frames\030\017 " +
+      "\001(\r\022\027\n\017required_frames\030\020 \001(\r\022\"\n\032registra" +
+      "tion_quality_valid\030\021 \001(\010\022\034\n\024registration" +
+      "_fitness\030\022 \001(\002\022!\n\031registration_inlier_ra" +
+      "tio\030\023 \001(\002\022\026\n\016residual_nodes\030\024 \003(\tJ\004\010\001\020\002J" +
+      "\004\010\002\020\003J\004\010\003\020\004J\004\010\004\020\005J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020" +
+      "\nR\006resultR\007messageR\tavailableR\006statusR\rs" +
+      "ystem_statusR\016odom_availableR\025odom_linea" +
+      "r_speed_mpsR\030odom_angular_speed_radps\"<\n" +
+      "\017DiscLiftControl\022)\n\007command\030\001 \001(\0162\030.sl_l" +
+      "ink.DiscLiftCommand\"\"\n\017LightingControl\022\017" +
+      "\n\007enabled\030\001 \001(\010\"&\n\023ChassisPowerControl\022\017" +
+      "\n\007enabled\030\001 \001(\010\"1\n\013DiscControl\022\017\n\007enable" +
+      "d\030\001 \001(\010\022\021\n\tspeed_rpm\030\002 \001(\r\"\'\n\024EmergencyS" +
+      "topControl\022\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualDr" +
+      "iveControl\022,\n\006motion\030\001 \001(\0162\034.sl_link.Man" +
+      "ualMotionCommand\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n" +
+      "\010remote_x\030\003 \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax" +
+      "_speed_mps\030\005 \001(\002\022\034\n\024max_turn_speed_ratio" +
+      "\030\006 \001(\002\"\313\002\n\016ControlCommand\022-\n\tdisc_lift\030\001" +
+      " \001(\0132\030.sl_link.DiscLiftControlH\000\022,\n\010ligh" +
+      "ting\030\002 \001(\0132\030.sl_link.LightingControlH\000\0223" +
+      "\n\014manual_drive\030\003 \001(\0132\033.sl_link.ManualDri" +
+      "veControlH\000\0225\n\rchassis_power\030\004 \001(\0132\034.sl_" +
+      "link.ChassisPowerControlH\000\022,\n\014disc_contr" +
+      "ol\030\005 \001(\0132\024.sl_link.DiscControlH\000\0227\n\016emer" +
+      "gency_stop\030\006 \001(\0132\035.sl_link.EmergencyStop" +
+      "ControlH\000B\t\n\007command\"\200\001\n\026ControlCommandR" +
+      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
+      "Code\022\017\n\007message\030\002 \001(\t\0220\n\017applied_command" +
+      "\030\003 \001(\0132\027.sl_link.ControlCommand*\302\023\n\tMess" +
+      "ageId\022\022\n\016MSG_ID_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI" +
+      "_CONFIG\020\201\004\022\036\n\031MSG_ID_WIFI_STATUS_REPORT\020" +
+      "\202\004\022!\n\034MSG_ID_SETTINGS_READ_REQUEST\020\203\004\022\"\n" +
+      "\035MSG_ID_SETTINGS_READ_RESPONSE\020\204\004\022\"\n\035MSG" +
+      "_ID_SETTINGS_WRITE_REQUEST\020\205\004\022#\n\036MSG_ID_" +
+      "SETTINGS_WRITE_RESPONSE\020\206\004\022 \n\033MSG_ID_DEV" +
+      "ICE_STATUS_REPORT\020\201\006\022 \n\033MSG_ID_CAMERA_FR" +
+      "AME_REQUEST\020\202\006\022\036\n\031MSG_ID_CAMERA_FRAME_CH" +
+      "UNK\020\203\006\022\027\n\022MSG_ID_MAP_REQUEST\020\204\006\022\025\n\020MSG_I" +
+      "D_MAP_CHUNK\020\205\006\022\033\n\026MSG_ID_CONTROL_COMMAND" +
+      "\020\201\010\022$\n\037MSG_ID_CONTROL_COMMAND_RESPONSE\020\202" +
+      "\010\022\027\n\022MSG_ID_TASK_CONFIG\020\200\n\022 \n\033MSG_ID_TAS" +
+      "K_CONFIG_RESPONSE\020\201\n\022\030\n\023MSG_ID_TASK_COMM" +
+      "AND\020\202\n\022!\n\034MSG_ID_TASK_COMMAND_RESPONSE\020\203" +
+      "\n\022\036\n\031MSG_ID_TASK_STATUS_REPORT\020\204\n\022#\n\036MSG" +
+      "_ID_PATH_POINT_PLAN_REQUEST\020\205\n\022$\n\037MSG_ID" +
+      "_PATH_POINT_PLAN_RESPONSE\020\206\n\022\037\n\032MSG_ID_M" +
+      "AP_PREVIEW_REQUEST\020\207\n\022 \n\033MSG_ID_MAP_PREV" +
+      "IEW_RESPONSE\020\210\n\022\034\n\027MSG_ID_MAP_EDIT_COMMA" +
+      "ND\020\211\n\022\035\n\030MSG_ID_MAP_EDIT_RESPONSE\020\212\n\022\"\n\035" +
+      "MSG_ID_MAP_EDIT_STATUS_REPORT\020\213\n\022%\n MSG_" +
+      "ID_VIDEO_STREAM_INFO_REQUEST\020\214\n\022&\n!MSG_I" +
+      "D_VIDEO_STREAM_INFO_RESPONSE\020\215\n\022\035\n\030MSG_I" +
+      "D_PATH_PLAN_REQUEST\020\216\n\022\036\n\031MSG_ID_PATH_PL" +
+      "AN_RESPONSE\020\217\n\022\034\n\027MSG_ID_MAP_SYNC_REQUES" +
+      "T\020\220\n\022\035\n\030MSG_ID_MAP_SYNC_RESPONSE\020\221\n\022\034\n\027M" +
+      "SG_ID_MAP_MODE_REQUEST\020\222\n\022\035\n\030MSG_ID_MAP_" +
+      "MODE_RESPONSE\020\223\n\022\037\n\032MSG_ID_MAP_CATALOG_R" +
+      "EQUEST\020\224\n\022 \n\033MSG_ID_MAP_CATALOG_RESPONSE" +
+      "\020\225\n\022\036\n\031MSG_ID_MAP_DELETE_REQUEST\020\226\n\022\037\n\032M" +
+      "SG_ID_MAP_DELETE_RESPONSE\020\227\n\022\034\n\027MSG_ID_M" +
+      "AP_SAVE_REQUEST\020\230\n\022\035\n\030MSG_ID_MAP_SAVE_RE" +
+      "SPONSE\020\231\n\022\037\n\032MSG_ID_MAP_METRICS_REQUEST\020" +
+      "\232\n\022 \n\033MSG_ID_MAP_METRICS_RESPONSE\020\233\n\022\037\n\032" +
+      "MSG_ID_TASK_RESULT_REQUEST\020\234\n\022 \n\033MSG_ID_" +
+      "TASK_RESULT_RESPONSE\020\235\n\022(\n#MSG_ID_LIVE_M" +
+      "AP_CACHE_CLEAR_REQUEST\020\236\n\022)\n$MSG_ID_LIVE" +
+      "_MAP_CACHE_CLEAR_RESPONSE\020\237\n\022)\n$MSG_ID_R" +
+      "ADAR_MAP_CACHE_CLEAR_REQUEST\020\240\n\022*\n%MSG_I" +
+      "D_RADAR_MAP_CACHE_CLEAR_RESPONSE\020\241\n\022\'\n\"M" +
+      "SG_ID_MAP_IMPORT_TO_RADAR_REQUEST\020\242\n\022(\n#" +
+      "MSG_ID_MAP_IMPORT_TO_RADAR_RESPONSE\020\243\n\022!" +
+      "\n\034MSG_ID_MAP_ALIGNMENT_REQUEST\020\244\n\022\"\n\035MSG" +
+      "_ID_MAP_ALIGNMENT_RESPONSE\020\245\n\022\'\n\"MSG_ID_" +
+      "RADAR_SYSTEM_STATUS_REQUEST\020\246\n\022(\n#MSG_ID" +
+      "_RADAR_SYSTEM_STATUS_RESPONSE\020\247\n\022\"\n\035MSG_" +
+      "ID_RADAR_MAP_SYNC_REQUEST\020\250\n\022#\n\036MSG_ID_R" +
+      "ADAR_MAP_SYNC_RESPONSE\020\251\n\022(\n#MSG_ID_RADA" +
+      "R_RELOCALIZATION_REQUEST\020\252\n\022)\n$MSG_ID_RA" +
+      "DAR_RELOCALIZATION_RESPONSE\020\253\n\022/\n*MSG_ID" +
+      "_RADAR_RELOCALIZATION_STATUS_REQUEST\020\254\n\022" +
+      "0\n+MSG_ID_RADAR_RELOCALIZATION_STATUS_RE" +
+      "SPONSE\020\255\n\022$\n\037MSG_ID_MAP_REGION_POINT_REQ" +
+      "UEST\020\256\n\022%\n MSG_ID_MAP_REGION_POINT_RESPO" +
+      "NSE\020\257\n\022*\n%MSG_ID_TASK_EXECUTION_HISTORY_" +
+      "REQUEST\020\260\n\022(\n#MSG_ID_TASK_EXECUTION_HIST" +
+      "ORY_CHUNK\020\261\n\022#\n\036MSG_ID_TASK_TRAJECTORY_R" +
+      "EQUEST\020\262\n\022!\n\034MSG_ID_TASK_TRAJECTORY_CHUN" +
+      "K\020\263\n\022)\n$MSG_ID_TASK_EXECUTION_DELETE_REQ" +
+      "UEST\020\264\n\022*\n%MSG_ID_TASK_EXECUTION_DELETE_" +
+      "RESPONSE\020\265\n\022&\n!MSG_ID_SYSTEM_CACHE_CLEAR" +
+      "_REQUEST\020\266\n\022\'\n\"MSG_ID_SYSTEM_CACHE_CLEAR" +
+      "_RESPONSE\020\267\n*X\n\010DeviceId\022\023\n\017DEVICE_RESER" +
+      "VED\020\000\022\016\n\nDEVICE_APP\020\001\022\020\n\014DEVICE_LOWER\020\020\022" +
+      "\025\n\020DEVICE_BROADCAST\020\377\001*v\n\013ComponentId\022\017\n" +
+      "\013COMP_SYSTEM\020\000\022\r\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_SE" +
+      "TTINGS\020\005\022\016\n\nCOMP_MEDIA\020\006\022\020\n\014COMP_CONTROL" +
+      "\020\007\022\022\n\016COMP_SCHEDULER\020\010*v\n\nResultCode\022\022\n\016" +
+      "RESULT_SUCCESS\020\000\022\030\n\024RESULT_INVALID_PARAM" +
+      "\020\001\022\026\n\022RESULT_UNSUPPORTED\020\002\022\017\n\013RESULT_BUS" +
+      "Y\020\003\022\021\n\rRESULT_FAILED\020\004*;\n\014SystemStatus\022\025" +
+      "\n\021SYS_STATUS_NORMAL\020\000\022\024\n\020SYS_STATUS_ERRO" +
+      "R\020\001*Q\n\nWifiResult\022\020\n\014WIFI_PENDING\020\000\022\020\n\014W" +
+      "IFI_SUCCESS\020\001\022\r\n\tWIFI_FAIL\020\002\022\020\n\014WIFI_TIM" +
+      "EOUT\020\003*s\n\010WorkMode\022\025\n\021WORK_MODE_UNKNOWN\020" +
+      "\000\022\024\n\020WORK_MODE_MANUAL\020\001\022\022\n\016WORK_MODE_AUT" +
+      "O\020\002\022\022\n\016WORK_MODE_EDGE\020\003\022\022\n\016WORK_MODE_DOC" +
+      "K\020\004*z\n\rDiscLiftState\022\033\n\027DISC_LIFT_STATE_" +
+      "UNKNOWN\020\000\022\026\n\022DISC_LIFT_STATE_UP\020\001\022\030\n\024DIS" +
+      "C_LIFT_STATE_DOWN\020\002\022\032\n\026DISC_LIFT_STATE_M" +
+      "OVING\020\003*W\n\017DiscLiftCommand\022\026\n\022DISC_LIFT_" +
+      "CMD_STOP\020\000\022\024\n\020DISC_LIFT_CMD_UP\020\001\022\026\n\022DISC" +
+      "_LIFT_CMD_DOWN\020\002*\350\001\n\023ManualMotionCommand" +
+      "\022\026\n\022MANUAL_MOTION_STOP\020\000\022\031\n\025MANUAL_MOTIO" +
+      "N_FORWARD\020\001\022\032\n\026MANUAL_MOTION_BACKWARD\020\002\022" +
+      "\036\n\032MANUAL_MOTION_FORWARD_LEFT\020\003\022\037\n\033MANUA" +
+      "L_MOTION_FORWARD_RIGHT\020\004\022\037\n\033MANUAL_MOTIO" +
+      "N_BACKWARD_LEFT\020\005\022 \n\034MANUAL_MOTION_BACKW" +
+      "ARD_RIGHT\020\006*;\n\013CameraCodec\022\025\n\021CAMERA_COD" +
+      "EC_JPEG\020\000\022\025\n\021CAMERA_CODEC_H264\020\001*[\n\013MapE" +
+      "ncoding\022\037\n\033MAP_ENCODING_OCCUPANCY_GRID\020\000" +
+      "\022\024\n\020MAP_ENCODING_PNG\020\001\022\025\n\021MAP_ENCODING_J" +
+      "SON\020\002*\202\001\n\nRegionType\022\027\n\023REGION_TYPE_UNKN" +
+      "OWN\020\000\022\024\n\020REGION_TYPE_WORK\020\001\022\030\n\024REGION_TY" +
+      "PE_OBSTACLE\020\002\022\025\n\021REGION_TYPE_ERASE\020\003\022\024\n\020" +
+      "REGION_TYPE_CROP\020\004*\306\001\n\tTaskState\022\023\n\017TASK" +
+      "_STATE_IDLE\020\000\022\024\n\020TASK_STATE_READY\020\001\022\027\n\023T" +
+      "ASK_STATE_PLANNING\020\002\022\026\n\022TASK_STATE_RUNNI" +
+      "NG\020\003\022\025\n\021TASK_STATE_PAUSED\020\004\022\030\n\024TASK_STAT" +
+      "E_COMPLETED\020\005\022\026\n\022TASK_STATE_STOPPED\020\006\022\024\n" +
+      "\020TASK_STATE_ERROR\020\007*a\n\017TaskCommandType\022\022" +
+      "\n\016TASK_CMD_START\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022\023" +
+      "\n\017TASK_CMD_RESUME\020\002\022\021\n\rTASK_CMD_STOP\020\003*\337" +
+      "\002\n\020MapEditOperation\022\027\n\023MAP_EDIT_OP_UNKNO" +
+      "WN\020\000\022\"\n\036MAP_EDIT_OP_UPSERT_WORK_REGION\020\001" +
+      "\022&\n\"MAP_EDIT_OP_UPSERT_OBSTACLE_REGION\020\002" +
+      "\022\035\n\031MAP_EDIT_OP_DELETE_REGION\020\003\022\032\n\026MAP_E" +
+      "DIT_OP_PAINT_FREE\020\004\022\036\n\032MAP_EDIT_OP_PAINT" +
+      "_OCCUPIED\020\005\022\035\n\031MAP_EDIT_OP_PAINT_UNKNOWN" +
+      "\020\006\022#\n\037MAP_EDIT_OP_CLEAR_OVERLAY_PATCH\020\007\022" +
+      "#\n\037MAP_EDIT_OP_UPSERT_ERASE_REGION\020\010\022\"\n\036" +
+      "MAP_EDIT_OP_UPSERT_CROP_REGION\020\t*s\n\020MapS" +
+      "yncOperation\022\027\n\023MAP_SYNC_OP_UNKNOWN\020\000\022$\n" +
+      " MAP_SYNC_OP_DOWNLOAD_FROM_AURORA\020\001\022 \n\034M" +
+      "AP_SYNC_OP_UPLOAD_TO_AURORA\020\002*T\n\013MapMode" +
+      "Type\022\024\n\020MAP_MODE_UNKNOWN\020\000\022\024\n\020MAP_MODE_M" +
+      "APPING\020\001\022\031\n\025MAP_MODE_LOCALIZATION\020\002:-\n\004u" +
+      "nit\022\035.google.protobuf.FieldOptions\030\321\206\003 \001" +
+      "(\t:.\n\005scale\022\035.google.protobuf.FieldOptio" +
+      "ns\030\322\206\003 \001(\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -108357,7 +112708,7 @@ public final class SlLink {
     internal_static_sl_link_MapPreviewResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapPreviewResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "MapVersion", "Width", "Height", "Resolution", "Origin", "FrameId", "ImageData", "OverlayJson", "PreviewScaleX", "PreviewScaleY", "LocalizationCovariance", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", });
+        new java.lang.String[] { "Result", "Message", "MapVersion", "Width", "Height", "Resolution", "Origin", "FrameId", "ImageData", "OverlayJson", "PreviewScaleX", "PreviewScaleY", "LocalizationCovariance", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", "MapId", "MapRevision", });
     internal_static_sl_link_MapRegionPointRequest_descriptor =
       getDescriptor().getMessageTypes().get(29);
     internal_static_sl_link_MapRegionPointRequest_fieldAccessorTable = new
@@ -108429,7 +112780,7 @@ public final class SlLink {
     internal_static_sl_link_MapSyncResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSyncResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "Operation", "MapId", "MapName", "MapYamlPath", "MapImagePath", "NavigationMapReloaded", });
+        new java.lang.String[] { "Result", "Message", "Operation", "MapId", "MapName", "MapRevision", "MapYamlPath", "MapImagePath", "NavigationMapReloaded", "LifecycleState", });
     internal_static_sl_link_MapImportToRadarRequest_descriptor =
       getDescriptor().getMessageTypes().get(41);
     internal_static_sl_link_MapImportToRadarRequest_fieldAccessorTable = new
@@ -108441,7 +112792,7 @@ public final class SlLink {
     internal_static_sl_link_MapImportToRadarResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapImportToRadarResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "MapId", "MapName", "Imported", });
+        new java.lang.String[] { "Result", "Message", "MapId", "MapName", "Imported", "MapRevision", "LifecycleState", });
     internal_static_sl_link_MapModeRequest_descriptor =
       getDescriptor().getMessageTypes().get(43);
     internal_static_sl_link_MapModeRequest_fieldAccessorTable = new
@@ -108453,7 +112804,7 @@ public final class SlLink {
     internal_static_sl_link_MapModeResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapModeResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "Mode", "Enabled", "MapKind", });
+        new java.lang.String[] { "Result", "Message", "Mode", "Enabled", "MapKind", "LifecycleState", "MapId", "MapRevision", "ResidualNodes", });
     internal_static_sl_link_MapAlignmentRequest_descriptor =
       getDescriptor().getMessageTypes().get(45);
     internal_static_sl_link_MapAlignmentRequest_fieldAccessorTable = new
@@ -108477,7 +112828,7 @@ public final class SlLink {
     internal_static_sl_link_MapCatalogItem_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapCatalogItem_descriptor,
-        new java.lang.String[] { "MapId", "Name", "SizeBytes", "SavedAt", "TotalWorkAreaM2", "EstimatedTimeS", "ThumbnailFormat", "ThumbnailWidth", "ThumbnailHeight", "ThumbnailImageB64", "CreatedAt", });
+        new java.lang.String[] { "MapId", "Name", "SizeBytes", "SavedAt", "TotalWorkAreaM2", "EstimatedTimeS", "ThumbnailFormat", "ThumbnailWidth", "ThumbnailHeight", "ThumbnailImageB64", "CreatedAt", "MapRevision", });
     internal_static_sl_link_MapCatalogResponse_descriptor =
       getDescriptor().getMessageTypes().get(49);
     internal_static_sl_link_MapCatalogResponse_fieldAccessorTable = new
@@ -108507,7 +112858,7 @@ public final class SlLink {
     internal_static_sl_link_MapSaveResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSaveResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "MapId", "MapName", "MapYamlPath", "MapImagePath", "NavigationMapReloaded", "TotalWorkAreaM2", "EstimatedTimeS", "CreatedAt", });
+        new java.lang.String[] { "Result", "Message", "MapId", "MapName", "MapYamlPath", "MapImagePath", "NavigationMapReloaded", "TotalWorkAreaM2", "EstimatedTimeS", "CreatedAt", "MapRevision", "LifecycleState", "MappingStopped", "LocalizationStarted", "ResidualNodes", });
     internal_static_sl_link_MapMetricsRequest_descriptor =
       getDescriptor().getMessageTypes().get(54);
     internal_static_sl_link_MapMetricsRequest_fieldAccessorTable = new
@@ -108657,13 +113008,13 @@ public final class SlLink {
     internal_static_sl_link_RadarRelocalizationRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationRequest_descriptor,
-        new java.lang.String[] { "InitialPoseAvailable", "InitialPose", "InitialPoseCovariance", });
+        new java.lang.String[] { "InitialPoseAvailable", "InitialPose", "InitialPoseCovariance", "MapId", "MapRevision", });
     internal_static_sl_link_RadarRelocalizationResponse_descriptor =
       getDescriptor().getMessageTypes().get(79);
     internal_static_sl_link_RadarRelocalizationResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "Accepted", "Status", });
+        new java.lang.String[] { "Result", "Message", "Accepted", "Status", "MapId", "MapRevision", "LifecycleState", });
     internal_static_sl_link_RadarRelocalizationStatusRequest_descriptor =
       getDescriptor().getMessageTypes().get(80);
     internal_static_sl_link_RadarRelocalizationStatusRequest_fieldAccessorTable = new
@@ -108675,7 +113026,7 @@ public final class SlLink {
     internal_static_sl_link_RadarRelocalizationStatusResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationStatusResponse_descriptor,
-        new java.lang.String[] { "RawStatus", "TimestampNs", });
+        new java.lang.String[] { "RawStatus", "TimestampNs", "LifecycleState", "Detail", "MapId", "MapRevision", "GoodFrames", "RequiredFrames", "RegistrationQualityValid", "RegistrationFitness", "RegistrationInlierRatio", "ResidualNodes", });
     internal_static_sl_link_DiscLiftControl_descriptor =
       getDescriptor().getMessageTypes().get(82);
     internal_static_sl_link_DiscLiftControl_fieldAccessorTable = new

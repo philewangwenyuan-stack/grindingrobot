@@ -842,6 +842,8 @@ class TcpManager @Inject constructor(
 
     /** 请求雷达执行重定位，并携带 ROS map 坐标系中的初始位姿。 */
     fun requestRadarRelocalization(
+        mapId: String,
+        mapRevision: String,
         xMeters: Float,
         yMeters: Float,
         headingDegrees: Float,
@@ -849,6 +851,12 @@ class TcpManager @Inject constructor(
         positionVariance: Float = 0.25f,
         yawVariance: Float = 0.06853892f
     ): Boolean {
+        val normalizedMapId = mapId.trim()
+        val normalizedMapRevision = mapRevision.trim().lowercase()
+        if (normalizedMapId.isEmpty() || !normalizedMapRevision.matches(Regex("[0-9a-f]{64}"))) {
+            LogUtils.w("拒绝发送缺少有效 map_id/map_revision 的重定位请求")
+            return false
+        }
         val initialPose = SlLink.Pose2D.newBuilder()
             .setX(xMeters)
             .setY(yMeters)
@@ -861,6 +869,8 @@ class TcpManager @Inject constructor(
             .setYawVariance(yawVariance)
             .build()
         val payload = SlLink.RadarRelocalizationRequest.newBuilder()
+            .setMapId(normalizedMapId)
+            .setMapRevision(normalizedMapRevision)
             .setInitialPoseAvailable(true)
             .setInitialPose(initialPose)
             .setInitialPoseCovariance(covariance)
@@ -869,10 +879,6 @@ class TcpManager @Inject constructor(
         val frameData = slLinkManager.requestRadarRelocalization(payload, dstId)
         return sendData(frameData)
     }
-
-    /** 兼容旧调用方；新页面必须传入用户确认的初始位姿。 */
-    fun requestRadarRelocalization(dstId: UByte = 0x10u): Boolean =
-        requestRadarRelocalization(0f, 0f, 0f, dstId)
 
     /** 查询雷达重定位执行状态。 */
     fun requestRadarRelocalizationStatus(dstId: UByte = 0x10u): Boolean {

@@ -78,7 +78,7 @@ internal fun StartGrindingScreen(
     relocalizationSettingsError: String,
     onRadarMapSync: () -> Unit,
     onRadarRelocalization: (Float, Float, Float) -> Unit,
-    onStartRelocalization: () -> Unit,
+    onStartRelocalization: (String) -> Unit,
     onDismissRelocalization: () -> Unit,
     onRetryRelocalizationSettings: () -> Unit,
     onRelocalizationRunSpeedDecrease: () -> Unit,
@@ -116,8 +116,12 @@ internal fun StartGrindingScreen(
         mapPreview?.imageBytes?.let(::decodeMapPreviewBitmap)
     }
 
-    LaunchedEffect(Unit) {
-        onStartRelocalization()
+    LaunchedEffect(session.mapId, session.bitmapSize, session.mapError) {
+        val mapId = session.mapId
+        if (!mapId.isNullOrBlank() && session.bitmapSize != null && session.mapError == null) {
+            // Wait until MapImportToRadar and the map snapshot have completed before switching modes.
+            onStartRelocalization(mapId)
+        }
     }
 
     DisposableEffect(Unit) {
