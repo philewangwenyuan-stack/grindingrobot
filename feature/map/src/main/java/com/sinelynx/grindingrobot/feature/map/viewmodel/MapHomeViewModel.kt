@@ -295,7 +295,7 @@ class MapHomeViewModel @Inject constructor(
         regions = MapRegionPointStream.responses,
         configs = TaskSchedulerStream.taskConfigResponse.filterNotNull(),
         paths = TaskPathStream.results,
-        sendImport = { requestRadarMapImportOnce(it) },
+        sendImport = { requestRadarMapImport(it) },
         sendMap = { tcpManager.requestMapSnapshot(it) },
         sendRegions = { tcpManager.requestMapRegionPoints(it) },
         sendConfig = { taskId, taskName, mapId, repeats, obstacles ->
@@ -339,9 +339,8 @@ class MapHomeViewModel @Inject constructor(
     // 状态查询必须等上一条响应或超时后再发，避免板端队列堵塞时 APP 自己制造请求洪峰。
     private var radarStatusRequestInFlight = false
     private var radarStatusRequestSentAtMs = 0L
-    // 同一张地图的导入请求只允许单飞；预览弹窗重复打开不会再次拉起导入流程。
+    // 合并同一张地图的在途导入请求；完成后的成功状态不跨会话复用。
     private var radarMapImportInFlightId: String? = null
-    private var radarMapImportedId: String? = null
     private var radarMapImportJob: Job? = null
 
     init {
@@ -1178,7 +1177,7 @@ class MapHomeViewModel @Inject constructor(
 
     fun requestMapPreview(mapId: String) {
         if (!mapId.isNullOrBlank()) {
-            val importSent = requestRadarMapImportOnce(mapId)
+            val importSent = requestRadarMapImport(mapId)
             if (!importSent) {
                 LogUtils.w("MapHomeViewModel", "requestMapImportToRadar 发送失败")
             }
@@ -1210,22 +1209,21 @@ class MapHomeViewModel @Inject constructor(
     }
 
     /**
-     * 发送地图导入并在短时间内去重。返回 true 表示请求已发送或已有同地图请求在途，
-     * 调用方可以继续等待共享的 MapImportToRadarStream 响应。
+     * 合并同一地图尚未完成的导入请求，但不缓存历史成功结果：雷达侧地图可能在任务结束后重置，
+     * 每个新地图会话都必须触发一次新导入并收到对应响应。
      */
-    private fun requestRadarMapImportOnce(mapId: String): Boolean {
+    private fun requestRadarMapImport(mapId: String): Boolean {
         if (mapId.isBlank()) return false
-        if (radarMapImportedId == mapId || radarMapImportInFlightId == mapId) return true
+        if (radarMapImportInFlightId == mapId) return true
         if (radarMapImportInFlightId != null) return false
 
         MapImportToRadarStream.reset()
         radarMapImportInFlightId = mapId
         radarMapImportJob?.cancel()
         radarMapImportJob = viewModelScope.launch {
-            val response = withTimeoutOrNull(MAP_TCP_REQUEST_TIMEOUT_MS) {
+            withTimeoutOrNull(MAP_TCP_REQUEST_TIMEOUT_MS) {
                 MapImportToRadarStream.responses.first()
             }
-            if (response?.isSuccess == true) radarMapImportedId = mapId
             if (radarMapImportInFlightId == mapId) radarMapImportInFlightId = null
         }
         if (!tcpManager.requestMapImportToRadar(mapId)) {
