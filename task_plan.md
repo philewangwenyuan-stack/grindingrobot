@@ -6,7 +6,7 @@
 
 ## 当前目标
 
-接入板端已经完成的设置协议和地图删除协议：Android 增加机器人外形/TF/RPP 设置页面与读写状态，同时将地图删除改为本地优先并展示远端后台重试结果。
+使导航与建图地图中的机器人标记按机器设置 Footprint 的真实米制形状/尺寸绘制，并以 base_link 为运动及旋转中心；验证构建。
 
 ## 阶段
 
@@ -30,6 +30,14 @@
 - [pending] 18. 将导航参数收敛到核心字段并统一设置页风格
 - [pending] 19. 增加路径规划参数页面并核对板端协议接入边界
 - [pending] 20. 做静态检查与定向验证（本轮不默认打包）
+- [complete] 21. 重绘机器人外形与坐标示意
+- [complete] 22. 编译验证示意图改动
+- [complete] 23. 统一三页容器、卡片、输入框与底部操作栏
+- [complete] 24. 增加机器设置动态轴向距离标注
+- [complete] 25. 定向验证、编译并生成 devDebug APK
+- [complete] 26. 梳理地图标记调用点、设置状态与地图坐标变换
+- [complete] 27. 统一 Footprint 地图标记绘制并接入导航/建图页面
+- [complete] 28. 增加定向测试、编译并生成 devDebug APK
 
 ## 决策
 
@@ -49,3 +57,8 @@
 | Gradle 无法启动 | 前序执行构建命令 | 已通过显式 JDK 环境变量重新执行 |
 | Android SDK 路径无效 | 配置 JDK 后重新执行 Gradle | 已安装 SDK command-line tools、platform-tools、API 36、Build Tools 36.0.0，并修正 `local.properties` |
 | 在工作区根目录执行 git diff | 本次排查 | 当前工作区根目录不是 Git 仓库，改用文件内容和构建验证检查变更 |
+| 并行读取源码时 PowerShell 进程异常退出（-1073741819） | 本轮读取文件头 | 输出已完整返回；随后读取其余源码并完成编译验证 |
+| 搜索不存在的 feature/main/src/androidTest 目录 | 本轮 rg 检查 | 仅搜索实际存在的测试目录，不影响源码分析 |
+| 首轮编译发现设置页双栏括号位置错误 | 修改页面布局后编译 | 已修正，Kotlin 编译及 devDebug APK 构建均通过 |
+| PowerShell 将 rg 的 Bash 花括号路径解析为语法错误 | 查找多个 ViewModel | 改为目录级 rg 搜索，不复用该写法 |
+| 搜索不存在的 MapGeo.kt 路径 | 查找地图坐标定义 | 定位到 MapScreenStep2ViewModel.kt 中的 MapGeo 定义 |

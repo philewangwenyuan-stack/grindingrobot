@@ -131,6 +131,7 @@ internal fun TaskMapPanel(
     robotPose: DevicePosePayload?,
     robotWidth: Double? = null,
     robotLength: Double? = null,
+    robotFootprint: List<com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint> = emptyList(),
     obstacleShapes: List<TaskObstacleShape>,
     editingObstacleIndex: Int?,
     onWorkspaceClick: (String) -> Unit,
@@ -318,6 +319,7 @@ internal fun TaskMapPanel(
             viewportOffset = activeViewportTransform.offset,
             robotWidth = robotWidth,
             robotLength = robotLength,
+            robotFootprint = robotFootprint,
             mapRotationDeg = activeMapRotationDeg
         )
 

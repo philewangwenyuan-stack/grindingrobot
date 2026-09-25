@@ -366,7 +366,14 @@ class RobotSettingsViewModel @Inject constructor(
                     val current = _uiState.value
                     appState.updateRobotSettings(
                         width = current.robotWidth,
-                        length = current.robotLength
+                        length = current.robotLength,
+                        footprint = current.footprint.mapNotNull { point ->
+                            val x = point.x.toFloatOrNull()
+                            val y = point.y.toFloatOrNull()
+                            if (x != null && y != null && x.isFinite() && y.isFinite()) {
+                                com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint(x, y)
+                            } else null
+                        }
                     )
                 } else {
                     ToastUtils.showReplacingError(response.message.ifBlank { "机器人设置失败" })

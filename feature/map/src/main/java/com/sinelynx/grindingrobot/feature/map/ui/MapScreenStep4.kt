@@ -342,6 +342,7 @@ internal fun Step4LegacyPreviewMap(
                             bitmapSize = preview.bitmapSize ?: (bitmap.width to bitmap.height),
                             robotWidth = currentState.robotWidth,
                             robotLength = currentState.robotLength,
+                            robotFootprint = currentState.robotFootprint,
                             mapRotationDeg = preview.rotationDeg
                         )
                     }
@@ -409,6 +410,7 @@ internal fun Step4MapOverlays(
             bitmapSize = bitmapSize,
             robotWidth = state.robotWidth,
             robotLength = state.robotLength,
+            robotFootprint = state.robotFootprint,
             mapRotationDeg = rotationDeg
         )
         Canvas(Modifier.fillMaxSize()) {

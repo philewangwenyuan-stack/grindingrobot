@@ -65,3 +65,13 @@
 - 路径规划的七个参数（inflation_radius、endpoint_margin、output_point_spacing、aligned_obstacle_inflation、aligned_obstacle_max_extent、obstacle_corner_angle_deg、obstacle_avoidance_distance）目前尚未在 Android UI 的独立页面中出现，需要确认板端协议是否已有对应字段；若没有，必须先扩展协议/读写链路，不能只做输入框。
 - 工程当前没有 `sl_link.proto` 源文件，Android 使用 `core/sllink/src/message_gen/sl_link/SlLink.java` 生成物；生成模型中可见 `MapSettings.inflation_radius`，未发现其余六个路径规划字段，不能直接假设已有板端可写接口。
 - `RelocalizationDialog` 通过 `StartGrindingScreen` 传入 `MapHomeViewModel` 的实时 `robotPose`；页面内 `pose` 的 remember key 目前包含实时位姿字段，是位置被回调覆盖的根因。
+- 2026-09-24：`RobotSettingsScreen.kt` 的 `RobotFootprintDiagram` 已绘制 Footprint 轮廓，但硬编码四点并在中心叠加车身。现有投影把 `x` 用作屏幕水平、`y` 用作屏幕垂直，与标注的 X 向前（上）、Y 向左（左）不符。
+- 2026-09-24：`RobotSettingsUiState` 已有 footprint 顶点、baseLaserX/baseLaserY；默认激光坐标与 base_link 均为 `(0,0)`，需要用可区分的重合标记。Z、roll、pitch、yaw 不决定平面位置，仍保留右侧输入字段。
+- 2026-09-24 三页实现现状：`RobotSettingsScreen.kt` 中机器设置、RPP、路径规划都已有功能和左侧共用菜单，但主面板各自组织标题/操作栏；RPP 的“控制器：Regulated Pure Pursuit”及“运行中”只是界面文字，没有对应实时状态来源，应按用户要求移除。
+- 机器设置当前顶点和激光 x/y 已通过 `RobotSettingsUiState` 实时重绘；缺少四个正交量尺。前/后取 footprint 的 X 最大正值与最小负值，左/右取 Y 最大正值与最小负值；激光平面偏移取其 x/y，z 保留在表单而不显示三维“空间距离”。
+- 2026-09-24 生成的导航参数界面稿文件实际存在于 `C:\Users\phil\.codex\generated_images\01a0b336-4a48-7732-9e73-5f63f1efc384\exec-6d95aba7-705e-4c04-8e46-5dfdf4e81fa6.png`；用户引用的 `/C:/...` 路径格式错误，但不影响参照已生成界面稿。
+## 2026-09-24 地图机器人标记与 Footprint
+
+- 地图标记共用 `feature/map/.../ui/MapRobotMarker.kt` 中的 `FittedMapRobotMarker`/`RobotPoseIcon`，当前只使用宽长比例缩放 `ic_robot`，并以图片中心旋转；无法表达前后不对称 Footprint 的 base_link 旋转中心。
+- `AppState.RobotSettingsState` 仅保存 `robotWidth/robotLength`；设置读取响应 `SlLinkManager.handleSettingsReadResponse` 已拿到 `MapSettings`，其中有 FootprintList，但未传给标记状态。
+- 建图 Step1/Step2/Step3 以及导航地图等 ViewModel 均订阅 `appState.robotSettings`，后续应把 Footprint 作为米制点列沿这条链路传递，绘制时使用地图分辨率确定 px/m，并固定 pose 为 base_link。

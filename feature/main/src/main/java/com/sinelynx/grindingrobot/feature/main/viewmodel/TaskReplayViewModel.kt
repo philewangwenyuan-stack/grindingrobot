@@ -41,6 +41,7 @@ data class TaskReplayUiState(
     val bitmapSize: Pair<Int, Int>? = null,
     val robotWidth: Double? = null,
     val robotLength: Double? = null,
+    val robotFootprint: List<AppState.FootprintPoint> = emptyList(),
     val totalPointCount: Int = 0,
     val startedAtMs: Long = 0L,
     val isLoading: Boolean = false,
@@ -125,6 +126,7 @@ class TaskReplayViewModel @Inject constructor(
                         it.copy(
                             robotWidth = width,
                             robotLength = length,
+                            robotFootprint = settings.footprint,
                             isRobotSettingsLoading = false,
                             robotSettingsError = null
                         )
@@ -160,6 +162,7 @@ class TaskReplayViewModel @Inject constructor(
             taskId = normalizedTaskId,
             robotWidth = robotWidth,
             robotLength = robotLength,
+            robotFootprint = settings?.footprint.orEmpty(),
             isLoading = true,
             isMapLoading = true,
             isPathLoading = true,

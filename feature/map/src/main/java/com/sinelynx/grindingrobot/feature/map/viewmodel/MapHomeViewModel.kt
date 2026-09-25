@@ -65,6 +65,7 @@ data class MapHomeUiState(
     val robotPose: DevicePosePayload? = null,
     val robotWidth: Double? = null,
     val robotLength: Double? = null,
+    val robotFootprint: List<AppState.FootprintPoint> = emptyList(),
     val isRelocalizationDialogVisible: Boolean = false,
     val isRelocalizationSuccessful: Boolean = false,
     val relocalizationRawStatus: String = "",
@@ -361,7 +362,8 @@ class MapHomeViewModel @Inject constructor(
                 _uiState.update { current ->
                     current.copy(
                         robotWidth = settings?.robotWidth,
-                        robotLength = settings?.robotLength
+                        robotLength = settings?.robotLength,
+                        robotFootprint = settings?.footprint.orEmpty()
                     )
                 }
             }
@@ -1077,6 +1079,9 @@ class MapHomeViewModel @Inject constructor(
     }
 
     fun requestMapCatalogOnEnter() {
+        if (appState.robotSettings.value == null) {
+            tcpManager.requestSettingRead(readChassis = true, readMap = true)
+        }
         MapCatalogStream.reset()
         _uiState.update { it.copy(isMapCatalogLoading = true) }
         val sent = tcpManager.requestMapCatalog()

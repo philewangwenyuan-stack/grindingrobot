@@ -120,6 +120,7 @@ fun HomeScreen(
                     existingTaskNames = mapState.existingTaskNames,
                     robotWidth = mapState.robotWidth,
                     robotLength = mapState.robotLength,
+                    robotFootprint = mapState.robotFootprint,
                     isRelocalizationDialogVisible = mapState.isRelocalizationDialogVisible,
                     isRelocalizationSuccessful = mapState.isRelocalizationSuccessful,
                     relocalizationRawStatus = mapState.relocalizationRawStatus,

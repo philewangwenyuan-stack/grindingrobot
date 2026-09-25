@@ -249,6 +249,7 @@ data class MapScreenStep3UiState(
     val latestScanDirection: String = "X",
     val robotWidth: Double? = null,
     val robotLength: Double? = null,
+    val robotFootprint: List<AppState.FootprintPoint> = emptyList(),
     val previewWorkRegions: List<MapPreviewRegionItem> = emptyList(),
     val previewObstacleRegions: List<MapPreviewRegionItem> = emptyList(),
     val previewEraseRegions: List<MapPreviewRegionItem> = emptyList()
@@ -275,7 +276,8 @@ class MapScreenStep3ViewModel @Inject constructor(
                 _uiState.update { current ->
                     current.copy(
                         robotWidth = settings?.robotWidth,
-                        robotLength = settings?.robotLength
+                        robotLength = settings?.robotLength,
+                        robotFootprint = settings?.footprint.orEmpty()
                     )
                 }
             }
@@ -329,7 +331,8 @@ class MapScreenStep3ViewModel @Inject constructor(
         loadedSessionId = snapshot.sessionId
         _uiState.update {
             val state = if (newSession) MapScreenStep3UiState(
-                robotPose = it.robotPose, robotWidth = it.robotWidth, robotLength = it.robotLength
+                robotPose = it.robotPose, robotWidth = it.robotWidth, robotLength = it.robotLength,
+                robotFootprint = it.robotFootprint
             ) else it
             state.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
                 bitmapDecodeSize = decodeImageSize(frame.imageBytes), mapGeo = frame.toMapGeo(),

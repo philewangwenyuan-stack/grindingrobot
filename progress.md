@@ -77,3 +77,26 @@
 
 - 已确认本轮目标：重定位编辑点不能被板端状态轮询覆盖；重定位地图视觉改为中心点+方向箭头；导航参数收敛为核心参数并统一视觉；新增路径规划参数页面。
 - 当前处于代码核对阶段，尚未编译。
+
+## 2026-09-24 外形坐标示意图
+
+- 已定位机器人设置页 `RobotFootprintDiagram`；准备移除车身装饰并按配置坐标绘制 Footprint、base_link 和 base_laser_link。
+- 已移除车身装饰；示意图按当前 Footprint 顶点绘制轮廓及编号，并实时按 baseLaserX/Y 绘制激光坐标。X 向上、Y 向左；两原点重合时使用同心标记和错行标签。
+- `:feature:main:compileDevDebugKotlin` 通过。当前只完成源码改动与编译，未重新打包 APK。
+
+## 2026-09-24 三页视觉统一落地
+
+- 已确认三张视觉稿与后续反馈：机器设置只显示轴向前后左右距离，移除三维“空间距离”；导航参数移除“控制器”文字行；三页字体完整显示并保留现有读写回调。
+## 2026-09-24 三页设置实现结果
+
+- 机器设置、导航参数、路径规划共用固定底部操作栏（临时应用 / 保存为默认 / 恢复默认），参数区滚动，窄宽度下双栏堆叠。
+- 导航参数移除硬编码“控制器：Regulated Pure Pursuit”及未经实时状态驱动的标签；实际 RPP 参数保留。
+- 机器示意图按输入顶点实时重绘，并沿 X/Y 正交方向标注前后左右边界距离；激光显示 X/Y 平面偏移，不再出现空间斜距。
+- `:feature:main:compileDevDebugKotlin` 与 `:app:assembleDevDebug` 通过。新 APK：`app-dev-arm64-v8a-debug.apk`、`app-dev-armeabi-v7a-debug.apk`。`adb devices` 无连接设备，未做真机视觉验收。
+## 2026-09-24 导航与建图机器人图标同步 Footprint
+
+- `AppState.RobotSettingsState` 增加米制 Footprint 点；设置读响应、写成功路径都同步到全局状态。
+- 地图标记改用 Footprint 多边形按地图分辨率显示实际尺寸，以 `base_link`（pose）为平移/旋转中心；扣除地图原点朝向及页面旋转。无有效 Footprint 时保留旧图标回退。
+- 已接入建图 Step1～Step4、导航地图预览、远程地图预览及轨迹回放；进入地图页且设置未加载时主动读取一次设置。
+- `MapRobotMarkerTest` 定向投影测试通过；`:feature:map:compileDevDebugKotlin`、`:feature:main:compileDevDebugKotlin`、`:app:assembleDevDebug` 通过。新 arm64/v7a APK 均于 18:17:58 生成。
+- 无连接 Android 设备，未做真机视觉验收。

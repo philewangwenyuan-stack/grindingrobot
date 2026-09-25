@@ -928,6 +928,20 @@ fun MapScreenStep3(
                             bitmapSize = uiState.bitmapDecodeSize
                                 ?: mapImageBitmap?.let { it.width to it.height }
                         )?.let { bitmapPoint ->
+                            val geo = uiState.mapGeo
+                            val logicalSize = uiState.mapImageSize ?: geo?.let { it.mapWidth to it.mapHeight }
+                            val decodedSize = uiState.bitmapDecodeSize ?: mapImageBitmap?.let { it.width to it.height }
+                            if (uiState.robotFootprint.size >= 3 && geo != null && geo.resolution > 0f &&
+                                logicalSize != null && decodedSize != null && logicalSize.first > 0 && logicalSize.second > 0) {
+                                val totalMapRotation = geo.alignmentYawDeg + geo.rotationAlignmentDeltaDeg
+                                FootprintRobotMarker(
+                                    center = toScreenPoint(bitmapPoint),
+                                    headingDeg = (uiState.robotPose?.headingDeg ?: 0f) - geo.headingDeg - totalMapRotation,
+                                    footprint = uiState.robotFootprint,
+                                    pixelsPerMeterX = baseScale * mapZoom * decodedSize.first / logicalSize.first / geo.resolution,
+                                    pixelsPerMeterY = baseScale * mapZoom * decodedSize.second / logicalSize.second / geo.resolution
+                                )
+                            } else {
                             val robotWidth = uiState.robotWidth
                             val robotLength = uiState.robotLength
                             val (drawWidth, drawLength) = remember(
@@ -966,6 +980,7 @@ fun MapScreenStep3(
                                 width = drawWidth,
                                 length = drawLength
                             )
+                            }
                         }
                         savedWorkspaceGeometries
                             .filterNot { it.regionId == uiState.editingWorkspaceRegionId }

@@ -2,6 +2,7 @@ package com.sinelynx.grindingrobot.feature.main.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Paint
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +15,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -45,9 +47,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -558,31 +561,27 @@ private fun RobotConfigContent(
     onRestore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.86f))
             .border(2.dp, Color.White.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .padding(horizontal = 34.dp, vertical = 26.dp)
+            .padding(horizontal = 28.dp, vertical = 22.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            Text("机器人外形与坐标", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.Top
-            ) {
+        Text("机器人外形与坐标", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Spacer(Modifier.height(18.dp))
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
+            val compact = maxWidth < 800.dp
+            val diagram: @Composable (Modifier) -> Unit = { diagramModifier ->
                 RobotFootprintDiagram(
                     points = uiState.footprint,
-                    modifier = Modifier.weight(0.94f).heightIn(min = 430.dp, max = 560.dp)
+                    baseLaserX = uiState.baseLaserX,
+                    baseLaserY = uiState.baseLaserY,
+                    modifier = diagramModifier.heightIn(min = 430.dp, max = 560.dp)
                 )
-                Column(
-                    modifier = Modifier.weight(1.18f),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
+            }
+            val fields: @Composable (Modifier) -> Unit = { fieldsModifier ->
+                Column(fieldsModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     DesignSectionHeader("Footprint 多边形（相对 base_link）")
                     uiState.footprint.forEachIndexed { index, point ->
                         FootprintPointRow(
@@ -613,7 +612,14 @@ private fun RobotConfigContent(
                         GeometryField("pitch (°)", uiState.baseLaserPitch, { onBaseLaserChange(BaseLaserField.PITCH, it) }, Modifier.weight(1f))
                         Spacer(Modifier.weight(2f))
                     }
-                    SettingsActionBar(onApply, onSave, onRestore)
+                    val laserX = uiState.baseLaserX.toDoubleOrNull()?.takeIf(Double::isFinite)
+                    val laserY = uiState.baseLaserY.toDoubleOrNull()?.takeIf(Double::isFinite)
+                    if (laserX != null && laserY != null) {
+                        Text(
+                            "平面偏移：前后 ${formatValue(laserX)} m，左右 ${formatValue(laserY)} m（相对 base_link）",
+                            fontSize = 13.sp, color = DesignMutedBlue
+                        )
+                    }
                     Text(
                         if (uiState.geometryRequiresRestart) {
                             "ⓘ 板端已接受设置；激光外参将在 Super-LIO 重载或重启后生效"
@@ -625,7 +631,19 @@ private fun RobotConfigContent(
                     )
                 }
             }
+            if (compact) {
+                Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                    diagram(Modifier.fillMaxWidth())
+                    fields(Modifier.fillMaxWidth())
+                }
+            } else {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                    diagram(Modifier.weight(1f))
+                    fields(Modifier.weight(1.15f))
+                }
+            }
         }
+        SettingsPanelFooter(onApply, onSave, onRestore)
     }
 }
 
@@ -635,47 +653,153 @@ private val DesignMutedBlue = Color(0xFF7482A9)
 private val DesignLine = Color(0xFFE6ECF4)
 
 @Composable
-private fun RobotFootprintDiagram(points: List<FootprintPointUi>, modifier: Modifier = Modifier) {
+private fun RobotFootprintDiagram(
+    points: List<FootprintPointUi>,
+    baseLaserX: String,
+    baseLaserY: String,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.clip(RoundedCornerShape(18.dp)).background(Color(0xFFFDFEFF))) {
-        Canvas(Modifier.fillMaxSize().padding(18.dp)) {
-            val coordinates = points.mapNotNull { p ->
-                val x = p.x.toFloatOrNull()
-                val y = p.y.toFloatOrNull()
-                if (x == null || y == null) null else x to y
+        Canvas(Modifier.fillMaxSize().padding(start = 34.dp, top = 52.dp, end = 28.dp, bottom = 72.dp)) {
+            val coordinates = points.mapIndexedNotNull { index, point ->
+                val x = point.x.toFloatOrNull()?.takeIf(Float::isFinite)
+                val y = point.y.toFloatOrNull()?.takeIf(Float::isFinite)
+                if (x == null || y == null) null else index to Offset(x, y)
             }
-            if (coordinates.size < 3) return@Canvas
-            val extentX = coordinates.maxOf { it.first } - coordinates.minOf { it.first }
-            val extentY = coordinates.maxOf { it.second } - coordinates.minOf { it.second }
-            val scale = minOf(size.width * 0.62f / extentX.coerceAtLeast(0.5f), size.height * 0.58f / extentY.coerceAtLeast(0.5f))
-            val center = Offset(size.width * 0.52f, size.height * 0.56f)
-            fun screen(p: Pair<Float, Float>) = Offset(center.x + p.first * scale, center.y - p.second * scale)
-            val top = screen(coordinates[0])
-            val right = screen(coordinates[1])
-            val bottom = screen(coordinates[2])
-            val left = screen(coordinates[3])
-            drawLine(Color(0xFF1466E8), top, right, strokeWidth = 3f)
-            drawLine(Color(0xFF1466E8), right, bottom, strokeWidth = 3f)
-            drawLine(Color(0xFF1466E8), bottom, left, strokeWidth = 3f)
-            drawLine(Color(0xFF1466E8), left, top, strokeWidth = 3f)
-            listOf(top, right, bottom, left).forEach { drawCircle(Color(0xFF1466E8), 8f, it) }
+            val laser = Offset(
+                baseLaserX.toFloatOrNull()?.takeIf(Float::isFinite) ?: 0f,
+                baseLaserY.toFloatOrNull()?.takeIf(Float::isFinite) ?: 0f
+            )
+            val allPositions = coordinates.map { it.second } + Offset.Zero + laser
+            val minX = allPositions.minOf { it.x }
+            val maxX = allPositions.maxOf { it.x }
+            val minY = allPositions.minOf { it.y }
+            val maxY = allPositions.maxOf { it.y }
+            val scale = minOf(
+                size.width * 0.72f / (maxY - minY).coerceAtLeast(0.5f),
+                size.height * 0.72f / (maxX - minX).coerceAtLeast(0.5f)
+            )
+            val centerX = (minX + maxX) / 2f
+            val centerY = (minY + maxY) / 2f
+            // ROS: X 向前显示为向上；Y 向左显示为向左。
+            fun screen(point: Offset) = Offset(
+                size.width / 2f - (point.y - centerY) * scale,
+                size.height / 2f - (point.x - centerX) * scale
+            )
+            val origin = screen(Offset.Zero)
+            val laserPosition = screen(laser)
+            val footprintColor = Color(0xFF1466E8)
+            val laserColor = Color(0xFFFF9B30)
 
-            drawCircle(Color(0xFF18191D), size.minDimension * 0.16f, center + Offset(0f, 22f))
-            drawRoundRect(Color(0xFFE83438), center + Offset(-size.minDimension * 0.075f, -size.minDimension * 0.06f),
-                size = Size(size.minDimension * 0.15f, size.minDimension * 0.30f), cornerRadius = androidx.compose.ui.geometry.CornerRadius(10f, 10f))
-            drawRoundRect(Color(0xFF111216), center + Offset(-size.minDimension * 0.058f, 0f),
-                size = Size(size.minDimension * 0.116f, size.minDimension * 0.17f), cornerRadius = androidx.compose.ui.geometry.CornerRadius(6f, 6f))
-            drawCircle(Color(0xFFF2F4F6), 15f, center + Offset(0f, -size.minDimension * 0.11f))
-            drawCircle(Color(0xFF111827), 9f, center + Offset(0f, -size.minDimension * 0.11f))
-            drawLine(Color(0xFFEF2D2D), center, center + Offset(0f, -size.height * 0.30f), strokeWidth = 4f)
-            drawLine(Color(0xFFEF2D2D), center + Offset(0f, -size.height * 0.30f), center + Offset(-10f, -size.height * 0.24f), strokeWidth = 4f)
-            drawLine(Color(0xFFEF2D2D), center + Offset(0f, -size.height * 0.30f), center + Offset(10f, -size.height * 0.24f), strokeWidth = 4f)
-            drawLine(Color(0xFF2CCB27), center + Offset(0f, 22f), center + Offset(-size.width * 0.19f, 22f), strokeWidth = 4f)
-            drawLine(Color(0xFF2CCB27), center + Offset(-size.width * 0.19f, 22f), center + Offset(-size.width * 0.15f, 12f), strokeWidth = 4f)
-            drawLine(Color(0xFF2CCB27), center + Offset(-size.width * 0.19f, 22f), center + Offset(-size.width * 0.15f, 32f), strokeWidth = 4f)
+            // 所有尺寸沿 X/Y 轴标注，绝不使用顶点到原点的斜线距离。
+            if (coordinates.size == points.size && coordinates.size >= 3) {
+                val front = coordinates.maxOf { it.second.x }.coerceAtLeast(0f)
+                val rear = (-coordinates.minOf { it.second.x }).coerceAtLeast(0f)
+                val left = coordinates.maxOf { it.second.y }.coerceAtLeast(0f)
+                val right = (-coordinates.minOf { it.second.y }).coerceAtLeast(0f)
+                val distancePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = android.graphics.Color.rgb(11, 22, 69)
+                    textSize = 12.sp.toPx()
+                    isFakeBoldText = true
+                }
+                val measureColor = Color(0xFF6B8DB6)
+                val verticalX = (origin.x + 28.dp.toPx()).coerceAtMost(size.width - 75.dp.toPx())
+                val horizontalY = (origin.y + 30.dp.toPx()).coerceAtMost(size.height - 24.dp.toPx())
+                fun verticalDistance(label: String, distance: Float, forward: Boolean) {
+                    if (distance <= 0f) return
+                    val end = origin.y + if (forward) -distance * scale else distance * scale
+                    drawLine(measureColor, Offset(verticalX, origin.y), Offset(verticalX, end), 1.5.dp.toPx())
+                    drawLine(measureColor, Offset(verticalX - 4.dp.toPx(), end), Offset(verticalX + 4.dp.toPx(), end), 1.5.dp.toPx())
+                    drawContext.canvas.nativeCanvas.drawText(
+                        "$label ${formatValue(distance.toDouble())} m",
+                        verticalX + 6.dp.toPx(), (origin.y + end) / 2f, distancePaint
+                    )
+                }
+                fun horizontalDistance(label: String, distance: Float, toLeft: Boolean) {
+                    if (distance <= 0f) return
+                    val end = origin.x + if (toLeft) -distance * scale else distance * scale
+                    drawLine(measureColor, Offset(origin.x, horizontalY), Offset(end, horizontalY), 1.5.dp.toPx())
+                    drawLine(measureColor, Offset(end, horizontalY - 4.dp.toPx()), Offset(end, horizontalY + 4.dp.toPx()), 1.5.dp.toPx())
+                    drawContext.canvas.nativeCanvas.drawText(
+                        "$label ${formatValue(distance.toDouble())} m",
+                        (origin.x + end) / 2f - 30.dp.toPx(), horizontalY + 17.dp.toPx(), distancePaint
+                    )
+                }
+                verticalDistance("前", front, true)
+                verticalDistance("后", rear, false)
+                horizontalDistance("左", left, true)
+                horizontalDistance("右", right, false)
+            }
+
+            if (coordinates.size == points.size && coordinates.size >= 3) {
+                coordinates.indices.forEach { index ->
+                    drawLine(
+                        footprintColor,
+                        screen(coordinates[index].second),
+                        screen(coordinates[(index + 1) % coordinates.size].second),
+                        strokeWidth = 3.dp.toPx()
+                    )
+                }
+            }
+            coordinates.forEach { (index, point) ->
+                val position = screen(point)
+                drawCircle(footprintColor, radius = 5.dp.toPx(), center = position)
+                val label = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = android.graphics.Color.rgb(20, 102, 232)
+                    textSize = 12.sp.toPx()
+                    isFakeBoldText = true
+                }
+                drawContext.canvas.nativeCanvas.drawText(
+                    "${index + 1}", position.x + 8.dp.toPx(), position.y - 6.dp.toPx(), label
+                )
+            }
+
+            val xArrow = origin + Offset(0f, -size.height * 0.25f)
+            drawLine(Color(0xFFE63838), origin, xArrow, strokeWidth = 2.dp.toPx())
+            drawLine(Color(0xFFE63838), xArrow, xArrow + Offset(-6.dp.toPx(), 11.dp.toPx()), strokeWidth = 2.dp.toPx())
+            drawLine(Color(0xFFE63838), xArrow, xArrow + Offset(6.dp.toPx(), 11.dp.toPx()), strokeWidth = 2.dp.toPx())
+            val yArrow = origin + Offset(-size.width * 0.25f, 0f)
+            drawLine(Color(0xFF2DAE55), origin, yArrow, strokeWidth = 2.dp.toPx())
+            drawLine(Color(0xFF2DAE55), yArrow, yArrow + Offset(11.dp.toPx(), -6.dp.toPx()), strokeWidth = 2.dp.toPx())
+            drawLine(Color(0xFF2DAE55), yArrow, yArrow + Offset(11.dp.toPx(), 6.dp.toPx()), strokeWidth = 2.dp.toPx())
+
+            if ((laserPosition - origin).getDistance() > 1.dp.toPx()) {
+                drawLine(DesignMutedBlue, origin, laserPosition, strokeWidth = 1.dp.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 5.dp.toPx())))
+            }
+            drawCircle(DesignNavy, radius = 5.dp.toPx(), center = origin)
+            drawCircle(laserColor, radius = 10.dp.toPx(), center = laserPosition, style = Stroke(width = 3.dp.toPx()))
+
+            val markerLabel = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                textSize = 13.sp.toPx()
+                isFakeBoldText = true
+            }
+            markerLabel.color = android.graphics.Color.rgb(11, 22, 69)
+            drawContext.canvas.nativeCanvas.drawText(
+                "base_link", origin.x + 13.dp.toPx(), origin.y + 5.dp.toPx(), markerLabel
+            )
+            markerLabel.color = android.graphics.Color.rgb(213, 112, 15)
+            drawContext.canvas.nativeCanvas.drawText(
+                "base_laser_link", laserPosition.x + 13.dp.toPx(),
+                laserPosition.y + if ((laserPosition - origin).getDistance() < 24.dp.toPx()) 23.dp.toPx() else 5.dp.toPx(),
+                markerLabel
+            )
+            if (baseLaserX.toFloatOrNull()?.isFinite() == true && baseLaserY.toFloatOrNull()?.isFinite() == true) {
+                val laserDistancePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = android.graphics.Color.rgb(213, 112, 15)
+                    textSize = 11.sp.toPx()
+                }
+                drawContext.canvas.nativeCanvas.drawText(
+                    "X ${formatValue(laser.x.toDouble())} m / Y ${formatValue(laser.y.toDouble())} m",
+                    laserPosition.x + 13.dp.toPx(), laserPosition.y + 38.dp.toPx(), laserDistancePaint
+                )
+            }
         }
         Text("X（前）", Modifier.align(Alignment.TopCenter).padding(top = 22.dp), color = Color.Red, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Text("Y（左）", Modifier.align(Alignment.CenterStart).padding(start = 20.dp), color = Color(0xFF25C923), fontSize = 14.sp, fontWeight = FontWeight.Bold)
-        Text("base_link\n当前位置", Modifier.align(Alignment.Center).offset(y = 98.dp), color = DesignBlue, textAlign = TextAlign.Center, fontSize = 12.sp)
+        Text("蓝点：Footprint 顶点   ● base_link   ◯ base_laser_link",
+            Modifier.align(Alignment.BottomCenter).padding(bottom = 22.dp),
+            color = DesignMutedBlue, fontSize = 11.sp, textAlign = TextAlign.Center)
     }
 }
 
@@ -738,26 +862,33 @@ private fun SettingsActionBar(
     onApply: () -> Unit,
     onSave: () -> Unit,
     onRestore: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth(),
-    saveOutlined: Boolean = false
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-        DesignActionButton("临时应用", onApply, Modifier.weight(1f))
-        if (saveOutlined) {
-            Box(
-                Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(10.dp)).background(Color.White)
-                    .border(1.dp, DesignLine, RoundedCornerShape(10.dp)).clickable(onClick = onSave),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("保存为默认", color = DesignNavy, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            }
-        } else {
-            DesignActionButton("保存为默认", onSave, Modifier.weight(1f))
+        Box(
+            Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(10.dp)).background(Color.White)
+                .border(1.dp, DesignBlue, RoundedCornerShape(10.dp)).clickable(onClick = onApply),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("临时应用", color = DesignBlue, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
-        Box(Modifier.width(84.dp).clickable(onClick = onRestore).padding(vertical = 13.dp), contentAlignment = Alignment.Center) {
-            Text("恢复默认", fontSize = 15.sp, color = DesignBlue, fontWeight = FontWeight.Bold)
+        DesignActionButton("保存为默认", onSave, Modifier.weight(1f))
+        Box(
+            Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(10.dp))
+                .background(Color(0xFFF0F8FF)).clickable(onClick = onRestore),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("恢复默认", fontSize = 16.sp, color = DesignBlue, fontWeight = FontWeight.Bold)
         }
     }
+}
+
+@Composable
+private fun SettingsPanelFooter(onApply: () -> Unit, onSave: () -> Unit, onRestore: () -> Unit) {
+    Spacer(Modifier.height(16.dp))
+    Box(Modifier.fillMaxWidth().height(1.dp).background(DesignLine))
+    Spacer(Modifier.height(16.dp))
+    SettingsActionBar(onApply, onSave, onRestore)
 }
 
 @Composable
@@ -793,28 +924,15 @@ private fun RppConfigContent(
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.86f))
             .border(2.dp, Color.White.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 26.dp, vertical = 22.dp),
+            .padding(horizontal = 28.dp, vertical = 22.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("RPP导航参数", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-            Spacer(Modifier.width(24.dp))
-            Text("仅保留影响导航的核心参数", Modifier.clip(RoundedCornerShape(8.dp)).background(Color(0xFFDCEEFF)).padding(horizontal = 14.dp, vertical = 7.dp), fontSize = 13.sp, color = DesignBlue, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.weight(1f))
-            SettingsActionBar(onApply, onSave, onRestore, Modifier.width(450.dp), saveOutlined = true)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text("控制器：Regulated Pure Pursuit", fontSize = 14.sp, color = DesignMutedBlue)
-            StatusPill("●  运行中", Color(0xFF12BF40), Color(0xFFE8FFF0))
-            StatusPill("临时调参模式", DesignBlue, Color(0xFFE5F4FF))
-            StatusPill("●  有未保存修改", Color(0xFFFFB800), Color.Transparent)
-            Spacer(Modifier.weight(1f))
-            Text("临时应用立即生效，重启后恢复；保存为默认写入配置文件", fontSize = 12.sp, color = DesignMutedBlue)
-        }
-        Box(Modifier.fillMaxWidth().height(1.dp).background(DesignLine))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Text("导航参数", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Text("临时应用立即生效；保存为默认写入板端配置。", fontSize = 13.sp, color = DesignMutedBlue)
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
+        val compact = maxWidth < 760.dp
+        val left: @Composable (Modifier) -> Unit = { columnModifier ->
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 RppCard("速度", "控制机器人整体运动速度和加速度", Color(0xFF149FE8)) {
                     RppTextRow("目标跟踪速度", "m/s", RppTextField.DESIRED_LINEAR_VEL, rpp.desiredLinearVel, onTextChange)
                     RppTextRow("最大线速度", "m/s", RppTextField.MAX_LINEAR_VEL, rpp.maxLinearVel, onTextChange)
@@ -833,7 +951,9 @@ private fun RppConfigContent(
                     RppTextRow("激光数据超时", "s", RppTextField.COLLISION_SCAN_TIMEOUT, rpp.collisionScanTimeoutS, onTextChange)
                 }
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        }
+        val right: @Composable (Modifier) -> Unit = { columnModifier ->
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 RppCard("直线 / 曲率跟踪", "影响直线跟踪稳定性和转弯平滑性", Color(0xFF149FE8)) {
                     RppTextRow("前视距离", "m", RppTextField.LOOKAHEAD_DIST, rpp.lookaheadDist, onTextChange)
                     RppTextRow("最小前视", "m", RppTextField.MIN_LOOKAHEAD_DIST, rpp.minLookaheadDist, onTextChange)
@@ -854,6 +974,19 @@ private fun RppConfigContent(
                 }
             }
         }
+        if (compact) {
+            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                left(Modifier.fillMaxWidth())
+                right(Modifier.fillMaxWidth())
+            }
+        } else {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                left(Modifier.weight(1f))
+                right(Modifier.weight(1f))
+            }
+        }
+        }
+        SettingsPanelFooter(onApply, onSave, onRestore)
     }
 }
 
@@ -871,32 +1004,15 @@ private fun PathPlanningConfigContent(
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.86f))
             .border(2.dp, Color.White.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 26.dp, vertical = 22.dp),
+            .padding(horizontal = 28.dp, vertical = 22.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("路径规划参数", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-            Spacer(Modifier.width(24.dp))
-            Text(
-                "影响扫描路径、安全距离和绕柱策略",
-                Modifier.clip(RoundedCornerShape(8.dp)).background(Color(0xFFDCEEFF))
-                    .padding(horizontal = 14.dp, vertical = 7.dp),
-                fontSize = 13.sp,
-                color = DesignBlue,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(Modifier.weight(1f))
-            SettingsActionBar(onApply, onSave, onRestore, Modifier.width(450.dp), saveOutlined = true)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("仅保留影响路径规划结果的核心参数", fontSize = 14.sp, color = DesignMutedBlue)
-            Spacer(Modifier.weight(1f))
-            Text("临时应用立即生效，保存为默认写入板端配置", fontSize = 12.sp, color = DesignMutedBlue)
-        }
-        Box(Modifier.fillMaxWidth().height(1.dp).background(DesignLine))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Text("路径规划参数", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Text("影响扫描路径、安全距离和绕柱策略。临时应用立即生效；保存为默认写入板端配置。", fontSize = 13.sp, color = DesignMutedBlue)
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
+        val compact = maxWidth < 760.dp
+        val left: @Composable (Modifier) -> Unit = { columnModifier ->
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 RppCard("路径安全", "控制障碍物边界和作业区域留边", Color(0xFFFFA31A), warning = true) {
                     PathPlanningTextRow(
                         "障碍物膨胀距离", "m", "planner.inflation_radius",
@@ -926,7 +1042,9 @@ private fun PathPlanningConfigContent(
                     )
                 }
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        }
+        val right: @Composable (Modifier) -> Unit = { columnModifier ->
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 RppCard("柱体绕行", "控制角度对齐后的柱体识别和绕行", Color(0xFF149FE8)) {
                     PathPlanningTextRow(
                         "柱体矩形膨胀距离", "m", "planner.aligned_obstacle_inflation",
@@ -955,6 +1073,19 @@ private fun PathPlanningConfigContent(
                 )
             }
         }
+        if (compact) {
+            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                left(Modifier.fillMaxWidth())
+                right(Modifier.fillMaxWidth())
+            }
+        } else {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                left(Modifier.weight(1f))
+                right(Modifier.weight(1f))
+            }
+        }
+        }
+        SettingsPanelFooter(onApply, onSave, onRestore)
     }
 }
 
@@ -962,28 +1093,20 @@ private fun PathPlanningConfigContent(
 private fun PathPlanningTextRow(
     label: String,
     unit: String,
-    protocol: String,
+    @Suppress("UNUSED_PARAMETER") protocol: String,
     field: PathPlanningTextField,
     value: String,
     onChange: (PathPlanningTextField, String) -> Unit
 ) {
     Row(
-        Modifier.fillMaxWidth().height(58.dp),
+        Modifier.fillMaxWidth().heightIn(min = 58.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
-            Text(label, fontSize = 14.sp, color = DesignNavy, fontWeight = FontWeight.Bold)
-            Text(protocol, fontSize = 10.sp, color = DesignMutedBlue)
-        }
-        CompactValueField(value, { onChange(field, it) }, Modifier.width(138.dp))
-        Text(unit, Modifier.width(46.dp), fontSize = 13.sp, color = DesignMutedBlue)
+        Text(label, Modifier.weight(1f), fontSize = 15.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 20.sp)
+        CompactValueField(value, { onChange(field, it) }, Modifier.width(106.dp))
+        Text(unit, Modifier.width(40.dp), fontSize = 13.sp, color = DesignMutedBlue)
     }
-}
-
-@Composable
-private fun StatusPill(text: String, color: Color, background: Color) {
-    Text(text, Modifier.clip(RoundedCornerShape(8.dp)).background(background).padding(horizontal = 10.dp, vertical = 6.dp), fontSize = 13.sp, color = color, fontWeight = FontWeight.Bold)
 }
 
 @Composable
@@ -997,12 +1120,13 @@ private fun RppCard(
     Column(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(if (warning) Color(0xFFFFFCF5) else Color(0xFFF8FBFF)).border(1.dp, if (warning) Color(0xFFFFD48A) else Color(0xFFE1ECF7), RoundedCornerShape(14.dp))
     ) {
-        Row(Modifier.fillMaxWidth().background(if (warning) Color(0xFFFFF9ED) else Color(0xFFF1F8FF)).padding(horizontal = 18.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.fillMaxWidth().background(if (warning) Color(0xFFFFF9ED) else Color(0xFFF1F8FF)).padding(horizontal = 18.dp, vertical = 12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.width(5.dp).height(28.dp).clip(RoundedCornerShape(4.dp)).background(accent))
             Spacer(Modifier.width(12.dp))
             Text(title, fontSize = 19.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-            Spacer(Modifier.width(20.dp))
-            Text(subtitle, fontSize = 12.sp, color = DesignMutedBlue)
+            }
+            Text(subtitle, Modifier.padding(start = 17.dp, top = 3.dp), fontSize = 12.sp, color = DesignMutedBlue)
         }
         Column(Modifier.padding(horizontal = 18.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(1.dp), content = content)
     }
@@ -1016,13 +1140,10 @@ private fun RppTextRow(
     value: String,
     onChange: (RppTextField, String) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth().height(50.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
-            Text(label, fontSize = 14.sp, color = DesignNavy, fontWeight = FontWeight.Bold)
-            Text(protocolName(field), fontSize = 10.sp, color = DesignMutedBlue)
-        }
-        CompactValueField(value, { onChange(field, it) }, Modifier.width(138.dp))
-        Text(unit, Modifier.width(46.dp), fontSize = 13.sp, color = DesignMutedBlue)
+    Row(Modifier.fillMaxWidth().heightIn(min = 54.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(label, Modifier.weight(1f), fontSize = 15.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 20.sp)
+        CompactValueField(value, { onChange(field, it) }, Modifier.width(106.dp))
+        Text(unit, Modifier.width(40.dp), fontSize = 13.sp, color = DesignMutedBlue)
     }
 }
 
@@ -1033,11 +1154,8 @@ private fun RppToggleRow(
     field: RppToggleField,
     onChange: (RppToggleField, Boolean) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth().height(50.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-        Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-            Text(label, fontSize = 14.sp, color = DesignNavy, fontWeight = FontWeight.Bold)
-            Text(toggleProtocolName(field), fontSize = 10.sp, color = DesignMutedBlue)
-        }
+    Row(Modifier.fillMaxWidth().heightIn(min = 54.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(label, Modifier.weight(1f), fontSize = 15.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 20.sp)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             CompactSwitch(checked, { onChange(field, it) })
             Text(if (checked) "开启" else "关闭", fontSize = 13.sp, color = DesignMutedBlue)

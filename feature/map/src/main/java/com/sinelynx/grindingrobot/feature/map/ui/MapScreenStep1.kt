@@ -123,9 +123,12 @@ private fun MapScreenContent(
                     mapImageBytes = uiState.mapImageBytes,
                     mapImageSize = uiState.mapImageSize,
                     mapGeo = uiState.mapGeo,
+                    mapLoadMessage = uiState.mapLoadMessage,
+                    mapLoadFailed = uiState.mapLoadFailed,
                     robotPose = uiState.robotPose,
                     robotWidth = uiState.robotWidth,
                     robotLength = uiState.robotLength,
+                    robotFootprint = uiState.robotFootprint,
                     onRadarMapSync = onRadarMapSync
                 )
                 ControlPanel(
@@ -209,9 +212,12 @@ private fun MapPanel(
     mapImageBytes: ByteArray?,
     mapImageSize: Pair<Int, Int>?,
     mapGeo: com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo?,
+    mapLoadMessage: String,
+    mapLoadFailed: Boolean,
     robotPose: com.sinelynx.grindingrobot.core.model.state.DevicePosePayload?,
     robotWidth: Double?,
     robotLength: Double?,
+    robotFootprint: List<com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint>,
     onRadarMapSync: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -247,11 +253,12 @@ private fun MapPanel(
                     mapImageSize = mapImageSize,
                     bitmapSize = mapImageBitmap.width to mapImageBitmap.height,
                     robotWidth = robotWidth,
-                    robotLength = robotLength
+                    robotLength = robotLength,
+                    robotFootprint = robotFootprint
                 )
             }
         } else {
-            MapDataLoadingPage()
+            MapDataLoadingPage(text = mapLoadMessage, showProgress = !mapLoadFailed)
         }
 
         Surface(

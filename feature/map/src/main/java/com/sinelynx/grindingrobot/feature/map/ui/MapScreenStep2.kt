@@ -141,6 +141,7 @@ fun MapScreenStep2(
                         robotPose = uiState.robotPose,
                         robotWidth = uiState.robotWidth,
                         robotLength = uiState.robotLength,
+                        robotFootprint = uiState.robotFootprint,
                         eraseAreas = uiState.eraseAreas,
                         previewWorkRegions = uiState.previewWorkRegions,
                         previewObstacleRegions = uiState.previewObstacleRegions,
@@ -402,6 +403,7 @@ private fun MapEditingPanel(
     robotPose: com.sinelynx.grindingrobot.core.model.state.DevicePosePayload?,
     robotWidth: Double?,
     robotLength: Double?,
+    robotFootprint: List<com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint>,
     eraseAreas: List<EraseRectArea>,
     previewWorkRegions: List<MapPreviewRegionItem>,
     previewObstacleRegions: List<MapPreviewRegionItem>,
@@ -692,6 +694,19 @@ private fun MapEditingPanel(
             mapImageSize = mapImageSize,
             bitmapSize = bitmapDecodeSize ?: mapImageBitmap?.let { it.width to it.height }
         )?.let { bitmapPoint ->
+            val geo = mapGeo
+            val logicalSize = mapImageSize ?: geo?.let { it.mapWidth to it.mapHeight }
+            val decodedSize = bitmapDecodeSize ?: mapImageBitmap?.let { it.width to it.height }
+            if (robotFootprint.size >= 3 && geo != null && geo.resolution > 0f &&
+                logicalSize != null && decodedSize != null && logicalSize.first > 0 && logicalSize.second > 0) {
+                FootprintRobotMarker(
+                    center = toScreenPoint(bitmapPoint),
+                    headingDeg = (robotPose?.headingDeg ?: 0f) - geo.headingDeg - alignmentYaw,
+                    footprint = robotFootprint,
+                    pixelsPerMeterX = baseScale * zoom * decodedSize.first / logicalSize.first / geo.resolution,
+                    pixelsPerMeterY = baseScale * zoom * decodedSize.second / logicalSize.second / geo.resolution
+                )
+            } else {
             val (drawWidth, drawLength) = remember(zoom, robotWidth, robotLength) {
                 val defaultSize = 40.dp
                 if (robotWidth != null && robotWidth > 0.0 && robotLength != null && robotLength > 0.0) {
@@ -719,6 +734,7 @@ private fun MapEditingPanel(
                 width = drawWidth,
                 length = drawLength
             )
+            }
         }
 
         if (

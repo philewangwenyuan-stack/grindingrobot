@@ -220,6 +220,7 @@ class TcpManager @Inject constructor(
         tcpService.setCallback(object : TcpService.TcpCallback {
             override fun onConnected() {
                 LogUtils.d("TCP连接已建立")
+                slLinkManager.clearMapTransfer()
                 // 连接成功，取消重连任务
                 cancelReconnect()
             }
@@ -238,6 +239,7 @@ class TcpManager @Inject constructor(
 
             override fun onDisconnected(reason: String) {
                 LogUtils.d("TCP连接已断开: $reason")
+                slLinkManager.clearMapTransfer()
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
                 // 断开后启动重连任务
@@ -249,6 +251,7 @@ class TcpManager @Inject constructor(
 
             override fun onFailure(error: Throwable) {
                 LogUtils.d("TCP连接失败: ${error.message}")
+                slLinkManager.clearMapTransfer()
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
                 // 失败后启动重连任务
@@ -444,14 +447,24 @@ class TcpManager @Inject constructor(
     /**
      * 请求地图快照
      */
-    fun requestMapSnapshot(mapId: String? = null, dstId: UByte = 0x10u): Boolean {
+    fun requestMapSnapshot(mapId: String? = null, dstId: UByte = 0x10u, requestId: Long = 0L): Boolean {
+        val effectiveRequestId = requestId.takeIf { it != 0L }
+            ?: ((UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE).takeIf { it != 0L } ?: 1L)
         val builder = SlLink.MapRequest.newBuilder()
         builder.maxChunkSize = 4096
+        builder.requestId = effectiveRequestId
         if (!mapId.isNullOrBlank()) {
             builder.mapId = mapId
         }
         val frameData = slLinkManager.requestMap(builder.build().toByteArray(), dstId)
-        return sendData(frameData)
+        if (!slLinkManager.expectMapRequest(effectiveRequestId)) return false
+        val sent = sendData(frameData)
+        if (!sent) slLinkManager.cancelMapRequest(effectiveRequestId)
+        return sent
+    }
+
+    fun cancelMapSnapshotRequest(requestId: Long) {
+        slLinkManager.cancelMapRequest(requestId)
     }
 
     /**

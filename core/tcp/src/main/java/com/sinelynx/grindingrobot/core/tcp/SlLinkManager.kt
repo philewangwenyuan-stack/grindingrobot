@@ -9,6 +9,8 @@ import com.sinelynx.grindingrobot.core.model.state.SystemCacheClearPayload
 import com.sinelynx.grindingrobot.core.model.state.SystemCacheClearStream
 import com.sinelynx.grindingrobot.core.model.state.MapImageStream
 import com.sinelynx.grindingrobot.core.model.state.MapImagePayload
+import com.sinelynx.grindingrobot.core.model.state.MapRequestOutcome
+import com.sinelynx.grindingrobot.core.model.state.MapRequestResultPayload
 import com.sinelynx.grindingrobot.core.model.state.MapDeletePayload
 import com.sinelynx.grindingrobot.core.model.state.MapDeleteStream
 import com.sinelynx.grindingrobot.core.model.state.MapEditPayload
@@ -63,6 +65,7 @@ import sl_link.SlLinkMonitor
 import sl_link.SlMessageBuilder
 import java.io.ByteArrayOutputStream
 import java.util.TreeMap
+import java.util.zip.CRC32
 import javax.inject.Inject
 
 internal fun SlLink.TaskConfigResponse.toPayload() = TaskConfigResponsePayload(
@@ -109,7 +112,35 @@ class SlLinkManager @Inject constructor(
     
     private val parser = SlFrameParser()
     private val monitor = SlLinkMonitor()
-    private val mapChunkAssembler = mutableMapOf<Int, MapChunkAssembly>()
+    private val mapTransferLock = Any()
+    private var activeMapRequestId: Long? = null
+    private var mapRequestStartedNanos: Long = 0L
+    private var mapChunkAssembly: MapChunkAssembly? = null
+
+    fun expectMapRequest(requestId: Long): Boolean = synchronized(mapTransferLock) {
+        val now = System.nanoTime()
+        if (activeMapRequestId != null && now - mapRequestStartedNanos < MAP_REQUEST_STALE_NANOS) {
+            return@synchronized false
+        }
+        activeMapRequestId = requestId
+        mapRequestStartedNanos = now
+        mapChunkAssembly = null
+        true
+    }
+
+    fun cancelMapRequest(requestId: Long) = synchronized(mapTransferLock) {
+        if (activeMapRequestId == requestId) {
+            activeMapRequestId = null
+            mapRequestStartedNanos = 0L
+            mapChunkAssembly = null
+        }
+    }
+
+    fun clearMapTransfer() = synchronized(mapTransferLock) {
+        activeMapRequestId = null
+        mapRequestStartedNanos = 0L
+        mapChunkAssembly = null
+    }
     private val taskPathChunkAssembler = TaskPathChunkAssembler()
     private val taskExecutionHistoryChunkAssembler = TaskExecutionHistoryChunkAssembler()
     private val taskTrajectoryChunkAssembler = TaskTrajectoryChunkAssembler()
@@ -394,6 +425,7 @@ class SlLinkManager @Inject constructor(
             MSG_ID_DEVICE_STATUS_REPORT -> handleDeviceStatusReport(frame, arrivalMonotonicS)
             MSG_ID_CAMERA_FRAME_CHUNK -> handleCameraFrame(frame)
             MSG_ID_MAP_CHUNK -> handleMapChunk(frame)
+            MSG_ID_MAP_REQUEST_RESULT -> handleMapRequestResult(frame)
             MSG_ID_MAP_MODE_RESPONSE -> handleMapModeResponse(frame)
             MSG_ID_CONTROL_COMMAND_RESPONSE -> handleControlCommandResponse(frame)
             MSG_ID_MAP_PREVIEW_RESPONSE -> handleMapPreviewResponse(frame)
@@ -522,6 +554,65 @@ class SlLinkManager @Inject constructor(
      *
      * @param frame 解析出的帧
      */
+    private fun handleMapRequestResult(frame: SlFrame) {
+        try {
+            val result = SlLink.MapRequestResult.parseFrom(frame.payload)
+            var outcome = when (result.status) {
+                SlLink.MapRequestStatus.MAP_REQUEST_STATUS_READY -> MapRequestOutcome.READY
+                SlLink.MapRequestStatus.MAP_REQUEST_STATUS_NOT_READY -> MapRequestOutcome.NOT_READY
+                SlLink.MapRequestStatus.MAP_REQUEST_STATUS_NOT_FOUND -> MapRequestOutcome.NOT_FOUND
+                else -> MapRequestOutcome.ERROR
+            }
+            if (outcome == MapRequestOutcome.READY &&
+                (result.snapshotId == 0L || result.totalChunks !in 1..MAX_MAP_CHUNKS ||
+                    result.payloadSize !in 1..MAX_MAP_PAYLOAD_BYTES)
+            ) {
+                outcome = MapRequestOutcome.ERROR
+            }
+            val accepted = synchronized(mapTransferLock) {
+                if (activeMapRequestId != result.requestId) {
+                    false
+                } else {
+                    mapChunkAssembly = if (
+                        outcome == MapRequestOutcome.READY &&
+                        result.snapshotId != 0L &&
+                        result.totalChunks in 1..MAX_MAP_CHUNKS &&
+                        result.payloadSize in 1..MAX_MAP_PAYLOAD_BYTES
+                    ) {
+                        MapChunkAssembly(
+                            requestId = result.requestId,
+                            snapshotId = result.snapshotId,
+                            mapId = null,
+                            utcTime = null,
+                            totalChunks = result.totalChunks,
+                            expectedSize = result.payloadSize,
+                            expectedCrc32 = result.payloadCrc32.toLong() and 0xffffffffL
+                        )
+                    } else {
+                        null
+                    }
+                    if (outcome != MapRequestOutcome.READY) {
+                        activeMapRequestId = null
+                        mapRequestStartedNanos = 0L
+                    }
+                    true
+                }
+            }
+            if (accepted) {
+                MapImageStream.publish(MapRequestResultPayload(
+                    requestId = result.requestId,
+                    snapshotId = result.snapshotId,
+                    mapId = result.mapId,
+                    outcome = outcome,
+                    retryAfterMs = result.retryAfterMs,
+                    message = result.message
+                ))
+            }
+        } catch (e: Exception) {
+            LogUtils.e("解析地图请求结果失败: ${e.message}")
+        }
+    }
+
     private fun handleMapChunk(frame: SlFrame) {
         try {
             val payload = frame.payload
@@ -532,12 +623,12 @@ class SlLinkManager @Inject constructor(
             val chunk = SlLink.MapChunk.parseFrom(payload)
 //            val byteArray = chunk.data.map { it.toByte() }.toByteArray()
 //            MapImageStream.publish(byteArray)
-            val mergedBytes = appendMapChunk(chunk)
-            if (mergedBytes != null) {
+            val completed = appendMapChunk(chunk)
+            if (completed != null) {
                 val origin = chunk.origin
                 MapImageStream.publish(
                     MapImagePayload(
-                        imageBytes = mergedBytes,
+                        imageBytes = completed.bytes,
                         mapWidth = chunk.width,
                         mapHeight = chunk.height,
                         resolution = chunk.resolution,
@@ -552,10 +643,12 @@ class SlLinkManager @Inject constructor(
                         // 保留协议的预览比例和旋转信息；页面是否应用须遵循各自坐标变换，不能重复缩放。
                         previewScaleX = chunk.previewScaleX,
                         previewScaleY = chunk.previewScaleY,
-                        appRotationDeg = chunk.appRotationDeg
+                        appRotationDeg = chunk.appRotationDeg,
+                        requestId = completed.requestId,
+                        snapshotId = completed.snapshotId
                     )
                 )
-                LogUtils.d("地图快照组包完成: mapId=${chunk.mapId}, totalBytes=${mergedBytes.size}")
+                LogUtils.d("地图快照组包完成: mapId=${chunk.mapId}, totalBytes=${completed.bytes.size}")
             }
             LogUtils.d(
                 "地图分片: " +
@@ -572,39 +665,68 @@ class SlLinkManager @Inject constructor(
         }
     }
 
-    private fun appendMapChunk(chunk: SlLink.MapChunk): ByteArray? {
-        val mapId = chunk.mapId
-        val chunkIndex = chunk.chunkIndex
-        val totalChunks = chunk.totalChunks
-        if (totalChunks <= 0) return null
-
-        val assembly = mapChunkAssembler.getOrPut(mapId) {
-            MapChunkAssembly(totalChunks = totalChunks)
+    private fun appendMapChunk(chunk: SlLink.MapChunk): CompletedMapImage? = synchronized(mapTransferLock) {
+        val activeId = activeMapRequestId ?: return@synchronized null
+        if (chunk.totalChunks !in 1..MAX_MAP_CHUNKS || chunk.chunkIndex !in 0 until chunk.totalChunks) {
+            return@synchronized null
         }
-
-        // 设备若更换了总分片数，重置当前组包上下文
-        if (assembly.totalChunks != totalChunks) {
-            mapChunkAssembler[mapId] = MapChunkAssembly(totalChunks = totalChunks).also {
-                it.chunks[chunkIndex] = chunk.data.toByteArray()
+        val legacy = chunk.requestId == 0L && chunk.snapshotId == 0L
+        if (!legacy && (chunk.requestId != activeId || chunk.snapshotId == 0L)) {
+            return@synchronized null
+        }
+        var assembly = mapChunkAssembly
+        if (legacy && assembly == null) {
+            assembly = MapChunkAssembly(
+                requestId = activeId,
+                snapshotId = 0L,
+                mapId = chunk.mapId,
+                utcTime = chunk.utcTime,
+                totalChunks = chunk.totalChunks,
+                expectedSize = 0,
+                expectedCrc32 = 0L
+            )
+            mapChunkAssembly = assembly
+        }
+        if (assembly == null || assembly.requestId != activeId ||
+            assembly.snapshotId != chunk.snapshotId || assembly.totalChunks != chunk.totalChunks ||
+            (assembly.mapId != null && assembly.mapId != chunk.mapId) ||
+            (assembly.utcTime != null && assembly.utcTime != chunk.utcTime)
+        ) {
+            return@synchronized null
+        }
+        if (assembly.mapId == null) assembly.mapId = chunk.mapId
+        if (assembly.utcTime == null) assembly.utcTime = chunk.utcTime
+        val bytes = chunk.data.toByteArray()
+        val previous = assembly.chunks[chunk.chunkIndex]
+        if (previous != null && !previous.contentEquals(bytes)) {
+            mapChunkAssembly = null
+            return@synchronized null
+        }
+        if (previous == null) {
+            assembly.receivedBytes += bytes.size
+            if (assembly.receivedBytes > MAX_MAP_PAYLOAD_BYTES ||
+                (assembly.expectedSize > 0 && assembly.receivedBytes > assembly.expectedSize)
+            ) {
+                mapChunkAssembly = null
+                return@synchronized null
             }
-            return tryBuildMapImage(mapId)
+            assembly.chunks[chunk.chunkIndex] = bytes
         }
-
-        assembly.chunks[chunkIndex] = chunk.data.toByteArray()
-        return tryBuildMapImage(mapId)
-    }
-
-    private fun tryBuildMapImage(mapId: Int): ByteArray? {
-        val assembly = mapChunkAssembler[mapId] ?: return null
-        if (assembly.chunks.size < assembly.totalChunks) return null
-
-        val output = ByteArrayOutputStream()
+        if (assembly.chunks.size != assembly.totalChunks) return@synchronized null
+        val output = ByteArrayOutputStream(assembly.receivedBytes)
         for (index in 0 until assembly.totalChunks) {
-            val bytes = assembly.chunks[index] ?: return null
-            output.write(bytes)
+            output.write(assembly.chunks[index] ?: return@synchronized null)
         }
-        mapChunkAssembler.remove(mapId)
-        return output.toByteArray()
+        mapChunkAssembly = null
+        val completed = output.toByteArray()
+        if (assembly.expectedSize > 0 && completed.size != assembly.expectedSize) return@synchronized null
+        if (assembly.snapshotId != 0L) {
+            val crc = CRC32().apply { update(completed) }.value
+            if (crc != assembly.expectedCrc32) return@synchronized null
+        }
+        activeMapRequestId = null
+        mapRequestStartedNanos = 0L
+        CompletedMapImage(completed, activeId, assembly.snapshotId)
     }
 
     /**
@@ -1569,7 +1691,10 @@ class SlLinkManager @Inject constructor(
                     val map = response.map
                     appState.updateRobotSettings(
                         width = map.vehicleWidth.toDouble(),
-                        length = map.vehicleLength.toDouble()
+                        length = map.vehicleLength.toDouble(),
+                        footprint = map.footprintList.map {
+                            AppState.FootprintPoint(it.x, it.y)
+                        }
                     )
                     appState.updateMapSetting(map)
                 }
@@ -1631,7 +1756,10 @@ class SlLinkManager @Inject constructor(
                     val map = response.map
                     appState.updateRobotSettings(
                         width = map.vehicleWidth.toDouble(),
-                        length = map.vehicleLength.toDouble()
+                        length = map.vehicleLength.toDouble(),
+                        footprint = map.footprintList.map {
+                            AppState.FootprintPoint(it.x, it.y)
+                        }
                     )
                     appState.updateMapSetting(map)
                 }
@@ -1798,6 +1926,10 @@ class SlLinkManager @Inject constructor(
         private const val MSG_ID_MAP_REQUEST = 0x0304
         //返回地图分片 LOWER -> APP
         private const val MSG_ID_MAP_CHUNK = 0x0305
+        private const val MSG_ID_MAP_REQUEST_RESULT = 0x0306
+        private const val MAX_MAP_CHUNKS = 8192
+        private const val MAX_MAP_PAYLOAD_BYTES = 32 * 1024 * 1024
+        private const val MAP_REQUEST_STALE_NANOS = 20_000_000_000L
         //返回地图模式切换结果 LOWER -> APP
         private const val MSG_ID_MAP_MODE_RESPONSE = 0x0513
         //下发控制指令 APP -> LOWER
@@ -1877,9 +2009,18 @@ class SlLinkManager @Inject constructor(
 }
 
 private data class MapChunkAssembly(
+    val requestId: Long,
+    val snapshotId: Long,
+    var mapId: Int?,
+    var utcTime: Int?,
     val totalChunks: Int,
-    val chunks: MutableMap<Int, ByteArray> = TreeMap()
+    val expectedSize: Int,
+    val expectedCrc32: Long,
+    val chunks: MutableMap<Int, ByteArray> = TreeMap(),
+    var receivedBytes: Int = 0
 )
+
+private data class CompletedMapImage(val bytes: ByteArray, val requestId: Long, val snapshotId: Long)
 
 /** 原样保留区域几何和接口提供的起终点，不在接收层按顶点、外接矩形或路径重新计算。 */
 internal fun parseMapRegionPoints(response: SlLink.MapRegionPointResponse): MapRegionPointPayload {

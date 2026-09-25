@@ -65,7 +65,8 @@ data class MapScreenStep4UiState(
     val planningError: String? = null,
     val isSaving: Boolean = false,
     val robotWidth: Double? = null,
-    val robotLength: Double? = null
+    val robotLength: Double? = null,
+    val robotFootprint: List<com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint> = emptyList()
 ) {
     val canPreviewLegacyPlan: Boolean get() = !isPlanning && !isSaving
     // 统计值不参与保存门禁；只要求底图、区域加载完成且本轮存在有效路径坐标。
@@ -207,7 +208,8 @@ class MapScreenStep4ViewModel @Inject constructor(
                 _uiState.update { current ->
                     current.copy(
                         robotWidth = settings?.robotWidth,
-                        robotLength = settings?.robotLength
+                        robotLength = settings?.robotLength,
+                        robotFootprint = settings?.footprint.orEmpty()
                     )
                 }
             }

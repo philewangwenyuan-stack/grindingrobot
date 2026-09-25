@@ -46,9 +46,13 @@ class AppState @Inject constructor(
     private val mmkvUtils: MMKVUtils,
     @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
+    /** 相对 base_link 的米制坐标：X 向前，Y 向左。 */
+    data class FootprintPoint(val x: Float, val y: Float)
+
     data class RobotSettingsState(
         val robotWidth: Double,
-        val robotLength: Double
+        val robotLength: Double,
+        val footprint: List<FootprintPoint> = emptyList()
     )
 
     data class SettingsWriteResponseState(
@@ -178,10 +182,15 @@ class AppState @Inject constructor(
         _videoStreamInfo.value = null
     }
 
-    fun updateRobotSettings(width: Double, length: Double) {
+    fun updateRobotSettings(
+        width: Double,
+        length: Double,
+        footprint: List<FootprintPoint> = emptyList()
+    ) {
         _robotSettings.value = RobotSettingsState(
             robotWidth = width,
-            robotLength = length
+            robotLength = length,
+            footprint = footprint.filter { it.x.isFinite() && it.y.isFinite() }
         )
     }
 

@@ -46,7 +46,8 @@ data class RemoteSettingsUiState(
     val showCameraOverlay: Boolean = false,
     val videoStreamUrl: String? = null,
     val robotWidth: Double? = null,
-    val robotLength: Double? = null
+    val robotLength: Double? = null,
+    val robotFootprint: List<AppState.FootprintPoint> = emptyList()
 )
 
 enum class SpinDirection {
@@ -78,7 +79,8 @@ class RemoteSettingsViewModel @Inject constructor(
                 _uiState.update { current ->
                     current.copy(
                         robotWidth = settings?.robotWidth,
-                        robotLength = settings?.robotLength
+                        robotLength = settings?.robotLength,
+                        robotFootprint = settings?.footprint.orEmpty()
                     )
                 }
             }

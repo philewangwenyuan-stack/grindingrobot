@@ -153,7 +153,8 @@ private fun RemoteSettingsContent(
                     cameraButtonActive = uiState.showCameraOverlay,
                     onCameraClick = onCameraClick,
                     robotWidth = uiState.robotWidth,
-                    robotLength = uiState.robotLength
+                    robotLength = uiState.robotLength,
+                    robotFootprint = uiState.robotFootprint
                 )
                 RemoteControlPanel(
                     modifier = Modifier.width(320.dp),
@@ -212,6 +213,7 @@ private fun RemotePreviewPanel(
     onCameraClick: () -> Unit,
     robotWidth: Double?,
     robotLength: Double?,
+    robotFootprint: List<com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint>,
     modifier: Modifier = Modifier
 ) {
     val bitmap = remember(imageBytes) {
@@ -246,7 +248,8 @@ private fun RemotePreviewPanel(
                     mapImageSize = mapImageSize,
                     bitmapSize = bitmap.width to bitmap.height,
                     robotWidth = robotWidth,
-                    robotLength = robotLength
+                    robotLength = robotLength,
+                    robotFootprint = robotFootprint
                 )
             }
         } else {

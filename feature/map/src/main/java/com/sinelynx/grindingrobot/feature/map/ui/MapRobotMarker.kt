@@ -1,6 +1,7 @@
 package com.sinelynx.grindingrobot.feature.map.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -22,6 +26,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.sinelynx.grindingrobot.core.model.state.DevicePosePayload
+import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.feature.map.R
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
 import kotlin.math.cos
@@ -79,7 +84,8 @@ fun BoxScope.FittedMapRobotMarker(
     viewportOffset: Offset = Offset.Zero,
     robotWidth: Double? = null,
     robotLength: Double? = null,
-    mapRotationDeg: Float = 0f
+    mapRotationDeg: Float = 0f,
+    robotFootprint: List<AppState.FootprintPoint> = emptyList()
 ) {
     var viewportSize by remember { mutableStateOf(IntSize.Zero) }
     Box(
@@ -130,16 +136,71 @@ fun BoxScope.FittedMapRobotMarker(
         }
     }
 
-    RobotPoseIcon(
-        center = Offset(
+    val markerCenter = Offset(
             x = rotatedPoint.x * viewportScale + viewportOffset.x,
             y = rotatedPoint.y * viewportScale + viewportOffset.y
-        ),
+        )
+    // map 的原点朝向和页面对齐旋转都要从世界朝向中扣除。
+    val markerHeading = (pose?.headingDeg ?: 0f) - (geo?.headingDeg ?: 0f) - mapRotationDeg
+    if (geo != null && geo.resolution > 0f && robotFootprint.size >= 3) {
+        FootprintRobotMarker(
+            center = markerCenter,
+            headingDeg = markerHeading,
+            footprint = robotFootprint,
+            pixelsPerMeterX = scale * viewportScale * bmpSize.first / (mapImageSize ?: (geo.mapWidth to geo.mapHeight)).first / geo.resolution,
+            pixelsPerMeterY = scale * viewportScale * bmpSize.second / (mapImageSize ?: (geo.mapWidth to geo.mapHeight)).second / geo.resolution
+        )
+        return
+    }
+    RobotPoseIcon(
+        center = markerCenter,
         // center 已按旋转后的地图定位；heading 再减地图角可保持机器人相对地图的真实朝向。
-        headingDeg = (pose?.headingDeg ?: 0f) - mapRotationDeg,
+        headingDeg = markerHeading,
         width = drawWidth,
         length = drawLength
     )
+}
+
+/** Footprint 的原点即 base_link；尺寸直接由地图分辨率换算，不做固定图标尺寸钳制。 */
+fun footprintPointOnScreen(
+    center: Offset,
+    point: AppState.FootprintPoint,
+    headingDeg: Float,
+    pixelsPerMeterX: Float,
+    pixelsPerMeterY: Float
+): Offset {
+    val radians = Math.toRadians(headingDeg.toDouble())
+    val c = cos(radians).toFloat()
+    val s = sin(radians).toFloat()
+    return Offset(
+        x = center.x + (point.x * c - point.y * s) * pixelsPerMeterX,
+        y = center.y - (point.x * s + point.y * c) * pixelsPerMeterY
+    )
+}
+
+@Composable
+fun BoxScope.FootprintRobotMarker(
+    center: Offset,
+    headingDeg: Float,
+    footprint: List<AppState.FootprintPoint>,
+    pixelsPerMeterX: Float,
+    pixelsPerMeterY: Float
+) {
+    if (footprint.size < 3 || !pixelsPerMeterX.isFinite() || !pixelsPerMeterY.isFinite() ||
+        pixelsPerMeterX <= 0f || pixelsPerMeterY <= 0f) return
+    Canvas(Modifier.fillMaxSize()) {
+        val points = footprint.map {
+            footprintPointOnScreen(center, it, headingDeg, pixelsPerMeterX, pixelsPerMeterY)
+        }
+        val outline = Path().apply {
+            moveTo(points.first().x, points.first().y)
+            points.drop(1).forEach { lineTo(it.x, it.y) }
+            close()
+        }
+        drawPath(outline, Color(0x55149FE8))
+        drawPath(outline, Color(0xFF0879D1), style = Stroke(width = 2.dp.toPx()))
+        drawCircle(Color(0xFF0B1645), radius = 3.dp.toPx(), center = center)
+    }
 }
 
 private fun Offset.rotateAround(center: Offset, rotationDeg: Float): Offset {

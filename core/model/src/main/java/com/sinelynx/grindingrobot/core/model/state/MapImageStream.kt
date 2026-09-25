@@ -25,7 +25,9 @@ data class MapImagePayload(
     val frameId: String = "map",
     val previewScaleX: Float = 1f,
     val previewScaleY: Float = 1f,
-    val appRotationDeg: Float = 0f
+    val appRotationDeg: Float = 0f,
+    val requestId: Long = 0L,
+    val snapshotId: Long = 0L
 ) {
     // StateFlow 依赖相等性判断更新：图片按内容比较，几何或显示角变化也必须通知页面。
     override fun equals(other: Any?): Boolean {
@@ -66,10 +68,26 @@ data class MapImagePayload(
     }
 }
 
+enum class MapRequestOutcome { READY, NOT_READY, NOT_FOUND, ERROR }
+
+data class MapRequestResultPayload(
+    val requestId: Long,
+    val snapshotId: Long,
+    val mapId: String,
+    val outcome: MapRequestOutcome,
+    val retryAfterMs: Int,
+    val message: String
+)
+
 object MapImageStream {
     // 完整帧事件不重放、不按内容去重，单次请求即使得到相同图片也能结束等待。
     private val _frames = MutableSharedFlow<MapImagePayload>(extraBufferCapacity = 16)
     val frames = _frames.asSharedFlow()
+    private val _results = MutableSharedFlow<MapRequestResultPayload>(extraBufferCapacity = 16)
+    val results = _results.asSharedFlow()
+    fun publish(result: MapRequestResultPayload) {
+        _results.tryEmit(result)
+    }
     /** 重进 Step1 时同时清空旧图片和元数据，避免新帧到来前冻结上一次会话的数据。 */
     fun reset() {
         _payload.value = null

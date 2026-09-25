@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MapDataLoadingPage(
     modifier: Modifier = Modifier,
-    text: String = "地图加载中..."
+    text: String = "地图加载中...",
+    showProgress: Boolean = true
 ) {
     Column(
         modifier = modifier
@@ -35,12 +36,14 @@ fun MapDataLoadingPage(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(40.dp),
-            color = Color(0xFF00A0E9),
-            strokeWidth = 4.dp
-        )
-        Spacer(modifier = Modifier.height(14.dp))
+        if (showProgress) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(40.dp),
+                color = Color(0xFF00A0E9),
+                strokeWidth = 4.dp
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+        }
         Text(
             text = text,
             color = Color(0xFF202937),

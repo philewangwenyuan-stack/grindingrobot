@@ -68,6 +68,7 @@ internal fun StartGrindingScreen(
     existingTaskNames: List<String>,
     robotWidth: Double? = null,
     robotLength: Double? = null,
+    robotFootprint: List<com.sinelynx.grindingrobot.core.data.state.AppState.FootprintPoint> = emptyList(),
     isRelocalizationDialogVisible: Boolean,
     isRelocalizationSuccessful: Boolean,
     relocalizationRawStatus: String,
@@ -244,6 +245,7 @@ internal fun StartGrindingScreen(
                     robotPose = robotPose,
                     robotWidth = robotWidth,
                     robotLength = robotLength,
+                    robotFootprint = robotFootprint,
                     obstacleShapes = obstacleShapes,
                     editingObstacleIndex = editingObstacleIndex,
                     onWorkspaceClick = { regionId ->

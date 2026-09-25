@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import com.sinelynx.grindingrobot.feature.common.component.DeviceStatusBar
 import com.sinelynx.grindingrobot.feature.main.viewmodel.TaskReplayUiState
 import com.sinelynx.grindingrobot.feature.map.ui.RobotPoseIcon
+import com.sinelynx.grindingrobot.feature.map.ui.FootprintRobotMarker
 import com.sinelynx.grindingrobot.feature.map.ui.drawFittedTaskPath
 import com.sinelynx.grindingrobot.feature.map.ui.taskBitmapPointToFittedPoint
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
@@ -272,7 +273,22 @@ fun TaskReplayScreen(
                         viewportCanvasSize
                     )
                 } else null
-                if (
+                val pixelsPerMeter = if (frame != null && geo != null && bitmapSize != null) {
+                    trajectoryMetersToScreenPx(
+                        1.0, geo, frame.mapWidth to frame.mapHeight,
+                        bitmapSize, viewportCanvasSize
+                    )
+                } else null
+                if (currentPoint != null && robotCenter != null &&
+                    uiState.robotFootprint.size >= 3 && pixelsPerMeter != null) {
+                    FootprintRobotMarker(
+                        center = robotCenter,
+                        headingDeg = currentPoint.headingDeg - (geo?.headingDeg ?: 0f) - totalMapRotation,
+                        footprint = uiState.robotFootprint,
+                        pixelsPerMeterX = pixelsPerMeter,
+                        pixelsPerMeterY = pixelsPerMeter
+                    )
+                } else if (
                     currentPoint != null && robotCenter != null &&
                     robotWidthPx != null && robotLengthPx != null
                 ) {
