@@ -14,6 +14,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -37,6 +39,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -58,6 +62,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import kotlin.math.abs
 import kotlin.math.max
@@ -551,6 +557,7 @@ private fun ClearCacheContent(
 }
 
 /** 机器人外形、base_link 到激光坐标系参数。布局按参考图保留“示意图 + 参数卡”层级。 */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RobotConfigContent(
     uiState: RobotSettingsUiState,
@@ -566,51 +573,52 @@ private fun RobotConfigContent(
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.86f))
             .border(2.dp, Color.White.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .padding(horizontal = 28.dp, vertical = 22.dp)
+            .padding(horizontal = 18.dp, vertical = 14.dp)
     ) {
-        Text("机器人外形与坐标", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-        Spacer(Modifier.height(18.dp))
+        Text("机器人外形与坐标", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Spacer(Modifier.height(10.dp))
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
-            val compact = maxWidth < 800.dp
+            val compact = maxWidth < 640.dp
             val diagram: @Composable (Modifier) -> Unit = { diagramModifier ->
                 RobotFootprintDiagram(
                     points = uiState.footprint,
                     baseLaserX = uiState.baseLaserX,
                     baseLaserY = uiState.baseLaserY,
-                    modifier = diagramModifier.heightIn(min = 430.dp, max = 560.dp)
+                    modifier = diagramModifier.height(300.dp)
                 )
             }
             val fields: @Composable (Modifier) -> Unit = { fieldsModifier ->
-                Column(fieldsModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    DesignSectionHeader("Footprint 多边形（相对 base_link）")
-                    uiState.footprint.forEachIndexed { index, point ->
-                        FootprintPointRow(
-                            index = index,
-                            point = point,
-                            onXChange = { onFootprintPointChange(index, it, null) },
-                            onYChange = { onFootprintPointChange(index, null, it) }
-                        )
+                Column(fieldsModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    DesignSectionHeader("Footprint（m，相对 base_link）")
+                    BoxWithConstraints(Modifier.fillMaxWidth()) {
+                        val columns = if (maxWidth >= 360.dp) 2 else 1
+                        val cellWidth = (maxWidth - 8.dp * (columns - 1)) / columns
+                        FlowRow(maxItemsInEachRow = columns,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            uiState.footprint.forEachIndexed { index, point ->
+                                FootprintPointRow(
+                                    index = index, point = point, modifier = Modifier.width(cellWidth),
+                                    onXChange = { onFootprintPointChange(index, it, null) },
+                                    onYChange = { onFootprintPointChange(index, null, it) }
+                                )
+                            }
+                        }
                     }
                     DimensionSummary(
                         width = footprintWidth(uiState.footprint),
                         length = footprintLength(uiState.footprint)
-                    )
-                    Text(
-                        "ⓘ 以上为相对 base_link 的多边形顶点，base_link 是坐标原点，不是机器人尺寸。",
-                        fontSize = 12.sp,
-                        color = DesignMutedBlue
                     )
                     DesignSectionHeader("base_link → base_laser_link")
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         GeometryField("x (m)", uiState.baseLaserX, { onBaseLaserChange(BaseLaserField.X, it) }, Modifier.weight(1f))
                         GeometryField("y (m)", uiState.baseLaserY, { onBaseLaserChange(BaseLaserField.Y, it) }, Modifier.weight(1f))
                         GeometryField("z (m)", uiState.baseLaserZ, { onBaseLaserChange(BaseLaserField.Z, it) }, Modifier.weight(1f))
-                        GeometryField("yaw (°)", uiState.baseLaserYaw, { onBaseLaserChange(BaseLaserField.YAW, it) }, Modifier.weight(1f))
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         GeometryField("roll (°)", uiState.baseLaserRoll, { onBaseLaserChange(BaseLaserField.ROLL, it) }, Modifier.weight(1f))
                         GeometryField("pitch (°)", uiState.baseLaserPitch, { onBaseLaserChange(BaseLaserField.PITCH, it) }, Modifier.weight(1f))
-                        Spacer(Modifier.weight(2f))
+                        GeometryField("yaw (°)", uiState.baseLaserYaw, { onBaseLaserChange(BaseLaserField.YAW, it) }, Modifier.weight(1f))
                     }
                     val laserX = uiState.baseLaserX.toDoubleOrNull()?.takeIf(Double::isFinite)
                     val laserY = uiState.baseLaserY.toDoubleOrNull()?.takeIf(Double::isFinite)
@@ -632,12 +640,12 @@ private fun RobotConfigContent(
                 }
             }
             if (compact) {
-                Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     diagram(Modifier.fillMaxWidth())
                     fields(Modifier.fillMaxWidth())
                 }
             } else {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     diagram(Modifier.weight(1f))
                     fields(Modifier.weight(1.15f))
                 }
@@ -660,7 +668,7 @@ private fun RobotFootprintDiagram(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.clip(RoundedCornerShape(18.dp)).background(Color(0xFFFDFEFF))) {
-        Canvas(Modifier.fillMaxSize().padding(start = 34.dp, top = 52.dp, end = 28.dp, bottom = 72.dp)) {
+        Canvas(Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 36.dp)) {
             val coordinates = points.mapIndexedNotNull { index, point ->
                 val x = point.x.toFloatOrNull()?.takeIf(Float::isFinite)
                 val y = point.y.toFloatOrNull()?.takeIf(Float::isFinite)
@@ -676,8 +684,8 @@ private fun RobotFootprintDiagram(
             val minY = allPositions.minOf { it.y }
             val maxY = allPositions.maxOf { it.y }
             val scale = minOf(
-                size.width * 0.72f / (maxY - minY).coerceAtLeast(0.5f),
-                size.height * 0.72f / (maxX - minX).coerceAtLeast(0.5f)
+                (size.width - 160.dp.toPx()).coerceAtLeast(size.width * 0.35f) / (maxY - minY).coerceAtLeast(0.5f),
+                size.height * 0.68f / (maxX - minX).coerceAtLeast(0.5f)
             )
             val centerX = (minX + maxX) / 2f
             val centerY = (minY + maxY) / 2f
@@ -702,33 +710,22 @@ private fun RobotFootprintDiagram(
                     textSize = 12.sp.toPx()
                     isFakeBoldText = true
                 }
-                val measureColor = Color(0xFF6B8DB6)
-                val verticalX = (origin.x + 28.dp.toPx()).coerceAtMost(size.width - 75.dp.toPx())
-                val horizontalY = (origin.y + 30.dp.toPx()).coerceAtMost(size.height - 24.dp.toPx())
-                fun verticalDistance(label: String, distance: Float, forward: Boolean) {
-                    if (distance <= 0f) return
-                    val end = origin.y + if (forward) -distance * scale else distance * scale
-                    drawLine(measureColor, Offset(verticalX, origin.y), Offset(verticalX, end), 1.5.dp.toPx())
-                    drawLine(measureColor, Offset(verticalX - 4.dp.toPx(), end), Offset(verticalX + 4.dp.toPx(), end), 1.5.dp.toPx())
-                    drawContext.canvas.nativeCanvas.drawText(
-                        "$label ${formatValue(distance.toDouble())} m",
-                        verticalX + 6.dp.toPx(), (origin.y + end) / 2f, distancePaint
-                    )
+                // 距离放在车身四侧，图内不再画交叉量尺。
+                fun distanceLabel(label: String, distance: Float, position: Offset, align: Paint.Align) {
+                    distancePaint.textAlign = align
+                    val text = "$label ${formatValue(distance.toDouble())} m"
+                    val halfWidth = distancePaint.measureText(text) / 2f
+                    val x = when (align) {
+                        Paint.Align.CENTER -> position.x.coerceIn(halfWidth, size.width - halfWidth)
+                        Paint.Align.RIGHT -> position.x.coerceAtLeast(halfWidth * 2f)
+                        else -> position.x.coerceAtMost(size.width - halfWidth * 2f)
+                    }
+                    drawContext.canvas.nativeCanvas.drawText(text, x, position.y, distancePaint)
                 }
-                fun horizontalDistance(label: String, distance: Float, toLeft: Boolean) {
-                    if (distance <= 0f) return
-                    val end = origin.x + if (toLeft) -distance * scale else distance * scale
-                    drawLine(measureColor, Offset(origin.x, horizontalY), Offset(end, horizontalY), 1.5.dp.toPx())
-                    drawLine(measureColor, Offset(end, horizontalY - 4.dp.toPx()), Offset(end, horizontalY + 4.dp.toPx()), 1.5.dp.toPx())
-                    drawContext.canvas.nativeCanvas.drawText(
-                        "$label ${formatValue(distance.toDouble())} m",
-                        (origin.x + end) / 2f - 30.dp.toPx(), horizontalY + 17.dp.toPx(), distancePaint
-                    )
-                }
-                verticalDistance("前", front, true)
-                verticalDistance("后", rear, false)
-                horizontalDistance("左", left, true)
-                horizontalDistance("右", right, false)
+                distanceLabel("前", front, Offset(origin.x, screen(Offset(front, 0f)).y - 14.dp.toPx()), Paint.Align.CENTER)
+                distanceLabel("后", rear, Offset(origin.x, screen(Offset(-rear, 0f)).y + 24.dp.toPx()), Paint.Align.CENTER)
+                distanceLabel("左", left, Offset(screen(Offset(0f, left)).x - 10.dp.toPx(), origin.y + 4.dp.toPx()), Paint.Align.RIGHT)
+                distanceLabel("右", right, Offset(screen(Offset(0f, -right)).x + 10.dp.toPx(), origin.y + 4.dp.toPx()), Paint.Align.LEFT)
             }
 
             if (coordinates.size == points.size && coordinates.size >= 3) {
@@ -754,14 +751,20 @@ private fun RobotFootprintDiagram(
                 )
             }
 
-            val xArrow = origin + Offset(0f, -size.height * 0.25f)
-            drawLine(Color(0xFFE63838), origin, xArrow, strokeWidth = 2.dp.toPx())
-            drawLine(Color(0xFFE63838), xArrow, xArrow + Offset(-6.dp.toPx(), 11.dp.toPx()), strokeWidth = 2.dp.toPx())
-            drawLine(Color(0xFFE63838), xArrow, xArrow + Offset(6.dp.toPx(), 11.dp.toPx()), strokeWidth = 2.dp.toPx())
-            val yArrow = origin + Offset(-size.width * 0.25f, 0f)
-            drawLine(Color(0xFF2DAE55), origin, yArrow, strokeWidth = 2.dp.toPx())
-            drawLine(Color(0xFF2DAE55), yArrow, yArrow + Offset(11.dp.toPx(), -6.dp.toPx()), strokeWidth = 2.dp.toPx())
-            drawLine(Color(0xFF2DAE55), yArrow, yArrow + Offset(11.dp.toPx(), 6.dp.toPx()), strokeWidth = 2.dp.toPx())
+            val axisLength = 42.dp.toPx()
+            val axisPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { textSize = 11.sp.toPx(); isFakeBoldText = true }
+            val xEnd = origin + Offset(0f, -axisLength)
+            val yEnd = origin + Offset(-axisLength, 0f)
+            drawLine(Color.Red, origin, xEnd, 2.dp.toPx())
+            drawLine(Color.Red, xEnd, xEnd + Offset(-4.dp.toPx(), 7.dp.toPx()), 2.dp.toPx())
+            drawLine(Color.Red, xEnd, xEnd + Offset(4.dp.toPx(), 7.dp.toPx()), 2.dp.toPx())
+            drawLine(Color(0xFF2DAE55), origin, yEnd, 2.dp.toPx())
+            drawLine(Color(0xFF2DAE55), yEnd, yEnd + Offset(7.dp.toPx(), -4.dp.toPx()), 2.dp.toPx())
+            drawLine(Color(0xFF2DAE55), yEnd, yEnd + Offset(7.dp.toPx(), 4.dp.toPx()), 2.dp.toPx())
+            axisPaint.color = android.graphics.Color.RED
+            drawContext.canvas.nativeCanvas.drawText("X（前）", xEnd.x + 6.dp.toPx(), xEnd.y, axisPaint)
+            axisPaint.color = android.graphics.Color.rgb(45, 174, 85)
+            drawContext.canvas.nativeCanvas.drawText("Y（左）", yEnd.x - 6.dp.toPx(), yEnd.y - 8.dp.toPx(), axisPaint)
 
             if ((laserPosition - origin).getDistance() > 1.dp.toPx()) {
                 drawLine(DesignMutedBlue, origin, laserPosition, strokeWidth = 1.dp.toPx(),
@@ -795,10 +798,8 @@ private fun RobotFootprintDiagram(
                 )
             }
         }
-        Text("X（前）", Modifier.align(Alignment.TopCenter).padding(top = 22.dp), color = Color.Red, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-        Text("Y（左）", Modifier.align(Alignment.CenterStart).padding(start = 20.dp), color = Color(0xFF25C923), fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Text("蓝点：Footprint 顶点   ● base_link   ◯ base_laser_link",
-            Modifier.align(Alignment.BottomCenter).padding(bottom = 22.dp),
+            Modifier.align(Alignment.BottomCenter).padding(bottom = 10.dp),
             color = DesignMutedBlue, fontSize = 11.sp, textAlign = TextAlign.Center)
     }
 }
@@ -806,9 +807,9 @@ private fun RobotFootprintDiagram(
 @Composable
 private fun DesignSectionHeader(text: String, accent: Color = DesignBlue, modifier: Modifier = Modifier) {
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Box(Modifier.width(6.dp).height(36.dp).clip(RoundedCornerShape(6.dp)).background(accent))
+        Box(Modifier.width(4.dp).height(22.dp).clip(RoundedCornerShape(6.dp)).background(accent))
         Spacer(Modifier.width(12.dp))
-        Text(text, fontSize = 19.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
     }
 }
 
@@ -817,20 +818,21 @@ private fun FootprintPointRow(
     index: Int,
     point: FootprintPointUi,
     onXChange: (String) -> Unit,
-    onYChange: (String) -> Unit
+    onYChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("顶点 ${index + 1}", Modifier.width(78.dp), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-        Text("x (m)", fontSize = 13.sp, color = DesignNavy)
+    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text("P${index + 1}", Modifier.width(24.dp), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Text("x", fontSize = 11.sp, color = DesignNavy)
         CompactValueField(point.x, onXChange, Modifier.weight(1f))
-        Text("y (m)", fontSize = 13.sp, color = DesignNavy)
+        Text("y", fontSize = 11.sp, color = DesignNavy)
         CompactValueField(point.y, onYChange, Modifier.weight(1f))
     }
 }
 
 @Composable
 private fun DimensionSummary(width: String, length: String) {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Color(0xFFF0F8FF)).padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Color(0xFFF0F8FF)).padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
         Text("宽度  $width m", Modifier.weight(1f), textAlign = TextAlign.Center, fontSize = 14.sp, color = DesignNavy, fontWeight = FontWeight.Bold)
         Box(Modifier.width(1.dp).height(22.dp).background(Color(0xFFD5E7F8)))
         Text("长度  $length m", Modifier.weight(1f), textAlign = TextAlign.Center, fontSize = 14.sp, color = DesignNavy, fontWeight = FontWeight.Bold)
@@ -839,9 +841,9 @@ private fun DimensionSummary(width: String, length: String) {
 
 @Composable
 private fun GeometryField(label: String, value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        Text(label, fontSize = 12.sp, color = DesignNavy)
-        CompactValueField(value, onChange, Modifier.fillMaxWidth())
+    Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, fontSize = 11.sp, color = DesignNavy)
+        CompactValueField(value, onChange, Modifier.weight(1f))
     }
 }
 
@@ -852,8 +854,8 @@ private fun CompactValueField(value: String, onValueChange: (String) -> Unit, mo
         onValueChange = onValueChange,
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp, color = Color(0xFF18213A), textAlign = TextAlign.Center),
-        modifier = modifier.height(42.dp).clip(RoundedCornerShape(6.dp)).background(Color.White).border(1.dp, DesignLine, RoundedCornerShape(6.dp)).padding(horizontal = 10.dp, vertical = 10.dp)
+        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 14.sp, color = Color(0xFF18213A), textAlign = TextAlign.Center),
+        modifier = modifier.height(34.dp).clip(RoundedCornerShape(6.dp)).background(Color.White).border(1.dp, DesignLine, RoundedCornerShape(6.dp)).padding(horizontal = 6.dp, vertical = 7.dp)
     )
 }
 
@@ -864,9 +866,9 @@ private fun SettingsActionBar(
     onRestore: () -> Unit,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    Row(modifier, horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(
-            Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(10.dp)).background(Color.White)
+            Modifier.weight(1f).height(48.dp).clip(RoundedCornerShape(10.dp)).background(Color.White)
                 .border(1.dp, DesignBlue, RoundedCornerShape(10.dp)).clickable(onClick = onApply),
             contentAlignment = Alignment.Center
         ) {
@@ -874,7 +876,7 @@ private fun SettingsActionBar(
         }
         DesignActionButton("保存为默认", onSave, Modifier.weight(1f))
         Box(
-            Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(10.dp))
+            Modifier.weight(1f).height(48.dp).clip(RoundedCornerShape(10.dp))
                 .background(Color(0xFFF0F8FF)).clickable(onClick = onRestore),
             contentAlignment = Alignment.Center
         ) {
@@ -885,15 +887,15 @@ private fun SettingsActionBar(
 
 @Composable
 private fun SettingsPanelFooter(onApply: () -> Unit, onSave: () -> Unit, onRestore: () -> Unit) {
-    Spacer(Modifier.height(16.dp))
+    Spacer(Modifier.height(8.dp))
     Box(Modifier.fillMaxWidth().height(1.dp).background(DesignLine))
-    Spacer(Modifier.height(16.dp))
+    Spacer(Modifier.height(8.dp))
     SettingsActionBar(onApply, onSave, onRestore)
 }
 
 @Composable
 private fun DesignActionButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier.height(52.dp).clip(RoundedCornerShape(10.dp)).background(DesignBlue).clickable(onClick = onClick), contentAlignment = Alignment.Center) {
+    Box(modifier.height(48.dp).clip(RoundedCornerShape(10.dp)).background(DesignBlue).clickable(onClick = onClick), contentAlignment = Alignment.Center) {
         Text(text, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
 }
@@ -924,15 +926,15 @@ private fun RppConfigContent(
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.86f))
             .border(2.dp, Color.White.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .padding(horizontal = 28.dp, vertical = 22.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(horizontal = 18.dp, vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text("导航参数", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Text("导航参数", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
         Text("临时应用立即生效；保存为默认写入板端配置。", fontSize = 13.sp, color = DesignMutedBlue)
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
-        val compact = maxWidth < 760.dp
+        val compact = maxWidth < 640.dp
         val left: @Composable (Modifier) -> Unit = { columnModifier ->
-            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 RppCard("速度", "控制机器人整体运动速度和加速度", Color(0xFF149FE8)) {
                     RppTextRow("目标跟踪速度", "m/s", RppTextField.DESIRED_LINEAR_VEL, rpp.desiredLinearVel, onTextChange)
                     RppTextRow("最大线速度", "m/s", RppTextField.MAX_LINEAR_VEL, rpp.maxLinearVel, onTextChange)
@@ -953,7 +955,7 @@ private fun RppConfigContent(
             }
         }
         val right: @Composable (Modifier) -> Unit = { columnModifier ->
-            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 RppCard("直线 / 曲率跟踪", "影响直线跟踪稳定性和转弯平滑性", Color(0xFF149FE8)) {
                     RppTextRow("前视距离", "m", RppTextField.LOOKAHEAD_DIST, rpp.lookaheadDist, onTextChange)
                     RppTextRow("最小前视", "m", RppTextField.MIN_LOOKAHEAD_DIST, rpp.minLookaheadDist, onTextChange)
@@ -975,12 +977,12 @@ private fun RppConfigContent(
             }
         }
         if (compact) {
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 left(Modifier.fillMaxWidth())
                 right(Modifier.fillMaxWidth())
             }
         } else {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 left(Modifier.weight(1f))
                 right(Modifier.weight(1f))
             }
@@ -1004,15 +1006,15 @@ private fun PathPlanningConfigContent(
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.86f))
             .border(2.dp, Color.White.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .padding(horizontal = 28.dp, vertical = 22.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+            .padding(horizontal = 18.dp, vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text("路径规划参数", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+        Text("路径规划参数", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
         Text("影响扫描路径、安全距离和绕柱策略。临时应用立即生效；保存为默认写入板端配置。", fontSize = 13.sp, color = DesignMutedBlue)
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState())) {
-        val compact = maxWidth < 760.dp
+        val compact = maxWidth < 640.dp
         val left: @Composable (Modifier) -> Unit = { columnModifier ->
-            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 RppCard("路径安全", "控制障碍物边界和作业区域留边", Color(0xFFFFA31A), warning = true) {
                     PathPlanningTextRow(
                         "障碍物膨胀距离", "m", "planner.inflation_radius",
@@ -1044,7 +1046,7 @@ private fun PathPlanningConfigContent(
             }
         }
         val right: @Composable (Modifier) -> Unit = { columnModifier ->
-            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(columnModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 RppCard("柱体绕行", "控制角度对齐后的柱体识别和绕行", Color(0xFF149FE8)) {
                     PathPlanningTextRow(
                         "柱体矩形膨胀距离", "m", "planner.aligned_obstacle_inflation",
@@ -1074,12 +1076,12 @@ private fun PathPlanningConfigContent(
             }
         }
         if (compact) {
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 left(Modifier.fillMaxWidth())
                 right(Modifier.fillMaxWidth())
             }
         } else {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 left(Modifier.weight(1f))
                 right(Modifier.weight(1f))
             }
@@ -1099,36 +1101,57 @@ private fun PathPlanningTextRow(
     onChange: (PathPlanningTextField, String) -> Unit
 ) {
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 58.dp),
+        parameterCellModifier(LocalParameterCellWidth.current).heightIn(min = 36.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(label, Modifier.weight(1f), fontSize = 15.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 20.sp)
-        CompactValueField(value, { onChange(field, it) }, Modifier.width(106.dp))
-        Text(unit, Modifier.width(40.dp), fontSize = 13.sp, color = DesignMutedBlue)
+        Text(label, Modifier.weight(1f), fontSize = 13.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 16.sp)
+        CompactValueField(value, { onChange(field, it) }, Modifier.width(62.dp))
+        Text(unit, Modifier.width(30.dp), fontSize = 13.sp, color = DesignMutedBlue)
     }
 }
 
+private val LocalParameterCellWidth = staticCompositionLocalOf { 0.dp }
+
+private fun parameterCellModifier(width: Dp): Modifier =
+    if (width > 0.dp) Modifier.width(width) else Modifier.fillMaxWidth()
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RppCard(
     title: String,
     subtitle: String,
     accent: Color,
     warning: Boolean = false,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable () -> Unit
 ) {
     Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(if (warning) Color(0xFFFFFCF5) else Color(0xFFF8FBFF)).border(1.dp, if (warning) Color(0xFFFFD48A) else Color(0xFFE1ECF7), RoundedCornerShape(14.dp))
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
+            .background(if (warning) Color(0xFFFFFCF5) else Color(0xFFF8FBFF))
+            .border(1.dp, if (warning) Color(0xFFFFD48A) else Color(0xFFE1ECF7), RoundedCornerShape(10.dp))
     ) {
-        Column(Modifier.fillMaxWidth().background(if (warning) Color(0xFFFFF9ED) else Color(0xFFF1F8FF)).padding(horizontal = 18.dp, vertical = 12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.width(5.dp).height(28.dp).clip(RoundedCornerShape(4.dp)).background(accent))
-            Spacer(Modifier.width(12.dp))
-            Text(title, fontSize = 19.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-            }
-            Text(subtitle, Modifier.padding(start = 17.dp, top = 3.dp), fontSize = 12.sp, color = DesignMutedBlue)
+        Row(
+            Modifier.fillMaxWidth().background(if (warning) Color(0xFFFFF9ED) else Color(0xFFF1F8FF))
+                .padding(horizontal = 10.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Box(Modifier.width(3.dp).height(20.dp).background(accent))
+            Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+            Text(subtitle, Modifier.weight(1f), fontSize = 10.sp, color = DesignMutedBlue,
+                maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        Column(Modifier.padding(horizontal = 18.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(1.dp), content = content)
+        BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)) {
+            val columns = if (maxWidth >= 300.dp) 2 else 1
+            val cellWidth = (maxWidth - 8.dp * (columns - 1)) / columns
+            CompositionLocalProvider(LocalParameterCellWidth provides cellWidth) {
+                FlowRow(
+                    Modifier.fillMaxWidth(), maxItemsInEachRow = columns,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) { content() }
+            }
+        }
     }
 }
 
@@ -1140,10 +1163,10 @@ private fun RppTextRow(
     value: String,
     onChange: (RppTextField, String) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth().heightIn(min = 54.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(label, Modifier.weight(1f), fontSize = 15.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 20.sp)
-        CompactValueField(value, { onChange(field, it) }, Modifier.width(106.dp))
-        Text(unit, Modifier.width(40.dp), fontSize = 13.sp, color = DesignMutedBlue)
+    Row(parameterCellModifier(LocalParameterCellWidth.current).heightIn(min = 36.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, Modifier.weight(1f), fontSize = 13.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 16.sp)
+        CompactValueField(value, { onChange(field, it) }, Modifier.width(62.dp))
+        Text(unit, Modifier.width(30.dp), fontSize = 13.sp, color = DesignMutedBlue)
     }
 }
 
@@ -1154,9 +1177,9 @@ private fun RppToggleRow(
     field: RppToggleField,
     onChange: (RppToggleField, Boolean) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth().heightIn(min = 54.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(label, Modifier.weight(1f), fontSize = 15.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 20.sp)
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(parameterCellModifier(LocalParameterCellWidth.current).heightIn(min = 36.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, Modifier.weight(1f), fontSize = 13.sp, color = DesignNavy, fontWeight = FontWeight.Medium, lineHeight = 16.sp)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             CompactSwitch(checked, { onChange(field, it) })
             Text(if (checked) "开启" else "关闭", fontSize = 13.sp, color = DesignMutedBlue)
         }

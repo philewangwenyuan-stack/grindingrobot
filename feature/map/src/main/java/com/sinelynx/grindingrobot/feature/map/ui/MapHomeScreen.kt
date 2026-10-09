@@ -1,7 +1,6 @@
 package com.sinelynx.grindingrobot.feature.map.ui
 
 import android.graphics.BitmapFactory
-import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +23,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.withFrameNanos
+import android.os.SystemClock
+import com.sinelynx.grindingrobot.core.util.log.LogUtils
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -121,6 +126,12 @@ fun MapHomeScreen(
     LaunchedEffect(Unit) {
         onEnter()
     }
+    LaunchedEffect(maps, isMapCatalogLoading) {
+        if (!isMapCatalogLoading && maps.isNotEmpty()) {
+            withFrameNanos { }
+            LogUtils.d("MapCatalogPerf", "list frame scheduled count=${maps.size}, atMs=${SystemClock.elapsedRealtime()}")
+        }
+    }
     var pendingDeleteMap by remember { mutableStateOf<MapHomeListItem?>(null) }
     var previewMap by remember { mutableStateOf<MapHomeListItem?>(null) }
     var startTaskMap by remember { mutableStateOf<MapHomeListItem?>(null) }
@@ -133,7 +144,7 @@ fun MapHomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        if (isMapCatalogLoading) {
+        if (isMapCatalogLoading && maps.isEmpty()) {
             MapCatalogLoadingState(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -149,14 +160,13 @@ fun MapHomeScreen(
                 EmptyMapState()
             }
         } else {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
+                    .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                maps.forEach { map ->
+                items(maps, key = { it.mapId }) { map ->
                     MapItemRow(
                         map = map,
                         onDeleteClick = { pendingDeleteMap = map },
@@ -358,16 +368,6 @@ private fun EmptyMapState(
     }
 }
 
-private fun decodeBase64ThumbnailToImageBitmap(base64: String): ImageBitmap? {
-    val trimmed = base64.trim()
-    if (trimmed.isEmpty()) return null
-    val payload = trimmed.substringAfter(",", trimmed)
-    return runCatching {
-        val bytes = Base64.decode(payload.trim(), Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-    }.getOrNull()
-}
-
 @Composable
 private fun MapItemRow(
     map: MapHomeListItem,
@@ -384,9 +384,11 @@ private fun MapItemRow(
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val thumbnailBitmap = remember(map.base64Image) {
-            decodeBase64ThumbnailToImageBitmap(map.base64Image)
+        val thumbnailState = produceState<ImageBitmap?>(null, map.base64Image) {
+            value = null
+            value = MapThumbnailLoader.load(map.base64Image)?.asImageBitmap()
         }
+        val thumbnailBitmap = thumbnailState.value
         Box(
             modifier = Modifier
                 .size(68.dp)

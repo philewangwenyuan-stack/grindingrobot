@@ -1,12 +1,9 @@
 package com.sinelynx.grindingrobot.feature.map.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,20 +14,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.sinelynx.grindingrobot.core.model.state.DevicePosePayload
 import com.sinelynx.grindingrobot.core.data.state.AppState
-import com.sinelynx.grindingrobot.feature.map.R
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
 import kotlin.math.cos
-import kotlin.math.roundToInt
 import kotlin.math.sin
 
 fun robotPoseToBitmapPoint(
@@ -199,8 +192,27 @@ fun BoxScope.FootprintRobotMarker(
         }
         drawPath(outline, Color(0x55149FE8))
         drawPath(outline, Color(0xFF0879D1), style = Stroke(width = 2.dp.toPx()))
-        drawCircle(Color(0xFF0B1645), radius = 3.dp.toPx(), center = center)
+        drawRobotHeading(center, headingDeg)
     }
+}
+
+/** 黑点精确锚定 base_link，单个箭头沿机器人 +X 方向。 */
+internal fun DrawScope.drawRobotHeading(center: Offset, headingDeg: Float, arrowLength: Float = 24.dp.toPx()) {
+    val radians = Math.toRadians(headingDeg.toDouble())
+    val direction = Offset(cos(radians).toFloat(), -sin(radians).toFloat())
+    val side = Offset(-direction.y, direction.x)
+    val color = Color(0xFF0879D1)
+    val dotRadius = 3.dp.toPx()
+    val length = arrowLength.coerceAtLeast(18.dp.toPx())
+    val head = 5.dp.toPx()
+    run {
+        val tip = center + direction * length
+        val start = center + direction * dotRadius
+        drawLine(color, start, tip, 2.dp.toPx(), cap = StrokeCap.Round)
+        drawLine(color, tip - direction * head + side * head * 0.7f, tip, 2.dp.toPx(), cap = StrokeCap.Round)
+        drawLine(color, tip - direction * head - side * head * 0.7f, tip, 2.dp.toPx(), cap = StrokeCap.Round)
+    }
+    drawCircle(Color.Black, dotRadius, center)
 }
 
 private fun Offset.rotateAround(center: Offset, rotationDeg: Float): Offset {
@@ -223,22 +235,13 @@ fun BoxScope.RobotPoseIcon(
     width: Dp,
     length: Dp
 ) {
-    val density = LocalDensity.current
-    val widthPx = with(density) { width.toPx() }
-    val lengthPx = with(density) { length.toPx() }
-    Image(
-        painter = painterResource(id = R.drawable.ic_robot),
-        contentDescription = "机器人位置",
-        modifier = Modifier
-            .offset {
-                IntOffset(
-                    x = (center.x - widthPx / 2f).roundToInt(),
-                    y = (center.y - lengthPx / 2f).roundToInt()
-                )
-            }
-            .size(width = width, height = length)
-            .graphicsLayer(rotationZ = 90f - headingDeg)
+    val footprint = listOf(
+        AppState.FootprintPoint(0.5f, 0.5f), AppState.FootprintPoint(0.5f, -0.5f),
+        AppState.FootprintPoint(-0.5f, -0.5f), AppState.FootprintPoint(-0.5f, 0.5f)
     )
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    FootprintRobotMarker(center, headingDeg, footprint,
+        with(density) { length.toPx() }, with(density) { width.toPx() })
 }
 
 @Composable

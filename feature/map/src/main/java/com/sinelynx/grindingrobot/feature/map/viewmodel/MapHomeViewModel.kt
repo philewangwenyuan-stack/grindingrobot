@@ -12,6 +12,7 @@ import com.sinelynx.grindingrobot.core.model.state.MapMetricsStream
 import com.sinelynx.grindingrobot.core.model.state.MapPreviewStream
 import com.sinelynx.grindingrobot.core.model.state.MapPreviewRegionPayload
 import android.graphics.BitmapFactory
+import android.os.SystemClock
 import com.sinelynx.grindingrobot.core.model.state.MapImageStream
 import com.sinelynx.grindingrobot.core.model.state.MapImportToRadarStream
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPointStream
@@ -284,6 +285,8 @@ class MapHomeViewModel @Inject constructor(
     private val _mapModeEvents = MutableSharedFlow<MapModeStartEvent>(extraBufferCapacity = 1)
     val mapModeEvents: SharedFlow<MapModeStartEvent> = _mapModeEvents.asSharedFlow()
     private var mapCatalogTimeoutJob: Job? = null
+    private var mapCatalogRequestedAtMs: Long? = null
+    private var mapCatalogRequestNumber = 0
     private var mapModeStartJob: Job? = null
     private var pendingPreviewMapId: String? = null
     private var mapPreviewTimeoutJob: Job? = null
@@ -500,6 +503,10 @@ class MapHomeViewModel @Inject constructor(
             MapCatalogStream.payload.collect { payload ->
                 payload ?: return@collect
                 mapCatalogTimeoutJob?.cancel()
+                val requestedAt = mapCatalogRequestedAtMs
+                mapCatalogRequestedAtMs = null
+                LogUtils.d("MapCatalogPerf", "catalog delivered request=$mapCatalogRequestNumber, " +
+                    "requestToDeliveryMs=${requestedAt?.let { SystemClock.elapsedRealtime() - it }}, count=${payload.items.size}")
                 if (!payload.isSuccess) {
                     _uiState.update { it.copy(isMapCatalogLoading = false) }
                     ToastUtils.show("获取任务列表失败")
@@ -1079,13 +1086,19 @@ class MapHomeViewModel @Inject constructor(
     }
 
     fun requestMapCatalogOnEnter() {
+        if (_uiState.value.isMapCatalogLoading) return
         if (appState.robotSettings.value == null) {
             tcpManager.requestSettingRead(readChassis = true, readMap = true)
         }
         MapCatalogStream.reset()
         _uiState.update { it.copy(isMapCatalogLoading = true) }
+        mapCatalogTimeoutJob?.cancel()
+        mapCatalogRequestedAtMs = SystemClock.elapsedRealtime()
+        mapCatalogRequestNumber++
+        LogUtils.d("MapCatalogPerf", "catalog request submitted request=$mapCatalogRequestNumber, atMs=$mapCatalogRequestedAtMs")
         val sent = tcpManager.requestMapCatalog()
         if (!sent) {
+            mapCatalogRequestedAtMs = null
             _uiState.update { it.copy(isMapCatalogLoading = false) }
             ToastUtils.show("获取任务列表失败")
             return
@@ -1093,8 +1106,10 @@ class MapHomeViewModel @Inject constructor(
 
         mapCatalogTimeoutJob?.cancel()
         mapCatalogTimeoutJob = viewModelScope.launch {
-            delay(MAP_TCP_REQUEST_TIMEOUT_MS)
+            delay(MAP_CATALOG_REQUEST_TIMEOUT_MS)
             if (_uiState.value.isMapCatalogLoading) {
+                mapCatalogRequestedAtMs = null
+                LogUtils.w("MapCatalogPerf", "catalog timeout request=$mapCatalogRequestNumber")
                 _uiState.update { it.copy(isMapCatalogLoading = false) }
                 ToastUtils.show("获取任务列表失败")
             }

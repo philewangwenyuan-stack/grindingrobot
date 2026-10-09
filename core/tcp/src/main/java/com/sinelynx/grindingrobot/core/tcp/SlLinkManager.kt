@@ -1006,15 +1006,13 @@ class SlLinkManager @Inject constructor(
      */
     private fun handleMapCatalogResponse(frame: SlFrame) {
         try {
+            val startedAt = android.os.SystemClock.elapsedRealtime()
             val payload = frame.payload
             if (payload.isEmpty()) {
                 LogUtils.w("地图目录响应payload为空")
                 return
             }
             val response = SlLink.MapCatalogResponse.parseFrom(payload)
-            LogUtils.d(
-                "地图目录响应: " + response.itemsList
-            )
             MapCatalogStream.publish(
                 MapCatalogPayload(
                     resultValue = response.resultValue,
@@ -1036,6 +1034,10 @@ class SlLinkManager @Inject constructor(
                     }
                 )
             )
+            LogUtils.d("MapCatalogPerf",
+                "response seq=${frame.seq}, count=${response.itemsCount}, bytes=${payload.size}, " +
+                    "parsePublishMs=${android.os.SystemClock.elapsedRealtime() - startedAt}, " +
+                    "receivedAtMs=$startedAt")
         } catch (e: Exception) {
             LogUtils.e("解析地图目录响应失败: ${e.message}")
         }

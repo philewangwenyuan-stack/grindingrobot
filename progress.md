@@ -100,3 +100,36 @@
 - 已接入建图 Step1～Step4、导航地图预览、远程地图预览及轨迹回放；进入地图页且设置未加载时主动读取一次设置。
 - `MapRobotMarkerTest` 定向投影测试通过；`:feature:map:compileDevDebugKotlin`、`:feature:main:compileDevDebugKotlin`、`:app:assembleDevDebug` 通过。新 arm64/v7a APK 均于 18:17:58 生成。
 - 无连接 Android 设备，未做真机视觉验收。
+
+
+## 2026-10-09 图标与紧凑布局
+
+已定位标记和三个设置页实现；保留 Footprint 米制轮廓和坐标投影，增加直接绘制的方向标记。
+
+- 已完成旋转绘制图标和 ±5° 方向修正、地图中心点/双箭头、旧导航资源替换、设置三页紧凑间距、图内十字轴移除与四向距离标注。
+- 无 adb 设备，未进行真机视觉验证。初次全量验证发现已有路径颜色断言和 GNSS 测试源码编译问题，改为最终源码编译、地图标记/重定位定向测试以及 device 测试验证。
+
+- 最终验证 BUILD SUCCESSFUL：feature:map/main/device 的 compileDevDebugKotlin；MapRobotMarkerTest、RelocalizationCoordinateTransformTest；feature:device:testDevDebugUnitTest。git diff --check 通过。
+
+
+## 2026-10-09 地图列表卡顿
+
+开始修复列表卡顿：保留已加载列表，改 LazyColumn、后台采样解码和 8 MiB 内容缓存，增加 MapCatalogPerf 分段日志。
+
+- 验证通过：core:tcp 56 项单测、map 缩略图采样/标记/重定位 8 项定向单测；map/main/device 最终编译成功。地图列表独立超时从 180 s 调整为 15 s。MapCatalogPerf 日志记录请求提交、响应 seq/大小/解析发布耗时、交付 UI 的等待、列表帧调度和缩略图解码。暂无设备，未测实际端到端改善。
+
+
+## 2026-10-09 APK 打包及日志查看
+
+- 用户要求编译，正在执行 :app:assembleDevDebug。MapCatalogPerf 使用 LogUtils.d，源码明确跳过 DEBUG 文件写入，需在 Logcat 查看；可用 adb logcat -v threadtime MapCatalogPerf:V *:S 实时采集。
+
+- :app:assembleDevDebug 成功（2m52s），输出 app-dev-arm64-v8a-debug.apk 和 app-dev-armeabi-v7a-debug.apk；已向用户提供 Logcat 实时查看与重定向导出命令。
+
+
+## 2026-10-09 单箭头及单页参数布局
+
+按反馈改为单箭头并增加真实轮廓透传；恢复坐标轴、距离保持四侧；分组内双列，外参短行，保留窄屏滚动以免隐藏字段。
+
+- 单箭头及设备轮廓已完成；导航从 robotSettings 透传 Footprint，并按任务地图分辨率/Fit/缩放绘制；重定位按编辑姿态绘制同一轮廓。fallback 资源也带外框。恢复 X 前/Y 左坐标轴。
+- 参数卡内部双列，Footprint 可双列顶点，激光外参两行内联标签；短行输入框与卡片标题使横屏优先单页显示。小屏继续允许滚动。
+- 地图标记/重定位 5 项与设备 27 项单测通过；最终 :app:assembleDevDebug 成功，APK 已更新。无连接设备，单页视觉仍需真机确认。

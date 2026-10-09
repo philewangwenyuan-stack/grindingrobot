@@ -226,12 +226,9 @@ class TcpManager @Inject constructor(
             }
 
             override fun onDataReceived(data: ByteArray, arrivalMonotonicS: Double) {
-                val hexString = data.joinToString("") { "%02x".format(it) }
-//                LogUtils.d("APP收到Hex: $hexString")
                 // 使用SlLinkManager解析数据，自动处理粘包拆包
                 try {
-                    val frames = slLinkManager.handleReceivedData(data, arrivalMonotonicS)
-//                    LogUtils.d("APP解析到 ${frames.size} 个完整帧")
+                    slLinkManager.handleReceivedData(data, arrivalMonotonicS)
                 } catch (e: Exception) {
                     LogUtils.e("解析数据帧失败: ${e.message}")
                 }

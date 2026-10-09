@@ -40,7 +40,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.core.model.state.DevicePosePayload
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapPreviewPointItem
@@ -77,6 +80,9 @@ private data class RelocalizationPose(
 internal fun RelocalizationDialog(
     mapPreview: MapPreviewUiState?,
     robotPose: DevicePosePayload?,
+    robotFootprint: List<AppState.FootprintPoint>,
+    robotWidth: Double?,
+    robotLength: Double?,
     isSuccessful: Boolean,
     rawStatus: String,
     runSpeed: Float,
@@ -184,6 +190,9 @@ internal fun RelocalizationDialog(
                         mapPreview = mapPreview,
                         previewBitmap = previewBitmap,
                         pose = pose,
+                        robotFootprint = robotFootprint,
+                        robotWidth = robotWidth,
+                        robotLength = robotLength,
                         isEditing = isEditing,
                         onPoseChanged = { pose = it },
                         modifier = Modifier
@@ -236,6 +245,9 @@ private fun RelocalizationMapPanel(
     mapPreview: MapPreviewUiState?,
     previewBitmap: ImageBitmap?,
     pose: RelocalizationPose,
+    robotFootprint: List<AppState.FootprintPoint>,
+    robotWidth: Double?,
+    robotLength: Double?,
     isEditing: Boolean,
     onPoseChanged: (RelocalizationPose) -> Unit,
     modifier: Modifier = Modifier
@@ -311,11 +323,24 @@ private fun RelocalizationMapPanel(
                         rotationDeg = displayRotation
                     )
                     if (markerPoint != null) {
-                        RelocalizationArrow(
-                            center = markerPoint,
-                            headingDeg = pose.headingDeg,
-                            mapRotationDeg = displayRotation
-                        )
+                        val heading = 90f - relocalizationArrowRotationDeg(pose.headingDeg - mapPreview.headingDeg, displayRotation)
+                        if (robotFootprint.size >= 3 && mapPreview.resolution > 0f) {
+                            val imageRect = fittedImageRect(
+                                Size(viewportSize.width.toFloat(), viewportSize.height.toFloat()),
+                                previewBitmap.width, previewBitmap.height
+                            )
+                            FootprintRobotMarker(
+                                center = markerPoint, headingDeg = heading, footprint = robotFootprint,
+                                pixelsPerMeterX = imageRect.width / mapPreview.mapWidth / mapPreview.resolution,
+                                pixelsPerMeterY = imageRect.height / mapPreview.mapHeight / mapPreview.resolution
+                            )
+                        } else {
+                            val length = 40.dp
+                            val width = if (robotWidth != null && robotLength != null && robotLength > 0.0) {
+                                length * (robotWidth / robotLength).toFloat().coerceIn(0.2f, 5f)
+                            } else 32.dp
+                            RobotPoseIcon(markerPoint, heading, width, length)
+                        }
                     }
                 }
             } else {
@@ -492,8 +517,39 @@ private fun RelocalizationAdjustPad(
         AdjustButton(text = "↓") { onMove(0f, -0.05f) }
         Spacer(modifier = Modifier.height(10.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            AdjustButton(text = "↺") { onRotate(-5f) }
-            AdjustButton(text = "↻") { onRotate(5f) }
+            RotateAdjustButton(clockwise = false) { onRotate(5f) }
+            RotateAdjustButton(clockwise = true) { onRotate(-5f) }
+        }
+    }
+}
+
+@Composable
+private fun RotateAdjustButton(clockwise: Boolean, onClick: () -> Unit) {
+    Box(
+        Modifier.size(48.dp).clip(RoundedCornerShape(12.dp))
+            .background(Color(0xFFEAF5FB))
+            .border(1.dp, Color(0xFFB9E1F4), RoundedCornerShape(12.dp))
+            .semantics { contentDescription = if (clockwise) "顺时针旋转 5 度" else "逆时针旋转 5 度" }
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(Modifier.size(28.dp)) {
+            val color = Color(0xFF008FD1)
+            val radius = size.minDimension * 0.34f
+            val start = -90f
+            val sweep = if (clockwise) 270f else -270f
+            drawArc(color, start, sweep, false,
+                topLeft = center - Offset(radius, radius),
+                size = Size(radius * 2, radius * 2),
+                style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round))
+            val tip = center + Offset(if (clockwise) -radius else radius, 0f)
+            val head = Path().apply {
+                moveTo(tip.x, tip.y - 4.dp.toPx())
+                lineTo(tip.x - 4.dp.toPx(), tip.y + 3.dp.toPx())
+                lineTo(tip.x + 4.dp.toPx(), tip.y + 3.dp.toPx())
+                close()
+            }
+            drawPath(head, color)
         }
     }
 }
@@ -518,44 +574,6 @@ private fun AdjustButton(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
-    }
-}
-
-@Composable
-private fun RelocalizationArrow(
-    center: Offset,
-    headingDeg: Float,
-    mapRotationDeg: Float
-) {
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        rotate(
-            // heading=0 points along map +X (screen right), heading=90 points along
-            // map +Y (screen up). The arrow itself is drawn from a screen-up base.
-            degrees = relocalizationArrowRotationDeg(headingDeg, mapRotationDeg),
-            pivot = center
-        ) {
-            val arrowLength = 18.dp.toPx()
-            val headLength = 6.dp.toPx()
-            val headHalfWidth = 4.dp.toPx()
-            val green = Color(0xFF2FB344)
-            val tip = center - Offset(0f, arrowLength)
-            drawLine(
-                color = green,
-                start = center,
-                end = tip,
-                strokeWidth = 2.5.dp.toPx(),
-                cap = StrokeCap.Round
-            )
-            val arrowHead = Path().apply {
-                moveTo(tip.x, tip.y)
-                lineTo(tip.x - headHalfWidth, tip.y + headLength)
-                lineTo(tip.x + headHalfWidth, tip.y + headLength)
-                close()
-            }
-            drawPath(arrowHead, color = green)
-            // 中心只保留一个小点，不再绘制外圈或圆形底座。
-            drawCircle(color = green, radius = 3.dp.toPx(), center = center)
-        }
     }
 }
 

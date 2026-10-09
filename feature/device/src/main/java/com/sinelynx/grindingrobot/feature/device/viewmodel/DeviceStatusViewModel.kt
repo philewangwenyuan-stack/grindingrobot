@@ -56,7 +56,8 @@ data class DeviceStatusUiState(
     val showCameraOverlay: Boolean = false,
     val videoStreamUrl: String? = null,
     val robotWidth: Double? = null,
-    val robotLength: Double? = null
+    val robotLength: Double? = null,
+    val robotFootprint: List<AppState.FootprintPoint> = emptyList()
 )
 
 enum class DeviceTaskUiState {
@@ -202,7 +203,8 @@ class DeviceStatusViewModel @Inject constructor(
                 _uiState.update { current ->
                     current.copy(
                         robotWidth = settings?.robotWidth,
-                        robotLength = settings?.robotLength
+                        robotLength = settings?.robotLength,
+                        robotFootprint = settings?.footprint.orEmpty()
                     )
                 }
             }

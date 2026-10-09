@@ -24,6 +24,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.sinelynx.grindingrobot.core.data.state.AppState
+import com.sinelynx.grindingrobot.feature.map.ui.FootprintRobotMarker
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -289,6 +291,7 @@ private fun TaskPreviewPanel(
             bitmapHeight = mapBitmap?.height ?: 0,
             robotWidth = uiState.robotWidth,
             robotLength = uiState.robotLength,
+            robotFootprint = uiState.robotFootprint,
             modifier = Modifier.fillMaxSize()
         )
 
@@ -524,6 +527,7 @@ private fun ZoomableTaskPreviewPanel(
                 pan = mapPan,
                 robotWidth = uiState.robotWidth,
                 robotLength = uiState.robotLength,
+                robotFootprint = uiState.robotFootprint,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -685,6 +689,7 @@ private fun ZoomableTaskTrajectoryOverlay(
     pan: Offset,
     robotWidth: Double?,
     robotLength: Double?,
+    robotFootprint: List<AppState.FootprintPoint>,
     modifier: Modifier = Modifier
 ) {
     if (trajectory.isEmpty() || mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
@@ -783,21 +788,31 @@ private fun ZoomableTaskTrajectoryOverlay(
         val drawWidthPx = with(density) { drawWidth.toPx() }
         val drawLengthPx = with(density) { drawLength.toPx() }
 
-        Image(
-            painter = painterResource(MapR.drawable.ic_robot),
-            contentDescription = "robot current position",
-            modifier = Modifier
-                .size(width = drawWidth, height = drawLength)
-                .offset {
-                    IntOffset(
-                        x = (robotCenter.x - drawWidthPx / 2f).roundToInt(),
-                        y = (robotCenter.y - drawLengthPx / 2f).roundToInt()
-                    )
-                }
-                .graphicsLayer {
-                    rotationZ = taskRobotRotationDeg(robotPoint.headingDeg, mapTransform)
-                }
-        )
+        if (robotFootprint.size >= 3) {
+            FootprintRobotMarker(
+                center = robotCenter,
+                headingDeg = 90f - taskRobotRotationDeg(robotPoint.headingDeg, mapTransform),
+                footprint = robotFootprint,
+                pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * zoom,
+                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution * zoom
+            )
+        } else {
+            Image(
+                painter = painterResource(MapR.drawable.ic_robot),
+                contentDescription = "robot current position",
+                modifier = Modifier
+                    .size(width = drawWidth, height = drawLength)
+                    .offset {
+                        IntOffset(
+                            x = (robotCenter.x - drawWidthPx / 2f).roundToInt(),
+                            y = (robotCenter.y - drawLengthPx / 2f).roundToInt()
+                        )
+                    }
+                    .graphicsLayer {
+                        rotationZ = taskRobotRotationDeg(robotPoint.headingDeg, mapTransform)
+                    }
+            )
+        }
     }
 }
 
@@ -809,6 +824,7 @@ private fun TaskTrajectoryOverlay(
     bitmapHeight: Int,
     robotWidth: Double?,
     robotLength: Double?,
+    robotFootprint: List<AppState.FootprintPoint>,
     modifier: Modifier = Modifier
 ) {
     if (trajectory.isEmpty() || mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
@@ -896,19 +912,29 @@ private fun TaskTrajectoryOverlay(
         )
         val drawX = robotCenter.x / density.density
         val drawY = robotCenter.y / density.density
-        Image(
-            painter = painterResource(MapR.drawable.ic_robot),
-            contentDescription = "机器人当前位置",
-            modifier = Modifier
-                .size(width = drawWidth, height = drawLength)
-                .offset(
-                    x = (drawX - drawWidth.value / 2f).dp,
-                    y = (drawY - drawLength.value / 2f).dp
-                )
-                .graphicsLayer {
-                    rotationZ = taskRobotRotationDeg(robotPoint.headingDeg, mapTransform)
-                }
-        )
+        if (robotFootprint.size >= 3) {
+            FootprintRobotMarker(
+                center = robotCenter,
+                headingDeg = 90f - taskRobotRotationDeg(robotPoint.headingDeg, mapTransform),
+                footprint = robotFootprint,
+                pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * 1f,
+                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution * 1f
+            )
+        } else {
+            Image(
+                painter = painterResource(MapR.drawable.ic_robot),
+                contentDescription = "机器人当前位置",
+                modifier = Modifier
+                    .size(width = drawWidth, height = drawLength)
+                    .offset(
+                        x = (drawX - drawWidth.value / 2f).dp,
+                        y = (drawY - drawLength.value / 2f).dp
+                    )
+                    .graphicsLayer {
+                        rotationZ = taskRobotRotationDeg(robotPoint.headingDeg, mapTransform)
+                    }
+            )
+        }
     }
 }
 

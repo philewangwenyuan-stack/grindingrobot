@@ -75,3 +75,21 @@
 - 地图标记共用 `feature/map/.../ui/MapRobotMarker.kt` 中的 `FittedMapRobotMarker`/`RobotPoseIcon`，当前只使用宽长比例缩放 `ic_robot`，并以图片中心旋转；无法表达前后不对称 Footprint 的 base_link 旋转中心。
 - `AppState.RobotSettingsState` 仅保存 `robotWidth/robotLength`；设置读取响应 `SlLinkManager.handleSettingsReadResponse` 已拿到 `MapSettings`，其中有 FootprintList，但未传给标记状态。
 - 建图 Step1/Step2/Step3 以及导航地图等 ViewModel 均订阅 `appState.robotSettings`，后续应把 Footprint 作为米制点列沿这条链路传递，绘制时使用地图分辨率确定 px/m，并固定 pose 为 base_link。
+
+
+## 2026-10-09 图标与紧凑布局
+
+旋转字符字体缺失；左侧逆时针应增加 heading，右侧顺时针应减小 heading。地图 Footprint 仅有中心点，设备导航轨迹仍使用旧 ic_robot。
+
+- 导航轨迹和图例共用 feature:map 的 ic_robot 资源；替换资源即可覆盖旧车身图标。Footprint 标记保留米制轮廓，增加黑点和朝向双箭头。
+- 地图全量测试：122 项中 4 项 TaskPathGeometryTest 失败，期望红色但当前路径实现为绿色；这两份文件均未修改。main 全量测试被既有 MainViewModelGnssDataEquivalenceTest 的 timestamp/gnss_pos_w 等字段引用编译错误阻断。
+
+
+## 2026-10-09 地图列表卡顿
+
+TCP IO 回调在日志注释后仍逐字节进行 String.format 十六进制转换，阻塞同一收包循环；目录行同步 Bitmap 解码且 Column 一次合成所有项；入口每次隐藏列表并无在途请求去重。
+
+
+## 2026-10-09 单箭头及单页参数布局
+
+设备导航只透传 width/length，轨迹标记沿用资源图，未透传 Footprint；重定位仅绘制箭头。设置页需要收紧分组内部字段并双列排列，而非仅缩小外边距。

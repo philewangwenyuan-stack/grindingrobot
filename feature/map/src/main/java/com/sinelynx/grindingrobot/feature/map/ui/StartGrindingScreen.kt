@@ -390,6 +390,9 @@ internal fun StartGrindingScreen(
         RelocalizationDialog(
             mapPreview = mapPreview,
             robotPose = robotPose,
+            robotFootprint = robotFootprint,
+            robotWidth = robotWidth,
+            robotLength = robotLength,
             isSuccessful = isRelocalizationSuccessful,
             rawStatus = relocalizationRawStatus,
             runSpeed = relocalizationRunSpeed,
