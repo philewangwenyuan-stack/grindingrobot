@@ -286,7 +286,7 @@ private fun RelocalizationMapPanel(
             }
             .pointerInput(Unit) {
                 detectTransformGestures { _, gesturePan, gestureZoom, _ ->
-                    zoom = (zoom * gestureZoom).coerceIn(1f, 4f)
+                    zoom = (zoom * gestureZoom).coerceIn(1f, 8f)
                     pan += gesturePan
                 }
             }
@@ -365,7 +365,7 @@ private fun RelocalizationMapPanel(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             MapZoomButton(text = "+") {
-                zoom = (zoom + 0.25f).coerceAtMost(4f)
+                zoom = (zoom + 0.25f).coerceAtMost(8f)
             }
             MapZoomButton(text = "−") {
                 zoom = (zoom - 0.25f).coerceAtLeast(1f)

@@ -421,7 +421,7 @@ private fun MapEditingPanel(
     var baseOffset by remember { mutableStateOf(Offset.Zero) }
 
     val minZoom = 0.5f
-    val maxZoom = 3f
+    val maxZoom = 6f
 
     val mapWidthPx = mapImageBitmap?.width?.toFloat() ?: 1f
     val mapHeightPx = mapImageBitmap?.height?.toFloat() ?: 1f

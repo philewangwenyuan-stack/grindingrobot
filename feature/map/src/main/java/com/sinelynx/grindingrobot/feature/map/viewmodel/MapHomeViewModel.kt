@@ -861,18 +861,13 @@ class MapHomeViewModel @Inject constructor(
 
     fun dismissRelocalization() {
         val lifecycleState = _uiState.value.relocalizationLifecycleState
-        val shouldStopLocalization = lifecycleState in setOf("STARTING", "LOCALIZING", "RELOCALIZING")
+        LogUtils.i("MapHomeViewModel", "关闭重定位页面 lifecycle=$lifecycleState，保留设备定位流程")
         relocalizationStartJob?.cancel()
         relocalizationStartJob = null
+        // 页面关闭只结束轮询和手动控制。定位质量可能回落到 RELOCALIZING，
+        // 不能因此关闭设备的定位流程（包括其 map_server 等依赖）。
         stopRelocalizationJobs(sendStop = true)
         clearPendingRadarOperationResponses()
-        if (shouldStopLocalization) {
-            tcpManager.requestMapMode(
-                mode = SlLink.MapModeType.MAP_MODE_LOCALIZATION,
-                enabled = false,
-                mapKind = 0
-            )
-        }
         _uiState.update {
             it.copy(
                 isRelocalizationDialogVisible = false,

@@ -38,6 +38,7 @@ import com.sinelynx.grindingrobot.core.model.state.RadarRelocalizationResponseSt
 import com.sinelynx.grindingrobot.core.model.state.RadarRelocalizationStatusPayload
 import com.sinelynx.grindingrobot.core.model.state.RadarRelocalizationStatusStream
 import com.sinelynx.grindingrobot.core.model.state.TaskCommandResponsePayload
+import com.sinelynx.grindingrobot.core.model.state.TaskRuntimeSettingsPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskConfigResponsePayload
 import com.sinelynx.grindingrobot.core.model.state.TaskResultRegionPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskResultResponsePayload
@@ -111,6 +112,9 @@ class SlLinkManager @Inject constructor(
 ) {
     
     private val parser = SlFrameParser()
+    internal val taskCommandReplies = CommandReplyTracker()
+    internal val emergencyStopReplies = CommandReplyTracker()
+    internal val taskRuntimeReplies = CommandReplyTracker()
     private val monitor = SlLinkMonitor()
     private val mapTransferLock = Any()
     private var activeMapRequestId: Long? = null
@@ -428,6 +432,7 @@ class SlLinkManager @Inject constructor(
             MSG_ID_MAP_REQUEST_RESULT -> handleMapRequestResult(frame)
             MSG_ID_MAP_MODE_RESPONSE -> handleMapModeResponse(frame)
             MSG_ID_CONTROL_COMMAND_RESPONSE -> handleControlCommandResponse(frame)
+            0x0539 -> handleTaskRuntimeSettingsResponse(frame)
             MSG_ID_MAP_PREVIEW_RESPONSE -> handleMapPreviewResponse(frame)
             // 区域响应独立分发，建图页面可刷新区域而不更新已冻结的图片。
             0x052F -> runCatching {
@@ -747,6 +752,15 @@ class SlLinkManager @Inject constructor(
             }
 
             val response = SlLink.ControlCommandResponse.parseFrom(payload)
+            val appliedEmergencyStop = response.hasAppliedCommand() &&
+                response.appliedCommand.hasEmergencyStop() && response.appliedCommand.emergencyStop.enabled
+            // Manual-drive replies must not confirm an emergency stop without a matching ack.
+            val ticket = emergencyStopReplies.complete(
+                ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = null,
+                reply = CommandReply(response.resultValue, response.message),
+                allowUnsequenced = appliedEmergencyStop
+            )
+            if (ticket != null) LogUtils.i("TaskControl", "emergency reply seq=${frame.seq} ack=${frame.ackSeq} request=${ticket.seq} result=${response.result}")
             LogUtils.d(
                 "控制指令响应: " +
                     "result=${response.result}, " +
@@ -1594,6 +1608,28 @@ class SlLinkManager @Inject constructor(
         }
     }
 
+    private fun handleTaskRuntimeSettingsResponse(frame: SlFrame) {
+        try {
+            val response = SlLink.TaskRuntimeSettingsResponse.parseFrom(frame.payload)
+            val settings = TaskRuntimeSettingsPayload(
+                taskId = response.taskId,
+                runSpeed = response.runSpeed.takeIf { response.hasRunSpeed() },
+                discSpeedRpm = response.discSpeedRpm.takeIf { response.hasDiscSpeedRpm() },
+                maxRunSpeed = response.maxRunSpeed,
+                maxDiscSpeedRpm = response.maxDiscSpeedRpm,
+                temporary = response.temporary
+            )
+            val ticket = taskRuntimeReplies.complete(
+                ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = response.taskId,
+                reply = CommandReply(response.resultValue, response.message, settings),
+                allowUnsequenced = false, requireExactAck = true
+            )
+            LogUtils.i("TaskControl", "runtime reply ack=${frame.ackSeq} request=${ticket?.seq} taskId=${response.taskId} result=${response.result} speed=${settings.runSpeed} rpm=${settings.discSpeedRpm}")
+        } catch (e: Exception) {
+            LogUtils.e("TaskControl", "运行参数回复解析失败: ${e.message}")
+        }
+    }
+
     private fun handleTaskCommandResponse(frame: SlFrame) {
         try {
             val payload = frame.payload
@@ -1602,6 +1638,11 @@ class SlLinkManager @Inject constructor(
                 return
             }
             val response = SlLink.TaskCommandResponse.parseFrom(payload)
+            val ticket = taskCommandReplies.complete(
+                ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = response.taskId,
+                reply = CommandReply(response.resultValue, response.message)
+            )
+            LogUtils.i("TaskControl", "task reply seq=${frame.seq} ack=${frame.ackSeq} request=${ticket?.seq} taskId=${response.taskId} result=${response.result}")
             LogUtils.d(
                 "任务控制响应: " +
                     "result=${response.result}, " +

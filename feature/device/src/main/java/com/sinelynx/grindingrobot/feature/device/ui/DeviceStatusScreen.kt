@@ -66,6 +66,8 @@ import com.sinelynx.grindingrobot.feature.device.viewmodel.DeviceStatusViewModel
 import com.sinelynx.grindingrobot.feature.device.viewmodel.DeviceTaskUiState
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskMapTransformUiState
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskPoseUiItem
+import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskRuntimeField
+import java.util.Locale
 import com.sinelynx.grindingrobot.feature.map.ui.FittedTaskPathOverlay
 import com.sinelynx.grindingrobot.feature.map.ui.drawTaskDisplayAnchors
 import com.sinelynx.grindingrobot.feature.map.ui.drawTaskDisplayRegions
@@ -104,8 +106,19 @@ fun DeviceStatusScreen(
         onStopTaskClick = viewModel::onStopTaskClick,
         onPauseTaskClick = viewModel::onPauseTaskClick,
         onRetryMap = viewModel::retryTaskMap,
+        onEditRuntime = viewModel::openRuntimeEditor,
         modifier = modifier
     )
+    uiState.runtimeEditor?.let { field ->
+        TaskRuntimeSettingsDialog(
+            state = uiState, field = field,
+            onInputChange = viewModel::updateRuntimeInput,
+            onStep = viewModel::stepRuntimeValue,
+            onApply = viewModel::applyRuntimeSettings,
+            onRetry = { viewModel.openRuntimeEditor(field) },
+            onDismiss = viewModel::dismissRuntimeEditor
+        )
+    }
 }
 
 @Composable
@@ -116,6 +129,7 @@ private fun DeviceStatusContent(
     onStopTaskClick: () -> Unit,
     onPauseTaskClick: () -> Unit,
     onRetryMap: () -> Unit,
+    onEditRuntime: (TaskRuntimeField) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -130,11 +144,12 @@ private fun DeviceStatusContent(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 if (uiState.taskState != DeviceTaskUiState.IDLE) {
-                    StatusCard(uiState = uiState)
+                    StatusCard(uiState = uiState, onEditRuntime = onEditRuntime)
                     TaskStatsCard(uiState = uiState)
                 } else {
                     StatusCard(
                         uiState = uiState,
+                        onEditRuntime = onEditRuntime,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -166,6 +181,7 @@ private fun DeviceStatusContent(
 @Composable
  private fun StatusCard(
     uiState: DeviceStatusUiState,
+    onEditRuntime: (TaskRuntimeField) -> Unit,
     modifier: Modifier = Modifier
  ) {
     Column(
@@ -183,8 +199,23 @@ private fun DeviceStatusContent(
         StatusRow("导航雷达", uiState.navRadarStatus, if (uiState.navRadarStatus == "正常") Color(0xFF33C461) else Color(0xFFD82B2A))
         StatusRow("避障雷达", uiState.obstacleRadarStatus, if (uiState.obstacleRadarStatus == "正常") Color(0xFF33C461) else Color(0xFFD82B2A))
         StatusRow("定位质量", uiState.localizationQuality.toString(), Color(0xFF33C461))
-        StatusRow("直行速度", uiState.straightSpeedText)
-        StatusRow("研磨转速", uiState.grindRpmText)
+        val runtimeEditable = uiState.taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED) && !uiState.runtimeApplying
+        RuntimeSettingRow(
+            "直行速度", uiState.runtimeSettings?.runSpeed?.let { String.format(Locale.US, "%.3f m/s", it) },
+            uiState.straightSpeedText, runtimeEditable, { onEditRuntime(TaskRuntimeField.RUN_SPEED) }
+        )
+        RuntimeSettingRow(
+            "研磨转速", uiState.runtimeSettings?.discSpeedRpm?.let { "$it rpm" },
+            uiState.grindRpmText, runtimeEditable, { onEditRuntime(TaskRuntimeField.DISC_RPM) }
+        )
+    }
+}
+
+@Composable
+private fun RuntimeSettingRow(label: String, setpoint: String?, actual: String, enabled: Boolean, onClick: () -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth().clickable(enabled = enabled, onClick = onClick).padding(vertical = 2.dp)) {
+        StatusRow(label, setpoint?.let { "设定 $it" } ?: if (enabled) "点击调节" else "—", Color(0xFF00A0E9))
+        Text(text = "实际 $actual", fontSize = 11.sp, color = Color(0xFF6D737D), modifier = Modifier.align(Alignment.End))
     }
 }
 
@@ -952,7 +983,7 @@ internal data class MapDrawBounds(
 )
 
 private const val MIN_TASK_MAP_ZOOM = 1f
-private const val MAX_TASK_MAP_ZOOM = 4f
+private const val MAX_TASK_MAP_ZOOM = 8f
 
 internal fun calculateImageBounds(
     containerWidth: Float,

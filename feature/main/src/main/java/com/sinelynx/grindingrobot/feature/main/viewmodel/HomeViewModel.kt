@@ -6,18 +6,16 @@ import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.TaskStatusReportPayload
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
+import com.sinelynx.grindingrobot.core.tcp.DeviceCommandResult
 import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import sl_link.SlLink
 
 enum class HomeModuleTab(val label: String) {
@@ -30,7 +28,8 @@ enum class HomeModuleTab(val label: String) {
 }
 
 data class HomeUiState(
-    val selectedTab: HomeModuleTab = HomeModuleTab.DeviceHome
+    val selectedTab: HomeModuleTab = HomeModuleTab.DeviceHome,
+    val emergencyStopFeedback: String? = null
 )
 
 @HiltViewModel
@@ -44,6 +43,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private val _uiState = MutableStateFlow(HomeUiState())
+    private var emergencyStopPending = false
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
@@ -91,23 +91,12 @@ class HomeViewModel @Inject constructor(
         if (taskId.isBlank()) {
             return true
         }
-        //清空任务状态的flow
-        TaskSchedulerStream.resetTaskCommandResponse()
-        val sent = tcpManager.sendTaskCommand(
+        val result = tcpManager.executeTaskCommand(
             taskType = SlLink.TaskCommandType.TASK_CMD_STOP,
-            taskId = taskId
+            taskId = taskId,
+            timeoutMs = STOP_TASK_RESPONSE_TIMEOUT_MS
         )
-        if (!sent) {
-            ToastUtils.showError("停止任务失败请重试")
-            return false
-        }
-
-        val response = withTimeoutOrNull(STOP_TASK_RESPONSE_TIMEOUT_MS) {
-            TaskSchedulerStream.taskCommandResponse
-                .filterNotNull()
-                .first { it.taskId == taskId }
-        }
-        val success = response?.resultValue == SlLink.ResultCode.RESULT_SUCCESS_VALUE
+        val success = result is DeviceCommandResult.Confirmed
         if (!success) {
             ToastUtils.showError("停止任务失败请重试")
         }
@@ -121,7 +110,33 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setEmergencyStop() {
-        tcpManager.sendEmergencyStop()
-        LogUtils.d("HomeViewModel", "已发送急停命令")
+        if (emergencyStopPending) return
+        emergencyStopPending = true
+        _uiState.update { it.copy(emergencyStopFeedback = "等待设备确认") }
+        viewModelScope.launch {
+            try {
+                ToastUtils.show("急停：等待设备确认")
+                when (val result = tcpManager.executeEmergencyStop()) {
+                    is DeviceCommandResult.Confirmed -> {
+                        _uiState.update { it.copy(emergencyStopFeedback = "指令已确认") }
+                        ToastUtils.showSuccess("急停指令已确认")
+                    }
+                    is DeviceCommandResult.Rejected -> {
+                        _uiState.update { it.copy(emergencyStopFeedback = "指令被拒绝") }
+                        ToastUtils.showError("急停失败：${result.message}")
+                    }
+                    DeviceCommandResult.SendFailed -> {
+                        _uiState.update { it.copy(emergencyStopFeedback = "发送失败") }
+                        ToastUtils.showError("急停发送失败，请检查连接")
+                    }
+                    DeviceCommandResult.TimedOut -> {
+                        _uiState.update { it.copy(emergencyStopFeedback = "未收到确认") }
+                        ToastUtils.showError("急停未收到确认，请核对设备状态")
+                    }
+                }
+            } finally {
+                emergencyStopPending = false
+            }
+        }
     }
 }

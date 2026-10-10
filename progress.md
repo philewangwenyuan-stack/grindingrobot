@@ -133,3 +133,27 @@
 - 单箭头及设备轮廓已完成；导航从 robotSettings 透传 Footprint，并按任务地图分辨率/Fit/缩放绘制；重定位按编辑姿态绘制同一轮廓。fallback 资源也带外框。恢复 X 前/Y 左坐标轴。
 - 参数卡内部双列，Footprint 可双列顶点，激光外参两行内联标签；短行输入框与卡片标题使横屏优先单页显示。小屏继续允许滚动。
 - 地图标记/重定位 5 项与设备 27 项单测通过；最终 :app:assembleDevDebug 成功，APK 已更新。无连接设备，单页视觉仍需真机确认。
+
+
+## 2026-10-09 现有缩放上限翻倍
+
+- 按用户缩小后的范围，只修改现有上限：Step2/Step3 3→6，设备导航/重定位（手势及按钮）/开始研磨 4→8；暂不新增其他地图缩放。
+- :feature:map:compileDevDebugKotlin 与 :feature:device:compileDevDebugKotlin 通过；本轮未重新打包 APK。
+
+## 2026-10-10 控制反馈修复
+
+- 暂停/开始/继续/结束改用发送前登记的独立回复等待，按 ackSeq/taskId/来源关联；停止优先于按钮防抖，过期暂停回复不覆盖较新的结束操作。缺少 ack 且归属不唯一时不猜测成功。
+- 暂停状态改为已暂停，急停增加等待、确认、拒绝、失败、5 秒超时反馈；按钮下方显示最近指令结果。遥控/断开前停止也按对应请求等待，断线清理待处理请求。
+- TaskControl 日志覆盖请求、实际 socket 写入、回复及 UI 更新，INFO/WARN 可落盘。
+- TCP 66 项、设备 27 项测试通过，最终 :app:assembleDevDebug 成功；输出 grindingrobot-control-feedback-arm64-debug.apk 与 arm32 版本。尚未真机联调，现场根因仍需 APP 日志确认。
+
+## 2026-10-10 关闭重定位页面保留定位
+
+- 移除 dismissRelocalization 中按生命周期发送的定位模式关闭请求，保留取消页面后台作业和零速手动控制；新增关闭时生命周期 INFO 日志。
+- :app:assembleDevDebug 成功；输出 grindingrobot-localization-keepalive-arm64-debug.apk 及 arm32 版本，包含之前的控制反馈修复。需在设备端核对关闭页面后节点和 /change_map 服务是否持续可用。
+## 2026-10-10 导航运行调速完成本地实现
+
+- 已实现 APP 编辑与确认反馈、板端任务临时参数接口，同步生成 Java/Python/nanopb SDK。
+- 构建 `:core:tcp:testDevDebugUnitTest :feature:device:testDevDebugUnitTest :app:assembleDevDebug` 成功；对应 101 项 APP 单测及板端 9 项离线测试通过。
+- 输出 runtime-speed arm64/arm32 APK 和 `app/build/outputs/board/grinder-runtime-speed-update.zip`（12 个板端文件及哈希清单、部署说明）。
+- 设备通过 SSH 只读核对，未部署、未重启、未发送任何真实调速命令；设备使用功能前需同步板端更新并完成实机联调。

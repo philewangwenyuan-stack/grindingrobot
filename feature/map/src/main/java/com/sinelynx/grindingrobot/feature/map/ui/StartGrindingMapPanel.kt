@@ -67,7 +67,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 private const val MIN_MAP_VIEWPORT_SCALE = 1f
-private const val MAX_MAP_VIEWPORT_SCALE = 4f
+private const val MAX_MAP_VIEWPORT_SCALE = 8f
 private const val MIN_OBSTACLE_WORLD_SIZE_METERS = 0.2f
 
 internal data class ObstacleWorldMetrics(

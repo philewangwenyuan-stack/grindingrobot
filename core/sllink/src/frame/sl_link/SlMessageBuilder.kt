@@ -21,6 +21,7 @@ object SlMessageBuilder {
         return current
     }
 
+    @Synchronized
     fun buildFrame(
         msgId: UShort,
         payloadData: ByteArray,
@@ -88,6 +89,10 @@ object SlMessageBuilder {
 
     fun buildTaskCommandRaw(serializedData: ByteArray, dstId: UByte): ByteArray {
         return buildFrame(0x0502u, serializedData, dstId, 0x08u)
+    }
+
+    fun buildTaskRuntimeSettingsRequestRaw(serializedData: ByteArray, dstId: UByte): ByteArray {
+        return buildFrame(0x0538u, serializedData, dstId, 0x08u)
     }
 
     fun buildPathPointPlanRequestRaw(serializedData: ByteArray, dstId: UByte): ByteArray {

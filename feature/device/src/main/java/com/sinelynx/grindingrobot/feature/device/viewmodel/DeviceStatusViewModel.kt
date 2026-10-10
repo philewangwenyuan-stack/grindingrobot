@@ -11,8 +11,10 @@ import com.sinelynx.grindingrobot.core.model.state.MapRegionPointStream
 import com.sinelynx.grindingrobot.core.model.state.TaskMapDisplayStream
 import com.sinelynx.grindingrobot.core.model.state.TaskPathPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskPathStream
-import com.sinelynx.grindingrobot.core.model.state.TaskCommandResponsePayload
+import com.sinelynx.grindingrobot.core.tcp.DeviceCommandResult
+import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
+import com.sinelynx.grindingrobot.core.model.state.TaskRuntimeSettingsPayload
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import sl_link.SlLink
 import kotlin.math.roundToInt
 
@@ -41,6 +44,12 @@ data class DeviceStatusUiState(
     val localizationQuality: Int = 0,
     val straightSpeedText: String = "0.0 m/s",
     val grindRpmText: String = "0 rpm",
+    val runtimeSettings: TaskRuntimeSettingsPayload? = null,
+    val runtimeEditor: TaskRuntimeField? = null,
+    val runtimeInput: String = "",
+    val runtimeLoading: Boolean = false,
+    val runtimeApplying: Boolean = false,
+    val runtimeError: String? = null,
     val totalTaskAreaText: String = "0.00m²",
     val doneTaskAreaText: String = "0.00m²",
     val remainTaskAreaText: String = "0.00m²",
@@ -119,6 +128,10 @@ internal fun DeviceStatusUiState.afterTaskStopped(): DeviceStatusUiState {
     return copy(
         taskState = DeviceTaskUiState.IDLE,
         navigationStatus = "空闲",
+        runtimeSettings = null,
+        runtimeEditor = null,
+        runtimeLoading = false,
+        runtimeApplying = false,
         plannedPath = null,
         reportedPathVersion = 0,
         trajectory = emptyList()
@@ -152,7 +165,9 @@ class DeviceStatusViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DeviceStatusUiState())
     val uiState: StateFlow<DeviceStatusUiState> = _uiState.asStateFlow()
     private var lastCommandClickAtMs: Long = 0L
-    private val pendingTaskCommands = mutableMapOf<String, PendingTaskCommandType>()
+    private var commandGeneration = 0L
+    private val pendingTaskCommands = mutableSetOf<PendingTaskCommandType>()
+    private var runtimeSettingsJob: Job? = null
     // 只订阅新路径结果流，不让其他页面的历史成功路径提前结束本轮等待。
     private val taskMapController = DeviceTaskMapController(
         scope = viewModelScope, cache = TaskMapDisplayStream.cache,
@@ -211,18 +226,17 @@ class DeviceStatusViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            TaskSchedulerStream.taskCommandResponse.collect { payload ->
-                payload ?: return@collect
-                handleTaskCommandResponse(payload)
-            }
-        }
-
-        viewModelScope.launch {
             // 不受地图 loading 状态控制；收到状态上报就更新，实际频率由嵌入式决定。
             TaskSchedulerStream.taskStatusReport.collect { payload ->
                 payload ?: return@collect
                 val reportTaskId = payload.taskId
                 val taskState = payload.toTaskUiState()
+                val runtimeInvalidated = reportTaskId != _uiState.value.currentTaskId ||
+                    taskState !in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)
+                if (runtimeInvalidated) runtimeSettingsJob?.cancel()
+                if (taskState != _uiState.value.taskState || reportTaskId != _uiState.value.currentTaskId) {
+                    LogUtils.i("TaskControl", "UI status taskId=$reportTaskId state=${payload.stateValue} label=$taskState")
+                }
                 _uiState.update { current ->
                     val doneTaskArea = payload.totalWorkArea - payload.remainWorkArea
                     val taskChanged = reportTaskId.isNotBlank() && reportTaskId != current.currentTaskId
@@ -236,8 +250,12 @@ class DeviceStatusViewModel @Inject constructor(
                     )
                     current.copy(
                         taskState = taskState,
+                        runtimeSettings = if (runtimeInvalidated) null else current.runtimeSettings,
+                        runtimeEditor = if (runtimeInvalidated) null else current.runtimeEditor,
+                        runtimeLoading = if (runtimeInvalidated) false else current.runtimeLoading,
+                        runtimeApplying = if (runtimeInvalidated) false else current.runtimeApplying,
                         currentTaskId = payload.taskId,
-                        navigationStatus = if (taskState == DeviceTaskUiState.IDLE) "空闲" else "研磨中",
+                        navigationStatus = taskState.navigationLabel(),
                         totalTaskAreaText = formatAreaM2(payload.totalWorkArea),
                         doneTaskAreaText = formatAreaM2(doneTaskArea),
                         remainTaskAreaText = formatAreaM2(payload.remainWorkArea),
@@ -308,13 +326,7 @@ class DeviceStatusViewModel @Inject constructor(
         } else {
             PendingTaskCommandType.PAUSE
         }
-        val sent = tcpManager.sendTaskCommand(
-            taskType = if (currentlyPaused) SlLink.TaskCommandType.TASK_CMD_RESUME else SlLink.TaskCommandType.TASK_CMD_PAUSE,
-            taskId = taskId
-        )
-        if (sent) {
-            pendingTaskCommands[taskId] = commandType
-        }
+        executeTaskCommand(taskId, commandType)
     }
 
     fun onStartTaskClick() {
@@ -323,29 +335,92 @@ class DeviceStatusViewModel @Inject constructor(
             ToastUtils.showError("当前任务ID为空")
             return
         }
-        val sent = tcpManager.sendTaskCommand(
-            taskType = SlLink.TaskCommandType.TASK_CMD_START,
-            taskId = taskId
-        )
-        if (sent) {
-            pendingTaskCommands[taskId] = PendingTaskCommandType.START
-        } else {
-            ToastUtils.showError("开始任务失败")
-        }
+        executeTaskCommand(taskId, PendingTaskCommandType.START)
     }
 
     fun onStopTaskClick() {
-        if (!canSendTaskCommand()) return
+        runtimeSettingsJob?.cancel()
+        _uiState.update { it.copy(runtimeEditor = null, runtimeLoading = false, runtimeApplying = false) }
         val taskId = currentTaskIdOrNull() ?: run {
             ToastUtils.showError("当前任务ID为空")
             return
         }
-        val sent = tcpManager.sendTaskCommand(SlLink.TaskCommandType.TASK_CMD_STOP, taskId = taskId)
-        if (sent) {
-            pendingTaskCommands[taskId] = PendingTaskCommandType.STOP
-        } else {
-            ToastUtils.showError("结束任务失败")
+        executeTaskCommand(taskId, PendingTaskCommandType.STOP)
+    }
+
+    fun openRuntimeEditor(field: TaskRuntimeField) {
+        val state = _uiState.value
+        if (!canEditRuntime(state) || pendingTaskCommands.isNotEmpty() || state.runtimeApplying) return
+        val taskId = state.currentTaskId
+        runtimeSettingsJob?.cancel()
+        _uiState.update { it.copy(runtimeEditor = field, runtimeInput = "", runtimeLoading = true, runtimeError = null) }
+        runtimeSettingsJob = viewModelScope.launch {
+            val result = tcpManager.executeTaskRuntimeSettings(taskId)
+            if (!canEditRuntime(_uiState.value) || _uiState.value.currentTaskId != taskId) return@launch
+            val settings = (result as? DeviceCommandResult.Confirmed)?.runtimeSettings
+            if (settings?.isUsableFor(taskId) == true) {
+                _uiState.update { it.copy(runtimeSettings = settings, runtimeInput = runtimeInput(field, settings), runtimeLoading = false) }
+            } else {
+                _uiState.update { it.copy(runtimeSettings = null, runtimeLoading = false, runtimeError = runtimeFailure(result)) }
+            }
         }
+    }
+
+    fun dismissRuntimeEditor() {
+        if (!_uiState.value.runtimeApplying) runtimeSettingsJob?.cancel()
+        _uiState.update { it.copy(runtimeEditor = null, runtimeLoading = false) }
+    }
+
+    fun updateRuntimeInput(value: String) {
+        if (_uiState.value.runtimeLoading || _uiState.value.runtimeApplying) return
+        _uiState.update { it.copy(runtimeInput = value, runtimeError = null) }
+    }
+
+    fun stepRuntimeValue(direction: Int) {
+        val state = _uiState.value
+        val field = state.runtimeEditor ?: return
+        val settings = state.runtimeSettings ?: return
+        updateRuntimeInput(stepRuntimeInput(field, state.runtimeInput, direction, settings))
+    }
+
+    fun applyRuntimeSettings() {
+        val state = _uiState.value
+        val field = state.runtimeEditor ?: return
+        val settings = state.runtimeSettings ?: return
+        if (!canEditRuntime(state) || state.runtimeLoading || state.runtimeApplying || pendingTaskCommands.isNotEmpty()) return
+        runtimeInputError(field, state.runtimeInput, settings)?.let { message ->
+            _uiState.update { it.copy(runtimeError = message) }
+            return
+        }
+        val taskId = state.currentTaskId
+        _uiState.update { it.copy(runtimeApplying = true, runtimeError = null) }
+        runtimeSettingsJob = viewModelScope.launch {
+            val result = tcpManager.executeTaskRuntimeSettings(
+                taskId,
+                runSpeed = state.runtimeInput.toFloatOrNull().takeIf { field == TaskRuntimeField.RUN_SPEED },
+                discSpeedRpm = state.runtimeInput.toIntOrNull().takeIf { field == TaskRuntimeField.DISC_RPM }
+            )
+            if (!canEditRuntime(_uiState.value) || _uiState.value.currentTaskId != taskId) return@launch
+            val confirmed = (result as? DeviceCommandResult.Confirmed)?.runtimeSettings
+            if (confirmed?.isUsableFor(taskId) == true) {
+                _uiState.update { it.copy(runtimeSettings = confirmed, runtimeInput = runtimeInput(field, confirmed), runtimeApplying = false) }
+                ToastUtils.showSuccess("${field.label}已确认，仅本次任务生效")
+            } else {
+                val error = runtimeFailure(result)
+                _uiState.update { it.copy(runtimeApplying = false, runtimeError = error) }
+                ToastUtils.showError(error)
+            }
+        }
+    }
+
+    private fun canEditRuntime(state: DeviceStatusUiState): Boolean = state.currentTaskId.isNotBlank() &&
+        state.taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)
+
+    private fun runtimeFailure(result: DeviceCommandResult): String = when (result) {
+        is DeviceCommandResult.Confirmed -> "板端未返回有效的临时运行参数，请更新板端"
+        is DeviceCommandResult.Rejected -> "设备拒绝调节：${result.message}"
+        DeviceCommandResult.SendFailed -> "发送失败，请检查设备连接"
+        DeviceCommandResult.TimedOut -> "未收到运行参数回复，请确认板端已更新；重新打开可读取当前值"
     }
 
     private fun currentTaskIdOrNull(): String? {
@@ -370,17 +445,49 @@ class DeviceStatusViewModel @Inject constructor(
         return true
     }
 
-    private fun handleTaskCommandResponse(payload: TaskCommandResponsePayload) {
-        val commandType = pendingTaskCommands.remove(payload.taskId) ?: return
-        val success = payload.resultValue == SlLink.ResultCode.RESULT_SUCCESS_VALUE
-        if (!success) {
-            when (commandType) {
-                PendingTaskCommandType.START -> ToastUtils.showError("开始任务失败")
-                PendingTaskCommandType.STOP -> ToastUtils.showError("结束任务失败")
-                else -> Unit
-            }
-            return
+    private fun executeTaskCommand(taskId: String, commandType: PendingTaskCommandType) {
+        if (commandType in pendingTaskCommands) return
+        if (commandType != PendingTaskCommandType.STOP && pendingTaskCommands.isNotEmpty()) return
+        pendingTaskCommands.add(commandType)
+        val generation = ++commandGeneration
+        val previousReport = TaskSchedulerStream.taskStatusReport.value
+        val (wireCommand, label) = when (commandType) {
+            PendingTaskCommandType.START -> SlLink.TaskCommandType.TASK_CMD_START to "开始任务"
+            PendingTaskCommandType.STOP -> SlLink.TaskCommandType.TASK_CMD_STOP to "结束任务"
+            PendingTaskCommandType.PAUSE -> SlLink.TaskCommandType.TASK_CMD_PAUSE to "暂停任务"
+            PendingTaskCommandType.RESUME -> SlLink.TaskCommandType.TASK_CMD_RESUME to "继续任务"
         }
+        viewModelScope.launch {
+            try {
+                ToastUtils.show("$label：等待设备确认")
+                val result = tcpManager.executeTaskCommand(wireCommand, taskId)
+                // A delayed pause/start reply must never undo a newer stop or a different task.
+                if (generation != commandGeneration || taskId != _uiState.value.currentTaskId) return@launch
+                when (result) {
+                    is DeviceCommandResult.Confirmed -> {
+                        val report = TaskSchedulerStream.taskStatusReport.value
+                        val terminal = report !== previousReport && report?.taskId == taskId && report.stateValue in setOf(
+                            SlLink.TaskState.TASK_STATE_STOPPED_VALUE,
+                            SlLink.TaskState.TASK_STATE_COMPLETED_VALUE,
+                            SlLink.TaskState.TASK_STATE_ERROR_VALUE
+                        )
+                        if (!terminal || commandType == PendingTaskCommandType.STOP) {
+                            applyTaskCommand(commandType, taskId)
+                        }
+                        ToastUtils.showSuccess("$label 已确认")
+                    }
+                    is DeviceCommandResult.Rejected -> ToastUtils.showError("$label 失败：${result.message}")
+                    DeviceCommandResult.SendFailed -> ToastUtils.showError("$label 发送失败，请检查连接")
+                    DeviceCommandResult.TimedOut -> ToastUtils.showError("$label 未收到确认，请核对设备状态")
+                }
+            } finally {
+                pendingTaskCommands.remove(commandType)
+            }
+        }
+    }
+
+    private fun applyTaskCommand(commandType: PendingTaskCommandType, taskId: String) {
+        LogUtils.i("TaskControl", "UI apply action=$commandType taskId=$taskId")
         when (commandType) {
             PendingTaskCommandType.START -> {
                 _uiState.update {
@@ -392,7 +499,7 @@ class DeviceStatusViewModel @Inject constructor(
             }
             PendingTaskCommandType.STOP -> {
                 taskMapController.onTask(null, 0)
-                TaskPathStream.reset(payload.taskId)
+                TaskPathStream.reset(taskId)
                 _uiState.update {
                     it.afterTaskStopped()
                 }
@@ -401,7 +508,7 @@ class DeviceStatusViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         taskState = DeviceTaskUiState.PAUSED,
-                        navigationStatus = "研磨中"
+                        navigationStatus = "已暂停"
                     )
                 }
             }
@@ -414,6 +521,13 @@ class DeviceStatusViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun DeviceTaskUiState.navigationLabel(): String = when (this) {
+        DeviceTaskUiState.IDLE -> "空闲"
+        DeviceTaskUiState.READY -> "待开始"
+        DeviceTaskUiState.RUNNING -> "研磨中"
+        DeviceTaskUiState.PAUSED -> "已暂停"
     }
 
     private fun formatAreaM2(value: Float): String {

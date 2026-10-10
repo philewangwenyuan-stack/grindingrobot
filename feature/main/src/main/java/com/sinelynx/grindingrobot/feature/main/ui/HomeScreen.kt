@@ -94,7 +94,8 @@ fun HomeScreen(
     ) {
         HomeTopBar(
             onCloseClick = { showDisconnectConfirmDialog = true },
-            onEmergencyClick = { showEmergencyConfirmDialog = true }
+            onEmergencyClick = { showEmergencyConfirmDialog = true },
+            emergencyStopFeedback = homeState.emergencyStopFeedback
         )
 
         LeftRail(
@@ -286,7 +287,8 @@ fun HomeScreen(
 @Composable
 private fun HomeTopBar(
     onCloseClick: () -> Unit,
-    onEmergencyClick: () -> Unit
+    onEmergencyClick: () -> Unit,
+    emergencyStopFeedback: String?
 ) {
     val context = LocalContext.current
     val appVersionName = remember { VersionUtils.getAppVersionName(context) }
@@ -324,6 +326,7 @@ private fun HomeTopBar(
 
         EmergencyPill(
             onClick = onEmergencyClick,
+            feedback = emergencyStopFeedback,
             modifier = Modifier.align(Alignment.TopCenter)
         )
 
@@ -353,6 +356,7 @@ private fun HomeTopBar(
 @Composable
 private fun EmergencyPill(
     onClick: () -> Unit,
+    feedback: String? = null,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -386,12 +390,15 @@ private fun EmergencyPill(
                 )
             )
         }
-        Text(
-            text = stringResource(R.string.home_emergency_stop),
-            color = Color(0xFFD82B2A),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Column {
+            Text(
+                text = stringResource(R.string.home_emergency_stop),
+                color = Color(0xFFD82B2A),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+            if (feedback != null) Text(text = feedback, color = Color(0xFFD82B2A), fontSize = 11.sp)
+        }
     }
 }
 

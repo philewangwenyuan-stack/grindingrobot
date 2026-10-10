@@ -288,13 +288,15 @@ class TcpService {
      * @param data 要发送的数据
      * @return 发送是否成功
      */
-    fun sendData(data: ByteArray): Boolean {
-        if (!isConnected || outputStream == null) return false
+    fun sendData(data: ByteArray, onWritten: (() -> Unit)? = null): Boolean {
+        val stream = outputStream ?: return false
+        if (!isConnected) return false
         // 必须在 launch 内捕获：write/flush 在协程里异步执行，外层 try 捕不到 IOException
         scope.launch {
             try {
-                outputStream?.write(data)
-                outputStream?.flush()
+                stream.write(data)
+                stream.flush()
+                onWritten?.invoke()
             } catch (e: IOException) {
                 LogUtils.e("TcpService", "sendData failed: ${e.message}")
                 handleDisconnection("Send failed: ${e.message}")

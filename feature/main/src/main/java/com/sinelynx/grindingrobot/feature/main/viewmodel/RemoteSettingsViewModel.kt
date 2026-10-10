@@ -21,12 +21,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
+import com.sinelynx.grindingrobot.core.tcp.DeviceCommandResult
 import sl_link.SlLink
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -364,22 +362,12 @@ class RemoteSettingsViewModel @Inject constructor(
         if (taskId.isBlank()) return true
         if (manualReadyTaskId == taskId) return true
 
-        TaskSchedulerStream.resetTaskCommandResponse()
-        val sent = tcpManager.sendTaskCommand(
+        val result = tcpManager.executeTaskCommand(
             taskType = SlLink.TaskCommandType.TASK_CMD_STOP,
-            taskId = taskId
+            taskId = taskId,
+            timeoutMs = STOP_TASK_RESPONSE_TIMEOUT_MS
         )
-        if (!sent) {
-            ToastUtils.showError(MANUAL_SWITCH_FAILED_MESSAGE)
-            return false
-        }
-
-        val response = withTimeoutOrNull(STOP_TASK_RESPONSE_TIMEOUT_MS) {
-            TaskSchedulerStream.taskCommandResponse
-                .filterNotNull()
-                .first()
-        }
-        val success = response?.resultValue == SlLink.ResultCode.RESULT_SUCCESS_VALUE
+        val success = result is DeviceCommandResult.Confirmed
         if (!success) {
             ToastUtils.showError(MANUAL_SWITCH_FAILED_MESSAGE)
             return false

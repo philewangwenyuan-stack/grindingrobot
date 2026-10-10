@@ -12,6 +12,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import sl_link.SlLink
 import sl_link.SlLink.ControlCommand
 import sl_link.SlLink.MapEditCommand
@@ -221,6 +222,7 @@ class TcpManager @Inject constructor(
             override fun onConnected() {
                 LogUtils.d("TCP连接已建立")
                 slLinkManager.clearMapTransfer()
+                resetCommandReplies()
                 // 连接成功，取消重连任务
                 cancelReconnect()
             }
@@ -237,6 +239,7 @@ class TcpManager @Inject constructor(
             override fun onDisconnected(reason: String) {
                 LogUtils.d("TCP连接已断开: $reason")
                 slLinkManager.clearMapTransfer()
+                resetCommandReplies()
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
                 // 断开后启动重连任务
@@ -249,6 +252,7 @@ class TcpManager @Inject constructor(
             override fun onFailure(error: Throwable) {
                 LogUtils.d("TCP连接失败: ${error.message}")
                 slLinkManager.clearMapTransfer()
+                resetCommandReplies()
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
                 // 失败后启动重连任务
@@ -344,9 +348,9 @@ class TcpManager @Inject constructor(
      * @param data 要发送的数据
      * @return 发送是否成功
      */
-    fun sendData(data: ByteArray): Boolean {
+    fun sendData(data: ByteArray, onWritten: (() -> Unit)? = null): Boolean {
         return if (tcpService.isConnected()) {
-            val success = tcpService.sendData(data)
+            val success = tcpService.sendData(data, onWritten)
             if (success) {
                 val hex = data.joinToString(separator = " ") { byte -> "%02X".format(byte) }
                 LogUtils.d("数据发送成功: $hex")
@@ -1029,11 +1033,63 @@ class TcpManager @Inject constructor(
         taskId: String? = "",
         dstId: UByte = 0x10u
     ): Boolean {
-        val build = SlLink.TaskCommand.newBuilder()
-        build.setCommand(taskType)
-        build.setTaskId(taskId)
-        val frameData = slLinkManager.requestTaskCommand(build.build().toByteArray(), dstId)
-        return sendData(frameData)
+        val frameData = taskCommandFrame(taskType, taskId.orEmpty(), dstId)
+        val tracker = slLinkManager.taskCommandReplies
+        val ticket = tracker.register(frameData, taskId.orEmpty())
+        val sent = sendData(frameData)
+        if (!sent) tracker.remove(ticket)
+        else scope.launch {
+            try { withTimeoutOrNull(5_000L) { ticket.reply.await() } }
+            finally { tracker.remove(ticket) }
+        }
+        return sent
+    }
+
+    private fun taskCommandFrame(taskType: SlLink.TaskCommandType, taskId: String, dstId: UByte): ByteArray =
+        slLinkManager.requestTaskCommand(
+            SlLink.TaskCommand.newBuilder().setCommand(taskType).setTaskId(taskId).build().toByteArray(), dstId
+        )
+
+    private fun resetCommandReplies() {
+        slLinkManager.taskCommandReplies.resetConnection()
+        slLinkManager.emergencyStopReplies.resetConnection()
+        slLinkManager.taskRuntimeReplies.resetConnection()
+    }
+
+    suspend fun executeTaskCommand(
+        taskType: SlLink.TaskCommandType,
+        taskId: String,
+        timeoutMs: Long = 5_000L,
+        dstId: UByte = 0x10u
+    ): DeviceCommandResult = executeConfirmedCommand(
+        taskCommandFrame(taskType, taskId, dstId), slLinkManager.taskCommandReplies,
+        taskId, taskType.name, timeoutMs
+    )
+
+    private suspend fun executeConfirmedCommand(
+        frame: ByteArray, tracker: CommandReplyTracker, taskId: String, action: String, timeoutMs: Long
+    ): DeviceCommandResult {
+        val ticket = tracker.register(frame, taskId)
+        try {
+            LogUtils.i("TaskControl", "send action=$action seq=${ticket.seq} taskId=$taskId")
+            if (!sendData(frame, onWritten = {
+                    LogUtils.i("TaskControl", "socket written action=$action seq=${ticket.seq} taskId=$taskId")
+                })) {
+                LogUtils.w("TaskControl", "send failed action=$action seq=${ticket.seq}")
+                return DeviceCommandResult.SendFailed
+            }
+            val response = withTimeoutOrNull(timeoutMs) { ticket.reply.await() }
+            return when {
+                response == null -> {
+                    LogUtils.w("TaskControl", "timeout action=$action seq=${ticket.seq} taskId=$taskId")
+                    DeviceCommandResult.TimedOut
+                }
+                response.resultValue == SlLink.ResultCode.RESULT_SUCCESS_VALUE -> DeviceCommandResult.Confirmed(response.message, response.runtimeSettings)
+                else -> DeviceCommandResult.Rejected(response.message)
+            }
+        } finally {
+            tracker.remove(ticket)
+        }
     }
 
     /**
@@ -1070,6 +1126,32 @@ class TcpManager @Inject constructor(
 
         val frameData = slLinkManager.sendControlCommand(estopOnCmd.toByteArray(), dstId)
         return sendData(frameData)
+    }
+
+    suspend fun executeEmergencyStop(timeoutMs: Long = 5_000L, dstId: UByte = 0x10u): DeviceCommandResult {
+        val command = ControlCommand.newBuilder().setEmergencyStop(
+            SlLink.EmergencyStopControl.newBuilder().setEnabled(true)
+        ).build()
+        return executeConfirmedCommand(
+            slLinkManager.sendControlCommand(command.toByteArray(), dstId),
+            slLinkManager.emergencyStopReplies, "", "EMERGENCY_STOP", timeoutMs
+        )
+    }
+
+    /** Null setpoints query capabilities; updates are task-scoped and never write defaults. */
+    suspend fun executeTaskRuntimeSettings(
+        taskId: String,
+        runSpeed: Float? = null,
+        discSpeedRpm: Int? = null,
+        dstId: UByte = 0x10u
+    ): DeviceCommandResult {
+        val request = SlLink.TaskRuntimeSettingsRequest.newBuilder().setTaskId(taskId)
+        runSpeed?.let { request.setRunSpeed(it) }
+        discSpeedRpm?.let { request.setDiscSpeedRpm(it) }
+        return executeConfirmedCommand(
+            sl_link.SlMessageBuilder.buildTaskRuntimeSettingsRequestRaw(request.build().toByteArray(), dstId),
+            slLinkManager.taskRuntimeReplies, taskId, "TASK_RUNTIME_SETTINGS", 5_000L
+        )
     }
 
     /**

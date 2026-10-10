@@ -93,3 +93,21 @@ TCP IO 回调在日志注释后仍逐字节进行 String.format 十六进制转�
 ## 2026-10-09 单箭头及单页参数布局
 
 设备导航只透传 width/length，轨迹标记沿用资源图，未透传 Footprint；重定位仅绘制箭头。设置页需要收紧分组内部字段并双列排列，而非仅缩小外边距。
+
+## 2026-10-10 控制按钮无反馈
+
+任务回复只带 taskId，旧页面按 taskId 覆盖待处理动作并通过 StateFlow 等待，连续暂停/结束可能串单、相同回复可能被合并；暂停状态文案固定为研磨中。遥控停止等待未过滤任务ID。急停 ControlCommandResponse 仅打印日志，页面未接收确认。
+
+改为发送前登记帧序号并用独立 Deferred 等待回复；ackSeq 非零严格关联，ackSeq=0 仅允许唯一且未发生并发/超时歧义的请求。并发或超时后缺少 ack 的回复不猜测归属；需要设备补回 ack 或由状态上报更新页面。急停无 ack 时还要求 applied_command 明确为 emergency_stop，避免遥控回复误确认。
+
+新增 TaskControl 信息日志，记录请求、实际 socket 写入、回复 seq/ack、UI 状态变化；日志落盘和 Logcat 均可查看。没有本次 APP 实测日志，无法断言所有现场症状均由这些缺陷导致。
+
+## 2026-10-10 关闭重定位页面误停定位
+
+已确认叉号经 onDismissRelocalization 调用 dismissRelocalization；旧代码在 STARTING/LOCALIZING/RELOCALIZING 下发送 MAP_MODE_LOCALIZATION enabled=false。修改为关闭页面仅取消页面启动等待、轮询和手动运动控制，保留设备定位；stopRelocalizationJobs(sendStop=true) 的 sendStop 是零速手动控制，不是定位模式停止。地图/版本不一致的 failRelocalization(stopLocalization=true) 仍是另一条明确停止来源。没有设备端源码/此次原始日志，不能把 map_server 被关闭唯一归因到 APP 叉号。
+## 2026-10-10 任务运行调速验证
+
+- 通过 SSH 只读核对设备 `/home/neardi/work/Grinder`：协议与 scheduler 模块对应本地修改前版本，尚不支持新接口。没有部署、重启或实机调速。
+- 本地板端 `E:/CODE/C++/Grinder` 新增 `0x0538/0x0539` 专用接口；可选参数缺省仅查询，不写默认配置。RPP 仅修改 desired_linear_vel，转速不发使能；暂停保留临时值，结束清理，恢复失败阻止下一任务启动。
+- APP 用请求 seq、任务 ID 与来源关联确认，实测/设定分开，旧板端超时提示更新。
+- TCP 69、设备 32、板端离线 9 项通过；devDebug 编译成功。板端源码 diff 检查通过；protoc 25.1 生成的 Android SDK 存在生成器空白行，未手工改生成文件。

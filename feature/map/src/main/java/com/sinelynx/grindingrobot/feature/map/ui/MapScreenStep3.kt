@@ -692,7 +692,7 @@ fun MapScreenStep3(
                                 detectTransformGestures { centroid, panChange, zoomChange, _ ->
                                     val oldZoom = currentMapZoom
                                     val oldPan = currentMapPan
-                                    val newZoom = (oldZoom * zoomChange).coerceIn(0.5f, 3f)
+                                    val newZoom = (oldZoom * zoomChange).coerceIn(0.5f, 6f)
                                     val zoomRatio = if (oldZoom == 0f) 1f else newZoom / oldZoom
                                     mapZoom = newZoom
                                     mapPan = centroid - (centroid - oldPan) * zoomRatio + panChange
