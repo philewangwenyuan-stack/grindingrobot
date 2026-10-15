@@ -117,3 +117,8 @@ TCP IO 回调在日志注释后仍逐字节进行 String.format 十六进制转�
 - RPP collision_imminent 已由板端上报，APP 直接使用；连接断开/重连取真实 TCP 回调。首次连接失败不误记断开，重复回调/连续状态不刷屏。
 - 底盘 connected 原仅在 ROS 内部与平台 JSON 中出现，新增 DeviceStatusReport optional 字段 21；未收到样本为未知，收到后超过 3 秒不刷新为断开。旧板端字段缺省不误报底盘断连。
 - 只修改本地板端 E:/CODE/C++/Grinder，未部署工控机或重启节点。APP 不能补记离线期间的板端事件。
+## 2026-10-15 断线重连 footprint
+
+- 根因：AppState.clearDeviceStatus 清空了机器人几何；TcpManager 自动重连成功未读取机器参数，HomeViewModel 只在首次打开时查询，导致现有地图回退 APP 默认轮廓。
+- 修复：保留同 host/port 的已确认 footprint，每次连接成功统一只读刷新参数；切换 host 或 port 清理旧设备参数。缺失有效 polygon 的部分回复不会清除已确认 footprint。
+- 新增 5 项 AppState 重连回归测试通过，TCP 74 项通过，完整 devDebug APK 构建成功。未做真机断网重连验证，本次未修改板端。

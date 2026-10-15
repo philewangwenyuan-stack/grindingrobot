@@ -226,6 +226,11 @@ class TcpManager @Inject constructor(
                 resetCommandReplies()
                 // 连接成功，取消重连任务
                 cancelReconnect()
+                // Read actual settings on every connection, including automatic reconnects.
+                // Never write the cached footprint back to the controller.
+                if (!requestSettingRead(readChassis = true, readMap = true, readRpp = true)) {
+                    LogUtils.w("TCP 重连后读取机器参数发送失败")
+                }
             }
 
             override fun onDataReceived(data: ByteArray, arrivalMonotonicS: Double) {
@@ -275,6 +280,7 @@ class TcpManager @Inject constructor(
      * @param port 服务器端口
      */
     fun connect(host: String, port: Int) {
+        appState.prepareDeviceSettings(AppState.TcpEndpoint(host, port))
         // 记录连接参数
         lastHost = host
         lastPort = port
@@ -292,6 +298,7 @@ class TcpManager @Inject constructor(
      * @return 连接是否成功
      */
     suspend fun connectAsync(host: String, port: Int): Boolean {
+        appState.prepareDeviceSettings(AppState.TcpEndpoint(host, port))
         // 记录连接参数
         lastHost = host
         lastPort = port
@@ -327,6 +334,7 @@ class TcpManager @Inject constructor(
         }
 
         cancelReconnect()
+        appState.prepareDeviceSettings(AppState.TcpEndpoint(host, port))
         lastHost = host
         lastPort = port
 

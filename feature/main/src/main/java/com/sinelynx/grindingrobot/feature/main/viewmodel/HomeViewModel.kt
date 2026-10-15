@@ -56,7 +56,6 @@ class HomeViewModel @Inject constructor(
             }.getOrDefault(false)
             if (ok) {
                 LogUtils.d("HomeViewModel", "TCP 已连接: $host:$port")
-                tcpManager.requestSettingRead(readChassis = true, readMap = true)
             } else {
                 LogUtils.w("HomeViewModel", "TCP 连接失败: $host:$port")
             }

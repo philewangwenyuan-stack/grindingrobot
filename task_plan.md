@@ -107,3 +107,5 @@
 - [complete] 41. 接入 APP/工控机连接、RPP 障碍停车、工控机/底盘连接事件，按变化去重，本地保留最近 500 条及记录时间
 - [complete] 42. 同步 optional chassis_connected=21、板端状态及 3 秒上报超时判断，生成各 SDK；旧字段缺省不误报
 - [complete] 43. TCP 74 项（新增 5 项）与板端 4 项通过，devDebug 编译成功；已打包两个 ABI APK 和板端更新包，未部署或操作硬件
+- [complete] 44. 消息卡片紧凑布局，默认完整显示三条；新增数量与可拖动滚动条，common 9 项测试通过，devDebug 编译打包成功
+- [complete] 45. 修复断网重连 footprint 重置：保留同设备已确认轮廓，每次连接自动读实际参数，切换设备清理旧参数；5 项回归、TCP 74 项通过，devDebug 编译成功

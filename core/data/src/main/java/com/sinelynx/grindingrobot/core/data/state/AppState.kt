@@ -148,6 +148,20 @@ class AppState @Inject constructor(
     //机器人设置
     private val _robotSettings = MutableStateFlow<RobotSettingsState?>(null)
     val robotSettings: StateFlow<RobotSettingsState?> = _robotSettings.asStateFlow()
+    private var deviceSettingsEndpoint: TcpEndpoint? = null
+
+    /** Keep confirmed geometry across reconnects, but never reuse another device's settings. */
+    @Synchronized
+    fun prepareDeviceSettings(endpoint: TcpEndpoint) {
+        val normalized = endpoint.copy(host = endpoint.host.trim())
+        if (deviceSettingsEndpoint != null && deviceSettingsEndpoint != normalized) {
+            _robotSettings.value = null
+            _mapSettings.value = null
+            _chassisSettings.value = null
+            _rppSettings.value = null
+        }
+        deviceSettingsEndpoint = normalized
+    }
 
     //底盘（磨盘）设置
     private val _chassisSettings = MutableStateFlow<SlLink.ChassisSettings?>(null)
@@ -187,10 +201,13 @@ class AppState @Inject constructor(
         length: Double,
         footprint: List<FootprintPoint> = emptyList()
     ) {
+        // Older/partial replies may omit the polygon; omission must not erase a confirmed footprint.
+        val confirmedFootprint = footprint.filter { it.x.isFinite() && it.y.isFinite() }
+            .takeIf { it.size >= 3 } ?: _robotSettings.value?.footprint.orEmpty()
         _robotSettings.value = RobotSettingsState(
             robotWidth = width,
             robotLength = length,
-            footprint = footprint.filter { it.x.isFinite() && it.y.isFinite() }
+            footprint = confirmedFootprint
         )
     }
 
@@ -369,17 +386,15 @@ class AppState @Inject constructor(
 
     /**
      * 清除设备状态
-     * 当TCP连接断开时调用，重置所有设备状态为未连接状态
+     * 当TCP连接断开时调用，清除实时状态；机器参数保留至重连读取或切换设备
      *
      * @author Dreamj
      */
     fun clearDeviceStatus() {
-        LogUtils.d("clearDeviceStatus")
         _runtimeTaskState.value = RuntimeTaskState()
         DeviceStatusStream.reset()
         TaskSchedulerStream.reset()
         _videoStreamInfo.value = null
-        _robotSettings.value = null
     }
 
     fun updateRuntimeTaskState(

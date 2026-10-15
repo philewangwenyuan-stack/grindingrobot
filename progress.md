@@ -159,6 +159,9 @@
 - 设备通过 SSH 只读核对，未部署、未重启、未发送任何真实调速命令；设备使用功能前需同步板端更新并完成实机联调。
 ## 2026-10-15 消息中心事件完成
 
+- 追加紧凑消息列表：卡片 56dp、间距 4dp，弹窗 284dp，默认完整展示三条；标题显示总条数，右侧滚动条支持拖动和点击轨道。弹窗位置限制在窗口内，避免底部清空入口被裁切。
+- 新增 MessageListScrollbar 与 5 项几何/边界测试；common 共 9 项测试通过，最终 devDebug 构建成功，输出 message-center-compact 两个 ABI APK。未做真机触摸验证。
+
 - 按截图反馈，将“清空消息”调整为消息中心弹窗内部右下角的固定按钮，列表区域使用剩余高度，空列表也保留入口。
 
 - 追加手动清理：消息中心右上角“清空消息”同步删除内存列表和 MMKV 历史；不重置事件去重状态，避免清空后相同持续告警立即重复入列。新事件仍正常记录。当前电量提示继续实时显示。
@@ -167,3 +170,9 @@
 - 可选底盘连接字段同步 APP 和板端协议，protoc 25.1 生成 Android/Python/nanopb，APP/板端 proto 内容相同。
 - :core:tcp:testDevDebugUnitTest 与 :app:assembleDevDebug 成功，TCP 74 项无失败；板端断连上报 4 项离线测试与 scheduler Python 语法检查通过。源码 diff --check 通过。
 - 输出 grindingrobot-message-events-arm64-debug.apk、arm32 APK 和 grinder-message-events-update.zip。未做真机 UI/串口验证，未部署工控机或重启服务。
+## 2026-10-15 断线重连轮廓修复
+
+- 同设备断线清理仅针对实时姿态、任务和视频，保留已确认几何；三个连接入口按 endpoint 绑定参数，切换机器清理缓存。
+- 连接成功回调统一读取机器参数，自动重连也覆盖；删除首页重复的首次请求，不向板端写回 APP 默认设置。
+- :core:data:testDevDebugUnitTest --tests '*RobotSettingsReconnectTest'（5项）、:core:tcp:testDevDebugUnitTest（74项）、:app:assembleDevDebug 全部通过。输出 footprint-reconnect arm64/arm32 APK。
+- 未做实机断网验证，未更改或部署板端。

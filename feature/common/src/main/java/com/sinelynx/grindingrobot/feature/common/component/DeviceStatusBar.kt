@@ -20,6 +20,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -32,6 +33,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -222,6 +224,7 @@ private fun MessageCenterDialog(
 ) {
     val density = LocalDensity.current
     val context = LocalContext.current
+    val messageListState = rememberLazyListState()
     val horizontalOffsetPx = with(density) { 170.dp.toPx() }
     val verticalOffsetPx = with(density) { 12.dp.toPx() }
     val fallbackTopPx = with(density) { 81.dp.toPx() }
@@ -245,14 +248,15 @@ private fun MessageCenterDialog(
             decorFitsSystemWindows = false
         )
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .offset { popupOffset },
-            contentAlignment = Alignment.TopStart
-        ) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val boundedOffset = with(density) {
+                IntOffset(
+                    popupOffset.x.coerceIn(0, (maxWidth.roundToPx() - 360.dp.roundToPx()).coerceAtLeast(0)),
+                    popupOffset.y.coerceIn(0, (maxHeight.roundToPx() - 284.dp.roundToPx()).coerceAtLeast(0))
+                )
+            }
             Surface(
-                modifier = Modifier.size(width = 360.dp, height = 254.dp),
+                modifier = Modifier.offset { boundedOffset }.size(width = 360.dp, height = 284.dp),
                 shape = RoundedCornerShape(24.dp),
                 color = Color(0xFFF6F8FB),
                 border = BorderStroke(2.dp, Color.White),
@@ -262,17 +266,20 @@ private fun MessageCenterDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
-                            .padding(start = 28.dp, end = 22.dp),
+                            .height(44.dp)
+                            .padding(start = 20.dp, end = 20.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = "消息中心",
-                            color = Color(0xFF777C89),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Text(
+                                text = "消息中心",
+                                color = Color(0xFF777C89),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text("共 ${messages.size} 条", color = Color(0xFF9298A3), fontSize = 11.sp)
+                        }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "×",
@@ -300,21 +307,33 @@ private fun MessageCenterDialog(
                             )
                         }
                     } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth().weight(1f).padding(start = 24.dp, top = 8.dp, end = 24.dp, bottom = 12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        Box(
+                            modifier = Modifier.fillMaxWidth().weight(1f).padding(start = 16.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
                         ) {
-                            items(messages) { message ->
-                                MessageCenterItem(
-                                    dotColor = message.type.dotColor,
-                                    title = message.title,
-                                    time = message.time
-                                )
+                            LazyColumn(
+                                state = messageListState,
+                                modifier = Modifier.fillMaxSize().padding(end = 28.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                items(messages) { message ->
+                                    MessageCenterItem(
+                                        dotColor = message.type.dotColor,
+                                        title = message.title,
+                                        time = message.time
+                                    )
+                                }
                             }
+                            MessageListScrollbar(
+                                state = messageListState,
+                                itemCount = messages.size,
+                                rowHeight = 56.dp,
+                                rowSpacing = 4.dp,
+                                modifier = Modifier.width(28.dp).fillMaxHeight().align(Alignment.CenterEnd)
+                            )
                         }
                     }
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
+                        modifier = Modifier.fillMaxWidth().height(52.dp).padding(start = 20.dp, end = 20.dp, bottom = 4.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         TextButton(onClick = {
@@ -340,27 +359,28 @@ private fun MessageCenterItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(76.dp)
+            .height(56.dp)
             .background(Color.White, RoundedCornerShape(8.dp))
             .border(1.dp, Color(0xFFE6E6E6), RoundedCornerShape(8.dp))
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(10.dp)
+                .size(8.dp)
                 .background(dotColor, CircleShape)
         )
-        Column(modifier = Modifier.padding(start = 8.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(modifier = Modifier.padding(start = 7.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
                 text = title,
                 color = Color(0xFF202937),
-                fontSize = 14.sp,
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(text = time, color = Color(0xFF777C89), fontSize = 12.sp)
+            Text(text = time, color = Color(0xFF777C89), fontSize = 10.sp, lineHeight = 12.sp)
         }
     }
 }
