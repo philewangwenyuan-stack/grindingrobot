@@ -30,14 +30,18 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,6 +69,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import com.sinelynx.grindingrobot.feature.common.R
+import com.sinelynx.grindingrobot.core.data.state.DeviceEventHistory
+import com.sinelynx.grindingrobot.core.data.state.DeviceEventLevel
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -88,7 +94,22 @@ fun DeviceStatusBar(
     val wifiText = wifiName ?: systemWifiName
     val resolvedBatteryPercent = batteryPercent ?: systemBatteryPercent
     val batteryValue = resolvedBatteryPercent.coerceIn(0, 100)
+    val history by DeviceEventHistory.events.collectAsState()
+    val eventFormatter = remember { SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()) }
     val messages = buildDeviceMessages(
+        embeddedMessages = remember(history) {
+            history.map { event ->
+                DeviceMessage(
+                    type = when (event.level) {
+                        DeviceEventLevel.NORMAL -> DeviceMessageType.NORMAL
+                        DeviceEventLevel.WARNING -> DeviceMessageType.WARNING
+                        DeviceEventLevel.ERROR -> DeviceMessageType.ERROR
+                    },
+                    title = event.title,
+                    time = eventFormatter.format(Date(event.occurredAtMillis))
+                )
+            }
+        },
         batteryPercent = resolvedBatteryPercent,
         time = timeText
     )
@@ -200,6 +221,7 @@ private fun MessageCenterDialog(
     onDismissRequest: () -> Unit
 ) {
     val density = LocalDensity.current
+    val context = LocalContext.current
     val horizontalOffsetPx = with(density) { 170.dp.toPx() }
     val verticalOffsetPx = with(density) { 12.dp.toPx() }
     val fallbackTopPx = with(density) { 81.dp.toPx() }
@@ -251,19 +273,22 @@ private fun MessageCenterDialog(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
-                        Text(
-                            text = "×",
-                            color = Color(0xFF9DA3AF),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.clickable(onClick = onDismissRequest)
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "×",
+                                color = Color(0xFF9DA3AF),
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.clickable(onClick = onDismissRequest)
+                            )
+                        }
                     }
 
                     if (messages.isEmpty()) {
                         Box(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth()
+                                .weight(1f)
                                 .padding(bottom = 16.dp),
                             contentAlignment = Alignment.Center
                         ) {
@@ -275,17 +300,29 @@ private fun MessageCenterDialog(
                             )
                         }
                     } else {
-                        Column(
-                            modifier = Modifier.padding(start = 24.dp, top = 16.dp, end = 24.dp),
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth().weight(1f).padding(start = 24.dp, top = 8.dp, end = 24.dp, bottom = 12.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            messages.forEach { message ->
+                            items(messages) { message ->
                                 MessageCenterItem(
                                     dotColor = message.type.dotColor,
                                     title = message.title,
                                     time = message.time
                                 )
                             }
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(onClick = {
+                            if (!DeviceEventHistory.clear()) {
+                                android.widget.Toast.makeText(context, "清空消息失败，请重试", android.widget.Toast.LENGTH_SHORT).show()
+                            }
+                        }) {
+                            Text("清空消息", fontSize = 14.sp)
                         }
                     }
                 }
@@ -303,7 +340,7 @@ private fun MessageCenterItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(76.dp)
             .background(Color.White, RoundedCornerShape(8.dp))
             .border(1.dp, Color(0xFFE6E6E6), RoundedCornerShape(8.dp))
             .padding(horizontal = 16.dp),
@@ -314,23 +351,17 @@ private fun MessageCenterItem(
                 .size(10.dp)
                 .background(dotColor, CircleShape)
         )
-        Text(
-            text = title,
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .weight(1f),
-            color = Color(0xFF202937),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            text = time,
-            color = Color(0xFF777C89),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
-        )
+        Column(modifier = Modifier.padding(start = 8.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = title,
+                color = Color(0xFF202937),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(text = time, color = Color(0xFF777C89), fontSize = 12.sp)
+        }
     }
 }
 

@@ -111,3 +111,9 @@ TCP IO 回调在日志注释后仍逐字节进行 String.format 十六进制转�
 - 本地板端 `E:/CODE/C++/Grinder` 新增 `0x0538/0x0539` 专用接口；可选参数缺省仅查询，不写默认配置。RPP 仅修改 desired_linear_vel，转速不发使能；暂停保留临时值，结束清理，恢复失败阻止下一任务启动。
 - APP 用请求 seq、任务 ID 与来源关联确认，实测/设定分开，旧板端超时提示更新。
 - TCP 69、设备 32、板端离线 9 项通过；devDebug 编译成功。板端源码 diff 检查通过；protoc 25.1 生成的 Android SDK 存在生成器空白行，未手工改生成文件。
+## 2026-10-15 消息中心事件
+
+- 原消息中心只有即时电量提示，页面没有接入通信事件。已增加全局 DeviceEventHistory（MMKV，最近 500 条），DeviceEventTracker 在通信回调识别状态边沿，UI 以年月日时分秒显示 APP 记录时间，并可滚动查看。
+- RPP collision_imminent 已由板端上报，APP 直接使用；连接断开/重连取真实 TCP 回调。首次连接失败不误记断开，重复回调/连续状态不刷屏。
+- 底盘 connected 原仅在 ROS 内部与平台 JSON 中出现，新增 DeviceStatusReport optional 字段 21；未收到样本为未知，收到后超过 3 秒不刷新为断开。旧板端字段缺省不误报底盘断连。
+- 只修改本地板端 E:/CODE/C++/Grinder，未部署工控机或重启节点。APP 不能补记离线期间的板端事件。

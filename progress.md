@@ -157,3 +157,13 @@
 - 构建 `:core:tcp:testDevDebugUnitTest :feature:device:testDevDebugUnitTest :app:assembleDevDebug` 成功；对应 101 项 APP 单测及板端 9 项离线测试通过。
 - 输出 runtime-speed arm64/arm32 APK 和 `app/build/outputs/board/grinder-runtime-speed-update.zip`（12 个板端文件及哈希清单、部署说明）。
 - 设备通过 SSH 只读核对，未部署、未重启、未发送任何真实调速命令；设备使用功能前需同步板端更新并完成实机联调。
+## 2026-10-15 消息中心事件完成
+
+- 按截图反馈，将“清空消息”调整为消息中心弹窗内部右下角的固定按钮，列表区域使用剩余高度，空列表也保留入口。
+
+- 追加手动清理：消息中心右上角“清空消息”同步删除内存列表和 MMKV 历史；不重置事件去重状态，避免清空后相同持续告警立即重复入列。新事件仍正常记录。当前电量提示继续实时显示。
+
+- 新增 APP/工控机连接、RPP 障碍停车与解除、工控机/底盘断开与恢复记录，时间固定为事件在 APP 的观测时间，本地保留最近 500 条。
+- 可选底盘连接字段同步 APP 和板端协议，protoc 25.1 生成 Android/Python/nanopb，APP/板端 proto 内容相同。
+- :core:tcp:testDevDebugUnitTest 与 :app:assembleDevDebug 成功，TCP 74 项无失败；板端断连上报 4 项离线测试与 scheduler Python 语法检查通过。源码 diff --check 通过。
+- 输出 grindingrobot-message-events-arm64-debug.apk、arm32 APK 和 grinder-message-events-update.zip。未做真机 UI/串口验证，未部署工控机或重启服务。

@@ -591,17 +591,21 @@ private fun RobotConfigContent(
                 Column(fieldsModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     DesignSectionHeader("Footprint（m，相对 base_link）")
                     BoxWithConstraints(Modifier.fillMaxWidth()) {
-                        val columns = if (maxWidth >= 360.dp) 2 else 1
-                        val cellWidth = (maxWidth - 8.dp * (columns - 1)) / columns
-                        FlowRow(maxItemsInEachRow = columns,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                            uiState.footprint.forEachIndexed { index, point ->
-                                FootprintPointRow(
-                                    index = index, point = point, modifier = Modifier.width(cellWidth),
-                                    onXChange = { onFootprintPointChange(index, it, null) },
-                                    onYChange = { onFootprintPointChange(index, null, it) }
-                                )
+                        val columns = if (maxWidth >= 300.dp) 2 else 1
+                        val pointsPerColumn = (uiState.footprint.size + columns - 1) / columns
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            repeat(columns) { columnIndex ->
+                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                    val startIndex = columnIndex * pointsPerColumn
+                                    val endIndex = minOf(startIndex + pointsPerColumn, uiState.footprint.size)
+                                    for (index in startIndex until endIndex) {
+                                        FootprintPointRow(
+                                            index = index, point = uiState.footprint[index],
+                                            onXChange = { onFootprintPointChange(index, it, null) },
+                                            onYChange = { onFootprintPointChange(index, null, it) }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -1116,7 +1120,6 @@ private val LocalParameterCellWidth = staticCompositionLocalOf { 0.dp }
 private fun parameterCellModifier(width: Dp): Modifier =
     if (width > 0.dp) Modifier.width(width) else Modifier.fillMaxWidth()
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RppCard(
     title: String,
@@ -1130,26 +1133,27 @@ private fun RppCard(
             .background(if (warning) Color(0xFFFFFCF5) else Color(0xFFF8FBFF))
             .border(1.dp, if (warning) Color(0xFFFFD48A) else Color(0xFFE1ECF7), RoundedCornerShape(10.dp))
     ) {
-        Row(
+        Column(
             Modifier.fillMaxWidth().background(if (warning) Color(0xFFFFF9ED) else Color(0xFFF1F8FF))
-                .padding(horizontal = 10.dp, vertical = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                .padding(horizontal = 10.dp, vertical = 6.dp),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
-            Box(Modifier.width(3.dp).height(20.dp).background(accent))
-            Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
-            Text(subtitle, Modifier.weight(1f), fontSize = 10.sp, color = DesignMutedBlue,
-                maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Box(Modifier.width(3.dp).height(20.dp).background(accent))
+                Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DesignNavy)
+            }
+            Text(subtitle, Modifier.fillMaxWidth().padding(start = 9.dp),
+                fontSize = 10.sp, lineHeight = 14.sp, color = DesignMutedBlue)
         }
-        BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)) {
-            val columns = if (maxWidth >= 300.dp) 2 else 1
-            val cellWidth = (maxWidth - 8.dp * (columns - 1)) / columns
-            CompositionLocalProvider(LocalParameterCellWidth provides cellWidth) {
-                FlowRow(
-                    Modifier.fillMaxWidth(), maxItemsInEachRow = columns,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                ) { content() }
+        CompositionLocalProvider(LocalParameterCellWidth provides 0.dp) {
+            Column(
+                Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                content()
             }
         }
     }

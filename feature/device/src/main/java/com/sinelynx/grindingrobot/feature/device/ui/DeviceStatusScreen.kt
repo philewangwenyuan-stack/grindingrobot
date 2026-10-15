@@ -213,9 +213,21 @@ private fun DeviceStatusContent(
 
 @Composable
 private fun RuntimeSettingRow(label: String, setpoint: String?, actual: String, enabled: Boolean, onClick: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth().clickable(enabled = enabled, onClick = onClick).padding(vertical = 2.dp)) {
-        StatusRow(label, setpoint?.let { "设定 $it" } ?: if (enabled) "点击调节" else "—", Color(0xFF00A0E9))
-        Text(text = "实际 $actual", fontSize = 11.sp, color = Color(0xFF6D737D), modifier = Modifier.align(Alignment.End))
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "$label:", color = Color(0x806D737D), fontSize = 12.sp, maxLines = 1)
+        Text(
+            text = setpoint?.let { "设定 $it" } ?: if (enabled) "点击调节" else "—",
+            modifier = Modifier.weight(1f).clickable(enabled = enabled, onClick = onClick),
+            color = Color(0xFF00A0E9),
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1
+        )
+        Text(text = "实际 $actual", fontSize = 11.sp, color = Color(0xFF6D737D), maxLines = 1)
     }
 }
 

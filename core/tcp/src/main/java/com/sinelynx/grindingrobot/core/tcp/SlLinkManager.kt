@@ -149,6 +149,9 @@ class SlLinkManager @Inject constructor(
     private val taskExecutionHistoryChunkAssembler = TaskExecutionHistoryChunkAssembler()
     private val taskTrajectoryChunkAssembler = TaskTrajectoryChunkAssembler()
     private var onRadarMapSyncResponse: (() -> Unit)? = null
+    internal val deviceEvents = DeviceEventTracker { level, title ->
+        com.sinelynx.grindingrobot.core.data.state.DeviceEventHistory.append(level, title)
+    }
     
     init {
         // 设置本设备的源ID (APP)
@@ -1843,6 +1846,10 @@ class SlLinkManager @Inject constructor(
                 return
             }
             val report = SlLink.DeviceStatusReport.parseFrom(payload)
+            deviceEvents.onStatus(
+                collisionImminent = report.collisionImminent,
+                chassisConnected = if (report.hasChassisConnected()) report.chassisConnected else null
+            )
 //            LogUtils.d(
 //                "设备状态上报 " +
 //                    "location=${report.position}, "

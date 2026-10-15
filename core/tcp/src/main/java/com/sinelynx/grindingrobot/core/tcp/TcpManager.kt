@@ -220,6 +220,7 @@ class TcpManager @Inject constructor(
         // 设置回调
         tcpService.setCallback(object : TcpService.TcpCallback {
             override fun onConnected() {
+                slLinkManager.deviceEvents.onConnected()
                 LogUtils.d("TCP连接已建立")
                 slLinkManager.clearMapTransfer()
                 resetCommandReplies()
@@ -237,6 +238,7 @@ class TcpManager @Inject constructor(
             }
 
             override fun onDisconnected(reason: String) {
+                slLinkManager.deviceEvents.onDisconnected()
                 LogUtils.d("TCP连接已断开: $reason")
                 slLinkManager.clearMapTransfer()
                 resetCommandReplies()
@@ -250,6 +252,7 @@ class TcpManager @Inject constructor(
             }
 
             override fun onFailure(error: Throwable) {
+                slLinkManager.deviceEvents.onDisconnected()
                 LogUtils.d("TCP连接失败: ${error.message}")
                 slLinkManager.clearMapTransfer()
                 resetCommandReplies()
