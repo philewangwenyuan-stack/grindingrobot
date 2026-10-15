@@ -201,11 +201,13 @@ private fun DeviceStatusContent(
         StatusRow("定位质量", uiState.localizationQuality.toString(), Color(0xFF33C461))
         val runtimeEditable = uiState.taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED) && !uiState.runtimeApplying
         RuntimeSettingRow(
-            "直行速度", uiState.runtimeSettings?.runSpeed?.let { String.format(Locale.US, "%.3f m/s", it) },
+            "直行速度", (uiState.runtimeSettings?.runSpeed ?: uiState.configuredRunSpeed)
+                ?.let { String.format(Locale.US, "%.3f m/s", it) },
             uiState.straightSpeedText, runtimeEditable, { onEditRuntime(TaskRuntimeField.RUN_SPEED) }
         )
         RuntimeSettingRow(
-            "研磨转速", uiState.runtimeSettings?.discSpeedRpm?.let { "$it rpm" },
+            "研磨转速", (uiState.runtimeSettings?.discSpeedRpm ?: uiState.configuredDiscSpeedRpm)
+                ?.let { "$it rpm" },
             uiState.grindRpmText, runtimeEditable, { onEditRuntime(TaskRuntimeField.DISC_RPM) }
         )
     }
@@ -220,7 +222,7 @@ private fun RuntimeSettingRow(label: String, setpoint: String?, actual: String, 
     ) {
         Text(text = "$label:", color = Color(0x806D737D), fontSize = 12.sp, maxLines = 1)
         Text(
-            text = setpoint?.let { "设定 $it" } ?: if (enabled) "点击调节" else "—",
+            text = setpoint?.let { "设定 $it" } ?: "设定 —",
             modifier = Modifier.weight(1f).clickable(enabled = enabled, onClick = onClick),
             color = Color(0xFF00A0E9),
             fontSize = 11.sp,

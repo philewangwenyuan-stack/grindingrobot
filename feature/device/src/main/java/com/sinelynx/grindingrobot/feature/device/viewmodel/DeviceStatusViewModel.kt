@@ -44,6 +44,8 @@ data class DeviceStatusUiState(
     val localizationQuality: Int = 0,
     val straightSpeedText: String = "0.0 m/s",
     val grindRpmText: String = "0 rpm",
+    val configuredRunSpeed: Float? = null,
+    val configuredDiscSpeedRpm: Int? = null,
     val runtimeSettings: TaskRuntimeSettingsPayload? = null,
     val runtimeEditor: TaskRuntimeField? = null,
     val runtimeInput: String = "",
@@ -187,6 +189,16 @@ class DeviceStatusViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            appState.chassisSettings.collect { settings ->
+                _uiState.update {
+                    it.copy(
+                        configuredRunSpeed = settings?.runSpeed,
+                        configuredDiscSpeedRpm = settings?.discSpeedRpm
+                    )
+                }
+            }
+        }
+        viewModelScope.launch {
             appState.runtimeTaskState.collect { runtime ->
                 _uiState.update { current ->
                     current.copy(
@@ -231,6 +243,7 @@ class DeviceStatusViewModel @Inject constructor(
                 payload ?: return@collect
                 val reportTaskId = payload.taskId
                 val taskState = payload.toTaskUiState()
+                val taskStateChanged = taskState != _uiState.value.taskState
                 val runtimeInvalidated = reportTaskId != _uiState.value.currentTaskId ||
                     taskState !in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)
                 if (runtimeInvalidated) runtimeSettingsJob?.cancel()
@@ -277,6 +290,7 @@ class DeviceStatusViewModel @Inject constructor(
                     taskId = reportTaskId.takeIf { taskState != DeviceTaskUiState.IDLE },
                     pathVersion = payload.pathVersion
                 )
+                if (runtimeInvalidated || taskStateChanged) refreshRuntimeSettings()
             }
         }
 
@@ -346,6 +360,21 @@ class DeviceStatusViewModel @Inject constructor(
             return
         }
         executeTaskCommand(taskId, PendingTaskCommandType.STOP)
+    }
+
+    private fun refreshRuntimeSettings() {
+        val state = _uiState.value
+        if (!canEditRuntime(state) || runtimeSettingsJob?.isActive == true ||
+            state.runtimeEditor != null) return
+        val taskId = state.currentTaskId
+        runtimeSettingsJob = viewModelScope.launch {
+            val result = tcpManager.executeTaskRuntimeSettings(taskId)
+            if (!canEditRuntime(_uiState.value) || _uiState.value.currentTaskId != taskId) return@launch
+            val settings = (result as? DeviceCommandResult.Confirmed)?.runtimeSettings
+            if (settings?.isUsableFor(taskId) == true) {
+                _uiState.update { it.copy(runtimeSettings = settings) }
+            }
+        }
     }
 
     fun openRuntimeEditor(field: TaskRuntimeField) {
@@ -427,8 +456,16 @@ class DeviceStatusViewModel @Inject constructor(
         return _uiState.value.currentTaskId.takeIf { it.isNotBlank() }
     }
 
-    /** 仅控制地图补取/等待，不开关任务状态上报 collector。 */
-    fun setMapVisible(visible: Boolean) = taskMapController.setVisible(visible)
+    /** 页面可见时补取地图与设定值，不开关任务状态上报 collector。 */
+    fun setMapVisible(visible: Boolean) {
+        taskMapController.setVisible(visible)
+        if (visible) {
+            if (appState.chassisSettings.value == null) {
+                tcpManager.requestSettingRead(readChassis = true, readMap = false, readRpp = false)
+            }
+            refreshRuntimeSettings()
+        }
+    }
 
     /** 重试失败材料，不重置实时轨迹，不触发任何任务执行指令。 */
     fun retryTaskMap() = taskMapController.retry()
