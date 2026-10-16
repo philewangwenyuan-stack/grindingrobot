@@ -176,3 +176,14 @@
 - 连接成功回调统一读取机器参数，自动重连也覆盖；删除首页重复的首次请求，不向板端写回 APP 默认设置。
 - :core:data:testDevDebugUnitTest --tests '*RobotSettingsReconnectTest'（5项）、:core:tcp:testDevDebugUnitTest（74项）、:app:assembleDevDebug 全部通过。输出 footprint-reconnect arm64/arm32 APK。
 - 未做实机断网验证，未更改或部署板端。
+## 2026-10-16 平板解除急停完成
+
+- 首页急停旁新增解除按钮、确认弹窗、板端详细结果弹窗；解除等待最长 10 秒，失败/超时不自动重试或启动。
+- 原紧急制动保持可用，新急停取消解除等待；解除与急停独立回复 tracker，解除严格匹配 ACK/source。
+- TCP 77 项（新增3项）及 main 新增4项定向测试通过；完整 devDebug APK 通过独立输出目录构建。原 main GNSS 测试编译缺陷、Windows 原输出 jar 占用均已记录，未更改旧测试或终止进程。
+- 已输出 emergency-release 两个 ABI APK；未修改板端、未部署、未执行真实解除。
+## 2026-10-16 急停改为单按钮
+
+- 移除第二个按钮，单按钮按板端实际锁存切换制动/解除，确认成功回切；未知状态保留制动，重连清除旧推断。
+- 补充板端状态 optional emergency_stop_latched=22，生成 Java/Python/nanopb SDK，本地语法与协议往返校验通过。
+- TCP 78 项、main 9 项定向测试通过，独立输出 devDebug 完整构建成功。输出 emergency-state 两个 ABI APK 与 grinder-emergency-state-update.zip，未部署、未实机操作。

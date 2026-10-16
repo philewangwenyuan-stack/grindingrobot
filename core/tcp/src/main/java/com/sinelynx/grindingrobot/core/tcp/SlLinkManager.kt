@@ -114,6 +114,7 @@ class SlLinkManager @Inject constructor(
     private val parser = SlFrameParser()
     internal val taskCommandReplies = CommandReplyTracker()
     internal val emergencyStopReplies = CommandReplyTracker()
+    internal val emergencyReleaseReplies = CommandReplyTracker()
     internal val taskRuntimeReplies = CommandReplyTracker()
     private val monitor = SlLinkMonitor()
     private val mapTransferLock = Any()
@@ -763,6 +764,12 @@ class SlLinkManager @Inject constructor(
                 reply = CommandReply(response.resultValue, response.message),
                 allowUnsequenced = appliedEmergencyStop
             )
+            val releaseTicket = emergencyReleaseReplies.complete(
+                ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = null,
+                reply = CommandReply(response.resultValue, response.message),
+                requireExactAck = true
+            )
+            if (releaseTicket != null) LogUtils.i("TaskControl", "emergency release reply ack=${frame.ackSeq} request=${releaseTicket.seq} result=${response.result}")
             if (ticket != null) LogUtils.i("TaskControl", "emergency reply seq=${frame.seq} ack=${frame.ackSeq} request=${ticket.seq} result=${response.result}")
             LogUtils.d(
                 "控制指令响应: " +
@@ -1865,7 +1872,8 @@ class SlLinkManager @Inject constructor(
                 radarSystemStatusAvailable = report.radarSystemStatusAvailable,
                 radarSystemStatus = report.radarSystemStatus,
                 collisionImminent = report.collisionImminent,
-                vehicleSpeedMps = report.vehicleSpeed
+                vehicleSpeedMps = report.vehicleSpeed,
+                emergencyStopLatched = if (report.hasEmergencyStopLatched()) report.emergencyStopLatched else null
             )
             if (report.hasPosition()) {
                 val position = report.position

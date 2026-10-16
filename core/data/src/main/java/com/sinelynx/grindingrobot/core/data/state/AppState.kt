@@ -86,7 +86,8 @@ class AppState @Inject constructor(
         val radarSystemStatusAvailable: Boolean = false,
         val radarSystemStatus: String = "",
         val collisionImminent: Boolean = false,
-        val vehicleSpeedMps: Float = 0f
+        val vehicleSpeedMps: Float = 0f,
+        val emergencyStopLatched: Boolean? = null
     )
 
     data class TcpEndpoint(
@@ -408,7 +409,8 @@ class AppState @Inject constructor(
         radarSystemStatusAvailable: Boolean,
         radarSystemStatus: String,
         collisionImminent: Boolean,
-        vehicleSpeedMps: Float
+        vehicleSpeedMps: Float,
+        emergencyStopLatched: Boolean? = null
     ) {
         val taskStarted = discEnabled || workMode == 2 || workMode == 3
         _runtimeTaskState.value = RuntimeTaskState(
@@ -423,7 +425,8 @@ class AppState @Inject constructor(
             radarSystemStatusAvailable = radarSystemStatusAvailable,
             radarSystemStatus = radarSystemStatus,
             collisionImminent = collisionImminent,
-            vehicleSpeedMps = vehicleSpeedMps
+            vehicleSpeedMps = vehicleSpeedMps,
+            emergencyStopLatched = emergencyStopLatched
         )
     }
 

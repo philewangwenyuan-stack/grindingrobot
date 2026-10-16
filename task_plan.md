@@ -109,3 +109,5 @@
 - [complete] 43. TCP 74 项（新增 5 项）与板端 4 项通过，devDebug 编译成功；已打包两个 ABI APK 和板端更新包，未部署或操作硬件
 - [complete] 44. 消息卡片紧凑布局，默认完整显示三条；新增数量与可拖动滚动条，common 9 项测试通过，devDebug 编译打包成功
 - [complete] 45. 修复断网重连 footprint 重置：保留同设备已确认轮廓，每次连接自动读实际参数，切换设备清理旧参数；5 项回归、TCP 74 项通过，devDebug 编译成功
+- [complete] 46. 平板接入解除急停：enabled=false、严格回复、现场确认、板端结果显示及急停优先；TCP 77 项与新增 main 4 项定向测试通过，独立输出目录 devDebug 构建成功
+- [complete] 47. 单按钮跟随实际急停状态；新增可选锁存上报，TCP 78 项和 main 9 项定向测试通过，devDebug APK 与板端更新包生成，尚未部署实机

@@ -122,3 +122,13 @@ TCP IO 回调在日志注释后仍逐字节进行 String.format 十六进制转�
 - 根因：AppState.clearDeviceStatus 清空了机器人几何；TcpManager 自动重连成功未读取机器参数，HomeViewModel 只在首次打开时查询，导致现有地图回退 APP 默认轮廓。
 - 修复：保留同 host/port 的已确认 footprint，每次连接成功统一只读刷新参数；切换 host 或 port 清理旧设备参数。缺失有效 polygon 的部分回复不会清除已确认 footprint。
 - 新增 5 项 AppState 重连回归测试通过，TCP 74 项通过，完整 devDebug APK 构建成功。未做真机断网重连验证，本次未修改板端。
+## 2026-10-16 平板解除急停
+
+- 板端现有 ControlCommand 0x0401 / response 0x0402 已支持 emergency_stop.enabled=false，并返回底盘停车核验结果；无底盘测试模式只清灯仍返回失败，APP 保留原文原因。
+- APP 新增解除入口和现场确认；独立 tracker 必须 exact ACK/source，不与急停旧 ACK=0 兼容回退混用。急停操作取消解除等待，并用代次阻止迟到结果覆盖新急停。
+- TCP 77 项通过；main 4 项新增定向测试通过。存量 GNSS 测试仍因缺失类型不能编译，未改动；Windows classes.jar 占用通过独立 main/app 输出目录解决。devDebug 构建成功，未实机解除。
+## 2026-10-16 急停单按钮
+
+- 原 DeviceStatusReport 无急停状态，新增 optional emergency_stop_latched=22，来源 scheduler._motion.latched。旧字段缺省为未知，不推断正常；重连后重新同步，本次已确认的急停/解除可即时更新按钮。
+- 单按钮正常红色“紧急制动”、锁存橙色“解除急停”，制动等待禁重复，解除等待期间同按钮保留再次制动。拒绝/超时不推断解除成功。
+- APP/板端 proto 一致，SDK 同步生成；TCP 78 项、main 9 项定向测试通过，板端语法与 Python 协议三态校验通过，devDebug 构建成功。板端尚未部署、未执行真实急停/解除。

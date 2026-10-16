@@ -7,6 +7,7 @@ import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.TaskStatusReportPayload
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
 import com.sinelynx.grindingrobot.core.tcp.DeviceCommandResult
+import com.sinelynx.grindingrobot.core.tcp.ConnectionState
 import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sl_link.SlLink
@@ -29,7 +31,10 @@ enum class HomeModuleTab(val label: String) {
 
 data class HomeUiState(
     val selectedTab: HomeModuleTab = HomeModuleTab.DeviceHome,
-    val emergencyStopFeedback: String? = null
+    val emergencyStopFeedback: String? = null,
+    val emergencyStopPending: Boolean = false,
+    val emergencyStopLatched: Boolean? = null,
+    val emergencyRelease: EmergencyReleaseUiState = EmergencyReleaseUiState()
 )
 
 @HiltViewModel
@@ -45,8 +50,39 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     private var emergencyStopPending = false
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val emergencyRelease = EmergencyReleaseController(
+        scope = viewModelScope,
+        execute = { tcpManager.executeEmergencyRelease() },
+        publish = { release ->
+            _uiState.update { it.copy(
+                emergencyRelease = release,
+                emergencyStopLatched = if (release.released) false else it.emergencyStopLatched,
+                emergencyStopFeedback = release.feedback ?: it.emergencyStopFeedback
+            ) }
+        }
+    )
 
     init {
+        viewModelScope.launch {
+            appState.runtimeTaskState.collect { runtime ->
+                runtime.emergencyStopLatched?.let { latched ->
+                    _uiState.update { current -> current.copy(
+                        emergencyStopLatched = latched,
+                        emergencyStopFeedback = if (current.emergencyStopLatched != latched && !current.emergencyStopPending && !current.emergencyRelease.pending)
+                            (if (latched) "已急停" else "状态正常") else current.emergencyStopFeedback
+                    ) }
+                }
+            }
+        }
+        viewModelScope.launch {
+            tcpManager.getConnectionStateFlow().collect { connection ->
+                if (connection != ConnectionState.CONNECTED) {
+                    _uiState.update { it.copy(emergencyStopLatched = null, emergencyStopFeedback = "连接中断，状态未知") }
+                } else {
+                    _uiState.update { if (it.emergencyStopLatched == null) it.copy(emergencyStopFeedback = "急停状态未上报") else it }
+                }
+            }
+        }
         viewModelScope.launch {
             val endpoint = appState.resolveTcpEndpoint()
             val host = endpoint.host
@@ -110,14 +146,15 @@ class HomeViewModel @Inject constructor(
 
     fun setEmergencyStop() {
         if (emergencyStopPending) return
+        emergencyRelease.cancelForEmergencyStop()
         emergencyStopPending = true
-        _uiState.update { it.copy(emergencyStopFeedback = "等待设备确认") }
+        _uiState.update { it.copy(emergencyStopPending = true, emergencyStopFeedback = "等待设备确认") }
         viewModelScope.launch {
             try {
                 ToastUtils.show("急停：等待设备确认")
                 when (val result = tcpManager.executeEmergencyStop()) {
                     is DeviceCommandResult.Confirmed -> {
-                        _uiState.update { it.copy(emergencyStopFeedback = "指令已确认") }
+                        _uiState.update { it.copy(emergencyStopLatched = true, emergencyStopFeedback = "急停已确认") }
                         ToastUtils.showSuccess("急停指令已确认")
                     }
                     is DeviceCommandResult.Rejected -> {
@@ -135,7 +172,16 @@ class HomeViewModel @Inject constructor(
                 }
             } finally {
                 emergencyStopPending = false
+                _uiState.update { it.copy(emergencyStopPending = false) }
             }
         }
+    }
+
+    fun releaseEmergencyStop() {
+        if (!emergencyStopPending) emergencyRelease.request()
+    }
+
+    fun dismissEmergencyReleaseResult() {
+        _uiState.update { it.copy(emergencyRelease = it.emergencyRelease.copy(title = null, message = null)) }
     }
 }

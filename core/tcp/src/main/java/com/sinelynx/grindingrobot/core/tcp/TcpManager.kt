@@ -20,6 +20,11 @@ import java.time.LocalTime
 import java.util.UUID
 import javax.inject.Inject
 
+internal fun buildEmergencyStopCommand(enabled: Boolean): ControlCommand =
+    ControlCommand.newBuilder().setEmergencyStop(
+        SlLink.EmergencyStopControl.newBuilder().setEnabled(enabled)
+    ).build()
+
 internal fun buildTaskConfig(
     taskId: String?,
     taskName: String,
@@ -1064,6 +1069,7 @@ class TcpManager @Inject constructor(
     private fun resetCommandReplies() {
         slLinkManager.taskCommandReplies.resetConnection()
         slLinkManager.emergencyStopReplies.resetConnection()
+        slLinkManager.emergencyReleaseReplies.resetConnection()
         slLinkManager.taskRuntimeReplies.resetConnection()
     }
 
@@ -1127,27 +1133,25 @@ class TcpManager @Inject constructor(
      * 发送紧急停止命令
      */
     fun sendEmergencyStop(dstId: UByte = 0x10u): Boolean {
-        val estopOnCmd = ControlCommand.newBuilder()
-            .setEmergencyStop(
-                SlLink.EmergencyStopControl.newBuilder()
-                    .setEnabled(true) // true=急停
-                    .build()
-            )
-            .build()
+        val estopOnCmd = buildEmergencyStopCommand(enabled = true)
 
         val frameData = slLinkManager.sendControlCommand(estopOnCmd.toByteArray(), dstId)
         return sendData(frameData)
     }
 
     suspend fun executeEmergencyStop(timeoutMs: Long = 5_000L, dstId: UByte = 0x10u): DeviceCommandResult {
-        val command = ControlCommand.newBuilder().setEmergencyStop(
-            SlLink.EmergencyStopControl.newBuilder().setEnabled(true)
-        ).build()
+        val command = buildEmergencyStopCommand(enabled = true)
         return executeConfirmedCommand(
             slLinkManager.sendControlCommand(command.toByteArray(), dstId),
             slLinkManager.emergencyStopReplies, "", "EMERGENCY_STOP", timeoutMs
         )
     }
+
+    suspend fun executeEmergencyRelease(timeoutMs: Long = 10_000L, dstId: UByte = 0x10u): DeviceCommandResult =
+        executeConfirmedCommand(
+            slLinkManager.sendControlCommand(buildEmergencyStopCommand(enabled = false).toByteArray(), dstId),
+            slLinkManager.emergencyReleaseReplies, "", "EMERGENCY_RELEASE", timeoutMs
+        )
 
     /** Null setpoints query capabilities; updates are task-scoped and never write defaults. */
     suspend fun executeTaskRuntimeSettings(

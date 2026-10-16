@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +52,8 @@ import com.sinelynx.grindingrobot.feature.main.R
 import com.sinelynx.grindingrobot.feature.main.ui.component.ConfirmOverlayDialog
 import com.sinelynx.grindingrobot.feature.main.viewmodel.HomeModuleTab
 import com.sinelynx.grindingrobot.feature.main.viewmodel.HomeViewModel
+import com.sinelynx.grindingrobot.feature.main.viewmodel.EmergencyButtonPresentation
+import com.sinelynx.grindingrobot.feature.main.viewmodel.emergencyButtonPresentation
 import com.sinelynx.grindingrobot.feature.main.viewmodel.JobStatisticsViewModel
 import com.sinelynx.grindingrobot.feature.main.viewmodel.RemoteSettingsViewModel
 import com.sinelynx.grindingrobot.feature.main.viewmodel.RobotSettingsViewModel
@@ -69,10 +73,14 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val homeState by viewModel.uiState.collectAsState()
+    val emergencyButton = emergencyButtonPresentation(
+        homeState.emergencyStopLatched, homeState.emergencyStopPending, homeState.emergencyRelease.pending
+    )
     val mapHomeViewModel: MapHomeViewModel = hiltViewModel()
     val mapState by mapHomeViewModel.uiState.collectAsState()
     var showDisconnectConfirmDialog by remember { mutableStateOf(false) }
     var showEmergencyConfirmDialog by remember { mutableStateOf(false) }
+    var showEmergencyReleaseConfirm by remember { mutableStateOf(false) }
 
     LaunchedEffect(mapHomeViewModel) {
         mapHomeViewModel.mapModeEvents.collect { event ->
@@ -94,8 +102,11 @@ fun HomeScreen(
     ) {
         HomeTopBar(
             onCloseClick = { showDisconnectConfirmDialog = true },
-            onEmergencyClick = { showEmergencyConfirmDialog = true },
-            emergencyStopFeedback = homeState.emergencyStopFeedback
+            onEmergencyClick = {
+                if (emergencyButton.releaseAction) showEmergencyReleaseConfirm = true else showEmergencyConfirmDialog = true
+            },
+            emergencyButton = emergencyButton,
+            emergencyStopFeedback = if (homeState.emergencyRelease.pending) "正在解除，点击可再次急停" else homeState.emergencyStopFeedback
         )
 
         LeftRail(
@@ -281,6 +292,28 @@ fun HomeScreen(
                 onCancel = { showEmergencyConfirmDialog = false }
             )
         }
+        if (showEmergencyReleaseConfirm) {
+            AlertDialog(
+                onDismissRequest = { showEmergencyReleaseConfirm = false },
+                title = { Text("解除急停") },
+                text = { Text("请确认现场安全，实体急停已释放。\n\n此操作会停止当前任务。板端确认停车反馈后才能解除；解除后仍保持停止，需要重新启动任务。") },
+                confirmButton = {
+                    TextButton(
+                        enabled = !homeState.emergencyStopPending && !homeState.emergencyRelease.pending,
+                        onClick = { showEmergencyReleaseConfirm = false; viewModel.releaseEmergencyStop() }
+                    ) { Text("确认解除") }
+                },
+                dismissButton = { TextButton(onClick = { showEmergencyReleaseConfirm = false }) { Text("取消") } }
+            )
+        }
+        homeState.emergencyRelease.title?.let { title ->
+            AlertDialog(
+                onDismissRequest = viewModel::dismissEmergencyReleaseResult,
+                title = { Text(title) },
+                text = { Text(homeState.emergencyRelease.message.orEmpty()) },
+                confirmButton = { TextButton(onClick = viewModel::dismissEmergencyReleaseResult) { Text("关闭") } }
+            )
+        }
     }
 }
 
@@ -288,6 +321,7 @@ fun HomeScreen(
 private fun HomeTopBar(
     onCloseClick: () -> Unit,
     onEmergencyClick: () -> Unit,
+    emergencyButton: EmergencyButtonPresentation,
     emergencyStopFeedback: String?
 ) {
     val context = LocalContext.current
@@ -326,6 +360,9 @@ private fun HomeTopBar(
 
         EmergencyPill(
             onClick = onEmergencyClick,
+            label = emergencyButton.label,
+            enabled = emergencyButton.enabled,
+            accent = if (emergencyButton.releaseAction) Color(0xFFB56B00) else Color(0xFFD82B2A),
             feedback = emergencyStopFeedback,
             modifier = Modifier.align(Alignment.TopCenter)
         )
@@ -356,14 +393,17 @@ private fun HomeTopBar(
 @Composable
 private fun EmergencyPill(
     onClick: () -> Unit,
+    label: String,
+    enabled: Boolean,
+    accent: Color,
     feedback: String? = null,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(1000.dp))
-            .background(Color(0x1AD82B2A))
-            .clickable(onClick = onClick)
+            .background(accent.copy(alpha = 0.1f))
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -372,7 +412,7 @@ private fun EmergencyPill(
             modifier = Modifier
                 .size(14.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFD82B2A)),
+                .background(accent),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -392,12 +432,12 @@ private fun EmergencyPill(
         }
         Column {
             Text(
-                text = stringResource(R.string.home_emergency_stop),
-                color = Color(0xFFD82B2A),
+                text = label,
+                color = accent,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
-            if (feedback != null) Text(text = feedback, color = Color(0xFFD82B2A), fontSize = 11.sp)
+            if (feedback != null) Text(text = feedback, color = accent, fontSize = 11.sp)
         }
     }
 }

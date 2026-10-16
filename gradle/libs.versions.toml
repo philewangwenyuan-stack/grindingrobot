@@ -6,9 +6,9 @@
 
 # 项目基础配置
 # 构建版本
-versionCode = "27"
+versionCode = "28"
 # 版本号
-versionName = "1.0.27"
+versionName = "1.0.28"
 # 包名
 namespace = "com.sinelynx.grindingrobot"
 
