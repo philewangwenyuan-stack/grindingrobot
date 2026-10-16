@@ -187,3 +187,9 @@
 - 移除第二个按钮，单按钮按板端实际锁存切换制动/解除，确认成功回切；未知状态保留制动，重连清除旧推断。
 - 补充板端状态 optional emergency_stop_latched=22，生成 Java/Python/nanopb SDK，本地语法与协议往返校验通过。
 - TCP 78 项、main 9 项定向测试通过，独立输出 devDebug 完整构建成功。输出 emergency-state 两个 ABI APK 与 grinder-emergency-state-update.zip，未部署、未实机操作。
+## 2026-10-16 解除急停弹窗风格统一
+
+- 移除 HomeScreen 默认 Material3 AlertDialog，确认及结果均复用现有 ConfirmOverlayDialog，白底48dp圆角、居中图标与文字、灰取消和红色胶囊主按钮。
+- 公共组件增加 confirmEnabled/showCancel；标题24sp Bold、正文20sp Normal、按钮18sp Bold，明确系统默认字体和行高。长正文可滚动，底部操作固定，解除说明精简为两行。
+- agent.md 新增用户确认的 UI 风格/字体规范，约束后续弹窗复用与主题、尺寸、颜色、字体处理。
+- :app:assembleDevDebug 独立输出构建成功，生成 emergency-dialog-style 两个 ABI APK。此次为样式变更，未新增或重复运行业务单测，未做真机视觉验证。

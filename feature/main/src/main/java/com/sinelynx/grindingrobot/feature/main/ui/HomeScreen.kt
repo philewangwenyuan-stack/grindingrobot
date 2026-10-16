@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -293,25 +291,25 @@ fun HomeScreen(
             )
         }
         if (showEmergencyReleaseConfirm) {
-            AlertDialog(
-                onDismissRequest = { showEmergencyReleaseConfirm = false },
-                title = { Text("解除急停") },
-                text = { Text("请确认现场安全，实体急停已释放。\n\n此操作会停止当前任务。板端确认停车反馈后才能解除；解除后仍保持停止，需要重新启动任务。") },
-                confirmButton = {
-                    TextButton(
-                        enabled = !homeState.emergencyStopPending && !homeState.emergencyRelease.pending,
-                        onClick = { showEmergencyReleaseConfirm = false; viewModel.releaseEmergencyStop() }
-                    ) { Text("确认解除") }
-                },
-                dismissButton = { TextButton(onClick = { showEmergencyReleaseConfirm = false }) { Text("取消") } }
+            ConfirmOverlayDialog(
+                title = "确定解除急停？",
+                message = "请确认现场安全，实体急停已释放。\n解除后仍保持停止，需要重新启动任务。",
+                confirmText = "确认解除",
+                cancelText = "取消",
+                confirmEnabled = !homeState.emergencyStopPending && !homeState.emergencyRelease.pending,
+                onConfirm = { showEmergencyReleaseConfirm = false; viewModel.releaseEmergencyStop() },
+                onCancel = { showEmergencyReleaseConfirm = false }
             )
         }
         homeState.emergencyRelease.title?.let { title ->
-            AlertDialog(
-                onDismissRequest = viewModel::dismissEmergencyReleaseResult,
-                title = { Text(title) },
-                text = { Text(homeState.emergencyRelease.message.orEmpty()) },
-                confirmButton = { TextButton(onClick = viewModel::dismissEmergencyReleaseResult) { Text("关闭") } }
+            ConfirmOverlayDialog(
+                title = title,
+                message = homeState.emergencyRelease.message.orEmpty(),
+                confirmText = "关闭",
+                cancelText = "",
+                showCancel = false,
+                onConfirm = viewModel::dismissEmergencyReleaseResult,
+                onCancel = viewModel::dismissEmergencyReleaseResult
             )
         }
     }

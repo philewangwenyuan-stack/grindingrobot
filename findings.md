@@ -132,3 +132,7 @@ TCP IO 回调在日志注释后仍逐字节进行 String.format 十六进制转�
 - 原 DeviceStatusReport 无急停状态，新增 optional emergency_stop_latched=22，来源 scheduler._motion.latched。旧字段缺省为未知，不推断正常；重连后重新同步，本次已确认的急停/解除可即时更新按钮。
 - 单按钮正常红色“紧急制动”、锁存橙色“解除急停”，制动等待禁重复，解除等待期间同按钮保留再次制动。拒绝/超时不推断解除成功。
 - APP/板端 proto 一致，SDK 同步生成；TCP 78 项、main 9 项定向测试通过，板端语法与 Python 协议三态校验通过，devDebug 构建成功。板端尚未部署、未执行真实急停/解除。
+## 2026-10-16 弹窗样式反馈
+
+- 解除确认与结果误用默认 Material3 AlertDialog，受深色主题影响显示黑色面板和默认小字/文字按钮，与既有急停 ConfirmOverlayDialog 不一致。
+- 已统一到既有公共确认组件，明确白底与系统字体，扩展滚动正文、单按钮结果和禁用确认；规范固化于 agent.md 的“UI 风格与字体（用户确认规范）”。
