@@ -53,6 +53,7 @@ Compose 页面 / ViewModel
 
 - `feature:connect`：设备连接页面和连接流程。
 - `feature:main`：主框架、首页、任务记录/回放、统计、OTA。
+  遥控松手与任务停止回执交错见 `viewmodel/ManualControlSession.kt`、`RemoteSettingsViewModel.kt`，离线回归 `ManualControlSessionTest.kt`；松手零速直接发送，不能等任务STOP回执。
 - `feature:map`：地图目录、编辑步骤、区域/禁区、路径规划、开始研磨。
 - `feature:device`：设备状态、任务地图及设备侧业务。
 - `feature:common`：跨功能公共 UI、弹窗、状态栏和资源。

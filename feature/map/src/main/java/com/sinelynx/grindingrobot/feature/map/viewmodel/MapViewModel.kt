@@ -378,7 +378,7 @@ class MapViewModel @Inject constructor(
     companion object {
         private const val MAP_SNAPSHOT_INTERVAL_MS = 6_000L
         private const val MAP_REQUEST_TIMEOUT_MS = 12_000L
-        private const val ROBOT_CONTROL_SEND_INTERVAL_MS = 200L
+        private const val ROBOT_CONTROL_SEND_INTERVAL_MS = 100L
         private const val MIN_RUN_SPEED = 0f
         private const val MAX_RUN_SPEED = 0.15f
         private const val RUN_SPEED_STEP = 0.05f

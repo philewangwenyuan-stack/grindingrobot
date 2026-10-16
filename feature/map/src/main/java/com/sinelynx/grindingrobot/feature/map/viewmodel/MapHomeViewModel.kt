@@ -1458,7 +1458,7 @@ private fun normalizeRelocalizationRunSpeed(value: Float): Float {
 private const val RADAR_STATUS_POLL_INTERVAL_MS = 1_000L
 private const val RADAR_STATUS_RESPONSE_TIMEOUT_MS = 3_000L
 private const val RELOCALIZATION_SETTINGS_READ_TIMEOUT_MS = 5_000L
-private const val ROBOT_CONTROL_SEND_INTERVAL_MS = 200L
+private const val ROBOT_CONTROL_SEND_INTERVAL_MS = 100L
 private const val RADAR_RELOCALIZATION_SUCCEEDED_STATUS = "RelocalizationSucceed"
 private const val MIN_RELOCALIZATION_RUN_SPEED = 0f
 private const val MAX_RELOCALIZATION_RUN_SPEED = 0.15f

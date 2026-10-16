@@ -63,7 +63,9 @@ class RemoteSettingsViewModel @Inject constructor(
     val uiState: StateFlow<RemoteSettingsUiState> = _uiState.asStateFlow()
 
     private var requestJob: Job? = null
-    private var manualControlJob: Job? = null
+    private val manualControlSession = ManualControlSession<JoystickPosition>(
+        viewModelScope, { stopActiveTaskBeforeManualControl() }, ::sendManualControlCommand
+    )
     private var continuousPositionJob: Job? = null
     private var lastRobotControlSendAtMs: Long = 0L
     private var pendingManualPosition: JoystickPosition? = null
@@ -264,7 +266,9 @@ class RemoteSettingsViewModel @Inject constructor(
         if (!position.hasRealJoystickInput()) {
             _uiState.update { it.copy(lastPosition = position) }
             stopContinuousPositionSend()
-            if (previousPosition.hasRealJoystickInput() && !isAutoMode()) {
+            pendingManualPosition = null
+            if (previousPosition.hasRealJoystickInput() &&
+                (!isAutoMode() || manualControlSession.hasRequestedControl)) {
                 lastRobotControlSendAtMs = SystemClock.elapsedRealtime()
                 requestManualControl(position)
             }
@@ -330,17 +334,7 @@ class RemoteSettingsViewModel @Inject constructor(
     }
 
     private fun requestManualControl(position: JoystickPosition) {
-        pendingManualPosition = position
-        if (manualControlJob?.isActive == true) return
-        manualControlJob = viewModelScope.launch {
-            if (!stopActiveTaskBeforeManualControl()) {
-                pendingManualPosition = null
-                return@launch
-            }
-            val targetPosition = pendingManualPosition ?: return@launch
-            pendingManualPosition = null
-            sendManualControlCommand(targetPosition)
-        }
+        manualControlSession.request(position, position.hasRealJoystickInput())
     }
 
     private fun sendManualControlCommand(position: JoystickPosition) {
@@ -410,7 +404,7 @@ class RemoteSettingsViewModel @Inject constructor(
 
     override fun onCleared() {
         requestJob?.cancel()
-        manualControlJob?.cancel()
+        manualControlSession.cancel()
         continuousPositionJob?.cancel()
         super.onCleared()
     }
@@ -437,7 +431,7 @@ class RemoteSettingsViewModel @Inject constructor(
 
     companion object {
         private const val MAP_SNAPSHOT_INTERVAL_MS = 30_000L
-        private const val ROBOT_CONTROL_SEND_INTERVAL_MS = 200L
+        private const val ROBOT_CONTROL_SEND_INTERVAL_MS = 100L
         private const val STOP_TASK_RESPONSE_TIMEOUT_MS = 5_000L
         private const val JOYSTICK_INPUT_THRESHOLD = 0.01f
         private const val JOYSTICK_POSITION_CHANGE_THRESHOLD = 0.0001f
