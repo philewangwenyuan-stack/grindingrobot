@@ -9,6 +9,36 @@ class DeviceEventTrackerTest {
     private val events = mutableListOf<Pair<DeviceEventLevel, String>>()
     private val tracker = DeviceEventTracker { level, title -> events += level to title }
 
+    @Test fun localizationPauseRecoveryAndStopAreDistinct() {
+        tracker.onConnected()
+        tracker.onStatus(false, null, false, false)
+        tracker.onStatus(false, null, false, true, "pose_jump_exceeded")
+        tracker.onStatus(false, null, false, true, "pose_jump_exceeded")
+        assertEquals(1, events.count { it.second.startsWith("定位异常") })
+        tracker.onStatus(false, null, true, true, "ready")
+        tracker.onStatus(false, null, true, true, "ready")
+        assertEquals(1, events.count { it.second.startsWith("定位已恢复") })
+        tracker.onStatus(false, null, true, false)
+        tracker.onStatus(false, null, false, true, "unknown_code")
+        assertTrue(events.last().second.contains("定位状态异常"))
+        tracker.onStatus(false, null, false, false)
+        tracker.onStatus(false, null, true, false)
+        assertEquals(1, events.count { it.second.startsWith("定位已恢复") })
+    }
+
+    @Test fun reconnectShowsActivePauseButOldFieldsStayUnknown() {
+        tracker.onConnected()
+        tracker.onStatus(false, null)
+        assertEquals(1, events.size)
+        tracker.onStatus(false, null, true, true, "ready")
+        assertEquals(1, events.count { it.second.startsWith("定位异常") })
+        assertEquals(0, events.count { it.second.startsWith("定位已恢复") })
+        tracker.onDisconnected()
+        tracker.onConnected()
+        tracker.onStatus(false, null, false, true, "registration_quality_failed")
+        assertEquals(2, events.count { it.second.startsWith("定位异常") })
+    }
+
     @Test fun failedAttemptsAndDuplicateCallbacksDoNotFloodHistory() {
         tracker.onDisconnected()
         assertTrue(events.isEmpty())

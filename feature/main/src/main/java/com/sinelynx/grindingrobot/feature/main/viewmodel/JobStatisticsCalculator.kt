@@ -32,15 +32,10 @@ internal data class JobStatisticsQuery(
 
 /** The transport has a single history chunk assembler, so callers must serialize requests. */
 internal object TaskHistoryRequestGate {
-    private var owner: Any? = null
-    @Synchronized fun acquire(candidate: Any): Boolean {
-        if (owner != null) return false
-        owner = candidate
-        return true
-    }
-    @Synchronized fun release(candidate: Any) {
-        if (owner === candidate) owner = null
-    }
+    fun acquire(candidate: Any): Boolean =
+        com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate.acquire(candidate)
+    fun release(candidate: Any) =
+        com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate.release(candidate)
 }
 
 internal fun calculateJobStatistics(

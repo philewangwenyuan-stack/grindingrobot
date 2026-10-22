@@ -177,7 +177,8 @@ fun BoxScope.FootprintRobotMarker(
     headingDeg: Float,
     footprint: List<AppState.FootprintPoint>,
     pixelsPerMeterX: Float,
-    pixelsPerMeterY: Float
+    pixelsPerMeterY: Float,
+    showGrindingDisc: Boolean = false
 ) {
     if (footprint.size < 3 || !pixelsPerMeterX.isFinite() || !pixelsPerMeterY.isFinite() ||
         pixelsPerMeterX <= 0f || pixelsPerMeterY <= 0f) return
@@ -191,6 +192,22 @@ fun BoxScope.FootprintRobotMarker(
             close()
         }
         drawPath(outline, Color(0x55149FE8))
+        if (showGrindingDisc) {
+            grindingDiscLocalCenter(footprint)?.let { local ->
+                val discCenter = footprintPointOnScreen(
+                    center, AppState.FootprintPoint(local.x, local.y), headingDeg,
+                    pixelsPerMeterX, pixelsPerMeterY
+                )
+                drawOval(
+                    color = Color(0x66FFE34A),
+                    topLeft = discCenter - Offset(GRINDING_DISC_RADIUS_M * pixelsPerMeterX,
+                        GRINDING_DISC_RADIUS_M * pixelsPerMeterY),
+                    size = androidx.compose.ui.geometry.Size(
+                        GRINDING_DISC_DIAMETER_M * pixelsPerMeterX,
+                        GRINDING_DISC_DIAMETER_M * pixelsPerMeterY)
+                )
+            }
+        }
         drawPath(outline, Color(0xFF0879D1), style = Stroke(width = 2.dp.toPx()))
         drawRobotHeading(center, headingDeg)
     }

@@ -34,8 +34,22 @@ class JobStatisticsCalculatorTest {
         assertEquals(original.taskId, item.taskId)
         assertEquals(original.executionId, item.executionId)
         assertEquals(original.startedAt * 1000, item.startTime)
-        assertEquals("未命名任务", original.copy(taskName = " ").toTaskRecordItem(query.mapNames).taskName)
-        assertEquals("未命名任务", record().toTaskRecordItem(query.mapNames).taskName)
+        val generated = taskRecordDisplayName("", original.startedAt, original.finishedAt)
+        assertEquals(generated, original.copy(taskName = " ").toTaskRecordItem(query.mapNames).taskName)
+        assertEquals(generated, record().toTaskRecordItem(query.mapNames).taskName)
+    }
+
+    @Test fun unnamedRecordsUseLocalStartAndFinishTimestampsAcrossDates() {
+        val start = java.time.Instant.parse("2026-10-22T15:30:00Z").epochSecond
+        val end = java.time.Instant.parse("2026-10-22T16:15:00Z").epochSecond
+        for (name in listOf("", "  ", "未命名任务", "未命名的任务")) {
+            assertEquals("20261022_233000——20261023_001500",
+                taskRecordDisplayName(name, start, end, ZoneId.of("Asia/Shanghai")))
+        }
+        assertEquals("20261022_233000——进行中",
+            taskRecordDisplayName("", start, 0L, ZoneId.of("Asia/Shanghai")))
+        assertEquals("开始时间未知——进行中", taskRecordDisplayName("", 0L, 0L))
+        assertEquals("保留名称", taskRecordDisplayName(" 保留名称 ", start, end))
     }
 
     private val zone = ZoneId.of("Asia/Shanghai")

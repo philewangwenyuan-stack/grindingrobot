@@ -1855,7 +1855,10 @@ class SlLinkManager @Inject constructor(
             val report = SlLink.DeviceStatusReport.parseFrom(payload)
             deviceEvents.onStatus(
                 collisionImminent = report.collisionImminent,
-                chassisConnected = if (report.hasChassisConnected()) report.chassisConnected else null
+                chassisConnected = if (report.hasChassisConnected()) report.chassisConnected else null,
+                localizationReady = if (report.hasLocalizationReady()) report.localizationReady else null,
+                localizationPauseLatched = if (report.hasLocalizationPauseLatched()) report.localizationPauseLatched else null,
+                localizationStatusReason = report.localizationStatusReason
             )
 //            LogUtils.d(
 //                "设备状态上报 " +

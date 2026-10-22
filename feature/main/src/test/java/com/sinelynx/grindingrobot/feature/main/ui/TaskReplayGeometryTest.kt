@@ -12,6 +12,18 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class TaskReplayGeometryTest {
+    @Test fun replayPanResetsAtOriginalScale() {
+        assertEquals(Offset.Zero, clampReplayMapPan(Size(800f, 600f), 400 to 400, 0f, 1f, Offset(200f, -400f)))
+    }
+
+    @Test fun replayPanStaysWithinFittedImageBounds() {
+        assertEquals(Offset(-100f, -600f), clampReplayMapPan(Size(800f, 600f), 400 to 400, 0f, 2f, Offset(300f, -900f)))
+    }
+
+    @Test fun replayPanAccountsForMapRotation() {
+        assertEquals(Offset(-200f, 100f), clampReplayMapPan(Size(800f, 600f), 400 to 200, 90f, 2f, Offset(300f, 200f)))
+    }
+
     private val geo = MapGeo(
         mapWidth = 200,
         mapHeight = 100,

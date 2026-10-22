@@ -21518,6 +21518,64 @@ public final class SlLink {
      * @return The emergencyStopLatched.
      */
     boolean getEmergencyStopLatched();
+
+    /**
+     * <pre>
+     * Composite Super-LIO readiness. Absence means unknown/older board.
+     * </pre>
+     *
+     * <code>optional bool localization_ready = 23;</code>
+     * @return Whether the localizationReady field is set.
+     */
+    boolean hasLocalizationReady();
+    /**
+     * <pre>
+     * Composite Super-LIO readiness. Absence means unknown/older board.
+     * </pre>
+     *
+     * <code>optional bool localization_ready = 23;</code>
+     * @return The localizationReady.
+     */
+    boolean getLocalizationReady();
+
+    /**
+     * <pre>
+     * True while a task remains paused due to confirmed localization failure.
+     * </pre>
+     *
+     * <code>optional bool localization_pause_latched = 24;</code>
+     * @return Whether the localizationPauseLatched field is set.
+     */
+    boolean hasLocalizationPauseLatched();
+    /**
+     * <pre>
+     * True while a task remains paused due to confirmed localization failure.
+     * </pre>
+     *
+     * <code>optional bool localization_pause_latched = 24;</code>
+     * @return The localizationPauseLatched.
+     */
+    boolean getLocalizationPauseLatched();
+
+    /**
+     * <pre>
+     * Stable reason code; clients own presentation language.
+     * </pre>
+     *
+     * <code>string localization_status_reason = 25;</code>
+     * @return The localizationStatusReason.
+     */
+    java.lang.String getLocalizationStatusReason();
+    /**
+     * <pre>
+     * Stable reason code; clients own presentation language.
+     * </pre>
+     *
+     * <code>string localization_status_reason = 25;</code>
+     * @return The bytes for localizationStatusReason.
+     */
+    com.google.protobuf.ByteString
+        getLocalizationStatusReasonBytes();
   }
   /**
    * Protobuf type {@code sl_link.DeviceStatusReport}
@@ -21537,6 +21595,7 @@ public final class SlLink {
       workMode_ = 0;
       discLiftState_ = 0;
       radarSystemStatus_ = "";
+      localizationStatusReason_ = "";
     }
 
     @java.lang.Override
@@ -21932,6 +21991,107 @@ public final class SlLink {
       return emergencyStopLatched_;
     }
 
+    public static final int LOCALIZATION_READY_FIELD_NUMBER = 23;
+    private boolean localizationReady_ = false;
+    /**
+     * <pre>
+     * Composite Super-LIO readiness. Absence means unknown/older board.
+     * </pre>
+     *
+     * <code>optional bool localization_ready = 23;</code>
+     * @return Whether the localizationReady field is set.
+     */
+    @java.lang.Override
+    public boolean hasLocalizationReady() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <pre>
+     * Composite Super-LIO readiness. Absence means unknown/older board.
+     * </pre>
+     *
+     * <code>optional bool localization_ready = 23;</code>
+     * @return The localizationReady.
+     */
+    @java.lang.Override
+    public boolean getLocalizationReady() {
+      return localizationReady_;
+    }
+
+    public static final int LOCALIZATION_PAUSE_LATCHED_FIELD_NUMBER = 24;
+    private boolean localizationPauseLatched_ = false;
+    /**
+     * <pre>
+     * True while a task remains paused due to confirmed localization failure.
+     * </pre>
+     *
+     * <code>optional bool localization_pause_latched = 24;</code>
+     * @return Whether the localizationPauseLatched field is set.
+     */
+    @java.lang.Override
+    public boolean hasLocalizationPauseLatched() {
+      return ((bitField0_ & 0x00000020) != 0);
+    }
+    /**
+     * <pre>
+     * True while a task remains paused due to confirmed localization failure.
+     * </pre>
+     *
+     * <code>optional bool localization_pause_latched = 24;</code>
+     * @return The localizationPauseLatched.
+     */
+    @java.lang.Override
+    public boolean getLocalizationPauseLatched() {
+      return localizationPauseLatched_;
+    }
+
+    public static final int LOCALIZATION_STATUS_REASON_FIELD_NUMBER = 25;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object localizationStatusReason_ = "";
+    /**
+     * <pre>
+     * Stable reason code; clients own presentation language.
+     * </pre>
+     *
+     * <code>string localization_status_reason = 25;</code>
+     * @return The localizationStatusReason.
+     */
+    @java.lang.Override
+    public java.lang.String getLocalizationStatusReason() {
+      java.lang.Object ref = localizationStatusReason_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        localizationStatusReason_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Stable reason code; clients own presentation language.
+     * </pre>
+     *
+     * <code>string localization_status_reason = 25;</code>
+     * @return The bytes for localizationStatusReason.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getLocalizationStatusReasonBytes() {
+      java.lang.Object ref = localizationStatusReason_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        localizationStatusReason_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -22011,6 +22171,15 @@ public final class SlLink {
       }
       if (((bitField0_ & 0x00000008) != 0)) {
         output.writeBool(22, emergencyStopLatched_);
+      }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        output.writeBool(23, localizationReady_);
+      }
+      if (((bitField0_ & 0x00000020) != 0)) {
+        output.writeBool(24, localizationPauseLatched_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(localizationStatusReason_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 25, localizationStatusReason_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -22108,6 +22277,17 @@ public final class SlLink {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(22, emergencyStopLatched_);
       }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(23, localizationReady_);
+      }
+      if (((bitField0_ & 0x00000020) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(24, localizationPauseLatched_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(localizationStatusReason_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(25, localizationStatusReason_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -22179,6 +22359,18 @@ public final class SlLink {
         if (getEmergencyStopLatched()
             != other.getEmergencyStopLatched()) return false;
       }
+      if (hasLocalizationReady() != other.hasLocalizationReady()) return false;
+      if (hasLocalizationReady()) {
+        if (getLocalizationReady()
+            != other.getLocalizationReady()) return false;
+      }
+      if (hasLocalizationPauseLatched() != other.hasLocalizationPauseLatched()) return false;
+      if (hasLocalizationPauseLatched()) {
+        if (getLocalizationPauseLatched()
+            != other.getLocalizationPauseLatched()) return false;
+      }
+      if (!getLocalizationStatusReason()
+          .equals(other.getLocalizationStatusReason())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -22254,6 +22446,18 @@ public final class SlLink {
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getEmergencyStopLatched());
       }
+      if (hasLocalizationReady()) {
+        hash = (37 * hash) + LOCALIZATION_READY_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+            getLocalizationReady());
+      }
+      if (hasLocalizationPauseLatched()) {
+        hash = (37 * hash) + LOCALIZATION_PAUSE_LATCHED_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+            getLocalizationPauseLatched());
+      }
+      hash = (37 * hash) + LOCALIZATION_STATUS_REASON_FIELD_NUMBER;
+      hash = (53 * hash) + getLocalizationStatusReason().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -22422,6 +22626,9 @@ public final class SlLink {
         vehicleSpeed_ = 0F;
         chassisConnected_ = false;
         emergencyStopLatched_ = false;
+        localizationReady_ = false;
+        localizationPauseLatched_ = false;
+        localizationStatusReason_ = "";
         return this;
       }
 
@@ -22529,6 +22736,17 @@ public final class SlLink {
         if (((from_bitField0_ & 0x00200000) != 0)) {
           result.emergencyStopLatched_ = emergencyStopLatched_;
           to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00400000) != 0)) {
+          result.localizationReady_ = localizationReady_;
+          to_bitField0_ |= 0x00000010;
+        }
+        if (((from_bitField0_ & 0x00800000) != 0)) {
+          result.localizationPauseLatched_ = localizationPauseLatched_;
+          to_bitField0_ |= 0x00000020;
+        }
+        if (((from_bitField0_ & 0x01000000) != 0)) {
+          result.localizationStatusReason_ = localizationStatusReason_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -22644,6 +22862,17 @@ public final class SlLink {
         }
         if (other.hasEmergencyStopLatched()) {
           setEmergencyStopLatched(other.getEmergencyStopLatched());
+        }
+        if (other.hasLocalizationReady()) {
+          setLocalizationReady(other.getLocalizationReady());
+        }
+        if (other.hasLocalizationPauseLatched()) {
+          setLocalizationPauseLatched(other.getLocalizationPauseLatched());
+        }
+        if (!other.getLocalizationStatusReason().isEmpty()) {
+          localizationStatusReason_ = other.localizationStatusReason_;
+          bitField0_ |= 0x01000000;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -22785,6 +23014,21 @@ public final class SlLink {
                 bitField0_ |= 0x00200000;
                 break;
               } // case 176
+              case 184: {
+                localizationReady_ = input.readBool();
+                bitField0_ |= 0x00400000;
+                break;
+              } // case 184
+              case 192: {
+                localizationPauseLatched_ = input.readBool();
+                bitField0_ |= 0x00800000;
+                break;
+              } // case 192
+              case 202: {
+                localizationStatusReason_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x01000000;
+                break;
+              } // case 202
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -23888,6 +24132,210 @@ public final class SlLink {
       public Builder clearEmergencyStopLatched() {
         bitField0_ = (bitField0_ & ~0x00200000);
         emergencyStopLatched_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean localizationReady_ ;
+      /**
+       * <pre>
+       * Composite Super-LIO readiness. Absence means unknown/older board.
+       * </pre>
+       *
+       * <code>optional bool localization_ready = 23;</code>
+       * @return Whether the localizationReady field is set.
+       */
+      @java.lang.Override
+      public boolean hasLocalizationReady() {
+        return ((bitField0_ & 0x00400000) != 0);
+      }
+      /**
+       * <pre>
+       * Composite Super-LIO readiness. Absence means unknown/older board.
+       * </pre>
+       *
+       * <code>optional bool localization_ready = 23;</code>
+       * @return The localizationReady.
+       */
+      @java.lang.Override
+      public boolean getLocalizationReady() {
+        return localizationReady_;
+      }
+      /**
+       * <pre>
+       * Composite Super-LIO readiness. Absence means unknown/older board.
+       * </pre>
+       *
+       * <code>optional bool localization_ready = 23;</code>
+       * @param value The localizationReady to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLocalizationReady(boolean value) {
+
+        localizationReady_ = value;
+        bitField0_ |= 0x00400000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Composite Super-LIO readiness. Absence means unknown/older board.
+       * </pre>
+       *
+       * <code>optional bool localization_ready = 23;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLocalizationReady() {
+        bitField0_ = (bitField0_ & ~0x00400000);
+        localizationReady_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean localizationPauseLatched_ ;
+      /**
+       * <pre>
+       * True while a task remains paused due to confirmed localization failure.
+       * </pre>
+       *
+       * <code>optional bool localization_pause_latched = 24;</code>
+       * @return Whether the localizationPauseLatched field is set.
+       */
+      @java.lang.Override
+      public boolean hasLocalizationPauseLatched() {
+        return ((bitField0_ & 0x00800000) != 0);
+      }
+      /**
+       * <pre>
+       * True while a task remains paused due to confirmed localization failure.
+       * </pre>
+       *
+       * <code>optional bool localization_pause_latched = 24;</code>
+       * @return The localizationPauseLatched.
+       */
+      @java.lang.Override
+      public boolean getLocalizationPauseLatched() {
+        return localizationPauseLatched_;
+      }
+      /**
+       * <pre>
+       * True while a task remains paused due to confirmed localization failure.
+       * </pre>
+       *
+       * <code>optional bool localization_pause_latched = 24;</code>
+       * @param value The localizationPauseLatched to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLocalizationPauseLatched(boolean value) {
+
+        localizationPauseLatched_ = value;
+        bitField0_ |= 0x00800000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * True while a task remains paused due to confirmed localization failure.
+       * </pre>
+       *
+       * <code>optional bool localization_pause_latched = 24;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLocalizationPauseLatched() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        localizationPauseLatched_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object localizationStatusReason_ = "";
+      /**
+       * <pre>
+       * Stable reason code; clients own presentation language.
+       * </pre>
+       *
+       * <code>string localization_status_reason = 25;</code>
+       * @return The localizationStatusReason.
+       */
+      public java.lang.String getLocalizationStatusReason() {
+        java.lang.Object ref = localizationStatusReason_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          localizationStatusReason_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Stable reason code; clients own presentation language.
+       * </pre>
+       *
+       * <code>string localization_status_reason = 25;</code>
+       * @return The bytes for localizationStatusReason.
+       */
+      public com.google.protobuf.ByteString
+          getLocalizationStatusReasonBytes() {
+        java.lang.Object ref = localizationStatusReason_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          localizationStatusReason_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Stable reason code; clients own presentation language.
+       * </pre>
+       *
+       * <code>string localization_status_reason = 25;</code>
+       * @param value The localizationStatusReason to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLocalizationStatusReason(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        localizationStatusReason_ = value;
+        bitField0_ |= 0x01000000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Stable reason code; clients own presentation language.
+       * </pre>
+       *
+       * <code>string localization_status_reason = 25;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLocalizationStatusReason() {
+        localizationStatusReason_ = getDefaultInstance().getLocalizationStatusReason();
+        bitField0_ = (bitField0_ & ~0x01000000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Stable reason code; clients own presentation language.
+       * </pre>
+       *
+       * <code>string localization_status_reason = 25;</code>
+       * @param value The bytes for localizationStatusReason to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLocalizationStatusReasonBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        localizationStatusReason_ = value;
+        bitField0_ |= 0x01000000;
         onChanged();
         return this;
       }
@@ -115936,7 +116384,7 @@ public final class SlLink {
       "alid\030\001 \001(\010\022\022\n\nx_variance\030\002 \001(\002\022\022\n\ny_vari" +
       "ance\030\003 \001(\002\022\024\n\014yaw_variance\030\004 \001(\002\022\025\n\rxy_c" +
       "ovariance\030\005 \001(\002\022\030\n\020x_yaw_covariance\030\006 \001(" +
-      "\002\022\030\n\020y_yaw_covariance\030\007 \001(\002\"\327\006\n\022DeviceSt" +
+      "\002\022\030\n\020y_yaw_covariance\030\007 \001(\002\"\373\007\n\022DeviceSt" +
       "atusReport\022\020\n\010utc_time\030\001 \001(\r\022,\n\rsystem_s" +
       "tatus\030\002 \001(\0162\025.sl_link.SystemStatus\022(\n\013wi" +
       "fi_status\030\003 \001(\0162\023.sl_link.WifiResult\022$\n\t" +
@@ -115956,519 +116404,523 @@ public final class SlLink {
       "available\030\022 \001(\010\022\033\n\023radar_system_status\030\023" +
       " \001(\t\022)\n\rvehicle_speed\030\024 \001(\002B\022\212\265\030\003m/s\221\265\030\000" +
       "\000\000\000\000\000\360?\022\036\n\021chassis_connected\030\025 \001(\010H\000\210\001\001\022" +
-      "#\n\026emergency_stop_latched\030\026 \001(\010H\001\210\001\001B\024\n\022" +
-      "_chassis_connectedB\031\n\027_emergency_stop_la" +
-      "tched\">\n\022CameraFrameRequest\022\020\n\010snapshot\030" +
-      "\001 \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\"\263\001\n\020Camera" +
-      "FrameChunk\022\020\n\010frame_id\030\001 \001(\r\022\020\n\010utc_time" +
-      "\030\002 \001(\r\022\r\n\005width\030\003 \001(\r\022\016\n\006height\030\004 \001(\r\022#\n" +
-      "\005codec\030\005 \001(\0162\024.sl_link.CameraCodec\022\023\n\013ch" +
-      "unk_index\030\006 \001(\r\022\024\n\014total_chunks\030\007 \001(\r\022\014\n" +
-      "\004data\030\010 \001(\014\"Z\n\nMapRequest\022\020\n\010snapshot\030\001 " +
-      "\001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\022\016\n\006map_id\030\003 " +
-      "\001(\t\022\022\n\nrequest_id\030\004 \001(\004\"\342\001\n\020MapRequestRe" +
-      "sult\022\022\n\nrequest_id\030\001 \001(\004\022)\n\006status\030\002 \001(\016" +
-      "2\031.sl_link.MapRequestStatus\022\016\n\006map_id\030\003 " +
-      "\001(\t\022\023\n\013snapshot_id\030\004 \001(\004\022\024\n\014total_chunks" +
-      "\030\005 \001(\r\022\024\n\014payload_size\030\006 \001(\r\022\025\n\rpayload_" +
-      "crc32\030\007 \001(\r\022\026\n\016retry_after_ms\030\010 \001(\r\022\017\n\007m" +
-      "essage\030\t \001(\t\"\200\004\n\010MapChunk\022\016\n\006map_id\030\001 \001(" +
-      "\r\022\020\n\010utc_time\030\002 \001(\r\022&\n\010encoding\030\003 \001(\0162\024." +
-      "sl_link.MapEncoding\022\r\n\005width\030\004 \001(\r\022\016\n\006he" +
-      "ight\030\005 \001(\r\022\022\n\nresolution\030\006 \001(\002\022\023\n\013chunk_" +
-      "index\030\007 \001(\r\022\024\n\014total_chunks\030\010 \001(\r\022\014\n\004dat" +
-      "a\030\t \001(\014\022\037\n\006origin\030\n \001(\0132\017.sl_link.Pose2D" +
-      "\022\020\n\010frame_id\030\013 \001(\t\022\027\n\017preview_scale_x\030\014 " +
-      "\001(\002\022\027\n\017preview_scale_y\030\r \001(\002\022@\n\027localiza" +
-      "tion_covariance\030\016 \001(\0132\037.sl_link.Localiza" +
-      "tionCovariance\022\031\n\021alignment_yaw_deg\030\017 \001(" +
-      "\002\022\030\n\020app_rotation_deg\030\020 \001(\002\022$\n\034rotation_" +
-      "alignment_delta_deg\030\021 \001(\002\022\023\n\013map_version" +
-      "\030\022 \001(\r\022\022\n\nrequest_id\030\023 \001(\004\022\023\n\013snapshot_i" +
-      "d\030\024 \001(\004\"6\n\013PathPoint2D\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002" +
-      " \001(\002\022\021\n\tpath_type\030\003 \001(\t\"5\n\020RegionRepeatI" +
-      "tem\022\021\n\tregion_id\030\001 \001(\t\022\016\n\006repeat\030\002 \001(\r\"\222" +
-      "\003\n\nTaskConfig\022\017\n\007task_id\030\001 \001(\t\022,\n\014work_r" +
-      "egions\030\002 \003(\0132\026.sl_link.PolygonRegion\0220\n\020" +
-      "obstacle_regions\030\003 \003(\0132\026.sl_link.Polygon" +
-      "Region\022.\n\024default_path_spacing\030\004 \001(\002B\020\212\265" +
-      "\030\001m\221\265\030\000\000\000\000\000\000\360?\022%\n\013turn_radius\030\005 \001(\002B\020\212\265\030" +
-      "\001m\221\265\030\000\000\000\000\000\000\360?\022+\n\roverlap_ratio\030\006 \001(\002B\024\212\265" +
-      "\030\005ratio\221\265\030\000\000\000\000\000\000\360?\022*\n\020inflation_radius\030\007" +
-      " \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022\016\n\006map_id\030\010 \001(\t\022 " +
-      "\n\030selected_work_region_ids\030\t \003(\t\0221\n\016regi" +
-      "on_repeats\030\n \003(\0132\031.sl_link.RegionRepeatI" +
-      "tem\"[\n\022TaskConfigResponse\022#\n\006result\030\001 \001(" +
-      "\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022" +
-      "\017\n\007task_id\030\003 \001(\t\"I\n\013TaskCommand\022\017\n\007task_" +
-      "id\030\001 \001(\t\022)\n\007command\030\002 \001(\0162\030.sl_link.Task" +
-      "CommandType\"\\\n\023TaskCommandResponse\022#\n\006re" +
-      "sult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messa" +
-      "ge\030\002 \001(\t\022\017\n\007task_id\030\003 \001(\t\"\227\001\n\032TaskRuntim" +
-      "eSettingsRequest\022\017\n\007task_id\030\001 \001(\t\022*\n\trun" +
-      "_speed\030\002 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?H\000\210\001\001\022\033\n" +
-      "\016disc_speed_rpm\030\003 \001(\rH\001\210\001\001B\014\n\n_run_speed" +
-      "B\021\n\017_disc_speed_rpm\"\250\002\n\033TaskRuntimeSetti" +
-      "ngsResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Re" +
-      "sultCode\022\017\n\007message\030\002 \001(\t\022\017\n\007task_id\030\003 \001" +
-      "(\t\022*\n\trun_speed\030\004 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360" +
-      "?H\000\210\001\001\022\033\n\016disc_speed_rpm\030\005 \001(\rH\001\210\001\001\022)\n\rm" +
-      "ax_run_speed\030\006 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022\032" +
-      "\n\022max_disc_speed_rpm\030\007 \001(\r\022\021\n\ttemporary\030" +
-      "\010 \001(\010B\014\n\n_run_speedB\021\n\017_disc_speed_rpm\"\273" +
-      "\004\n\020TaskStatusReport\022\017\n\007task_id\030\001 \001(\t\022!\n\005" +
-      "state\030\002 \001(\0162\022.sl_link.TaskState\022\020\n\010progr" +
-      "ess\030\003 \001(\002\022\023\n\013map_version\030\004 \001(\r\022\017\n\007messag" +
-      "e\030\005 \001(\t\022!\n\010position\030\006 \001(\0132\017.sl_link.Pose" +
-      "2D\022\030\n\020replan_requested\030\007 \001(\010\022\030\n\020path_poi" +
-      "nt_count\030\010 \001(\r\022\024\n\014path_version\030\t \001(\r\022-\n\022" +
-      "total_work_area_m2\030\n \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000" +
-      "\000\360?\0221\n\026remaining_work_area_m2\030\013 \001(\002B\021\212\265\030" +
-      "\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020remaining_time_s\030\014 \001(\002" +
-      "B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\031\n\021current_region_id\030" +
-      "\r \001(\t\022#\n\033current_region_repeat_index\030\016 \001" +
-      "(\r\022#\n\033current_region_repeat_total\030\017 \001(\r\022" +
-      "\031\n\021alignment_yaw_deg\030\020 \001(\002\022@\n\027localizati" +
-      "on_covariance\030\021 \001(\0132\037.sl_link.Localizati" +
-      "onCovariance\"\333\001\n\024PathPointPlanRequest\022\017\n" +
-      "\007task_id\030\001 \001(\t\022\026\n\016max_chunk_size\030\002 \001(\r\022\022" +
-      "\n\nrequest_id\030\003 \001(\t\022\024\n\014force_replan\030\004 \001(\010" +
-      "\022#\n\nstart_pose\030\005 \001(\0132\017.sl_link.Pose2D\022!\n" +
-      "\010end_pose\030\006 \001(\0132\017.sl_link.Pose2D\022\030\n\020glob" +
-      "al_direction\030\007 \001(\t\022\016\n\006map_id\030\010 \001(\t\"\225\003\n\025P" +
-      "athPointPlanResponse\022\017\n\007task_id\030\001 \001(\t\022\023\n" +
-      "\013chunk_index\030\002 \001(\r\022\024\n\014total_chunks\030\003 \001(\r" +
-      "\022\024\n\014path_version\030\004 \001(\r\022\014\n\004data\030\005 \001(\014\022\022\n\n" +
-      "request_id\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022#\n\006resu" +
-      "lt\030\010 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
-      "\030\t \001(\t\022\017\n\007planned\030\n \001(\010\022\023\n\013map_version\030\013" +
-      " \001(\r\022\030\n\020path_point_count\030\014 \001(\r\022\025\n\rpath_l" +
-      "ength_m\030\r \001(\002\022-\n\022total_work_area_m2\030\016 \001(" +
-      "\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s" +
-      "\030\017 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\020\n\010frame_id\030\020 \001" +
-      "(\t\"d\n\021MapPreviewRequest\022\020\n\010max_edge\030\001 \001(" +
-      "\r\022\024\n\014image_format\030\002 \001(\t\022\027\n\017include_overl" +
-      "ay\030\003 \001(\010\022\016\n\006map_id\030\004 \001(\t\"\344\003\n\022MapPreviewR" +
-      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
-      "Code\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version\030\003 \001" +
-      "(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030\005 \001(\r\022\022\n\nres" +
-      "olution\030\006 \001(\002\022\037\n\006origin\030\007 \001(\0132\017.sl_link." +
-      "Pose2D\022\020\n\010frame_id\030\010 \001(\t\022\022\n\nimage_data\030\t" +
-      " \001(\014\022\024\n\014overlay_json\030\n \001(\t\022\027\n\017preview_sc" +
-      "ale_x\030\013 \001(\002\022\027\n\017preview_scale_y\030\014 \001(\002\022@\n\027" +
-      "localization_covariance\030\r \001(\0132\037.sl_link." +
-      "LocalizationCovariance\022\031\n\021alignment_yaw_" +
-      "deg\030\016 \001(\002\022\030\n\020app_rotation_deg\030\017 \001(\002\022$\n\034r" +
-      "otation_alignment_delta_deg\030\020 \001(\002\022\016\n\006map" +
-      "_id\030\021 \001(\t\022\024\n\014map_revision\030\022 \001(\t\"\'\n\025MapRe" +
-      "gionPointRequest\022\016\n\006map_id\030\001 \001(\t\"\277\001\n\023Wor" +
-      "kRegionPointInfo\022&\n\006region\030\001 \001(\0132\026.sl_li" +
-      "nk.PolygonRegion\022\034\n\024start_pose_available" +
-      "\030\002 \001(\010\022#\n\nstart_pose\030\003 \001(\0132\017.sl_link.Pos" +
-      "e2D\022\032\n\022end_pose_available\030\004 \001(\010\022!\n\010end_p" +
-      "ose\030\005 \001(\0132\017.sl_link.Pose2D\"\324\002\n\026MapRegion" +
-      "PointResponse\022#\n\006result\030\001 \001(\0162\023.sl_link." +
-      "ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 " +
-      "\001(\t\022\023\n\013map_version\030\004 \001(\r\0222\n\014work_regions" +
-      "\030\005 \003(\0132\034.sl_link.WorkRegionPointInfo\0220\n\020" +
-      "obstacle_regions\030\006 \003(\0132\026.sl_link.Polygon" +
-      "Region\022-\n\rerase_regions\030\007 \003(\0132\026.sl_link." +
-      "PolygonRegion\022\035\n\025crop_region_available\030\010" +
-      " \001(\010\022+\n\013crop_region\030\t \001(\0132\026.sl_link.Poly" +
-      "gonRegion\"\261\003\n\016MapEditCommand\022\017\n\007edit_id\030" +
-      "\001 \001(\t\022,\n\toperation\030\002 \001(\0162\031.sl_link.MapEd" +
-      "itOperation\022\023\n\013region_name\030\003 \001(\t\022&\n\006regi" +
-      "on\030\004 \001(\0132\026.sl_link.PolygonRegion\022&\n\007poly" +
-      "gon\030\005 \003(\0132\025.sl_link.PolygonPoint\022\024\n\014brus" +
-      "h_radius\030\006 \001(\002\022\023\n\013paint_value\030\007 \001(\005\022\030\n\020t" +
-      "arget_region_id\030\010 \001(\t\022/\n\022target_region_t" +
-      "ype\030\t \001(\0162\023.sl_link.RegionType\022\034\n\024expect" +
-      "ed_map_version\030\n \001(\r\022\017\n\007dry_run\030\013 \001(\010\022#\n" +
-      "\nstart_pose\030\014 \001(\0132\017.sl_link.Pose2D\022!\n\010en" +
-      "d_pose\030\r \001(\0132\017.sl_link.Pose2D\022\016\n\006map_id\030" +
-      "\016 \001(\t\"\\\n\017MapEditResponse\022#\n\006result\030\001 \001(\016" +
-      "2\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\023" +
-      "\n\013map_version\030\003 \001(\r\"W\n\023MapEditStatusRepo" +
-      "rt\022\023\n\013map_version\030\001 \001(\r\022\032\n\022applied_to_pl" +
-      "anner\030\002 \001(\010\022\017\n\007message\030\003 \001(\t\"/\n\026VideoStr" +
-      "eamInfoRequest\022\025\n\rinclude_debug\030\001 \001(\010\"\263\001" +
-      "\n\027VideoStreamInfoResponse\022#\n\006result\030\001 \001(" +
-      "\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022" +
-      "\022\n\nstream_url\030\003 \001(\t\022\r\n\005codec\030\004 \001(\t\022\r\n\005wi" +
-      "dth\030\005 \001(\r\022\016\n\006height\030\006 \001(\r\022\016\n\006online\030\007 \001(" +
-      "\010\022\020\n\010utc_time\030\010 \001(\r\"\362\001\n\017PathPlanRequest\022" +
-      "\022\n\nrequest_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\024\n\014" +
-      "force_replan\030\003 \001(\010\022\032\n\022return_path_chunks" +
-      "\030\004 \001(\010\022\026\n\016max_chunk_size\030\005 \001(\r\022#\n\nstart_" +
-      "pose\030\006 \001(\0132\017.sl_link.Pose2D\022!\n\010end_pose\030" +
-      "\007 \001(\0132\017.sl_link.Pose2D\022\030\n\020global_directi" +
-      "on\030\010 \001(\t\022\016\n\006map_id\030\t \001(\t\"\257\005\n\020PathPlanRes" +
-      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
-      "de\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(\t\022" +
-      "\017\n\007task_id\030\004 \001(\t\022\023\n\013map_version\030\005 \001(\r\022\024\n" +
-      "\014path_version\030\006 \001(\r\022\030\n\020path_point_count\030" +
-      "\007 \001(\r\022\025\n\rpath_length_m\030\010 \001(\002\022\017\n\007planned\030" +
-      "\t \001(\010\022\024\n\014path_chunked\030\n \001(\010\022\025\n\rpreview_i" +
-      "mage\030\013 \001(\014\022\026\n\016preview_format\030\014 \001(\t\022\r\n\005wi" +
-      "dth\030\r \001(\r\022\016\n\006height\030\016 \001(\r\022\022\n\nresolution\030" +
-      "\017 \001(\002\022\037\n\006origin\030\020 \001(\0132\017.sl_link.Pose2D\022\020" +
-      "\n\010frame_id\030\021 \001(\t\022\027\n\017preview_scale_x\030\022 \001(" +
-      "\002\022\027\n\017preview_scale_y\030\023 \001(\002\022-\n\022total_work" +
-      "_area_m2\030\024 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020est" +
-      "imated_time_s\030\025 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022@\n" +
-      "\027localization_covariance\030\026 \001(\0132\037.sl_link" +
-      ".LocalizationCovariance\022\031\n\021alignment_yaw" +
-      "_deg\030\027 \001(\002\022\030\n\020app_rotation_deg\030\030 \001(\002\022$\n\034" +
-      "rotation_alignment_delta_deg\030\031 \001(\002\"m\n\016Ma" +
-      "pSyncRequest\022,\n\toperation\030\001 \001(\0162\031.sl_lin" +
-      "k.MapSyncOperation\022\016\n\006map_id\030\002 \001(\t\022\035\n\025up" +
-      "date_navigation_map\030\003 \001(\010\"\226\002\n\017MapSyncRes" +
-      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
-      "de\022\017\n\007message\030\002 \001(\t\022,\n\toperation\030\003 \001(\0162\031" +
-      ".sl_link.MapSyncOperation\022\016\n\006map_id\030\004 \001(" +
-      "\t\022\020\n\010map_name\030\010 \001(\t\022\024\n\014map_revision\030\t \001(" +
-      "\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016map_image_pa" +
-      "th\030\006 \001(\t\022\037\n\027navigation_map_reloaded\030\007 \001(" +
-      "\010\022\027\n\017lifecycle_state\030\n \001(\t\")\n\027MapImportT" +
-      "oRadarRequest\022\016\n\006map_id\030\001 \001(\t\"\263\001\n\030MapImp" +
-      "ortToRadarResponse\022#\n\006result\030\001 \001(\0162\023.sl_" +
-      "link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_" +
-      "id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\020\n\010imported\030\005" +
-      " \001(\010\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle_" +
-      "state\030\007 \001(\t\"W\n\016MapModeRequest\022\"\n\004mode\030\001 " +
-      "\001(\0162\024.sl_link.MapModeType\022\017\n\007enabled\030\002 \001" +
-      "(\010\022\020\n\010map_kind\030\003 \001(\005\"\345\001\n\017MapModeResponse" +
-      "\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n" +
-      "\007message\030\002 \001(\t\022\"\n\004mode\030\003 \001(\0162\024.sl_link.M" +
-      "apModeType\022\017\n\007enabled\030\004 \001(\010\022\020\n\010map_kind\030" +
-      "\005 \001(\005\022\027\n\017lifecycle_state\030\006 \001(\t\022\016\n\006map_id" +
-      "\030\007 \001(\t\022\024\n\014map_revision\030\010 \001(\t\022\026\n\016residual" +
-      "_nodes\030\t \003(\t\";\n\023MapAlignmentRequest\022\016\n\006m" +
-      "ap_id\030\001 \001(\t\022\024\n\014rotation_deg\030\002 \001(\002\"\311\001\n\024Ma" +
-      "pAlignmentResponse\022#\n\006result\030\001 \001(\0162\023.sl_" +
-      "link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_" +
-      "id\030\003 \001(\t\022\024\n\014rotation_deg\030\004 \001(\002\022\024\n\014rotati" +
-      "on_rad\030\005 \001(\002\022\031\n\021alignment_yaw_deg\030\006 \001(\002\022" +
-      "$\n\034rotation_alignment_delta_deg\030\007 \001(\002\"\023\n" +
-      "\021MapCatalogRequest\"\303\002\n\016MapCatalogItem\022\016\n" +
-      "\006map_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\022\n\nsize_byte" +
-      "s\030\003 \001(\004\022\020\n\010saved_at\030\004 \001(\004\022-\n\022total_work_" +
-      "area_m2\030\005 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020esti" +
-      "mated_time_s\030\006 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030\n\020" +
-      "thumbnail_format\030\007 \001(\t\022\027\n\017thumbnail_widt" +
-      "h\030\010 \001(\r\022\030\n\020thumbnail_height\030\t \001(\r\022\033\n\023thu" +
-      "mbnail_image_b64\030\n \001(\t\022\022\n\ncreated_at\030\013 \001" +
-      "(\t\022\024\n\014map_revision\030\014 \001(\t\"\207\001\n\022MapCatalogR" +
-      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
-      "Code\022\017\n\007message\030\002 \001(\t\022\023\n\013total_count\030\003 \001" +
-      "(\r\022&\n\005items\030\004 \003(\0132\027.sl_link.MapCatalogIt" +
-      "em\"\"\n\020MapDeleteRequest\022\016\n\006map_id\030\001 \001(\t\"\312" +
-      "\001\n\021MapDeleteResponse\022#\n\006result\030\001 \001(\0162\023.s" +
-      "l_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006ma" +
-      "p_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\017\n\007deleted\030" +
-      "\005 \001(\010\022\025\n\rlocal_deleted\030\006 \001(\010\022\026\n\016remote_d" +
-      "eleted\030\007 \001(\010\022\035\n\025remote_delete_pending\030\010 " +
-      "\001(\010\"b\n\016MapSaveRequest\022\020\n\010map_name\030\001 \001(\t\022" +
-      "\016\n\006map_id\030\002 \001(\t\022\030\n\020has_rotation_deg\030\003 \001(" +
-      "\010\022\024\n\014rotation_deg\030\004 \001(\002\"\246\003\n\017MapSaveRespo" +
-      "nse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode" +
-      "\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map" +
-      "_name\030\004 \001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016ma" +
-      "p_image_path\030\006 \001(\t\022\037\n\027navigation_map_rel" +
-      "oaded\030\007 \001(\010\022-\n\022total_work_area_m2\030\010 \001(\002B" +
-      "\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030\t" +
-      " \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\022\n\ncreated_at\030\n \001" +
-      "(\t\022\024\n\014map_revision\030\013 \001(\t\022\027\n\017lifecycle_st" +
-      "ate\030\014 \001(\t\022\027\n\017mapping_stopped\030\r \001(\010\022\034\n\024lo" +
-      "calization_started\030\016 \001(\010\022\026\n\016residual_nod" +
-      "es\030\017 \003(\t\"#\n\021MapMetricsRequest\022\016\n\006map_id\030" +
-      "\001 \001(\t\"\233\001\n\021RegionMetricsItem\022\021\n\tregion_id" +
-      "\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\016\n\006repeat\030\003 " +
-      "\001(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022" +
-      "*\n\020estimated_time_h\030\005 \001(\002B\020\212\265\030\001h\221\265\030\000\000\000\000\000" +
-      "\000\360?\"\240\001\n\022MapMetricsResponse\022#\n\006result\030\001 \001" +
-      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
-      "\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\0222\n\016re" +
-      "gion_metrics\030\005 \003(\0132\032.sl_link.RegionMetri" +
-      "csItem\"S\n\021TaskResultRequest\022\016\n\006map_id\030\001 " +
-      "\001(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_execution_re" +
-      "cords\030\003 \001(\r\"\234\001\n\024TaskResultRegionItem\022\021\n\t" +
-      "region_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\025\n\r" +
-      "target_repeat\030\003 \001(\r\022\027\n\017executed_repeat\030\004" +
-      " \001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021unfinished_re" +
-      "ason\030\006 \001(\t\"\341\002\n\023TaskExecutionRecord\022\024\n\014ex" +
-      "ecution_id\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\017\n\007task" +
-      "_id\030\003 \001(\t\022\'\n\013final_state\030\004 \001(\0162\022.sl_link" +
-      ".TaskState\022\023\n\013stop_reason\030\005 \001(\t\022\022\n\nstart" +
-      "ed_at\030\006 \001(\004\022\023\n\013finished_at\030\007 \001(\004\022*\n\017plan" +
-      "ned_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020" +
-      "executed_area_m2\030\t \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360",
-      "?\022&\n\010progress\030\n \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360" +
-      "?\022\024\n\014path_version\030\013 \001(\r\022\025\n\rall_completed" +
-      "\030\014 \001(\010\"\244\006\n\022TaskResultResponse\022#\n\006result\030" +
+      "#\n\026emergency_stop_latched\030\026 \001(\010H\001\210\001\001\022\037\n\022" +
+      "localization_ready\030\027 \001(\010H\002\210\001\001\022\'\n\032localiz" +
+      "ation_pause_latched\030\030 \001(\010H\003\210\001\001\022\"\n\032locali" +
+      "zation_status_reason\030\031 \001(\tB\024\n\022_chassis_c" +
+      "onnectedB\031\n\027_emergency_stop_latchedB\025\n\023_" +
+      "localization_readyB\035\n\033_localization_paus" +
+      "e_latched\">\n\022CameraFrameRequest\022\020\n\010snaps" +
+      "hot\030\001 \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\"\263\001\n\020Ca" +
+      "meraFrameChunk\022\020\n\010frame_id\030\001 \001(\r\022\020\n\010utc_" +
+      "time\030\002 \001(\r\022\r\n\005width\030\003 \001(\r\022\016\n\006height\030\004 \001(" +
+      "\r\022#\n\005codec\030\005 \001(\0162\024.sl_link.CameraCodec\022\023" +
+      "\n\013chunk_index\030\006 \001(\r\022\024\n\014total_chunks\030\007 \001(" +
+      "\r\022\014\n\004data\030\010 \001(\014\"Z\n\nMapRequest\022\020\n\010snapsho" +
+      "t\030\001 \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\022\016\n\006map_i" +
+      "d\030\003 \001(\t\022\022\n\nrequest_id\030\004 \001(\004\"\342\001\n\020MapReque" +
+      "stResult\022\022\n\nrequest_id\030\001 \001(\004\022)\n\006status\030\002" +
+      " \001(\0162\031.sl_link.MapRequestStatus\022\016\n\006map_i" +
+      "d\030\003 \001(\t\022\023\n\013snapshot_id\030\004 \001(\004\022\024\n\014total_ch" +
+      "unks\030\005 \001(\r\022\024\n\014payload_size\030\006 \001(\r\022\025\n\rpayl" +
+      "oad_crc32\030\007 \001(\r\022\026\n\016retry_after_ms\030\010 \001(\r\022" +
+      "\017\n\007message\030\t \001(\t\"\200\004\n\010MapChunk\022\016\n\006map_id\030" +
+      "\001 \001(\r\022\020\n\010utc_time\030\002 \001(\r\022&\n\010encoding\030\003 \001(" +
+      "\0162\024.sl_link.MapEncoding\022\r\n\005width\030\004 \001(\r\022\016" +
+      "\n\006height\030\005 \001(\r\022\022\n\nresolution\030\006 \001(\002\022\023\n\013ch" +
+      "unk_index\030\007 \001(\r\022\024\n\014total_chunks\030\010 \001(\r\022\014\n" +
+      "\004data\030\t \001(\014\022\037\n\006origin\030\n \001(\0132\017.sl_link.Po" +
+      "se2D\022\020\n\010frame_id\030\013 \001(\t\022\027\n\017preview_scale_" +
+      "x\030\014 \001(\002\022\027\n\017preview_scale_y\030\r \001(\002\022@\n\027loca" +
+      "lization_covariance\030\016 \001(\0132\037.sl_link.Loca" +
+      "lizationCovariance\022\031\n\021alignment_yaw_deg\030" +
+      "\017 \001(\002\022\030\n\020app_rotation_deg\030\020 \001(\002\022$\n\034rotat" +
+      "ion_alignment_delta_deg\030\021 \001(\002\022\023\n\013map_ver" +
+      "sion\030\022 \001(\r\022\022\n\nrequest_id\030\023 \001(\004\022\023\n\013snapsh" +
+      "ot_id\030\024 \001(\004\"6\n\013PathPoint2D\022\t\n\001x\030\001 \001(\002\022\t\n" +
+      "\001y\030\002 \001(\002\022\021\n\tpath_type\030\003 \001(\t\"5\n\020RegionRep" +
+      "eatItem\022\021\n\tregion_id\030\001 \001(\t\022\016\n\006repeat\030\002 \001" +
+      "(\r\"\222\003\n\nTaskConfig\022\017\n\007task_id\030\001 \001(\t\022,\n\014wo" +
+      "rk_regions\030\002 \003(\0132\026.sl_link.PolygonRegion" +
+      "\0220\n\020obstacle_regions\030\003 \003(\0132\026.sl_link.Pol" +
+      "ygonRegion\022.\n\024default_path_spacing\030\004 \001(\002" +
+      "B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022%\n\013turn_radius\030\005 \001(\002B" +
+      "\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022+\n\roverlap_ratio\030\006 \001(\002" +
+      "B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\022*\n\020inflation_radi" +
+      "us\030\007 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022\016\n\006map_id\030\010 \001" +
+      "(\t\022 \n\030selected_work_region_ids\030\t \003(\t\0221\n\016" +
+      "region_repeats\030\n \003(\0132\031.sl_link.RegionRep" +
+      "eatItem\"[\n\022TaskConfigResponse\022#\n\006result\030" +
       "\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 " +
-      "\001(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\'\n\013" +
-      "final_state\030\005 \001(\0162\022.sl_link.TaskState\022\025\n" +
-      "\rall_completed\030\006 \001(\010\022\023\n\013stop_reason\030\007 \001(" +
-      "\t\022\024\n\014path_version\030\010 \001(\r\022\024\n\014image_format\030" +
-      "\t \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n\013image_width" +
-      "\030\013 \001(\r\022\024\n\014image_height\030\014 \001(\r\022\023\n\013finished" +
-      "_at\030\r \001(\004\022 \n\030selected_work_region_ids\030\016 " +
-      "\003(\t\0225\n\016region_results\030\017 \003(\0132\035.sl_link.Ta" +
-      "skResultRegionItem\022@\n\027localization_covar" +
-      "iance\030\020 \001(\0132\037.sl_link.LocalizationCovari" +
-      "ance\022\031\n\021alignment_yaw_deg\030\021 \001(\002\022\030\n\020app_r" +
-      "otation_deg\030\022 \001(\002\022$\n\034rotation_alignment_" +
-      "delta_deg\030\023 \001(\002\022\024\n\014execution_id\030\024 \001(\t\022\022\n" +
-      "\nstarted_at\030\025 \001(\004\022*\n\017planned_area_m2\030\026 \001" +
-      "(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020executed_area_m" +
-      "2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220\n\022execution_" +
-      "progress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\0227\n\021" +
-      "execution_records\030\031 \003(\0132\034.sl_link.TaskEx" +
-      "ecutionRecord\"|\n\033TaskExecutionHistoryReq" +
-      "uest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\022\n" +
-      "\nstart_time\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\026\n\016m" +
-      "ax_chunk_size\030\005 \001(\r\"\314\001\n\031TaskExecutionHis" +
-      "toryChunk\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
-      "ltCode\022\017\n\007message\030\002 \001(\t\022\023\n\013chunk_index\030\003" +
-      " \001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032\n\022total_reco" +
-      "rd_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014\022\022\n\nstart_ti" +
-      "me\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2\n\032TaskExecut" +
-      "ionDeleteRequest\022\024\n\014execution_id\030\001 \001(\t\"\274" +
-      "\001\n\033TaskExecutionDeleteResponse\022#\n\006result" +
-      "\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002" +
-      " \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017\n\007task_id\030\004 " +
-      "\001(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007deleted\030\006 \001(\010\022\037\n\027" +
-      "execution_files_deleted\030\007 \001(\010\"\272\001\n\025TaskTr" +
-      "ajectoryRequest\022\024\n\014execution_id\030\001 \001(\t\022\017\n" +
-      "\007task_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010en" +
-      "d_time\030\004 \001(\004\022\023\n\013start_index\030\005 \001(\r\022\022\n\nmax" +
-      "_points\030\006 \001(\r\022\023\n\013sample_step\030\007 \001(\r\022\026\n\016ma" +
-      "x_chunk_size\030\010 \001(\r\"\221\002\n\023TaskTrajectoryPoi" +
-      "nt\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_ms\030\002 \001(\r\022\014\n\004" +
-      "x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014heading_mdeg" +
-      "\030\005 \001(\021\022\031\n\021linear_speed_mmps\030\006 \001(\021\022\034\n\024ang" +
-      "ular_speed_mradps\030\007 \001(\021\022\026\n\016disc_speed_rp" +
-      "m\030\010 \001(\r\022\027\n\017speed_available\030\t \001(\010\022\024\n\014disc" +
-      "_enabled\030\n \001(\010\022&\n\ntask_state\030\013 \001(\0162\022.sl_" +
-      "link.TaskState\"\243\007\n\023TaskTrajectoryChunk\022#" +
+      "\001(\t\022\017\n\007task_id\030\003 \001(\t\"I\n\013TaskCommand\022\017\n\007t" +
+      "ask_id\030\001 \001(\t\022)\n\007command\030\002 \001(\0162\030.sl_link." +
+      "TaskCommandType\"\\\n\023TaskCommandResponse\022#" +
       "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
-      "essage\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\023\n\013ch" +
-      "unk_index\030\004 \001(\r\022\024\n\014total_chunks\030\005 \001(\r\022\031\n" +
-      "\021total_point_count\030\006 \001(\r\022\034\n\024returned_poi" +
-      "nt_count\030\007 \001(\r\022\023\n\013start_index\030\010 \001(\r\022\022\n\nn" +
-      "ext_index\030\t \001(\r\022\020\n\010has_more\030\n \001(\010\022\025\n\rsta" +
-      "rted_at_ms\030\013 \001(\004\022,\n\006points\030\014 \003(\0132\034.sl_li" +
-      "nk.TaskTrajectoryPoint\022\017\n\007task_id\030\r \001(\t\022" +
-      "\016\n\006map_id\030\016 \001(\t\022\022\n\nstart_time\030\017 \001(\004\022\020\n\010e" +
-      "nd_time\030\020 \001(\004\022\023\n\013sample_step\030\021 \001(\r\022\025\n\rma" +
-      "p_available\030\022 \001(\010\022\023\n\013map_message\030\023 \001(\t\022\023" +
-      "\n\013map_version\030\024 \001(\r\022\030\n\020map_source_width\030" +
-      "\025 \001(\r\022\031\n\021map_source_height\030\026 \001(\r\022\026\n\016map_" +
-      "resolution\030\027 \001(\002\022#\n\nmap_origin\030\030 \001(\0132\017.s" +
-      "l_link.Pose2D\022\024\n\014map_frame_id\030\031 \001(\t\022\030\n\020m" +
-      "ap_image_format\030\032 \001(\t\022\027\n\017map_image_width" +
-      "\030\033 \001(\r\022\030\n\020map_image_height\030\034 \001(\r\022\033\n\023map_" +
-      "preview_scale_x\030\035 \001(\002\022\033\n\023map_preview_sca" +
-      "le_y\030\036 \001(\002\022\026\n\016map_image_data\030\037 \001(\014\022\035\n\025ma" +
-      "p_image_chunk_index\030  \001(\r\022\036\n\026map_image_t" +
-      "otal_chunks\030! \001(\r\022\031\n\021alignment_yaw_deg\030\"" +
-      " \001(\002\022\030\n\020app_rotation_deg\030# \001(\002\022$\n\034rotati" +
-      "on_alignment_delta_deg\030$ \001(\002\"\032\n\030LiveMapC" +
-      "acheClearRequest\"Q\n\031LiveMapCacheClearRes" +
-      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
-      "de\022\017\n\007message\030\002 \001(\t\"h\n\027SystemCacheClearR" +
-      "equest\022\032\n\022clear_memory_cache\030\001 \001(\010\022\035\n\025cl" +
-      "ear_temporary_files\030\002 \001(\010\022\022\n\nclear_logs\030" +
-      "\003 \001(\010\"\376\001\n\030SystemCacheClearResponse\022#\n\006re" +
-      "sult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messa" +
-      "ge\030\002 \001(\t\022\034\n\024memory_cache_cleared\030\003 \001(\010\022\037" +
-      "\n\027temporary_files_cleared\030\004 \001(\r\022 \n\030tempo" +
-      "rary_bytes_released\030\005 \001(\004\022\031\n\021log_files_c" +
-      "leared\030\006 \001(\r\022\032\n\022log_bytes_released\030\007 \001(\004" +
-      "\022\024\n\014failed_items\030\010 \001(\r\"\033\n\031RadarMapCacheC" +
-      "learRequest\"R\n\032RadarMapCacheClearRespons" +
-      "e\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017" +
-      "\n\007message\030\002 \001(\t\"\032\n\030RadarSystemStatusRequ" +
-      "est\"\212\001\n\031RadarSystemStatusResponse\022#\n\006res" +
-      "ult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messag" +
-      "e\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016\n\006status\030\004 \001" +
-      "(\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023RadarMapSync" +
-      "Request\"Z\n\024RadarMapSyncResponse\022#\n\006resul" +
-      "t\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030" +
-      "\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\313\001\n\032RadarRelocalizat" +
-      "ionRequest\022\036\n\026initial_pose_available\030\001 \001" +
-      "(\010\022%\n\014initial_pose\030\002 \001(\0132\017.sl_link.Pose2" +
-      "D\022@\n\027initial_pose_covariance\030\003 \001(\0132\037.sl_" +
-      "link.LocalizationCovariance\022\016\n\006map_id\030\004 " +
-      "\001(\t\022\024\n\014map_revision\030\005 \001(\t\"\264\001\n\033RadarReloc" +
-      "alizationResponse\022#\n\006result\030\001 \001(\0162\023.sl_l" +
-      "ink.ResultCode\022\017\n\007message\030\002 \001(\t\022\020\n\010accep" +
-      "ted\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\016\n\006map_id\030\005 \001(" +
-      "\t\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle_sta" +
-      "te\030\007 \001(\t\"\"\n RadarRelocalizationStatusReq" +
-      "uest\"\353\003\n!RadarRelocalizationStatusRespon" +
-      "se\022\022\n\nraw_status\030\005 \001(\t\022\024\n\014timestamp_ns\030\n" +
-      " \001(\004\022\027\n\017lifecycle_state\030\013 \001(\t\022\016\n\006detail\030" +
-      "\014 \001(\t\022\016\n\006map_id\030\r \001(\t\022\024\n\014map_revision\030\016 " +
-      "\001(\t\022\023\n\013good_frames\030\017 \001(\r\022\027\n\017required_fra" +
-      "mes\030\020 \001(\r\022\"\n\032registration_quality_valid\030" +
-      "\021 \001(\010\022\034\n\024registration_fitness\030\022 \001(\002\022!\n\031r" +
-      "egistration_inlier_ratio\030\023 \001(\002\022\026\n\016residu" +
-      "al_nodes\030\024 \003(\tJ\004\010\001\020\002J\004\010\002\020\003J\004\010\003\020\004J\004\010\004\020\005J\004" +
-      "\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020\nR\006resultR\007messageR" +
-      "\tavailableR\006statusR\rsystem_statusR\016odom_" +
-      "availableR\025odom_linear_speed_mpsR\030odom_a" +
-      "ngular_speed_radps\"<\n\017DiscLiftControl\022)\n" +
-      "\007command\030\001 \001(\0162\030.sl_link.DiscLiftCommand" +
-      "\"\"\n\017LightingControl\022\017\n\007enabled\030\001 \001(\010\"&\n\023" +
-      "ChassisPowerControl\022\017\n\007enabled\030\001 \001(\010\"1\n\013" +
-      "DiscControl\022\017\n\007enabled\030\001 \001(\010\022\021\n\tspeed_rp" +
-      "m\030\002 \001(\r\"\'\n\024EmergencyStopControl\022\017\n\007enabl" +
-      "ed\030\001 \001(\010\"\260\001\n\022ManualDriveControl\022,\n\006motio" +
-      "n\030\001 \001(\0162\034.sl_link.ManualMotionCommand\022\023\n" +
-      "\013speed_ratio\030\002 \001(\002\022\020\n\010remote_x\030\003 \001(\002\022\020\n\010" +
-      "remote_y\030\004 \001(\002\022\025\n\rmax_speed_mps\030\005 \001(\002\022\034\n" +
-      "\024max_turn_speed_ratio\030\006 \001(\002\"\313\002\n\016ControlC" +
-      "ommand\022-\n\tdisc_lift\030\001 \001(\0132\030.sl_link.Disc" +
-      "LiftControlH\000\022,\n\010lighting\030\002 \001(\0132\030.sl_lin" +
-      "k.LightingControlH\000\0223\n\014manual_drive\030\003 \001(" +
-      "\0132\033.sl_link.ManualDriveControlH\000\0225\n\rchas" +
-      "sis_power\030\004 \001(\0132\034.sl_link.ChassisPowerCo" +
-      "ntrolH\000\022,\n\014disc_control\030\005 \001(\0132\024.sl_link." +
-      "DiscControlH\000\0227\n\016emergency_stop\030\006 \001(\0132\035." +
-      "sl_link.EmergencyStopControlH\000B\t\n\007comman" +
-      "d\"\200\001\n\026ControlCommandResponse\022#\n\006result\030\001" +
+      "essage\030\002 \001(\t\022\017\n\007task_id\030\003 \001(\t\"\227\001\n\032TaskRu" +
+      "ntimeSettingsRequest\022\017\n\007task_id\030\001 \001(\t\022*\n" +
+      "\trun_speed\030\002 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?H\000\210\001" +
+      "\001\022\033\n\016disc_speed_rpm\030\003 \001(\rH\001\210\001\001B\014\n\n_run_s" +
+      "peedB\021\n\017_disc_speed_rpm\"\250\002\n\033TaskRuntimeS" +
+      "ettingsResponse\022#\n\006result\030\001 \001(\0162\023.sl_lin" +
+      "k.ResultCode\022\017\n\007message\030\002 \001(\t\022\017\n\007task_id" +
+      "\030\003 \001(\t\022*\n\trun_speed\030\004 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000" +
+      "\000\000\000\360?H\000\210\001\001\022\033\n\016disc_speed_rpm\030\005 \001(\rH\001\210\001\001\022" +
+      ")\n\rmax_run_speed\030\006 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000" +
+      "\360?\022\032\n\022max_disc_speed_rpm\030\007 \001(\r\022\021\n\ttempor" +
+      "ary\030\010 \001(\010B\014\n\n_run_speedB\021\n\017_disc_speed_r" +
+      "pm\"\273\004\n\020TaskStatusReport\022\017\n\007task_id\030\001 \001(\t" +
+      "\022!\n\005state\030\002 \001(\0162\022.sl_link.TaskState\022\020\n\010p" +
+      "rogress\030\003 \001(\002\022\023\n\013map_version\030\004 \001(\r\022\017\n\007me" +
+      "ssage\030\005 \001(\t\022!\n\010position\030\006 \001(\0132\017.sl_link." +
+      "Pose2D\022\030\n\020replan_requested\030\007 \001(\010\022\030\n\020path" +
+      "_point_count\030\010 \001(\r\022\024\n\014path_version\030\t \001(\r" +
+      "\022-\n\022total_work_area_m2\030\n \001(\002B\021\212\265\030\002m2\221\265\030\000" +
+      "\000\000\000\000\000\360?\0221\n\026remaining_work_area_m2\030\013 \001(\002B" +
+      "\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020remaining_time_s\030\014" +
+      " \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\031\n\021current_region" +
+      "_id\030\r \001(\t\022#\n\033current_region_repeat_index" +
+      "\030\016 \001(\r\022#\n\033current_region_repeat_total\030\017 " +
+      "\001(\r\022\031\n\021alignment_yaw_deg\030\020 \001(\002\022@\n\027locali" +
+      "zation_covariance\030\021 \001(\0132\037.sl_link.Locali" +
+      "zationCovariance\"\333\001\n\024PathPointPlanReques" +
+      "t\022\017\n\007task_id\030\001 \001(\t\022\026\n\016max_chunk_size\030\002 \001" +
+      "(\r\022\022\n\nrequest_id\030\003 \001(\t\022\024\n\014force_replan\030\004" +
+      " \001(\010\022#\n\nstart_pose\030\005 \001(\0132\017.sl_link.Pose2" +
+      "D\022!\n\010end_pose\030\006 \001(\0132\017.sl_link.Pose2D\022\030\n\020" +
+      "global_direction\030\007 \001(\t\022\016\n\006map_id\030\010 \001(\t\"\225" +
+      "\003\n\025PathPointPlanResponse\022\017\n\007task_id\030\001 \001(" +
+      "\t\022\023\n\013chunk_index\030\002 \001(\r\022\024\n\014total_chunks\030\003" +
+      " \001(\r\022\024\n\014path_version\030\004 \001(\r\022\014\n\004data\030\005 \001(\014" +
+      "\022\022\n\nrequest_id\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022#\n\006" +
+      "result\030\010 \001(\0162\023.sl_link.ResultCode\022\017\n\007mes" +
+      "sage\030\t \001(\t\022\017\n\007planned\030\n \001(\010\022\023\n\013map_versi" +
+      "on\030\013 \001(\r\022\030\n\020path_point_count\030\014 \001(\r\022\025\n\rpa" +
+      "th_length_m\030\r \001(\002\022-\n\022total_work_area_m2\030" +
+      "\016 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_ti" +
+      "me_s\030\017 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\020\n\010frame_id" +
+      "\030\020 \001(\t\"d\n\021MapPreviewRequest\022\020\n\010max_edge\030" +
+      "\001 \001(\r\022\024\n\014image_format\030\002 \001(\t\022\027\n\017include_o" +
+      "verlay\030\003 \001(\010\022\016\n\006map_id\030\004 \001(\t\"\344\003\n\022MapPrev" +
+      "iewResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Re" +
+      "sultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version" +
+      "\030\003 \001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030\005 \001(\r\022\022\n" +
+      "\nresolution\030\006 \001(\002\022\037\n\006origin\030\007 \001(\0132\017.sl_l" +
+      "ink.Pose2D\022\020\n\010frame_id\030\010 \001(\t\022\022\n\nimage_da" +
+      "ta\030\t \001(\014\022\024\n\014overlay_json\030\n \001(\t\022\027\n\017previe" +
+      "w_scale_x\030\013 \001(\002\022\027\n\017preview_scale_y\030\014 \001(\002" +
+      "\022@\n\027localization_covariance\030\r \001(\0132\037.sl_l" +
+      "ink.LocalizationCovariance\022\031\n\021alignment_" +
+      "yaw_deg\030\016 \001(\002\022\030\n\020app_rotation_deg\030\017 \001(\002\022" +
+      "$\n\034rotation_alignment_delta_deg\030\020 \001(\002\022\016\n" +
+      "\006map_id\030\021 \001(\t\022\024\n\014map_revision\030\022 \001(\t\"\'\n\025M" +
+      "apRegionPointRequest\022\016\n\006map_id\030\001 \001(\t\"\277\001\n" +
+      "\023WorkRegionPointInfo\022&\n\006region\030\001 \001(\0132\026.s" +
+      "l_link.PolygonRegion\022\034\n\024start_pose_avail" +
+      "able\030\002 \001(\010\022#\n\nstart_pose\030\003 \001(\0132\017.sl_link" +
+      ".Pose2D\022\032\n\022end_pose_available\030\004 \001(\010\022!\n\010e" +
+      "nd_pose\030\005 \001(\0132\017.sl_link.Pose2D\"\324\002\n\026MapRe" +
+      "gionPointResponse\022#\n\006result\030\001 \001(\0162\023.sl_l" +
+      "ink.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_i" +
+      "d\030\003 \001(\t\022\023\n\013map_version\030\004 \001(\r\0222\n\014work_reg" +
+      "ions\030\005 \003(\0132\034.sl_link.WorkRegionPointInfo" +
+      "\0220\n\020obstacle_regions\030\006 \003(\0132\026.sl_link.Pol" +
+      "ygonRegion\022-\n\rerase_regions\030\007 \003(\0132\026.sl_l" +
+      "ink.PolygonRegion\022\035\n\025crop_region_availab" +
+      "le\030\010 \001(\010\022+\n\013crop_region\030\t \001(\0132\026.sl_link." +
+      "PolygonRegion\"\261\003\n\016MapEditCommand\022\017\n\007edit" +
+      "_id\030\001 \001(\t\022,\n\toperation\030\002 \001(\0162\031.sl_link.M" +
+      "apEditOperation\022\023\n\013region_name\030\003 \001(\t\022&\n\006" +
+      "region\030\004 \001(\0132\026.sl_link.PolygonRegion\022&\n\007" +
+      "polygon\030\005 \003(\0132\025.sl_link.PolygonPoint\022\024\n\014" +
+      "brush_radius\030\006 \001(\002\022\023\n\013paint_value\030\007 \001(\005\022" +
+      "\030\n\020target_region_id\030\010 \001(\t\022/\n\022target_regi" +
+      "on_type\030\t \001(\0162\023.sl_link.RegionType\022\034\n\024ex" +
+      "pected_map_version\030\n \001(\r\022\017\n\007dry_run\030\013 \001(" +
+      "\010\022#\n\nstart_pose\030\014 \001(\0132\017.sl_link.Pose2D\022!" +
+      "\n\010end_pose\030\r \001(\0132\017.sl_link.Pose2D\022\016\n\006map" +
+      "_id\030\016 \001(\t\"\\\n\017MapEditResponse\022#\n\006result\030\001" +
       " \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001" +
-      "(\t\0220\n\017applied_command\030\003 \001(\0132\027.sl_link.Co" +
-      "ntrolCommand*\271\024\n\tMessageId\022\022\n\016MSG_ID_UNK" +
-      "NOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020\201\004\022\036\n\031MSG_I" +
-      "D_WIFI_STATUS_REPORT\020\202\004\022!\n\034MSG_ID_SETTIN" +
-      "GS_READ_REQUEST\020\203\004\022\"\n\035MSG_ID_SETTINGS_RE" +
-      "AD_RESPONSE\020\204\004\022\"\n\035MSG_ID_SETTINGS_WRITE_" +
-      "REQUEST\020\205\004\022#\n\036MSG_ID_SETTINGS_WRITE_RESP" +
-      "ONSE\020\206\004\022 \n\033MSG_ID_DEVICE_STATUS_REPORT\020\201" +
-      "\006\022 \n\033MSG_ID_CAMERA_FRAME_REQUEST\020\202\006\022\036\n\031M" +
-      "SG_ID_CAMERA_FRAME_CHUNK\020\203\006\022\027\n\022MSG_ID_MA" +
-      "P_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_CHUNK\020\205\006\022\036\n\031M" +
-      "SG_ID_MAP_REQUEST_RESULT\020\206\006\022\033\n\026MSG_ID_CO" +
-      "NTROL_COMMAND\020\201\010\022$\n\037MSG_ID_CONTROL_COMMA" +
-      "ND_RESPONSE\020\202\010\022\027\n\022MSG_ID_TASK_CONFIG\020\200\n\022" +
-      " \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201\n\022\030\n\023MSG" +
-      "_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TASK_COMMA" +
-      "ND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_STATUS_REP" +
-      "ORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN_REQUEST" +
-      "\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RESPONSE\020\206" +
-      "\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020\207\n\022 \n\033MS" +
-      "G_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027MSG_ID_M" +
-      "AP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP_EDIT_RE" +
-      "SPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STATUS_REPO" +
-      "RT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INFO_REQUES" +
-      "T\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO_RESPONS" +
-      "E\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST\020\216\n\022\036\n\031M" +
-      "SG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027MSG_ID_MA" +
-      "P_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_SYNC_RES" +
-      "PONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQUEST\020\222\n\022\035" +
-      "\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n\032MSG_ID_" +
-      "MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID_MAP_CAT" +
-      "ALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_DELETE_RE" +
-      "QUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RESPONSE\020\227" +
-      "\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022\035\n\030MSG_I" +
-      "D_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID_MAP_MET" +
-      "RICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_METRICS_RE" +
-      "SPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_REQUEST\020" +
-      "\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONSE\020\235\n\022(\n#" +
-      "MSG_ID_LIVE_MAP_CACHE_CLEAR_REQUEST\020\236\n\022)" +
-      "\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RESPONSE\020\237" +
-      "\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEAR_REQUES" +
-      "T\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_CLEAR_RES" +
-      "PONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO_RADAR_R" +
-      "EQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_TO_RADAR_" +
-      "RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNMENT_REQU" +
-      "EST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_RESPONSE\020" +
-      "\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS_REQUEST" +
-      "\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATUS_RESPON" +
-      "SE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_REQUEST\020\250" +
-      "\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPONSE\020\251\n\022(" +
-      "\n#MSG_ID_RADAR_RELOCALIZATION_REQUEST\020\252\n" +
-      "\022)\n$MSG_ID_RADAR_RELOCALIZATION_RESPONSE" +
-      "\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATION_STATU" +
-      "S_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_RELOCALIZAT" +
-      "ION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID_MAP_REG" +
-      "ION_POINT_REQUEST\020\256\n\022%\n MSG_ID_MAP_REGIO" +
-      "N_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TASK_EXECU" +
-      "TION_HISTORY_REQUEST\020\260\n\022(\n#MSG_ID_TASK_E" +
-      "XECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG_ID_TASK" +
-      "_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID_TASK_TR" +
-      "AJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK_EXECUTI" +
-      "ON_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_TASK_EXEC" +
-      "UTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_ID_SYSTE" +
-      "M_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_ID_SYSTE" +
-      "M_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG_ID_TASK" +
-      "_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%MSG_ID_T" +
-      "ASK_RUNTIME_SETTINGS_RESPONSE\020\271\n*X\n\010Devi" +
-      "ceId\022\023\n\017DEVICE_RESERVED\020\000\022\016\n\nDEVICE_APP\020" +
-      "\001\022\020\n\014DEVICE_LOWER\020\020\022\025\n\020DEVICE_BROADCAST\020" +
-      "\377\001*v\n\013ComponentId\022\017\n\013COMP_SYSTEM\020\000\022\r\n\tCO" +
-      "MP_WIFI\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\nCOMP_MED" +
-      "IA\020\006\022\020\n\014COMP_CONTROL\020\007\022\022\n\016COMP_SCHEDULER" +
-      "\020\010*v\n\nResultCode\022\022\n\016RESULT_SUCCESS\020\000\022\030\n\024" +
-      "RESULT_INVALID_PARAM\020\001\022\026\n\022RESULT_UNSUPPO" +
-      "RTED\020\002\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESULT_FAILED" +
-      "\020\004*;\n\014SystemStatus\022\025\n\021SYS_STATUS_NORMAL\020" +
-      "\000\022\024\n\020SYS_STATUS_ERROR\020\001*Q\n\nWifiResult\022\020\n" +
-      "\014WIFI_PENDING\020\000\022\020\n\014WIFI_SUCCESS\020\001\022\r\n\tWIF" +
-      "I_FAIL\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010WorkMode\022\025" +
-      "\n\021WORK_MODE_UNKNOWN\020\000\022\024\n\020WORK_MODE_MANUA" +
-      "L\020\001\022\022\n\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_MODE_EDG" +
-      "E\020\003\022\022\n\016WORK_MODE_DOCK\020\004*z\n\rDiscLiftState" +
-      "\022\033\n\027DISC_LIFT_STATE_UNKNOWN\020\000\022\026\n\022DISC_LI" +
-      "FT_STATE_UP\020\001\022\030\n\024DISC_LIFT_STATE_DOWN\020\002\022" +
-      "\032\n\026DISC_LIFT_STATE_MOVING\020\003*W\n\017DiscLiftC" +
-      "ommand\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024\n\020DISC_L" +
-      "IFT_CMD_UP\020\001\022\026\n\022DISC_LIFT_CMD_DOWN\020\002*\350\001\n" +
-      "\023ManualMotionCommand\022\026\n\022MANUAL_MOTION_ST" +
-      "OP\020\000\022\031\n\025MANUAL_MOTION_FORWARD\020\001\022\032\n\026MANUA" +
-      "L_MOTION_BACKWARD\020\002\022\036\n\032MANUAL_MOTION_FOR" +
-      "WARD_LEFT\020\003\022\037\n\033MANUAL_MOTION_FORWARD_RIG" +
-      "HT\020\004\022\037\n\033MANUAL_MOTION_BACKWARD_LEFT\020\005\022 \n" +
-      "\034MANUAL_MOTION_BACKWARD_RIGHT\020\006*;\n\013Camer" +
-      "aCodec\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n\021CAMERA_" +
-      "CODEC_H264\020\001*[\n\013MapEncoding\022\037\n\033MAP_ENCOD" +
-      "ING_OCCUPANCY_GRID\020\000\022\024\n\020MAP_ENCODING_PNG" +
-      "\020\001\022\025\n\021MAP_ENCODING_JSON\020\002*\202\001\n\nRegionType" +
-      "\022\027\n\023REGION_TYPE_UNKNOWN\020\000\022\024\n\020REGION_TYPE" +
-      "_WORK\020\001\022\030\n\024REGION_TYPE_OBSTACLE\020\002\022\025\n\021REG" +
-      "ION_TYPE_ERASE\020\003\022\024\n\020REGION_TYPE_CROP\020\004*\306" +
-      "\001\n\tTaskState\022\023\n\017TASK_STATE_IDLE\020\000\022\024\n\020TAS" +
-      "K_STATE_READY\020\001\022\027\n\023TASK_STATE_PLANNING\020\002" +
-      "\022\026\n\022TASK_STATE_RUNNING\020\003\022\025\n\021TASK_STATE_P" +
-      "AUSED\020\004\022\030\n\024TASK_STATE_COMPLETED\020\005\022\026\n\022TAS" +
-      "K_STATE_STOPPED\020\006\022\024\n\020TASK_STATE_ERROR\020\007*" +
-      "a\n\017TaskCommandType\022\022\n\016TASK_CMD_START\020\000\022\022" +
-      "\n\016TASK_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_RESUME\020\002\022" +
-      "\021\n\rTASK_CMD_STOP\020\003*\337\002\n\020MapEditOperation\022" +
-      "\027\n\023MAP_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_EDIT_OP_" +
-      "UPSERT_WORK_REGION\020\001\022&\n\"MAP_EDIT_OP_UPSE" +
-      "RT_OBSTACLE_REGION\020\002\022\035\n\031MAP_EDIT_OP_DELE" +
-      "TE_REGION\020\003\022\032\n\026MAP_EDIT_OP_PAINT_FREE\020\004\022" +
-      "\036\n\032MAP_EDIT_OP_PAINT_OCCUPIED\020\005\022\035\n\031MAP_E" +
-      "DIT_OP_PAINT_UNKNOWN\020\006\022#\n\037MAP_EDIT_OP_CL" +
-      "EAR_OVERLAY_PATCH\020\007\022#\n\037MAP_EDIT_OP_UPSER" +
-      "T_ERASE_REGION\020\010\022\"\n\036MAP_EDIT_OP_UPSERT_C" +
-      "ROP_REGION\020\t*s\n\020MapSyncOperation\022\027\n\023MAP_" +
-      "SYNC_OP_UNKNOWN\020\000\022$\n MAP_SYNC_OP_DOWNLOA" +
-      "D_FROM_AURORA\020\001\022 \n\034MAP_SYNC_OP_UPLOAD_TO" +
-      "_AURORA\020\002*T\n\013MapModeType\022\024\n\020MAP_MODE_UNK" +
-      "NOWN\020\000\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025MAP_MODE" +
-      "_LOCALIZATION\020\002*\262\001\n\020MapRequestStatus\022\036\n\032" +
-      "MAP_REQUEST_STATUS_UNKNOWN\020\000\022\034\n\030MAP_REQU" +
-      "EST_STATUS_READY\020\001\022 \n\034MAP_REQUEST_STATUS" +
-      "_NOT_READY\020\002\022 \n\034MAP_REQUEST_STATUS_NOT_F" +
-      "OUND\020\003\022\034\n\030MAP_REQUEST_STATUS_ERROR\020\004:-\n\004" +
-      "unit\022\035.google.protobuf.FieldOptions\030\321\206\003 " +
-      "\001(\t:.\n\005scale\022\035.google.protobuf.FieldOpti" +
-      "ons\030\322\206\003 \001(\001b\006proto3"
+      "(\t\022\023\n\013map_version\030\003 \001(\r\"W\n\023MapEditStatus" +
+      "Report\022\023\n\013map_version\030\001 \001(\r\022\032\n\022applied_t" +
+      "o_planner\030\002 \001(\010\022\017\n\007message\030\003 \001(\t\"/\n\026Vide" +
+      "oStreamInfoRequest\022\025\n\rinclude_debug\030\001 \001(" +
+      "\010\"\263\001\n\027VideoStreamInfoResponse\022#\n\006result\030" +
+      "\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 " +
+      "\001(\t\022\022\n\nstream_url\030\003 \001(\t\022\r\n\005codec\030\004 \001(\t\022\r" +
+      "\n\005width\030\005 \001(\r\022\016\n\006height\030\006 \001(\r\022\016\n\006online\030" +
+      "\007 \001(\010\022\020\n\010utc_time\030\010 \001(\r\"\362\001\n\017PathPlanRequ" +
+      "est\022\022\n\nrequest_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t" +
+      "\022\024\n\014force_replan\030\003 \001(\010\022\032\n\022return_path_ch" +
+      "unks\030\004 \001(\010\022\026\n\016max_chunk_size\030\005 \001(\r\022#\n\nst" +
+      "art_pose\030\006 \001(\0132\017.sl_link.Pose2D\022!\n\010end_p" +
+      "ose\030\007 \001(\0132\017.sl_link.Pose2D\022\030\n\020global_dir" +
+      "ection\030\010 \001(\t\022\016\n\006map_id\030\t \001(\t\"\257\005\n\020PathPla" +
+      "nResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
+      "ltCode\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest_id\030\003 " +
+      "\001(\t\022\017\n\007task_id\030\004 \001(\t\022\023\n\013map_version\030\005 \001(" +
+      "\r\022\024\n\014path_version\030\006 \001(\r\022\030\n\020path_point_co" +
+      "unt\030\007 \001(\r\022\025\n\rpath_length_m\030\010 \001(\002\022\017\n\007plan" +
+      "ned\030\t \001(\010\022\024\n\014path_chunked\030\n \001(\010\022\025\n\rprevi" +
+      "ew_image\030\013 \001(\014\022\026\n\016preview_format\030\014 \001(\t\022\r" +
+      "\n\005width\030\r \001(\r\022\016\n\006height\030\016 \001(\r\022\022\n\nresolut" +
+      "ion\030\017 \001(\002\022\037\n\006origin\030\020 \001(\0132\017.sl_link.Pose" +
+      "2D\022\020\n\010frame_id\030\021 \001(\t\022\027\n\017preview_scale_x\030" +
+      "\022 \001(\002\022\027\n\017preview_scale_y\030\023 \001(\002\022-\n\022total_" +
+      "work_area_m2\030\024 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n" +
+      "\020estimated_time_s\030\025 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360" +
+      "?\022@\n\027localization_covariance\030\026 \001(\0132\037.sl_" +
+      "link.LocalizationCovariance\022\031\n\021alignment" +
+      "_yaw_deg\030\027 \001(\002\022\030\n\020app_rotation_deg\030\030 \001(\002" +
+      "\022$\n\034rotation_alignment_delta_deg\030\031 \001(\002\"m" +
+      "\n\016MapSyncRequest\022,\n\toperation\030\001 \001(\0162\031.sl" +
+      "_link.MapSyncOperation\022\016\n\006map_id\030\002 \001(\t\022\035" +
+      "\n\025update_navigation_map\030\003 \001(\010\"\226\002\n\017MapSyn" +
+      "cResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
+      "ltCode\022\017\n\007message\030\002 \001(\t\022,\n\toperation\030\003 \001" +
+      "(\0162\031.sl_link.MapSyncOperation\022\016\n\006map_id\030" +
+      "\004 \001(\t\022\020\n\010map_name\030\010 \001(\t\022\024\n\014map_revision\030" +
+      "\t \001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016map_imag" +
+      "e_path\030\006 \001(\t\022\037\n\027navigation_map_reloaded\030" +
+      "\007 \001(\010\022\027\n\017lifecycle_state\030\n \001(\t\")\n\027MapImp" +
+      "ortToRadarRequest\022\016\n\006map_id\030\001 \001(\t\"\263\001\n\030Ma" +
+      "pImportToRadarResponse\022#\n\006result\030\001 \001(\0162\023" +
+      ".sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006" +
+      "map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\020\n\010import" +
+      "ed\030\005 \001(\010\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecy" +
+      "cle_state\030\007 \001(\t\"W\n\016MapModeRequest\022\"\n\004mod" +
+      "e\030\001 \001(\0162\024.sl_link.MapModeType\022\017\n\007enabled" +
+      "\030\002 \001(\010\022\020\n\010map_kind\030\003 \001(\005\"\345\001\n\017MapModeResp" +
+      "onse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCod" +
+      "e\022\017\n\007message\030\002 \001(\t\022\"\n\004mode\030\003 \001(\0162\024.sl_li" +
+      "nk.MapModeType\022\017\n\007enabled\030\004 \001(\010\022\020\n\010map_k" +
+      "ind\030\005 \001(\005\022\027\n\017lifecycle_state\030\006 \001(\t\022\016\n\006ma" +
+      "p_id\030\007 \001(\t\022\024\n\014map_revision\030\010 \001(\t\022\026\n\016resi" +
+      "dual_nodes\030\t \003(\t\";\n\023MapAlignmentRequest\022" +
+      "\016\n\006map_id\030\001 \001(\t\022\024\n\014rotation_deg\030\002 \001(\002\"\311\001" +
+      "\n\024MapAlignmentResponse\022#\n\006result\030\001 \001(\0162\023" +
+      ".sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006" +
+      "map_id\030\003 \001(\t\022\024\n\014rotation_deg\030\004 \001(\002\022\024\n\014ro" +
+      "tation_rad\030\005 \001(\002\022\031\n\021alignment_yaw_deg\030\006 " +
+      "\001(\002\022$\n\034rotation_alignment_delta_deg\030\007 \001(" +
+      "\002\"\023\n\021MapCatalogRequest\"\303\002\n\016MapCatalogIte" +
+      "m\022\016\n\006map_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\022\n\nsize_" +
+      "bytes\030\003 \001(\004\022\020\n\010saved_at\030\004 \001(\004\022-\n\022total_w" +
+      "ork_area_m2\030\005 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020" +
+      "estimated_time_s\030\006 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?" +
+      "\022\030\n\020thumbnail_format\030\007 \001(\t\022\027\n\017thumbnail_" +
+      "width\030\010 \001(\r\022\030\n\020thumbnail_height\030\t \001(\r\022\033\n" +
+      "\023thumbnail_image_b64\030\n \001(\t\022\022\n\ncreated_at" +
+      "\030\013 \001(\t\022\024\n\014map_revision\030\014 \001(\t\"\207\001\n\022MapCata" +
+      "logResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Re" +
+      "sultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013total_count" +
+      "\030\003 \001(\r\022&\n\005items\030\004 \003(\0132\027.sl_link.MapCatal" +
+      "ogItem\"\"\n\020MapDeleteRequest\022\016\n\006map_id\030\001 \001" +
+      "(\t\"\312\001\n\021MapDeleteResponse\022#\n\006result\030\001 \001(\016" +
+      "2\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016" +
+      "\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\017\n\007dele" +
+      "ted\030\005 \001(\010\022\025\n\rlocal_deleted\030\006 \001(\010\022\026\n\016remo" +
+      "te_deleted\030\007 \001(\010\022\035\n\025remote_delete_pendin" +
+      "g\030\010 \001(\010\"b\n\016MapSaveRequest\022\020\n\010map_name\030\001 " +
+      "\001(\t\022\016\n\006map_id\030\002 \001(\t\022\030\n\020has_rotation_deg\030" +
+      "\003 \001(\010\022\024\n\014rotation_deg\030\004 \001(\002\"\246\003\n\017MapSaveR" +
+      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
+      "Code\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n" +
+      "\010map_name\030\004 \001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026" +
+      "\n\016map_image_path\030\006 \001(\t\022\037\n\027navigation_map" +
+      "_reloaded\030\007 \001(\010\022-\n\022total_work_area_m2\030\010 " +
+      "\001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time" +
+      "_s\030\t \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\022\n\ncreated_at" +
+      "\030\n \001(\t\022\024\n\014map_revision\030\013 \001(\t\022\027\n\017lifecycl" +
+      "e_state\030\014 \001(\t\022\027\n\017mapping_stopped\030\r \001(\010\022\034" +
+      "\n\024localization_started\030\016 \001(\010\022\026\n\016residual" +
+      "_nodes\030\017 \003(\t\"#\n\021MapMetricsRequest\022\016\n\006map" +
+      "_id\030\001 \001(\t\"\233\001\n\021RegionMetricsItem\022\021\n\tregio" +
+      "n_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\016\n\006repea" +
+      "t\030\003 \001(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000" +
+      "\000\360?\022*\n\020estimated_time_h\030\005 \001(\002B\020\212\265\030\001h\221\265\030\000" +
+      "\000\000\000\000\000\360?\"\240\001\n\022MapMetricsResponse\022#\n\006result" +
+      "\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002" +
+      " \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\0222" +
+      "\n\016region_metrics\030\005 \003(\0132\032.sl_link.RegionM" +
+      "etricsItem\"S\n\021TaskResultRequest\022\016\n\006map_i" +
+      "d\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_executio" +
+      "n_records\030\003 \001(\r\"\234\001\n\024TaskResultRegionItem" +
+      "\022\021\n\tregion_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t" +
+      "\022\025\n\rtarget_repeat\030\003 \001(\r\022\027\n\017executed_repe" +
+      "at\030\004 \001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021unfinishe" +
+      "d_reason\030\006 \001(\t\"\341\002\n\023TaskExecutionRecord\022\024" +
+      "\n\014execution_id\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\017\n\007" +
+      "task_id\030\003 \001(\t\022\'\n\013final_state\030\004 \001(\0162\022.sl_",
+      "link.TaskState\022\023\n\013stop_reason\030\005 \001(\t\022\022\n\ns" +
+      "tarted_at\030\006 \001(\004\022\023\n\013finished_at\030\007 \001(\004\022*\n\017" +
+      "planned_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?" +
+      "\022+\n\020executed_area_m2\030\t \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000" +
+      "\000\000\000\360?\022&\n\010progress\030\n \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000" +
+      "\000\000\000\360?\022\024\n\014path_version\030\013 \001(\r\022\025\n\rall_compl" +
+      "eted\030\014 \001(\010\"\244\006\n\022TaskResultResponse\022#\n\006res" +
+      "ult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messag" +
+      "e\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t" +
+      "\022\'\n\013final_state\030\005 \001(\0162\022.sl_link.TaskStat" +
+      "e\022\025\n\rall_completed\030\006 \001(\010\022\023\n\013stop_reason\030" +
+      "\007 \001(\t\022\024\n\014path_version\030\010 \001(\r\022\024\n\014image_for" +
+      "mat\030\t \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n\013image_w" +
+      "idth\030\013 \001(\r\022\024\n\014image_height\030\014 \001(\r\022\023\n\013fini" +
+      "shed_at\030\r \001(\004\022 \n\030selected_work_region_id" +
+      "s\030\016 \003(\t\0225\n\016region_results\030\017 \003(\0132\035.sl_lin" +
+      "k.TaskResultRegionItem\022@\n\027localization_c" +
+      "ovariance\030\020 \001(\0132\037.sl_link.LocalizationCo" +
+      "variance\022\031\n\021alignment_yaw_deg\030\021 \001(\002\022\030\n\020a" +
+      "pp_rotation_deg\030\022 \001(\002\022$\n\034rotation_alignm" +
+      "ent_delta_deg\030\023 \001(\002\022\024\n\014execution_id\030\024 \001(" +
+      "\t\022\022\n\nstarted_at\030\025 \001(\004\022*\n\017planned_area_m2" +
+      "\030\026 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020executed_ar" +
+      "ea_m2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220\n\022execut" +
+      "ion_progress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?" +
+      "\0227\n\021execution_records\030\031 \003(\0132\034.sl_link.Ta" +
+      "skExecutionRecord\"|\n\033TaskExecutionHistor" +
+      "yRequest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(" +
+      "\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022" +
+      "\026\n\016max_chunk_size\030\005 \001(\r\"\314\001\n\031TaskExecutio" +
+      "nHistoryChunk\022#\n\006result\030\001 \001(\0162\023.sl_link." +
+      "ResultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013chunk_ind" +
+      "ex\030\003 \001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032\n\022total_" +
+      "record_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014\022\022\n\nstar" +
+      "t_time\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2\n\032TaskEx" +
+      "ecutionDeleteRequest\022\024\n\014execution_id\030\001 \001" +
+      "(\t\"\274\001\n\033TaskExecutionDeleteResponse\022#\n\006re" +
+      "sult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messa" +
+      "ge\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017\n\007task_i" +
+      "d\030\004 \001(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007deleted\030\006 \001(\010" +
+      "\022\037\n\027execution_files_deleted\030\007 \001(\010\"\272\001\n\025Ta" +
+      "skTrajectoryRequest\022\024\n\014execution_id\030\001 \001(" +
+      "\t\022\017\n\007task_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020" +
+      "\n\010end_time\030\004 \001(\004\022\023\n\013start_index\030\005 \001(\r\022\022\n" +
+      "\nmax_points\030\006 \001(\r\022\023\n\013sample_step\030\007 \001(\r\022\026" +
+      "\n\016max_chunk_size\030\010 \001(\r\"\221\002\n\023TaskTrajector" +
+      "yPoint\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_ms\030\002 \001(\r" +
+      "\022\014\n\004x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014heading_" +
+      "mdeg\030\005 \001(\021\022\031\n\021linear_speed_mmps\030\006 \001(\021\022\034\n" +
+      "\024angular_speed_mradps\030\007 \001(\021\022\026\n\016disc_spee" +
+      "d_rpm\030\010 \001(\r\022\027\n\017speed_available\030\t \001(\010\022\024\n\014" +
+      "disc_enabled\030\n \001(\010\022&\n\ntask_state\030\013 \001(\0162\022" +
+      ".sl_link.TaskState\"\243\007\n\023TaskTrajectoryChu" +
+      "nk\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022" +
+      "\017\n\007message\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\023" +
+      "\n\013chunk_index\030\004 \001(\r\022\024\n\014total_chunks\030\005 \001(" +
+      "\r\022\031\n\021total_point_count\030\006 \001(\r\022\034\n\024returned" +
+      "_point_count\030\007 \001(\r\022\023\n\013start_index\030\010 \001(\r\022" +
+      "\022\n\nnext_index\030\t \001(\r\022\020\n\010has_more\030\n \001(\010\022\025\n" +
+      "\rstarted_at_ms\030\013 \001(\004\022,\n\006points\030\014 \003(\0132\034.s" +
+      "l_link.TaskTrajectoryPoint\022\017\n\007task_id\030\r " +
+      "\001(\t\022\016\n\006map_id\030\016 \001(\t\022\022\n\nstart_time\030\017 \001(\004\022" +
+      "\020\n\010end_time\030\020 \001(\004\022\023\n\013sample_step\030\021 \001(\r\022\025" +
+      "\n\rmap_available\030\022 \001(\010\022\023\n\013map_message\030\023 \001" +
+      "(\t\022\023\n\013map_version\030\024 \001(\r\022\030\n\020map_source_wi" +
+      "dth\030\025 \001(\r\022\031\n\021map_source_height\030\026 \001(\r\022\026\n\016" +
+      "map_resolution\030\027 \001(\002\022#\n\nmap_origin\030\030 \001(\013" +
+      "2\017.sl_link.Pose2D\022\024\n\014map_frame_id\030\031 \001(\t\022" +
+      "\030\n\020map_image_format\030\032 \001(\t\022\027\n\017map_image_w" +
+      "idth\030\033 \001(\r\022\030\n\020map_image_height\030\034 \001(\r\022\033\n\023" +
+      "map_preview_scale_x\030\035 \001(\002\022\033\n\023map_preview" +
+      "_scale_y\030\036 \001(\002\022\026\n\016map_image_data\030\037 \001(\014\022\035" +
+      "\n\025map_image_chunk_index\030  \001(\r\022\036\n\026map_ima" +
+      "ge_total_chunks\030! \001(\r\022\031\n\021alignment_yaw_d" +
+      "eg\030\" \001(\002\022\030\n\020app_rotation_deg\030# \001(\002\022$\n\034ro" +
+      "tation_alignment_delta_deg\030$ \001(\002\"\032\n\030Live" +
+      "MapCacheClearRequest\"Q\n\031LiveMapCacheClea" +
+      "rResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
+      "ltCode\022\017\n\007message\030\002 \001(\t\"h\n\027SystemCacheCl" +
+      "earRequest\022\032\n\022clear_memory_cache\030\001 \001(\010\022\035" +
+      "\n\025clear_temporary_files\030\002 \001(\010\022\022\n\nclear_l" +
+      "ogs\030\003 \001(\010\"\376\001\n\030SystemCacheClearResponse\022#" +
+      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
+      "essage\030\002 \001(\t\022\034\n\024memory_cache_cleared\030\003 \001" +
+      "(\010\022\037\n\027temporary_files_cleared\030\004 \001(\r\022 \n\030t" +
+      "emporary_bytes_released\030\005 \001(\004\022\031\n\021log_fil" +
+      "es_cleared\030\006 \001(\r\022\032\n\022log_bytes_released\030\007" +
+      " \001(\004\022\024\n\014failed_items\030\010 \001(\r\"\033\n\031RadarMapCa" +
+      "cheClearRequest\"R\n\032RadarMapCacheClearRes" +
+      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
+      "de\022\017\n\007message\030\002 \001(\t\"\032\n\030RadarSystemStatus" +
+      "Request\"\212\001\n\031RadarSystemStatusResponse\022#\n" +
+      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
+      "ssage\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016\n\006status" +
+      "\030\004 \001(\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023RadarMap" +
+      "SyncRequest\"Z\n\024RadarMapSyncResponse\022#\n\006r" +
+      "esult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mess" +
+      "age\030\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\313\001\n\032RadarRelocal" +
+      "izationRequest\022\036\n\026initial_pose_available" +
+      "\030\001 \001(\010\022%\n\014initial_pose\030\002 \001(\0132\017.sl_link.P" +
+      "ose2D\022@\n\027initial_pose_covariance\030\003 \001(\0132\037" +
+      ".sl_link.LocalizationCovariance\022\016\n\006map_i" +
+      "d\030\004 \001(\t\022\024\n\014map_revision\030\005 \001(\t\"\264\001\n\033RadarR" +
+      "elocalizationResponse\022#\n\006result\030\001 \001(\0162\023." +
+      "sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\020\n\010a" +
+      "ccepted\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\016\n\006map_id\030" +
+      "\005 \001(\t\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle" +
+      "_state\030\007 \001(\t\"\"\n RadarRelocalizationStatu" +
+      "sRequest\"\353\003\n!RadarRelocalizationStatusRe" +
+      "sponse\022\022\n\nraw_status\030\005 \001(\t\022\024\n\014timestamp_" +
+      "ns\030\n \001(\004\022\027\n\017lifecycle_state\030\013 \001(\t\022\016\n\006det" +
+      "ail\030\014 \001(\t\022\016\n\006map_id\030\r \001(\t\022\024\n\014map_revisio" +
+      "n\030\016 \001(\t\022\023\n\013good_frames\030\017 \001(\r\022\027\n\017required" +
+      "_frames\030\020 \001(\r\022\"\n\032registration_quality_va" +
+      "lid\030\021 \001(\010\022\034\n\024registration_fitness\030\022 \001(\002\022" +
+      "!\n\031registration_inlier_ratio\030\023 \001(\002\022\026\n\016re" +
+      "sidual_nodes\030\024 \003(\tJ\004\010\001\020\002J\004\010\002\020\003J\004\010\003\020\004J\004\010\004" +
+      "\020\005J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020\nR\006resultR\007mess" +
+      "ageR\tavailableR\006statusR\rsystem_statusR\016o" +
+      "dom_availableR\025odom_linear_speed_mpsR\030od" +
+      "om_angular_speed_radps\"<\n\017DiscLiftContro" +
+      "l\022)\n\007command\030\001 \001(\0162\030.sl_link.DiscLiftCom" +
+      "mand\"\"\n\017LightingControl\022\017\n\007enabled\030\001 \001(\010" +
+      "\"&\n\023ChassisPowerControl\022\017\n\007enabled\030\001 \001(\010" +
+      "\"1\n\013DiscControl\022\017\n\007enabled\030\001 \001(\010\022\021\n\tspee" +
+      "d_rpm\030\002 \001(\r\"\'\n\024EmergencyStopControl\022\017\n\007e" +
+      "nabled\030\001 \001(\010\"\260\001\n\022ManualDriveControl\022,\n\006m" +
+      "otion\030\001 \001(\0162\034.sl_link.ManualMotionComman" +
+      "d\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n\010remote_x\030\003 \001(\002" +
+      "\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax_speed_mps\030\005 \001(" +
+      "\002\022\034\n\024max_turn_speed_ratio\030\006 \001(\002\"\313\002\n\016Cont" +
+      "rolCommand\022-\n\tdisc_lift\030\001 \001(\0132\030.sl_link." +
+      "DiscLiftControlH\000\022,\n\010lighting\030\002 \001(\0132\030.sl" +
+      "_link.LightingControlH\000\0223\n\014manual_drive\030" +
+      "\003 \001(\0132\033.sl_link.ManualDriveControlH\000\0225\n\r" +
+      "chassis_power\030\004 \001(\0132\034.sl_link.ChassisPow" +
+      "erControlH\000\022,\n\014disc_control\030\005 \001(\0132\024.sl_l" +
+      "ink.DiscControlH\000\0227\n\016emergency_stop\030\006 \001(" +
+      "\0132\035.sl_link.EmergencyStopControlH\000B\t\n\007co" +
+      "mmand\"\200\001\n\026ControlCommandResponse\022#\n\006resu" +
+      "lt\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
+      "\030\002 \001(\t\0220\n\017applied_command\030\003 \001(\0132\027.sl_lin" +
+      "k.ControlCommand*\271\024\n\tMessageId\022\022\n\016MSG_ID" +
+      "_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020\201\004\022\036\n\031M" +
+      "SG_ID_WIFI_STATUS_REPORT\020\202\004\022!\n\034MSG_ID_SE" +
+      "TTINGS_READ_REQUEST\020\203\004\022\"\n\035MSG_ID_SETTING" +
+      "S_READ_RESPONSE\020\204\004\022\"\n\035MSG_ID_SETTINGS_WR" +
+      "ITE_REQUEST\020\205\004\022#\n\036MSG_ID_SETTINGS_WRITE_" +
+      "RESPONSE\020\206\004\022 \n\033MSG_ID_DEVICE_STATUS_REPO" +
+      "RT\020\201\006\022 \n\033MSG_ID_CAMERA_FRAME_REQUEST\020\202\006\022" +
+      "\036\n\031MSG_ID_CAMERA_FRAME_CHUNK\020\203\006\022\027\n\022MSG_I" +
+      "D_MAP_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_CHUNK\020\205\006\022" +
+      "\036\n\031MSG_ID_MAP_REQUEST_RESULT\020\206\006\022\033\n\026MSG_I" +
+      "D_CONTROL_COMMAND\020\201\010\022$\n\037MSG_ID_CONTROL_C" +
+      "OMMAND_RESPONSE\020\202\010\022\027\n\022MSG_ID_TASK_CONFIG" +
+      "\020\200\n\022 \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201\n\022\030\n" +
+      "\023MSG_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TASK_C" +
+      "OMMAND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_STATUS" +
+      "_REPORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN_REQ" +
+      "UEST\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RESPON" +
+      "SE\020\206\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020\207\n\022 " +
+      "\n\033MSG_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027MSG_" +
+      "ID_MAP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP_EDI" +
+      "T_RESPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STATUS_" +
+      "REPORT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INFO_RE" +
+      "QUEST\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO_RES" +
+      "PONSE\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST\020\216\n\022" +
+      "\036\n\031MSG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027MSG_I" +
+      "D_MAP_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_SYNC" +
+      "_RESPONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQUEST\020" +
+      "\222\n\022\035\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n\032MSG" +
+      "_ID_MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID_MAP" +
+      "_CATALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_DELET" +
+      "E_REQUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RESPON" +
+      "SE\020\227\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022\035\n\030M" +
+      "SG_ID_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID_MAP" +
+      "_METRICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_METRIC" +
+      "S_RESPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_REQU" +
+      "EST\020\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONSE\020\235\n" +
+      "\022(\n#MSG_ID_LIVE_MAP_CACHE_CLEAR_REQUEST\020" +
+      "\236\n\022)\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RESPON" +
+      "SE\020\237\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEAR_RE" +
+      "QUEST\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_CLEAR" +
+      "_RESPONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO_RAD" +
+      "AR_REQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_TO_RA" +
+      "DAR_RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNMENT_" +
+      "REQUEST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_RESPO" +
+      "NSE\020\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS_REQ" +
+      "UEST\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATUS_RE" +
+      "SPONSE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_REQUE" +
+      "ST\020\250\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPONSE\020" +
+      "\251\n\022(\n#MSG_ID_RADAR_RELOCALIZATION_REQUES" +
+      "T\020\252\n\022)\n$MSG_ID_RADAR_RELOCALIZATION_RESP" +
+      "ONSE\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATION_S" +
+      "TATUS_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_RELOCAL" +
+      "IZATION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID_MAP" +
+      "_REGION_POINT_REQUEST\020\256\n\022%\n MSG_ID_MAP_R" +
+      "EGION_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TASK_E" +
+      "XECUTION_HISTORY_REQUEST\020\260\n\022(\n#MSG_ID_TA" +
+      "SK_EXECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG_ID_" +
+      "TASK_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID_TAS" +
+      "K_TRAJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK_EXE" +
+      "CUTION_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_TASK_" +
+      "EXECUTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_ID_S" +
+      "YSTEM_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_ID_S" +
+      "YSTEM_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG_ID_" +
+      "TASK_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%MSG_" +
+      "ID_TASK_RUNTIME_SETTINGS_RESPONSE\020\271\n*X\n\010" +
+      "DeviceId\022\023\n\017DEVICE_RESERVED\020\000\022\016\n\nDEVICE_" +
+      "APP\020\001\022\020\n\014DEVICE_LOWER\020\020\022\025\n\020DEVICE_BROADC" +
+      "AST\020\377\001*v\n\013ComponentId\022\017\n\013COMP_SYSTEM\020\000\022\r" +
+      "\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\nCOMP" +
+      "_MEDIA\020\006\022\020\n\014COMP_CONTROL\020\007\022\022\n\016COMP_SCHED" +
+      "ULER\020\010*v\n\nResultCode\022\022\n\016RESULT_SUCCESS\020\000" +
+      "\022\030\n\024RESULT_INVALID_PARAM\020\001\022\026\n\022RESULT_UNS" +
+      "UPPORTED\020\002\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESULT_FA" +
+      "ILED\020\004*;\n\014SystemStatus\022\025\n\021SYS_STATUS_NOR" +
+      "MAL\020\000\022\024\n\020SYS_STATUS_ERROR\020\001*Q\n\nWifiResul" +
+      "t\022\020\n\014WIFI_PENDING\020\000\022\020\n\014WIFI_SUCCESS\020\001\022\r\n" +
+      "\tWIFI_FAIL\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010WorkMo" +
+      "de\022\025\n\021WORK_MODE_UNKNOWN\020\000\022\024\n\020WORK_MODE_M" +
+      "ANUAL\020\001\022\022\n\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_MODE" +
+      "_EDGE\020\003\022\022\n\016WORK_MODE_DOCK\020\004*z\n\rDiscLiftS" +
+      "tate\022\033\n\027DISC_LIFT_STATE_UNKNOWN\020\000\022\026\n\022DIS" +
+      "C_LIFT_STATE_UP\020\001\022\030\n\024DISC_LIFT_STATE_DOW" +
+      "N\020\002\022\032\n\026DISC_LIFT_STATE_MOVING\020\003*W\n\017DiscL" +
+      "iftCommand\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024\n\020DI" +
+      "SC_LIFT_CMD_UP\020\001\022\026\n\022DISC_LIFT_CMD_DOWN\020\002" +
+      "*\350\001\n\023ManualMotionCommand\022\026\n\022MANUAL_MOTIO" +
+      "N_STOP\020\000\022\031\n\025MANUAL_MOTION_FORWARD\020\001\022\032\n\026M" +
+      "ANUAL_MOTION_BACKWARD\020\002\022\036\n\032MANUAL_MOTION" +
+      "_FORWARD_LEFT\020\003\022\037\n\033MANUAL_MOTION_FORWARD" +
+      "_RIGHT\020\004\022\037\n\033MANUAL_MOTION_BACKWARD_LEFT\020" +
+      "\005\022 \n\034MANUAL_MOTION_BACKWARD_RIGHT\020\006*;\n\013C" +
+      "ameraCodec\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n\021CAM" +
+      "ERA_CODEC_H264\020\001*[\n\013MapEncoding\022\037\n\033MAP_E" +
+      "NCODING_OCCUPANCY_GRID\020\000\022\024\n\020MAP_ENCODING" +
+      "_PNG\020\001\022\025\n\021MAP_ENCODING_JSON\020\002*\202\001\n\nRegion" +
+      "Type\022\027\n\023REGION_TYPE_UNKNOWN\020\000\022\024\n\020REGION_" +
+      "TYPE_WORK\020\001\022\030\n\024REGION_TYPE_OBSTACLE\020\002\022\025\n" +
+      "\021REGION_TYPE_ERASE\020\003\022\024\n\020REGION_TYPE_CROP" +
+      "\020\004*\306\001\n\tTaskState\022\023\n\017TASK_STATE_IDLE\020\000\022\024\n" +
+      "\020TASK_STATE_READY\020\001\022\027\n\023TASK_STATE_PLANNI" +
+      "NG\020\002\022\026\n\022TASK_STATE_RUNNING\020\003\022\025\n\021TASK_STA" +
+      "TE_PAUSED\020\004\022\030\n\024TASK_STATE_COMPLETED\020\005\022\026\n" +
+      "\022TASK_STATE_STOPPED\020\006\022\024\n\020TASK_STATE_ERRO" +
+      "R\020\007*a\n\017TaskCommandType\022\022\n\016TASK_CMD_START" +
+      "\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_RESUM" +
+      "E\020\002\022\021\n\rTASK_CMD_STOP\020\003*\337\002\n\020MapEditOperat" +
+      "ion\022\027\n\023MAP_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_EDIT" +
+      "_OP_UPSERT_WORK_REGION\020\001\022&\n\"MAP_EDIT_OP_" +
+      "UPSERT_OBSTACLE_REGION\020\002\022\035\n\031MAP_EDIT_OP_" +
+      "DELETE_REGION\020\003\022\032\n\026MAP_EDIT_OP_PAINT_FRE" +
+      "E\020\004\022\036\n\032MAP_EDIT_OP_PAINT_OCCUPIED\020\005\022\035\n\031M" +
+      "AP_EDIT_OP_PAINT_UNKNOWN\020\006\022#\n\037MAP_EDIT_O" +
+      "P_CLEAR_OVERLAY_PATCH\020\007\022#\n\037MAP_EDIT_OP_U" +
+      "PSERT_ERASE_REGION\020\010\022\"\n\036MAP_EDIT_OP_UPSE" +
+      "RT_CROP_REGION\020\t*s\n\020MapSyncOperation\022\027\n\023" +
+      "MAP_SYNC_OP_UNKNOWN\020\000\022$\n MAP_SYNC_OP_DOW" +
+      "NLOAD_FROM_AURORA\020\001\022 \n\034MAP_SYNC_OP_UPLOA" +
+      "D_TO_AURORA\020\002*T\n\013MapModeType\022\024\n\020MAP_MODE" +
+      "_UNKNOWN\020\000\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025MAP_" +
+      "MODE_LOCALIZATION\020\002*\262\001\n\020MapRequestStatus" +
+      "\022\036\n\032MAP_REQUEST_STATUS_UNKNOWN\020\000\022\034\n\030MAP_" +
+      "REQUEST_STATUS_READY\020\001\022 \n\034MAP_REQUEST_ST" +
+      "ATUS_NOT_READY\020\002\022 \n\034MAP_REQUEST_STATUS_N" +
+      "OT_FOUND\020\003\022\034\n\030MAP_REQUEST_STATUS_ERROR\020\004" +
+      ":-\n\004unit\022\035.google.protobuf.FieldOptions\030" +
+      "\321\206\003 \001(\t:.\n\005scale\022\035.google.protobuf.Field" +
+      "Options\030\322\206\003 \001(\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -116558,7 +117010,7 @@ public final class SlLink {
     internal_static_sl_link_DeviceStatusReport_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_DeviceStatusReport_descriptor,
-        new java.lang.String[] { "UtcTime", "SystemStatus", "WifiStatus", "WorkMode", "LeftWheelSpeed", "RightWheelSpeed", "DiscSpeedRpm", "DiscEnabled", "DiscLiftState", "LightEnabled", "Position", "ChassisEnabled", "AlignmentYawDeg", "LocalizationCovariance", "LocalizationQualityAvailable", "LocalizationQuality", "CollisionImminent", "RadarSystemStatusAvailable", "RadarSystemStatus", "VehicleSpeed", "ChassisConnected", "EmergencyStopLatched", });
+        new java.lang.String[] { "UtcTime", "SystemStatus", "WifiStatus", "WorkMode", "LeftWheelSpeed", "RightWheelSpeed", "DiscSpeedRpm", "DiscEnabled", "DiscLiftState", "LightEnabled", "Position", "ChassisEnabled", "AlignmentYawDeg", "LocalizationCovariance", "LocalizationQualityAvailable", "LocalizationQuality", "CollisionImminent", "RadarSystemStatusAvailable", "RadarSystemStatus", "VehicleSpeed", "ChassisConnected", "EmergencyStopLatched", "LocalizationReady", "LocalizationPauseLatched", "LocalizationStatusReason", });
     internal_static_sl_link_CameraFrameRequest_descriptor =
       getDescriptor().getMessageTypes().get(14);
     internal_static_sl_link_CameraFrameRequest_fieldAccessorTable = new

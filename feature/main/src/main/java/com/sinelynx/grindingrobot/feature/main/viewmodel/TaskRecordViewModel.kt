@@ -23,6 +23,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 data class TrajectoryPoint(
     val index: Int,
@@ -54,12 +58,33 @@ internal fun TaskExecutionHistoryRecordPayload.toTaskRecordItem(mapNames: Map<St
     TaskRecordItem(
         executionId = executionId,
         taskId = taskId,
-        taskName = taskName.trim().ifBlank { "未命名任务" },
+        taskName = taskRecordDisplayName(taskName, startedAt, finishedAt),
         mapId = mapId,
         mapName = mapNames[mapId] ?: mapId.ifBlank { "未知地图" },
         startTime = startedAt.coerceIn(Long.MIN_VALUE / 1000L, Long.MAX_VALUE / 1000L) * 1000L,
         area = executedAreaM2
     )
+
+internal fun taskRecordDisplayName(
+    name: String,
+    startedAt: Long,
+    finishedAt: Long,
+    zone: ZoneId = ZoneId.systemDefault()
+): String {
+    val title = name.trim()
+    if (title.isNotEmpty() && title !in setOf("未命名任务", "未命名的任务")) return title
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss", Locale.ROOT).withZone(zone)
+    fun timestamp(seconds: Long): String? = if (seconds <= 0L) null else runCatching {
+        formatter.format(Instant.ofEpochSecond(seconds))
+    }.getOrNull()
+    val start = timestamp(startedAt) ?: "开始时间未知"
+    val end = when {
+        finishedAt == 0L -> "进行中"
+        startedAt > 0L && finishedAt < startedAt -> "结束时间未知"
+        else -> timestamp(finishedAt) ?: "结束时间未知"
+    }
+    return "$start——$end"
+}
 
 data class TaskRecordUiState(
     val records: List<TaskRecordItem> = emptyList(),

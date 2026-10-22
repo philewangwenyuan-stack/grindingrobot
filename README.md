@@ -48,6 +48,9 @@ Android 端不直接控制研磨机硬件，而是主要通过 TCP + SLLink 协�
 5. 页面收集的 StateFlow/事件是否与业务状态匹配。
 
 `core:sllink/src/message_gen` 下为协议生成代码，不应直接手工修改。协议发生变化时，需要先与嵌入式相关人员确认并重新生成。
+定位状态由 `DeviceStatusReport.localization_ready`、`localization_pause_latched` 和
+`localization_status_reason` 上报。`DeviceEventTracker` 将定位暂停与恢复边沿写入现有消息中心；
+旧板端缺少可选字段时保持未知，重连后若仍处于定位暂停则展示当前告警。
 
 ### 地图与任务
 

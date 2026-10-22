@@ -5,6 +5,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +41,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +57,7 @@ import com.sinelynx.grindingrobot.feature.common.component.DeviceStatusBar
 import com.sinelynx.grindingrobot.feature.main.viewmodel.TaskReplayUiState
 import com.sinelynx.grindingrobot.feature.map.ui.RobotPoseIcon
 import com.sinelynx.grindingrobot.feature.map.ui.FootprintRobotMarker
+import com.sinelynx.grindingrobot.feature.map.ui.GRINDING_DISC_DIAMETER_M
 import com.sinelynx.grindingrobot.feature.map.ui.drawFittedTaskPath
 import com.sinelynx.grindingrobot.feature.map.ui.taskBitmapPointToFittedPoint
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
@@ -76,6 +82,10 @@ fun TaskReplayScreen(
     var speedFactor by remember { mutableStateOf(1) }
     var isSpeedMenuExpanded by remember { mutableStateOf(false) }
     var mapViewportSize by remember { mutableStateOf(IntSize.Zero) }
+    var mapZoom by remember(uiState.executionId, uiState.taskId, uiState.mapId) { mutableStateOf(1f) }
+    var mapPan by remember(uiState.executionId, uiState.taskId, uiState.mapId) { mutableStateOf(Offset.Zero) }
+    val currentMapZoom by rememberUpdatedState(mapZoom)
+    val currentMapPan by rememberUpdatedState(mapPan)
     val density = LocalDensity.current
     val mapFrame = uiState.mapFrame
     val mapBitmap = remember(mapFrame) {
@@ -101,6 +111,11 @@ fun TaskReplayScreen(
     val totalMapRotation = mapGeo?.let {
         it.alignmentYawDeg + it.rotationAlignmentDeltaDeg
     } ?: 0f
+
+    LaunchedEffect(mapBitmap, mapViewportSize, totalMapRotation) {
+        mapZoom = 1f
+        mapPan = Offset.Zero
+    }
 
     LaunchedEffect(points.size) {
         currentIndex = currentIndex.coerceIn(0, (points.size - 1).coerceAtLeast(0))
@@ -159,145 +174,183 @@ fun TaskReplayScreen(
                     .clip(RoundedCornerShape(18.dp))
                     .background(Color(0xFFF6F8FB))
                     .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(18.dp))
-            ) {
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    val bitmap = mapBitmap ?: return@Canvas
-                    val frame = mapFrame ?: return@Canvas
-                    val geo = mapGeo ?: return@Canvas
-                    val bitmapSize = uiState.bitmapSize ?: (bitmap.width to bitmap.height)
-                    val logicalSize = frame.mapWidth to frame.mapHeight
-                    val fitScale = minOf(
-                        size.width / bitmap.width.toFloat(),
-                        size.height / bitmap.height.toFloat()
-                    )
-                    val fitOffset = Offset(
-                        x = (size.width - bitmap.width * fitScale) / 2f,
-                        y = (size.height - bitmap.height * fitScale) / 2f
-                    )
-
-                    // 与 Step3 相同：底图和所有地图附着几何共用适配及总旋转。
-                    withTransform({
-                        translate(fitOffset.x, fitOffset.y)
-                        scale(fitScale, fitScale, pivot = Offset.Zero)
-                        rotate(
-                            degrees = totalMapRotation,
-                            pivot = Offset(bitmap.width / 2f, bitmap.height / 2f)
-                        )
-                    }) {
-                        drawImage(bitmap)
+                    .pointerInput(mapBitmap, totalMapRotation) {
+                        val bitmap = mapBitmap ?: return@pointerInput
+                        detectTransformGestures { centroid, panChange, zoomChange, _ ->
+                            val nextZoom = (currentMapZoom * zoomChange).coerceIn(1f, 8f)
+                            val ratio = nextZoom / currentMapZoom
+                            val proposedPan = centroid - (centroid - currentMapPan) * ratio + panChange
+                            mapPan = clampReplayMapPan(
+                                viewport = Size(size.width.toFloat(), size.height.toFloat()),
+                                bitmapSize = bitmap.width to bitmap.height,
+                                rotationDeg = totalMapRotation,
+                                zoom = nextZoom,
+                                pan = proposedPan
+                            )
+                            mapZoom = nextZoom
+                        }
                     }
+            ) {
+                // The map, planned path, replay trail and marker share one viewport transform.
+                Box(Modifier.fillMaxSize().graphicsLayer {
+                    transformOrigin = TransformOrigin(0f, 0f)
+                    scaleX = mapZoom
+                    scaleY = mapZoom
+                    translationX = mapPan.x
+                    translationY = mapPan.y
+                }) {
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val bitmap = mapBitmap ?: return@Canvas
+                        val frame = mapFrame ?: return@Canvas
+                        val geo = mapGeo ?: return@Canvas
+                        val bitmapSize = uiState.bitmapSize ?: (bitmap.width to bitmap.height)
+                        val logicalSize = frame.mapWidth to frame.mapHeight
+                        val fitScale = minOf(
+                            size.width / bitmap.width.toFloat(),
+                            size.height / bitmap.height.toFloat()
+                        )
+                        val fitOffset = Offset(
+                            x = (size.width - bitmap.width * fitScale) / 2f,
+                            y = (size.height - bitmap.height * fitScale) / 2f
+                        )
 
-                    // 与 Step4 一致，完整规划路径位于按回放进度增长的实际轨迹下方。
-                    uiState.plannedPath?.let { path ->
-                        drawFittedTaskPath(
-                            path = path,
+                        // 与 Step3 相同：底图和所有地图附着几何共用适配及总旋转。
+                        withTransform({
+                            translate(fitOffset.x, fitOffset.y)
+                            scale(fitScale, fitScale, pivot = Offset.Zero)
+                            rotate(
+                                degrees = totalMapRotation,
+                                pivot = Offset(bitmap.width / 2f, bitmap.height / 2f)
+                            )
+                        }) {
+                            drawImage(bitmap)
+                        }
+
+                        // 与 Step4 一致，完整规划路径位于按回放进度增长的实际轨迹下方。
+                        uiState.plannedPath?.let { path ->
+                            drawFittedTaskPath(
+                                path = path,
+                                geo = geo,
+                                mapImageSize = logicalSize,
+                                bitmapSize = bitmapSize,
+                                mapRotationDeg = totalMapRotation,
+                                colorByScope = true
+                            )
+                        }
+
+                        val routeWidthPx = trajectoryMetersToScreenPx(
+                            meters = GRINDING_DISC_DIAMETER_M.toDouble(),
                             geo = geo,
                             mapImageSize = logicalSize,
                             bitmapSize = bitmapSize,
-                            mapRotationDeg = totalMapRotation,
-                            colorByScope = true
+                            canvasSize = size
                         )
-                    }
-
-                    val routeWidthPx = trajectoryMetersToScreenPx(
-                        meters = uiState.robotWidth,
-                        geo = geo,
-                        mapImageSize = logicalSize,
-                        bitmapSize = bitmapSize,
-                        canvasSize = size
-                    )
-                    val visibleSegmentCount = visibleTrajectorySegmentCount(
-                        pointCount = points.size,
-                        currentIndex = currentIndex
-                    )
-                    if (routeWidthPx != null && visibleSegmentCount > 0) {
-                        for (index in 0 until visibleSegmentCount) {
-                            val first = points[index]
-                            val second = points[index + 1]
-                            val start = trajectoryPointToBitmapOffset(first, geo, logicalSize, bitmapSize)
-                                ?.let { taskBitmapPointToFittedPoint(it, size, bitmapSize, totalMapRotation) }
-                            val end = trajectoryPointToBitmapOffset(second, geo, logicalSize, bitmapSize)
-                                ?.let { taskBitmapPointToFittedPoint(it, size, bitmapSize, totalMapRotation) }
-                            if (start == null || end == null) continue
-                            drawLine(
-                                color = Color(0xFF00A0E9).copy(alpha = 0.5f),
-                                start = start,
-                                end = end,
-                                strokeWidth = routeWidthPx,
-                                cap = StrokeCap.Round
-                            )
+                        val visibleSegmentCount = visibleTrajectorySegmentCount(
+                            pointCount = points.size,
+                            currentIndex = currentIndex
+                        )
+                        if (routeWidthPx != null) {
+                            for (index in 0 until visibleSegmentCount) {
+                                val first = points[index]
+                                val second = points[index + 1]
+                                val start = grindingTrajectoryPointToBitmapOffset(first, geo, logicalSize, bitmapSize,
+                                    uiState.robotFootprint, uiState.robotLength)
+                                    ?.let { taskBitmapPointToFittedPoint(it, size, bitmapSize, totalMapRotation) }
+                                val end = grindingTrajectoryPointToBitmapOffset(second, geo, logicalSize, bitmapSize,
+                                    uiState.robotFootprint, uiState.robotLength)
+                                    ?.let { taskBitmapPointToFittedPoint(it, size, bitmapSize, totalMapRotation) }
+                                if (start == null || end == null) continue
+                                drawLine(
+                                    color = Color(0xFF00A0E9).copy(alpha = 0.5f),
+                                    start = start,
+                                    end = end,
+                                    strokeWidth = routeWidthPx,
+                                    cap = StrokeCap.Round
+                                )
+                            }
+                            points.take((currentIndex + 1).coerceAtLeast(0)).forEach { point ->
+                                val disc = grindingTrajectoryPointToBitmapOffset(point, geo, logicalSize, bitmapSize,
+                                    uiState.robotFootprint, uiState.robotLength)
+                                    ?.let { taskBitmapPointToFittedPoint(it, size, bitmapSize, totalMapRotation) }
+                                if (disc != null) drawCircle(
+                                    color = Color(0xFF00A0E9).copy(alpha = 0.5f),
+                                    radius = routeWidthPx / 2f,
+                                    center = disc
+                                )
+                            }
                         }
                     }
-                }
 
-                val currentPoint = points.getOrNull(currentIndex)
-                val frame = mapFrame
-                val geo = mapGeo
-                val bitmapSize = uiState.bitmapSize
-                val viewportCanvasSize = Size(
-                    mapViewportSize.width.toFloat(),
-                    mapViewportSize.height.toFloat()
-                )
-                val robotCenter = if (
-                    currentPoint != null && frame != null && geo != null && bitmapSize != null
-                ) {
-                    trajectoryPointToBitmapOffset(
-                        currentPoint,
-                        geo,
-                        frame.mapWidth to frame.mapHeight,
-                        bitmapSize
-                    )?.let {
-                        taskBitmapPointToFittedPoint(
-                            it,
-                            viewportCanvasSize,
+                    val currentPoint = points.getOrNull(currentIndex)
+                    val frame = mapFrame
+                    val geo = mapGeo
+                    val bitmapSize = uiState.bitmapSize
+                    val viewportCanvasSize = Size(
+                        mapViewportSize.width.toFloat(),
+                        mapViewportSize.height.toFloat()
+                    )
+                    val robotCenter = if (
+                        currentPoint != null && frame != null && geo != null && bitmapSize != null
+                    ) {
+                        trajectoryPointToBitmapOffset(
+                            currentPoint,
+                            geo,
+                            frame.mapWidth to frame.mapHeight,
+                            bitmapSize
+                        )?.let {
+                            taskBitmapPointToFittedPoint(
+                                it,
+                                viewportCanvasSize,
+                                bitmapSize,
+                                totalMapRotation
+                            )
+                        }
+                    } else null
+                    val robotWidthPx = if (frame != null && geo != null && bitmapSize != null) {
+                        trajectoryMetersToScreenPx(
+                            uiState.robotWidth,
+                            geo,
+                            frame.mapWidth to frame.mapHeight,
                             bitmapSize,
-                            totalMapRotation
+                            viewportCanvasSize
+                        )
+                    } else null
+                    val robotLengthPx = if (frame != null && geo != null && bitmapSize != null) {
+                        trajectoryMetersToScreenPx(
+                            uiState.robotLength,
+                            geo,
+                            frame.mapWidth to frame.mapHeight,
+                            bitmapSize,
+                            viewportCanvasSize
+                        )
+                    } else null
+                    val pixelsPerMeter = if (frame != null && geo != null && bitmapSize != null) {
+                        trajectoryMetersToScreenPx(
+                            1.0, geo, frame.mapWidth to frame.mapHeight,
+                            bitmapSize, viewportCanvasSize
+                        )
+                    } else null
+                    if (currentPoint != null && robotCenter != null &&
+                        uiState.robotFootprint.size >= 3 && pixelsPerMeter != null) {
+                        FootprintRobotMarker(
+                            center = robotCenter,
+                            headingDeg = currentPoint.headingDeg - (geo?.headingDeg ?: 0f) - totalMapRotation,
+                            footprint = uiState.robotFootprint,
+                            pixelsPerMeterX = pixelsPerMeter,
+                            pixelsPerMeterY = pixelsPerMeter,
+                            showGrindingDisc = true
+                        )
+                    } else if (
+                        currentPoint != null && robotCenter != null &&
+                        robotWidthPx != null && robotLengthPx != null
+                    ) {
+                        RobotPoseIcon(
+                            center = robotCenter,
+                            headingDeg = currentPoint.headingDeg - totalMapRotation,
+                            width = with(density) { robotWidthPx.toDp() },
+                            length = with(density) { robotLengthPx.toDp() }
                         )
                     }
-                } else null
-                val robotWidthPx = if (frame != null && geo != null && bitmapSize != null) {
-                    trajectoryMetersToScreenPx(
-                        uiState.robotWidth,
-                        geo,
-                        frame.mapWidth to frame.mapHeight,
-                        bitmapSize,
-                        viewportCanvasSize
-                    )
-                } else null
-                val robotLengthPx = if (frame != null && geo != null && bitmapSize != null) {
-                    trajectoryMetersToScreenPx(
-                        uiState.robotLength,
-                        geo,
-                        frame.mapWidth to frame.mapHeight,
-                        bitmapSize,
-                        viewportCanvasSize
-                    )
-                } else null
-                val pixelsPerMeter = if (frame != null && geo != null && bitmapSize != null) {
-                    trajectoryMetersToScreenPx(
-                        1.0, geo, frame.mapWidth to frame.mapHeight,
-                        bitmapSize, viewportCanvasSize
-                    )
-                } else null
-                if (currentPoint != null && robotCenter != null &&
-                    uiState.robotFootprint.size >= 3 && pixelsPerMeter != null) {
-                    FootprintRobotMarker(
-                        center = robotCenter,
-                        headingDeg = currentPoint.headingDeg - (geo?.headingDeg ?: 0f) - totalMapRotation,
-                        footprint = uiState.robotFootprint,
-                        pixelsPerMeterX = pixelsPerMeter,
-                        pixelsPerMeterY = pixelsPerMeter
-                    )
-                } else if (
-                    currentPoint != null && robotCenter != null &&
-                    robotWidthPx != null && robotLengthPx != null
-                ) {
-                    RobotPoseIcon(
-                        center = robotCenter,
-                        headingDeg = currentPoint.headingDeg - totalMapRotation,
-                        width = with(density) { robotWidthPx.toDp() },
-                        length = with(density) { robotLengthPx.toDp() }
-                    )
                 }
 
                 val loadingText = when {

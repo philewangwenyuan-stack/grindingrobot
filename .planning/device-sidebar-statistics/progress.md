@@ -1,0 +1,11 @@
+# Progress
+- Inspected UI, DeviceStatusViewModel, history payload, statistics page calculator and TCP API.
+- Approved prototype uses fixed-height sidebar with two equally weighted cards; no task toggle in product.
+- Preparing pure aggregation and page-visible history refresh.
+- Added pure aggregation, shared history request gate, visible-only refresh and refresh on task stop.
+- Bound today's elapsed work duration and area/total metrics, retained fixed-height/idle behavior.
+- Added seven aggregation tests and documented time/retained-history boundaries; no compilation or test execution.
+- A guessed existing test filename was absent; created a dedicated DeviceStatisticsTest.kt instead.
+- Reviewed ViewModel lifecycle cancellation/request lock, query filter and UI bindings. Remaining-time text now uses compact hours/minutes.
+- Added idle transition preservation test. git diff --check passed; no Gradle/build/test invocation.
+- Added total elapsed grinding duration to the bottom-right metric, using deduplicated real history; extended cross-day/duplicate/active/idle tests. No compilation.

@@ -25,6 +25,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withTimeoutOrNull
+import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
+import com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate
+import java.util.Locale
 import sl_link.SlLink
 import kotlin.math.roundToInt
 
@@ -57,6 +68,9 @@ data class DeviceStatusUiState(
     val remainTaskAreaText: String = "0.00m²",
     val todayAreaText: String = "-",
     val totalAreaText: String = "-",
+    val todayWorkTimeText: String = "-",
+    val totalWorkTimeText: String = "-",
+    val statisticsError: String? = null,
     val remainTimeText: String = "未知",
     val mapImageBytes: ByteArray? = null,
     val mapTransform: TaskMapTransformUiState? = null,
@@ -170,6 +184,10 @@ class DeviceStatusViewModel @Inject constructor(
     private var commandGeneration = 0L
     private val pendingTaskCommands = mutableSetOf<PendingTaskCommandType>()
     private var runtimeSettingsJob: Job? = null
+    private var statisticsVisible = false
+    private var statisticsRefreshJob: Job? = null
+    private var statisticsRequestJob: Job? = null
+    private var statisticsRecords: List<TaskExecutionHistoryRecordPayload>? = null
     // 只订阅新路径结果流，不让其他页面的历史成功路径提前结束本轮等待。
     private val taskMapController = DeviceTaskMapController(
         scope = viewModelScope, cache = TaskMapDisplayStream.cache,
@@ -244,6 +262,8 @@ class DeviceStatusViewModel @Inject constructor(
                 val reportTaskId = payload.taskId
                 val taskState = payload.toTaskUiState()
                 val taskStateChanged = taskState != _uiState.value.taskState
+                val taskEnded = taskState == DeviceTaskUiState.IDLE &&
+                    _uiState.value.taskState != DeviceTaskUiState.IDLE
                 val runtimeInvalidated = reportTaskId != _uiState.value.currentTaskId ||
                     taskState !in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)
                 if (runtimeInvalidated) runtimeSettingsJob?.cancel()
@@ -291,6 +311,7 @@ class DeviceStatusViewModel @Inject constructor(
                     pathVersion = payload.pathVersion
                 )
                 if (runtimeInvalidated || taskStateChanged) refreshRuntimeSettings()
+                if (taskEnded) refreshStatistics()
             }
         }
 
@@ -459,6 +480,7 @@ class DeviceStatusViewModel @Inject constructor(
     /** 页面可见时补取地图与设定值，不开关任务状态上报 collector。 */
     fun setMapVisible(visible: Boolean) {
         taskMapController.setVisible(visible)
+        setStatisticsVisible(visible)
         if (visible) {
             if (appState.chassisSettings.value == null) {
                 tcpManager.requestSettingRead(readChassis = true, readMap = false, readRpp = false)
@@ -472,7 +494,76 @@ class DeviceStatusViewModel @Inject constructor(
 
     override fun onCleared() {
         taskMapController.close()
+        statisticsRefreshJob?.cancel()
+        statisticsRequestJob?.cancel()
         super.onCleared()
+    }
+
+    private fun setStatisticsVisible(visible: Boolean) {
+        statisticsVisible = visible
+        if (!visible) {
+            statisticsRefreshJob?.cancel()
+            statisticsRefreshJob = null
+            statisticsRequestJob?.cancel()
+            return
+        }
+        if (statisticsRefreshJob?.isActive == true) return
+        statisticsRefreshJob = viewModelScope.launch {
+            while (isActive) {
+                updateStatisticsDisplay()
+                refreshStatistics()
+                delay(30_000L)
+            }
+        }
+    }
+
+    /** Background reads share the history assembler with record/statistics pages. */
+    private fun refreshStatistics() {
+        if (!statisticsVisible || statisticsRequestJob?.isActive == true || !tcpManager.isConnected()) return
+        statisticsRequestJob = viewModelScope.launch {
+            if (!TaskHistoryRequestGate.acquire(this@DeviceStatusViewModel)) return@launch
+            try {
+                TaskSchedulerStream.resetTaskExecutionHistory()
+                val response = withTimeoutOrNull(10_000L) {
+                    coroutineScope {
+                        // Install the receiver before sending, including for immediate cached replies.
+                        val reply = async(start = CoroutineStart.UNDISPATCHED) {
+                            TaskSchedulerStream.taskExecutionHistory.filterNotNull().first {
+                                it.mapId.isBlank() && it.taskId.isBlank() &&
+                                    it.startTime == 0L && it.endTime == 0L
+                            }
+                        }
+                        if (!tcpManager.requestTaskExecutionHistory()) {
+                            reply.cancel()
+                            null
+                        } else reply.await()
+                    }
+                }
+                if (response?.isSuccess == true) {
+                    statisticsRecords = response.records
+                    updateStatisticsDisplay()
+                    _uiState.update { it.copy(statisticsError = null) }
+                } else {
+                    _uiState.update { it.copy(statisticsError = "统计更新失败") }
+                    LogUtils.w("DeviceStatistics", response?.message ?: "历史统计请求失败或超时")
+                }
+            } finally {
+                TaskHistoryRequestGate.release(this@DeviceStatusViewModel)
+            }
+        }
+    }
+
+    private fun updateStatisticsDisplay() {
+        val records = statisticsRecords ?: return
+        val summary = summarizeDeviceStatistics(records, System.currentTimeMillis() / 1000L)
+        _uiState.update {
+            it.copy(
+                todayAreaText = String.format(Locale.US, "%.2fm²", summary.todayAreaM2),
+                totalAreaText = String.format(Locale.US, "%.2fm²", summary.totalAreaM2),
+                todayWorkTimeText = formatStatisticsDuration(summary.todayWorkSeconds),
+                totalWorkTimeText = formatStatisticsDuration(summary.totalWorkSeconds)
+            )
+        }
     }
 
     private fun canSendTaskCommand(): Boolean {
@@ -572,7 +663,9 @@ class DeviceStatusViewModel @Inject constructor(
     }
 
     private fun formatRemainTimeS(value: Float): String {
-        return "${value.coerceAtLeast(0f).roundToInt()}秒"
+        if (!value.isFinite()) return "未知"
+        val seconds = value.coerceAtLeast(0f).toLong()
+        return if (seconds < 60L) "${seconds}秒" else formatStatisticsDuration(seconds)
     }
 
     private fun com.sinelynx.grindingrobot.core.model.state.TaskStatusReportPayload.toPoseItem(): TaskPoseUiItem? {

@@ -1,6 +1,7 @@
 ﻿package com.sinelynx.grindingrobot.feature.map.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -67,6 +68,9 @@ fun VirtualDirectionPad(
     val maxThumbDistancePx = (sizePx - thumbSizePx) / 2f
     val deadZonePx = with(density) { 8.dp.toPx() }
     var thumbOffset by remember { mutableStateOf(Offset.Zero) }
+    // Keep the unsnapped input separately so sideways movement can exit the snap band.
+    var rawThumbOffset by remember { mutableStateOf(Offset.Zero) }
+    var snapAxis by remember { mutableStateOf(JoystickSnapAxis.NONE) }
     var activeCommand by remember { mutableStateOf(DirectionCommand.Stop) }
     var lastEmittedNormalized by remember { mutableStateOf<Pair<Float, Float>?>(null) }
     var isLocked by remember { mutableStateOf(false) }
@@ -131,12 +135,15 @@ fun VirtualDirectionPad(
 
     fun applyOffset(candidate: Offset) {
         val distance = hypot(candidate.x, candidate.y)
-        thumbOffset = if (distance <= maxThumbDistancePx) {
+        rawThumbOffset = if (distance <= maxThumbDistancePx) {
             candidate
         } else {
             val ratio = maxThumbDistancePx / max(distance, 0.0001f)
             Offset(candidate.x * ratio, candidate.y * ratio)
         }
+        val snapped = snapJoystickToAxis(rawThumbOffset, snapAxis, deadZonePx)
+        thumbOffset = snapped.offset
+        snapAxis = snapped.axis
         updateDirection(resolveDirection(thumbOffset))
         emitPosition(thumbOffset)
         updateEdgeDwell(thumbOffset)
@@ -146,6 +153,8 @@ fun VirtualDirectionPad(
         isLocked = false
         edgeDwellAnchor = null
         thumbOffset = Offset.Zero
+        rawThumbOffset = Offset.Zero
+        snapAxis = JoystickSnapAxis.NONE
         updateDirection(DirectionCommand.Stop)
         emitPosition(Offset.Zero)
     }
@@ -189,7 +198,7 @@ fun VirtualDirectionPad(
                                 change.consume()
                                 if (!isLocked) {
                                     val dragAmount = change.position - change.previousPosition
-                                    applyOffset(thumbOffset + dragAmount)
+                                    applyOffset(rawThumbOffset + dragAmount)
                                 }
                             }
                         } finally {
@@ -200,6 +209,22 @@ fun VirtualDirectionPad(
                     }
                 }
         )
+        Canvas(Modifier.matchParentSize()) {
+            val inset = 12.dp.toPx()
+            val guide = Color(0xFF00A0E9)
+            drawLine(
+                color = guide.copy(alpha = if (snapAxis == JoystickSnapAxis.HORIZONTAL) 0.45f else 0.12f),
+                start = Offset(inset, this.size.height / 2f),
+                end = Offset(this.size.width - inset, this.size.height / 2f),
+                strokeWidth = 1.dp.toPx()
+            )
+            drawLine(
+                color = guide.copy(alpha = if (snapAxis == JoystickSnapAxis.VERTICAL) 0.45f else 0.12f),
+                start = Offset(this.size.width / 2f, inset),
+                end = Offset(this.size.width / 2f, this.size.height - inset),
+                strokeWidth = 1.dp.toPx()
+            )
+        }
         Box(
             modifier = Modifier
                 .size(thumbSize)

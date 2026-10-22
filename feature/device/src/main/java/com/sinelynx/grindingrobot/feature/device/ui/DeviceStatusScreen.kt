@@ -26,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.feature.map.ui.FootprintRobotMarker
+import com.sinelynx.grindingrobot.feature.map.ui.grindingDiscWorldCenter
+import com.sinelynx.grindingrobot.feature.map.ui.GRINDING_DISC_DIAMETER_M
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,6 +54,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -141,18 +146,14 @@ private fun DeviceStatusContent(
                 modifier = Modifier
                     .width(240.dp)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (uiState.taskState != DeviceTaskUiState.IDLE) {
-                    StatusCard(uiState = uiState, onEditRuntime = onEditRuntime)
-                    TaskStatsCard(uiState = uiState)
-                } else {
-                    StatusCard(
-                        uiState = uiState,
-                        onEditRuntime = onEditRuntime,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+                StatusCard(
+                    uiState = uiState,
+                    onEditRuntime = onEditRuntime,
+                    modifier = Modifier.weight(1f)
+                )
+                TaskStatsCard(uiState = uiState, modifier = Modifier.weight(1f))
             }
             ZoomableTaskPreviewPanel(
                 uiState = uiState,
@@ -190,8 +191,8 @@ private fun DeviceStatusContent(
             .clip(RoundedCornerShape(24.dp))
             .background(Color(0xFFF6F8FB))
             .border(2.dp, Color.White, RoundedCornerShape(24.dp))
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         StatusTitle(CommonR.drawable.ic_device_status, "状态")
         StatusRow("导航状态", uiState.navigationStatus, Color(0xFF00A0E9))
@@ -203,7 +204,7 @@ private fun DeviceStatusContent(
         RuntimeSettingRow(
             "直行速度", (uiState.runtimeSettings?.runSpeed ?: uiState.configuredRunSpeed)
                 ?.let { String.format(Locale.US, "%.3f m/s", it) },
-            uiState.straightSpeedText, runtimeEditable, { onEditRuntime(TaskRuntimeField.RUN_SPEED) }
+            compactSpeedText(uiState.straightSpeedText), runtimeEditable, { onEditRuntime(TaskRuntimeField.RUN_SPEED) }
         )
         RuntimeSettingRow(
             "研磨转速", (uiState.runtimeSettings?.discSpeedRpm ?: uiState.configuredDiscSpeedRpm)
@@ -217,50 +218,118 @@ private fun DeviceStatusContent(
 private fun RuntimeSettingRow(label: String, setpoint: String?, actual: String, enabled: Boolean, onClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "$label:", color = Color(0x806D737D), fontSize = 12.sp, maxLines = 1)
-        Text(
-            text = setpoint?.let { "设定 $it" } ?: "设定 —",
+        SidebarText(text = label, color = SidebarLabelColor)
+        SidebarText(
+            text = "设定 ${sidebarDisplayValue(setpoint)}",
             modifier = Modifier.weight(1f).clickable(enabled = enabled, onClick = onClick),
-            color = Color(0xFF00A0E9),
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            maxLines = 1
+            color = Color(0xFF00A0E9)
         )
-        Text(text = "实际 $actual", fontSize = 11.sp, color = Color(0xFF6D737D), maxLines = 1)
+        SidebarText(text = "实际 ${sidebarDisplayValue(actual)}", color = SidebarSecondaryColor)
     }
 }
 
+private fun compactSpeedText(value: String): String {
+    val speed = value.substringBefore(' ').toDoubleOrNull()?.takeIf { it.isFinite() } ?: return value
+    return String.format(Locale.US, "%.3f m/s", speed)
+}
+
 @Composable
-private fun TaskStatsCard(uiState: DeviceStatusUiState) {
+private fun TaskStatsCard(uiState: DeviceStatusUiState, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(Color(0xFFF6F8FB))
             .border(2.dp, Color.White, RoundedCornerShape(24.dp))
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-//        Text(text = "任务统计", color = Color(0x80202937), fontSize = 12.sp, fontWeight = FontWeight.Medium)
-        StatusTitle(CommonR.drawable.ic_task_info, "任务统计")
-        StatusRow("当前任务总研磨面积", uiState.totalTaskAreaText)
-        StatusRow("当前任务已研磨面积", uiState.doneTaskAreaText)
-        StatusRow("当前任务剩余研磨面积", uiState.remainTaskAreaText)
-        StatusRow("今日总研磨面积", uiState.todayAreaText)
-        StatusRow("机器总研磨面积", uiState.totalAreaText)
-        StatusRow("当前任务剩余时间", uiState.remainTimeText)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.weight(1f)) { StatusTitle(CommonR.drawable.ic_task_info, "任务统计") }
+            uiState.statisticsError?.let {
+                SidebarText(it, color = Color(0xFFD82B2A))
+            }
+        }
+        val hasTask = uiState.taskState != DeviceTaskUiState.IDLE
+        TaskStatsPair(
+            "任务总面积", if (hasTask) uiState.totalTaskAreaText else "—",
+            "任务已磨面积", if (hasTask) uiState.doneTaskAreaText else "—"
+        )
+        TaskStatsPair(
+            "任务剩余面积", if (hasTask) uiState.remainTaskAreaText else "—",
+            "当前任务剩余时间", if (hasTask) uiState.remainTimeText else "—",
+            highlightLeft = true, highlightRight = true
+        )
+        TaskStatsPair("今日总研磨面积", uiState.todayAreaText, "今日工作时间", uiState.todayWorkTimeText)
+        TaskStatsPair("机器总研磨面积", uiState.totalAreaText, "机器总研磨时间", uiState.totalWorkTimeText)
+    }
+}
+
+@Composable
+private fun TaskStatsPair(
+    leftLabel: String,
+    leftValue: String,
+    rightLabel: String? = null,
+    rightValue: String = "—",
+    highlightLeft: Boolean = false,
+    highlightRight: Boolean = false
+) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        TaskStatsMetric(leftLabel, leftValue, highlightLeft, Modifier.weight(1f))
+        if (rightLabel != null) {
+            TaskStatsMetric(rightLabel, rightValue, highlightRight, Modifier.weight(1f))
+        } else {
+            Box(Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun TaskStatsMetric(label: String, value: String, highlighted: Boolean, modifier: Modifier) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        SidebarText(label, color = SidebarLabelColor)
+        SidebarText(
+            value,
+            color = if (highlighted) Color(0xFF00A0E9) else Color(0xFF202937)
+        )
     }
 }
 
 @Composable
 private fun StatusRow(label: String, value: String, valueColor: Color = Color(0xFF202937)) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "$label:", color = Color(0x806D737D), fontSize = 12.sp)
-        Text(text = value, color = valueColor, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+        SidebarText(text = "$label:", color = SidebarLabelColor)
+        SidebarText(text = value, color = valueColor)
     }
+}
+
+private val SidebarLabelColor = Color(0x806D737D)
+private val SidebarSecondaryColor = Color(0xFF6D737D)
+private val SidebarTextStyle = TextStyle(
+    fontFamily = FontFamily.SansSerif,
+    fontSize = 11.sp,
+    lineHeight = 16.sp,
+    fontWeight = FontWeight.Normal,
+    letterSpacing = 0.sp
+)
+
+/** Use the same em dash for all unavailable values, independent of source protocol spelling. */
+private fun sidebarDisplayValue(value: String?): String =
+    value?.trim()?.takeUnless { it.isEmpty() || it.all { character -> character in "-–—−" } } ?: "—"
+
+@Composable
+private fun SidebarText(text: String, color: Color, modifier: Modifier = Modifier) {
+    Text(
+        text = sidebarDisplayValue(text),
+        modifier = modifier,
+        color = color,
+        style = SidebarTextStyle,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
 }
 
 @Composable
@@ -274,7 +343,8 @@ private fun StatusTitle(@DrawableRes icon: Int, title: String) {
             )
         }
 
-        Text(text = title, color = Color(0xFF202937), fontSize = 12.sp, fontWeight = FontWeight.Medium)
+        Text(text = title, color = Color(0xFF202937),
+            style = SidebarTextStyle.copy(fontSize = 12.sp, fontWeight = FontWeight.Medium))
     }
 }
 
@@ -739,13 +809,15 @@ private fun ZoomableTaskTrajectoryOverlay(
 ) {
     if (trajectory.isEmpty() || mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
 
-    val bitmapTrajectory = remember(trajectory, mapTransform, bitmapWidth, bitmapHeight) {
+    val bitmapTrajectory = remember(trajectory, mapTransform, bitmapWidth, bitmapHeight, robotFootprint, robotLength) {
         trajectory.mapNotNull { pose ->
             pose.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)?.let { offset ->
                 TaskTrajectoryDrawPoint(
                     offset = offset,
                     lineColor = Color(pose.lineColorArgb),
-                    headingDeg = pose.headingDeg
+                    headingDeg = pose.headingDeg,
+                    discOffset = grindingDiscWorldCenter(pose.x, pose.y, pose.headingDeg, robotFootprint, robotLength)
+                        ?.let { pose.copy(x = it.x, y = it.y).toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight) }
                 )
             }
         }
@@ -776,31 +848,31 @@ private fun ZoomableTaskTrajectoryOverlay(
                 imageHeight = bitmapHeight
             )
             for (index in 1 until bitmapTrajectory.size) {
+                val start = bitmapTrajectory[index - 1].discOffset ?: continue
+                val end = bitmapTrajectory[index].discOffset ?: continue
                 drawLine(
                     color = bitmapTrajectory[index].lineColor,
-                    start = bitmapTrajectory[index - 1].offset
+                    start = start
                         .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
                         .transformBy(zoom, pan),
-                    end = bitmapTrajectory[index].offset
+                    end = end
                         .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
                         .transformBy(zoom, pan),
-                    strokeWidth = 4f * zoom
+                    strokeWidth = GRINDING_DISC_DIAMETER_M * finalMapBounds.width /
+                        mapTransform.width / mapTransform.resolution * zoom,
+                    cap = androidx.compose.ui.graphics.StrokeCap.Round
                 )
             }
             bitmapTrajectory.forEach { point ->
-                val center = point.offset
+                val disc = point.discOffset ?: return@forEach
+                val center = disc
                     .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
                     .transformBy(zoom, pan)
                 drawCircle(
-                    color = Color.White,
-                    radius = 5f * zoom,
-                    center = center
-                )
-                drawCircle(
                     color = point.lineColor,
-                    radius = 5f * zoom,
-                    center = center,
-                    style = Stroke(width = 2f * zoom)
+                    radius = GRINDING_DISC_DIAMETER_M / 2f * finalMapBounds.width /
+                        mapTransform.width / mapTransform.resolution * zoom,
+                    center = center
                 )
             }
         }
@@ -839,7 +911,8 @@ private fun ZoomableTaskTrajectoryOverlay(
                 headingDeg = 90f - taskRobotRotationDeg(robotPoint.headingDeg, mapTransform),
                 footprint = robotFootprint,
                 pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * zoom,
-                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution * zoom
+                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution * zoom,
+                showGrindingDisc = true
             )
         } else {
             Image(
@@ -874,13 +947,15 @@ private fun TaskTrajectoryOverlay(
 ) {
     if (trajectory.isEmpty() || mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
 
-    val bitmapTrajectory = remember(trajectory, mapTransform, bitmapWidth, bitmapHeight) {
+    val bitmapTrajectory = remember(trajectory, mapTransform, bitmapWidth, bitmapHeight, robotFootprint, robotLength) {
         trajectory.mapNotNull { pose ->
             pose.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)?.let { offset ->
                 TaskTrajectoryDrawPoint(
                     offset = offset,
                     lineColor = Color(pose.lineColorArgb),
-                    headingDeg = pose.headingDeg
+                    headingDeg = pose.headingDeg,
+                    discOffset = grindingDiscWorldCenter(pose.x, pose.y, pose.headingDeg, robotFootprint, robotLength)
+                        ?.let { pose.copy(x = it.x, y = it.y).toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight) }
                 )
             }
         }
@@ -919,32 +994,32 @@ private fun TaskTrajectoryOverlay(
         Canvas(modifier = Modifier.fillMaxSize()) {
             val finalMapBounds = mapBounds
             for (index in 1 until bitmapTrajectory.size) {
+                val start = bitmapTrajectory[index - 1].discOffset ?: continue
+                val end = bitmapTrajectory[index].discOffset ?: continue
                 drawLine(
                     color = bitmapTrajectory[index].lineColor,
-                    start = bitmapTrajectory[index - 1].offset
+                    start = start
                         .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg),
-                    end = bitmapTrajectory[index].offset
+                    end = end
                         .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg),
-                    strokeWidth = 4f
+                    strokeWidth = GRINDING_DISC_DIAMETER_M * finalMapBounds.width /
+                        mapTransform.width / mapTransform.resolution,
+                    cap = androidx.compose.ui.graphics.StrokeCap.Round
                 )
             }
             bitmapTrajectory.forEach { point ->
-                val center = point.offset.toTaskDrawOffset(
+                val disc = point.discOffset ?: return@forEach
+                val center = disc.toTaskDrawOffset(
                     finalMapBounds,
                     bitmapWidth,
                     bitmapHeight,
                     mapTransform.totalRotationDeg
                 )
                 drawCircle(
-                    color = Color.White,
-                    radius = 5f,
-                    center = center
-                )
-                drawCircle(
                     color = point.lineColor,
-                    radius = 5f,
-                    center = center,
-                    style = Stroke(width = 2f)
+                    radius = GRINDING_DISC_DIAMETER_M / 2f * finalMapBounds.width /
+                        mapTransform.width / mapTransform.resolution,
+                    center = center
                 )
             }
         }
@@ -963,7 +1038,8 @@ private fun TaskTrajectoryOverlay(
                 headingDeg = 90f - taskRobotRotationDeg(robotPoint.headingDeg, mapTransform),
                 footprint = robotFootprint,
                 pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * 1f,
-                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution * 1f
+                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution,
+                showGrindingDisc = true
             )
         } else {
             Image(
@@ -986,7 +1062,8 @@ private fun TaskTrajectoryOverlay(
 private data class TaskTrajectoryDrawPoint(
     val offset: Offset,
     val lineColor: Color,
-    val headingDeg: Float
+    val headingDeg: Float,
+    val discOffset: Offset? = null
 )
 
 internal data class MapDrawBounds(
