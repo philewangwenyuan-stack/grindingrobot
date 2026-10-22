@@ -89,6 +89,7 @@ class AppState @Inject constructor(
         val vehicleSpeedMps: Float = 0f,
         val emergencyStopLatched: Boolean? = null,
         val localizationReady: Boolean? = null,
+        val localizationPauseLatched: Boolean? = null,
         val localizationStatusReason: String = "",
         val localizationPoseAvailable: Boolean = false,
         val receivedAtElapsedMs: Long = 0L
@@ -416,6 +417,7 @@ class AppState @Inject constructor(
         vehicleSpeedMps: Float,
         emergencyStopLatched: Boolean? = null,
         localizationReady: Boolean? = null,
+        localizationPauseLatched: Boolean? = null,
         localizationStatusReason: String = "",
         localizationPoseAvailable: Boolean = false
     ) {
@@ -435,6 +437,7 @@ class AppState @Inject constructor(
             vehicleSpeedMps = vehicleSpeedMps,
             emergencyStopLatched = emergencyStopLatched,
             localizationReady = localizationReady,
+            localizationPauseLatched = localizationPauseLatched,
             localizationStatusReason = localizationStatusReason,
             localizationPoseAvailable = localizationPoseAvailable,
             receivedAtElapsedMs = android.os.SystemClock.elapsedRealtime()

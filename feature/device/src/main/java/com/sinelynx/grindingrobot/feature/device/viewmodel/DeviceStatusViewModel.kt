@@ -67,6 +67,7 @@ data class DeviceStatusUiState(
     val runtimeLoading: Boolean = false,
     val runtimeApplying: Boolean = false,
     val runtimeError: String? = null,
+    val navigationPauseNotice: NavigationPauseNotice? = null,
     val totalTaskAreaText: String = "0.00m²",
     val doneTaskAreaText: String = "0.00m²",
     val remainTaskAreaText: String = "0.00m²",
@@ -152,6 +153,7 @@ internal fun DeviceStatusUiState.afterTaskStopped(): DeviceStatusUiState {
         runtimeEditor = null,
         runtimeLoading = false,
         runtimeApplying = false,
+        navigationPauseNotice = null,
         plannedPath = null,
         reportedPathVersion = 0,
         trajectory = emptyList()
@@ -194,6 +196,7 @@ class DeviceStatusViewModel @Inject constructor(
     private var statisticsRecords: List<TaskExecutionHistoryRecordPayload>? = null
     private var navigationWasConnected = false
     private var navigationConnectedAtMs = Long.MAX_VALUE
+    private val navigationPauseTracker = NavigationPauseNoticeTracker()
     // 只订阅新路径结果流，不让其他页面的历史成功路径提前结束本轮等待。
     private val taskMapController = DeviceTaskMapController(
         scope = viewModelScope, cache = TaskMapDisplayStream.cache,
@@ -243,6 +246,7 @@ class DeviceStatusViewModel @Inject constructor(
                         localizationQuality = runtime.localizationQuality
                     )
                 }
+                refreshNavigationPauseNotice()
             }
         }
 
@@ -290,6 +294,9 @@ class DeviceStatusViewModel @Inject constructor(
                         currentTaskId = current.currentTaskId,
                         reportTaskId = reportTaskId,
                         taskState = taskState,
+                        navigationPauseNotice = current.navigationPauseNotice.takeIf {
+                            taskState != DeviceTaskUiState.IDLE && !taskChanged
+                        },
                         currentTrajectory = current.trajectory,
                         pose = payload.toPoseItem(),
                         maxPoints = MAX_TRAJECTORY_POINTS
@@ -325,6 +332,7 @@ class DeviceStatusViewModel @Inject constructor(
                     pathVersion = payload.pathVersion
                 )
                 if (runtimeInvalidated || taskStateChanged) refreshRuntimeSettings()
+                refreshNavigationPauseNotice()
                 if (taskEnded) refreshStatistics()
             }
         }
@@ -513,6 +521,20 @@ class DeviceStatusViewModel @Inject constructor(
 
     /** 重试失败材料，不重置实时轨迹，不触发任何任务执行指令。 */
     fun retryTaskMap() = taskMapController.retry()
+
+    fun dismissNavigationPauseNotice() {
+        _uiState.update { it.copy(navigationPauseNotice = null) }
+    }
+
+    private fun refreshNavigationPauseNotice() {
+        val state = _uiState.value
+        val runtime = appState.runtimeTaskState.value
+        val notice = navigationPauseTracker.update(
+            state.currentTaskId, state.taskState, runtime,
+            tcpManager.isConnected() && runtime.receivedAtElapsedMs >= navigationConnectedAtMs
+        ) ?: return
+        _uiState.update { it.copy(navigationPauseNotice = notice, runtimeEditor = null) }
+    }
 
     override fun onCleared() {
         taskMapController.close()

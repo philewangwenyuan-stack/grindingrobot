@@ -97,26 +97,30 @@ fun DeviceStatusBar(
     val resolvedBatteryPercent = batteryPercent ?: systemBatteryPercent
     val batteryValue = resolvedBatteryPercent.coerceIn(0, 100)
     val history by DeviceEventHistory.events.collectAsState()
+    val hasUnread by DeviceEventHistory.hasUnread.collectAsState()
     val eventFormatter = remember { SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()) }
-    val messages = buildDeviceMessages(
-        embeddedMessages = remember(history) {
-            history.map { event ->
-                DeviceMessage(
-                    type = when (event.level) {
-                        DeviceEventLevel.NORMAL -> DeviceMessageType.NORMAL
-                        DeviceEventLevel.WARNING -> DeviceMessageType.WARNING
-                        DeviceEventLevel.ERROR -> DeviceMessageType.ERROR
-                    },
-                    title = event.title,
-                    time = eventFormatter.format(Date(event.occurredAtMillis))
-                )
-            }
-        },
-        batteryPercent = resolvedBatteryPercent,
-        time = timeText
-    )
+    val messages = remember(history) {
+        history.map { event ->
+            DeviceMessage(
+                type = when (event.level) {
+                    DeviceEventLevel.NORMAL -> DeviceMessageType.NORMAL
+                    DeviceEventLevel.WARNING -> DeviceMessageType.WARNING
+                    DeviceEventLevel.ERROR -> DeviceMessageType.ERROR
+                },
+                title = event.title,
+                time = eventFormatter.format(Date(event.occurredAtMillis))
+            )
+        }
+    }
     var showMessageDialog by remember { mutableStateOf(false) }
     var messageButtonBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
+
+    LaunchedEffect(resolvedBatteryPercent) {
+        DeviceEventHistory.reportBatteryLevel(resolvedBatteryPercent)
+    }
+    LaunchedEffect(showMessageDialog, history.firstOrNull()?.eventId) {
+        if (showMessageDialog) history.firstOrNull()?.let { DeviceEventHistory.markReadThrough(it.eventId) }
+    }
 
     Row(
         modifier = modifier,
@@ -124,6 +128,7 @@ fun DeviceStatusBar(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         BellDotIcon(
+            showDot = hasUnread,
             modifier = Modifier
                 .onGloballyPositioned { coordinates ->
                     messageButtonBounds = coordinates.boundsInWindow()
@@ -191,30 +196,6 @@ private data class DeviceMessage(
     val title: String,
     val time: String
 )
-
-private fun buildDeviceMessages(
-    embeddedMessages: List<DeviceMessage> = emptyList(),
-    batteryPercent: Int? = null,
-    time: String
-): List<DeviceMessage> {
-    val batteryValue = batteryPercent?.coerceIn(0, 100)
-    val batteryMessage = when {
-        batteryValue == null -> null
-        batteryValue < 10 -> DeviceMessage(
-            type = DeviceMessageType.ERROR,
-            title = "设备电量严重不足($batteryValue%)",
-            time = time
-        )
-        batteryValue < 20 -> DeviceMessage(
-            type = DeviceMessageType.WARNING,
-            title = "设备电量过低($batteryValue%)",
-            time = time
-        )
-        else -> null
-    }
-
-    return embeddedMessages + listOfNotNull(batteryMessage)
-}
 
 @Composable
 private fun MessageCenterDialog(
@@ -493,12 +474,15 @@ private fun rememberConnectedWifiName(): androidx.compose.runtime.State<String> 
 }
 
 @Composable
-private fun BellDotIcon(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.ic_topbar_message),
-        contentDescription = "消息",
-        modifier = modifier.size(20.dp)
-    )
+private fun BellDotIcon(showDot: Boolean, modifier: Modifier = Modifier) {
+    Box(modifier.size(20.dp)) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_topbar_bell),
+            contentDescription = if (showDot) "消息，有未读消息" else "消息",
+            modifier = Modifier.fillMaxSize()
+        )
+        if (showDot) Box(Modifier.align(Alignment.TopEnd).size(4.dp).background(Color(0xFFD82B2A), CircleShape))
+    }
 }
 
 @Composable

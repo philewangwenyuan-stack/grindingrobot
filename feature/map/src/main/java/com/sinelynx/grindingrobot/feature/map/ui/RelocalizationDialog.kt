@@ -593,7 +593,7 @@ private fun RelocalizationStatusFooter(
     ) {
         Text(
             text = when {
-                isSuccessful -> "雷达定位成功"
+                isSuccessful -> "雷达定位成功，请关闭弹窗继续下一步操作。"
                 rawStatus.isNotBlank() -> "当前雷达状态：$rawStatus"
                 else -> "请设置初始位置后再开始重定位"
             },

@@ -124,6 +124,9 @@ fun DeviceStatusScreen(
             onDismiss = viewModel::dismissRuntimeEditor
         )
     }
+    uiState.navigationPauseNotice?.let { notice ->
+        NavigationPauseDialog(notice, onDismiss = viewModel::dismissNavigationPauseNotice)
+    }
 }
 
 @Composable

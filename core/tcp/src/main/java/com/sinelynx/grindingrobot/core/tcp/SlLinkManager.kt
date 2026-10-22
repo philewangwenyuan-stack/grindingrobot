@@ -1879,6 +1879,7 @@ class SlLinkManager @Inject constructor(
                 emergencyStopLatched = if (report.hasEmergencyStopLatched()) report.emergencyStopLatched else null,
                 localizationReady = if (report.hasLocalizationReady()) report.localizationReady else null,
                 localizationStatusReason = report.localizationStatusReason,
+                localizationPauseLatched = if (report.hasLocalizationPauseLatched()) report.localizationPauseLatched else null,
                 localizationPoseAvailable = report.hasPosition() && report.position.x.isFinite() &&
                     report.position.y.isFinite() && report.position.headingDeg.isFinite()
             )
