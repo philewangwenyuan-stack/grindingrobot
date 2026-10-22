@@ -87,7 +87,11 @@ class AppState @Inject constructor(
         val radarSystemStatus: String = "",
         val collisionImminent: Boolean = false,
         val vehicleSpeedMps: Float = 0f,
-        val emergencyStopLatched: Boolean? = null
+        val emergencyStopLatched: Boolean? = null,
+        val localizationReady: Boolean? = null,
+        val localizationStatusReason: String = "",
+        val localizationPoseAvailable: Boolean = false,
+        val receivedAtElapsedMs: Long = 0L
     )
 
     data class TcpEndpoint(
@@ -410,7 +414,10 @@ class AppState @Inject constructor(
         radarSystemStatus: String,
         collisionImminent: Boolean,
         vehicleSpeedMps: Float,
-        emergencyStopLatched: Boolean? = null
+        emergencyStopLatched: Boolean? = null,
+        localizationReady: Boolean? = null,
+        localizationStatusReason: String = "",
+        localizationPoseAvailable: Boolean = false
     ) {
         val taskStarted = discEnabled || workMode == 2 || workMode == 3
         _runtimeTaskState.value = RuntimeTaskState(
@@ -426,7 +433,11 @@ class AppState @Inject constructor(
             radarSystemStatus = radarSystemStatus,
             collisionImminent = collisionImminent,
             vehicleSpeedMps = vehicleSpeedMps,
-            emergencyStopLatched = emergencyStopLatched
+            emergencyStopLatched = emergencyStopLatched,
+            localizationReady = localizationReady,
+            localizationStatusReason = localizationStatusReason,
+            localizationPoseAvailable = localizationPoseAvailable,
+            receivedAtElapsedMs = android.os.SystemClock.elapsedRealtime()
         )
     }
 

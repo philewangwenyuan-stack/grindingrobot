@@ -1876,7 +1876,11 @@ class SlLinkManager @Inject constructor(
                 radarSystemStatus = report.radarSystemStatus,
                 collisionImminent = report.collisionImminent,
                 vehicleSpeedMps = report.vehicleSpeed,
-                emergencyStopLatched = if (report.hasEmergencyStopLatched()) report.emergencyStopLatched else null
+                emergencyStopLatched = if (report.hasEmergencyStopLatched()) report.emergencyStopLatched else null,
+                localizationReady = if (report.hasLocalizationReady()) report.localizationReady else null,
+                localizationStatusReason = report.localizationStatusReason,
+                localizationPoseAvailable = report.hasPosition() && report.position.x.isFinite() &&
+                    report.position.y.isFinite() && report.position.headingDeg.isFinite()
             )
             if (report.hasPosition()) {
                 val position = report.position

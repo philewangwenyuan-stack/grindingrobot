@@ -196,8 +196,12 @@ private fun DeviceStatusContent(
     ) {
         StatusTitle(CommonR.drawable.ic_device_status, "状态")
         StatusRow("导航状态", uiState.navigationStatus, Color(0xFF00A0E9))
-        StatusRow("地图", if (uiState.mapAvailable) "已加载" else "暂无地图")
-        StatusRow("导航雷达", uiState.navRadarStatus, if (uiState.navRadarStatus == "正常") Color(0xFF33C461) else Color(0xFFD82B2A))
+        StatusRow("地图", uiState.mapName)
+        StatusRow("导航雷达", uiState.navRadarStatus, when (uiState.navRadarStatus) {
+            "正常" -> Color(0xFF33C461)
+            "未收敛" -> Color(0xFFD82B2A)
+            else -> SidebarSecondaryColor
+        })
         StatusRow("避障雷达", uiState.obstacleRadarStatus, if (uiState.obstacleRadarStatus == "正常") Color(0xFF33C461) else Color(0xFFD82B2A))
         StatusRow("定位质量", uiState.localizationQuality.toString(), Color(0xFF33C461))
         val runtimeEditable = uiState.taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED) && !uiState.runtimeApplying

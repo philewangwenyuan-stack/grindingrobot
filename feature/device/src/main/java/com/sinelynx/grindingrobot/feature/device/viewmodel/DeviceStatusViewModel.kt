@@ -16,6 +16,7 @@ import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.TaskRuntimeSettingsPayload
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
+import com.sinelynx.grindingrobot.core.tcp.ConnectionState
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -31,6 +32,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.combine
+import com.sinelynx.grindingrobot.core.model.state.MapCatalogStream
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withTimeoutOrNull
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
@@ -48,8 +51,9 @@ data class DeviceStatusUiState(
     val taskState: DeviceTaskUiState = DeviceTaskUiState.IDLE,
     val currentTaskId: String = "",
     val mapAvailable: Boolean = false,
+    val mapName: String = "暂无地图",
     val navigationStatus: String = "空闲",
-    val navRadarStatus: String = "正常",
+    val navRadarStatus: String = "—",
     val obstacleRadarStatus: String = "-",
     val localizationQualityAvailable: Boolean = false,
     val localizationQuality: Int = 0,
@@ -188,6 +192,8 @@ class DeviceStatusViewModel @Inject constructor(
     private var statisticsRefreshJob: Job? = null
     private var statisticsRequestJob: Job? = null
     private var statisticsRecords: List<TaskExecutionHistoryRecordPayload>? = null
+    private var navigationWasConnected = false
+    private var navigationConnectedAtMs = Long.MAX_VALUE
     // 只订阅新路径结果流，不让其他页面的历史成功路径提前结束本轮等待。
     private val taskMapController = DeviceTaskMapController(
         scope = viewModelScope, cache = TaskMapDisplayStream.cache,
@@ -217,12 +223,19 @@ class DeviceStatusViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            appState.runtimeTaskState.collect { runtime ->
+            combine(appState.runtimeTaskState, tcpManager.getConnectionStateFlow()) { runtime, connection ->
+                runtime to connection
+            }.collect { (runtime, connection) ->
+                val connected = connection == ConnectionState.CONNECTED
+                if (connected && !navigationWasConnected) navigationConnectedAtMs = SystemClock.elapsedRealtime()
+                navigationWasConnected = connected
+                val hasCurrentReport = connected && runtime.receivedAtElapsedMs >= navigationConnectedAtMs
                 _uiState.update { current ->
                     current.copy(
-                        navRadarStatus = runtime.radarSystemStatus
-                            .takeIf { runtime.radarSystemStatusAvailable && it.isNotBlank() }
-                            ?: "-",
+                        navRadarStatus = if (!hasCurrentReport) "—" else navigationRadarLabel(
+                            runtime.localizationReady, runtime.localizationStatusReason,
+                            runtime.localizationPoseAvailable
+                        ),
                         obstacleRadarStatus = if (runtime.collisionImminent) "异常" else "正常",
                         straightSpeedText = "${runtime.vehicleSpeedMps} m/s",
                         grindRpmText = "${runtime.discSpeedRpm} rpm",
@@ -296,6 +309,7 @@ class DeviceStatusViewModel @Inject constructor(
                         mapImageBytes = if (taskChanged) null else current.mapImageBytes,
                         mapTransform = if (taskChanged) null else current.mapTransform,
                         mapAvailable = if (taskChanged) false else current.mapAvailable,
+                        mapName = if (taskChanged) "暂无地图" else current.mapName,
                         plannedPath = when {
                             taskState == DeviceTaskUiState.IDLE -> null
                             taskChanged -> null
@@ -317,7 +331,9 @@ class DeviceStatusViewModel @Inject constructor(
 
         viewModelScope.launch {
             // 地图加载结果只更新显示材料。规划阶段面积/耗时不能覆盖上方实时任务统计。
-            taskMapController.state.collect { map ->
+            combine(taskMapController.state, MapCatalogStream.payload) { map, catalog ->
+                map to catalog?.takeIf { it.isSuccess }?.items.orEmpty().associate { it.mapId to it.name }
+            }.collect { (map, mapNames) ->
                 _uiState.update { current ->
                     val snapshot = map.snapshot
                     if (snapshot != null && snapshot.taskId != current.currentTaskId) return@update current
@@ -325,6 +341,11 @@ class DeviceStatusViewModel @Inject constructor(
                         taskMap = map, mapImageBytes = snapshot?.frame?.imageBytes,
                         mapTransform = snapshot?.frame?.toTaskMapTransform(),
                         mapAvailable = snapshot?.frame != null && snapshot.bitmapSize != null,
+                        mapName = loadedMapLabel(
+                            snapshot?.frame != null && snapshot.bitmapSize != null,
+                            snapshot?.mapId?.takeUnless { it == "LIVE_MAP" } ?: snapshot?.path?.mapId,
+                            mapNames
+                        ),
                         plannedPath = snapshot?.path
                     )
                 }
@@ -482,6 +503,7 @@ class DeviceStatusViewModel @Inject constructor(
         taskMapController.setVisible(visible)
         setStatisticsVisible(visible)
         if (visible) {
+            if (MapCatalogStream.payload.value?.isSuccess != true) tcpManager.requestMapCatalog()
             if (appState.chassisSettings.value == null) {
                 tcpManager.requestSettingRead(readChassis = true, readMap = false, readRpp = false)
             }
