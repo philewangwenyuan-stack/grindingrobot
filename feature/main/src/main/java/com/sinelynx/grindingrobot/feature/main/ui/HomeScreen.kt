@@ -34,16 +34,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sinelynx.grindingrobot.core.designsystem.theme.LogoIcon
 import com.sinelynx.grindingrobot.core.util.VersionUtils
-import com.sinelynx.grindingrobot.feature.common.component.DeviceStatusBar
+import com.sinelynx.grindingrobot.feature.common.component.GlobalTopBar
 import com.sinelynx.grindingrobot.feature.device.ui.DeviceStatusScreen
 import com.sinelynx.grindingrobot.feature.device.viewmodel.DeviceStatusViewModel
 import com.sinelynx.grindingrobot.feature.main.R
@@ -75,6 +72,7 @@ fun HomeScreen(
         homeState.emergencyStopLatched, homeState.emergencyStopPending, homeState.emergencyRelease.pending
     )
     val mapHomeViewModel: MapHomeViewModel = hiltViewModel()
+    val remoteViewModel: RemoteSettingsViewModel = hiltViewModel()
     val mapState by mapHomeViewModel.uiState.collectAsState()
     var showDisconnectConfirmDialog by remember { mutableStateOf(false) }
     var showEmergencyConfirmDialog by remember { mutableStateOf(false) }
@@ -101,6 +99,7 @@ fun HomeScreen(
         HomeTopBar(
             onCloseClick = { showDisconnectConfirmDialog = true },
             onEmergencyClick = {
+                remoteViewModel.stopControl()
                 if (emergencyButton.releaseAction) showEmergencyReleaseConfirm = true else showEmergencyConfirmDialog = true
             },
             emergencyButton = emergencyButton,
@@ -209,7 +208,6 @@ fun HomeScreen(
             }
 
             HomeModuleTab.Remote -> {
-                val remoteViewModel: RemoteSettingsViewModel = hiltViewModel()
                 RemoteSettingsScreen(
                     viewModel = remoteViewModel,
                     modifier = Modifier
@@ -325,13 +323,13 @@ private fun HomeTopBar(
     val context = LocalContext.current
     val appVersionName = remember { VersionUtils.getAppVersionName(context) }
 
-    Box(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.align(Alignment.TopStart),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    GlobalTopBar(
+        onEmergencyClick = onEmergencyClick,
+        emergencyLabel = emergencyButton.label,
+        emergencyEnabled = emergencyButton.enabled,
+        emergencyAccent = if (emergencyButton.releaseAction) Color(0xFFB56B00) else Color(0xFFD82B2A),
+        emergencyFeedback = emergencyStopFeedback,
+        title = {
             Box(
                 modifier = Modifier
                     .size(32.dp)
@@ -354,23 +352,8 @@ private fun HomeTopBar(
                 color = Color(0xFF6B7280),
                 modifier = Modifier.padding(start = 8.dp)
             )
-        }
-
-        EmergencyPill(
-            onClick = onEmergencyClick,
-            label = emergencyButton.label,
-            enabled = emergencyButton.enabled,
-            accent = if (emergencyButton.releaseAction) Color(0xFFB56B00) else Color(0xFFD82B2A),
-            feedback = emergencyStopFeedback,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
-
-        Row(
-            modifier = Modifier.align(Alignment.TopEnd),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            DeviceStatusBar()
+        },
+        trailingContent = {
             Box(
                 modifier = Modifier.clip(CircleShape),
                 contentAlignment = Alignment.Center
@@ -384,60 +367,8 @@ private fun HomeTopBar(
                         .clickable(onClick = onCloseClick)
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun EmergencyPill(
-    onClick: () -> Unit,
-    label: String,
-    enabled: Boolean,
-    accent: Color,
-    feedback: String? = null,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(1000.dp))
-            .background(accent.copy(alpha = 0.1f))
-            .clickable(enabled = enabled, onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(14.dp)
-                .clip(CircleShape)
-                .background(accent),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "!",
-                color = Color.White,
-                style = TextStyle(
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    lineHeight = 10.sp,
-                    platformStyle = PlatformTextStyle(includeFontPadding = false),
-                    lineHeightStyle = LineHeightStyle(
-                        alignment = LineHeightStyle.Alignment.Center,
-                        trim = LineHeightStyle.Trim.Both
-                    )
-                )
-            )
-        }
-        Column {
-            Text(
-                text = label,
-                color = accent,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
-            )
-            if (feedback != null) Text(text = feedback, color = accent, fontSize = 11.sp)
-        }
-    }
+        },
+    )
 }
 
 @Composable

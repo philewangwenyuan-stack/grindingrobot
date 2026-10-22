@@ -294,15 +294,15 @@ class DeviceStatusViewModel @Inject constructor(
                         currentTaskId = current.currentTaskId,
                         reportTaskId = reportTaskId,
                         taskState = taskState,
-                        navigationPauseNotice = current.navigationPauseNotice.takeIf {
-                            taskState != DeviceTaskUiState.IDLE && !taskChanged
-                        },
                         currentTrajectory = current.trajectory,
                         pose = payload.toPoseItem(),
                         maxPoints = MAX_TRAJECTORY_POINTS
                     )
                     current.copy(
                         taskState = taskState,
+                        navigationPauseNotice = current.navigationPauseNotice.takeIf {
+                            taskState != DeviceTaskUiState.IDLE && !taskChanged
+                        },
                         runtimeSettings = if (runtimeInvalidated) null else current.runtimeSettings,
                         runtimeEditor = if (runtimeInvalidated) null else current.runtimeEditor,
                         runtimeLoading = if (runtimeInvalidated) false else current.runtimeLoading,

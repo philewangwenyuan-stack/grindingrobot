@@ -66,8 +66,8 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-private const val MIN_MAP_VIEWPORT_SCALE = 1f
-private const val MAX_MAP_VIEWPORT_SCALE = 8f
+internal const val MIN_MAP_VIEWPORT_SCALE = 1f
+internal const val MAX_MAP_VIEWPORT_SCALE = 8f
 private const val MIN_OBSTACLE_WORLD_SIZE_METERS = 0.2f
 
 internal data class ObstacleWorldMetrics(
@@ -77,7 +77,7 @@ internal data class ObstacleWorldMetrics(
     val areaSquareMeters: Float
 )
 
-private data class MapViewportTransform(
+internal data class MapViewportTransform(
     val scale: Float = 1f,
     val offset: Offset = Offset.Zero
 ) {
@@ -561,7 +561,7 @@ private fun MapPreviewUiState.worldToCanvas(
     )
 }
 
-private fun previewImageRect(canvasSize: Size, bitmapWidth: Int, bitmapHeight: Int): Rect {
+internal fun previewImageRect(canvasSize: Size, bitmapWidth: Int, bitmapHeight: Int): Rect {
     if (bitmapWidth <= 0 || bitmapHeight <= 0) {
         return Rect(Offset.Zero, canvasSize)
     }

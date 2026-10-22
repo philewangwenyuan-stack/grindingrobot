@@ -1,3 +1,4 @@
 /build
 /src/test/java/com/sinelynx/grindingrobot/feature/map/
-/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/
+/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/*
+!/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/ManualDriveUiTest.kt

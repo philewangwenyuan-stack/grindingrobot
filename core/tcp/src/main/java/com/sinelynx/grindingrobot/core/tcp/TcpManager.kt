@@ -1129,6 +1129,19 @@ class TcpManager @Inject constructor(
         return sendData(data)
     }
 
+    /** Independent manual axes; gain and wheel envelope apply only to this command. */
+    fun sendManualDriveCommand(
+        remoteX: Float,
+        remoteY: Float,
+        speedRatio: Float,
+        maxSpeedMps: Float,
+        maxTurnSpeedRatio: Float,
+    ): Boolean {
+        val command = buildRobotControlCommand(remoteX, remoteY, speedRatio,
+            maxSpeedMps, maxTurnSpeedRatio)
+        return sendData(slLinkManager.sendControlCommand(command.toByteArray()))
+    }
+
     /**
      * 发送紧急停止命令
      */
@@ -1310,7 +1323,8 @@ internal fun buildRobotControlCommand(
     remoteX: Float,
     remoteY: Float,
     speed: Float,
-    maxSpeedMps: Float = 0f
+    maxSpeedMps: Float = 0f,
+    maxTurnSpeedRatio: Float = 0f,
 ): SlLink.ControlCommand = SlLink.ControlCommand.newBuilder()
     .setManualDrive(
         SlLink.ManualDriveControl.newBuilder()
@@ -1318,6 +1332,7 @@ internal fun buildRobotControlCommand(
             .setRemoteY(remoteY)
             .setSpeedRatio(speed)
             .setMaxSpeedMps(maxSpeedMps)
+            .setMaxTurnSpeedRatio(maxTurnSpeedRatio)
     )
     .build()
 
