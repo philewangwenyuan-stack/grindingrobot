@@ -11,6 +11,26 @@ import org.junit.Test
 import kotlin.math.abs
 
 class ManualDriveControllerTest {
+    @Test fun heldFullSteeringRenewsBothManualAxesWithoutSendingStop() = runBlocking {
+        for (steering in listOf(-1f, 1f)) {
+            val sent = mutableListOf<ManualDriveTarget>()
+            val control = ManualDriveController(this, { true }, { sent.add(it); true }, {})
+            control.refreshAvailability()
+            control.travel(TravelDirection.FORWARD)
+            yield()
+            control.steer(steering, control.state.inputEpoch)
+            sent.clear()
+            // Longer than the board's 500ms command timeout: a held endpoint
+            // must keep renewing pure rotation even though translation is zero.
+            delay(550L)
+            assertTrue("Endpoint must keep renewing: steering=$steering", sent.size >= 4)
+            assertTrue(sent.all { it.remoteX == steering && it.remoteY == 0f && it.speedRatio == 1f })
+            assertTrue(control.state.hasMotion)
+            control.stop()
+            assertEquals(0f, sent.last().speedRatio, 0f)
+        }
+    }
+
     @Test fun steadyTravelIsRenewedAndExplicitStopCancelsRenewal() = runBlocking {
         val sent = mutableListOf<ManualDriveTarget>()
         val control = ManualDriveController(this, { true }, { sent.add(it); true }, {})

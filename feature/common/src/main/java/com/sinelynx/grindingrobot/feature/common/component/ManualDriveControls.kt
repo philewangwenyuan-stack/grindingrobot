@@ -90,6 +90,8 @@ fun DriveParameterSlider(
     endpointLabels: Pair<String, String> = "${range.start}" to "${range.endInclusive}",
     compact: Boolean = false,
 ) {
+    val feedback = manualFeedback()
+    val finish = { onValueChangeFinished(); feedback(ManualFeedback.Tick) }
     Column(modifier = modifier.padding(horizontal = 8.dp)) {
         if (compact) {
             Text(label, Modifier.align(Alignment.CenterHorizontally), color = DriveInk,
@@ -105,10 +107,10 @@ fun DriveParameterSlider(
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (!compact) SliderStepButton(false, value > range.start) {
-                onValueChange((value - step).coerceIn(range)); onValueChangeFinished()
+                onValueChange((value - step).coerceIn(range)); finish()
             }
             Slider(value = value.coerceIn(range), onValueChange = onValueChange,
-                valueRange = range, onValueChangeFinished = onValueChangeFinished,
+                valueRange = range, onValueChangeFinished = finish,
                 modifier = Modifier.weight(1f).padding(horizontal = if (compact) 0.dp else 6.dp).testTag("slider_$label"),
                 thumb = {
                     Box(Modifier.size(28.dp).shadow(3.dp, CircleShape).background(Color.White, CircleShape)
@@ -117,7 +119,7 @@ fun DriveParameterSlider(
                 colors = SliderDefaults.colors(thumbColor = DriveBlue, activeTrackColor = DriveBlue,
                     inactiveTrackColor = Color(0xFFD6E2EB)))
             if (!compact) SliderStepButton(true, value < range.endInclusive) {
-                onValueChange((value + step).coerceIn(range)); onValueChangeFinished()
+                onValueChange((value + step).coerceIn(range)); finish()
             }
         }
         Row(Modifier.fillMaxWidth().padding(horizontal = if (compact) 0.dp else 48.dp),
@@ -128,10 +130,10 @@ fun DriveParameterSlider(
         if (compact) Row(Modifier.fillMaxWidth().padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween) {
             SliderStepButton(false, value > range.start) {
-                onValueChange((value - step).coerceIn(range)); onValueChangeFinished()
+                onValueChange((value - step).coerceIn(range)); finish()
             }
             SliderStepButton(true, value < range.endInclusive) {
-                onValueChange((value + step).coerceIn(range)); onValueChangeFinished()
+                onValueChange((value + step).coerceIn(range)); finish()
             }
         }
     }
@@ -204,6 +206,7 @@ fun ManualDriveDeck(
     onStop: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val feedback = manualFeedback()
     BoxWithConstraints(modifier.background(Color(0xFFF6F8FB), RoundedCornerShape(18.dp))) {
         val compact = maxHeight < 270.dp
         val dialSize = (maxHeight - if (compact) 40.dp else 90.dp).coerceIn(120.dp, 300.dp)
@@ -226,7 +229,7 @@ fun ManualDriveDeck(
                 }
                 Text(String.format(Locale.US, "行走指令  %.3f m/s", state.commandedSpeedMps),
                     color = DriveMuted, fontSize = if (compact) 13.sp else 18.sp)
-                Surface(onClick = onStop, color = Color(0xFFD82B2A), shape = RoundedCornerShape(50),
+                Surface(onClick = { onStop(); if (state.enabled) feedback(ManualFeedback.Stop) }, color = Color(0xFFD82B2A), shape = RoundedCornerShape(50),
                     modifier = Modifier.widthIn(max = 310.dp).fillMaxWidth()
                         .height(if (compact) 54.dp else 80.dp).testTag("manual_stop")) {
                     Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -293,6 +296,7 @@ fun ManualDriveFooter(
     onStop: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val feedback = manualFeedback()
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)) {
         val direction = when (state.direction) {
@@ -309,7 +313,7 @@ fun ManualDriveFooter(
             Text(String.format(Locale.US, "行走指令  %.3f m/s", state.commandedSpeedMps),
                 color = DriveMuted, fontSize = 12.sp)
         }
-        Surface(onClick = onStop, color = Color(0xFFD82B2A), shape = RoundedCornerShape(50),
+        Surface(onClick = { onStop(); if (state.enabled) feedback(ManualFeedback.Stop) }, color = Color(0xFFD82B2A), shape = RoundedCornerShape(50),
             modifier = Modifier.widthIn(max = 360.dp).fillMaxWidth().height(48.dp).testTag("manual_stop")) {
             Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                 Icon(painterResource(R.drawable.ic_task_stop), null, tint = Color.White, modifier = Modifier.size(20.dp))
@@ -326,7 +330,12 @@ private fun TravelButton(
     modifier: Modifier, compact: Boolean,
 ) {
     val selected = state.direction == direction
-    Surface(onClick = { onTravel(direction) }, enabled = state.enabled,
+    val feedback = manualFeedback()
+    Surface(onClick = {
+        onTravel(direction)
+        feedback(if (state.direction != TravelDirection.STOPPED && state.direction != direction)
+            ManualFeedback.Stop else ManualFeedback.Tick)
+    }, enabled = state.enabled,
         modifier = modifier.fillMaxWidth().testTag(if (direction == TravelDirection.FORWARD) "travel_forward" else "travel_backward"),
         shape = RoundedCornerShape(32.dp), color = if (selected) Color(0xFFD5EFFF) else Color.White) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -347,8 +356,14 @@ fun HorizontalDriveJoystick(
     onCancel: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val feedback = manualFeedback()
+    val feedbackTracker = remember(state.inputEpoch) { SteeringFeedbackTracker() }
+    fun applySteering(value: Float, epoch: Int) {
+        onSteering(value, epoch)
+        if (feedbackTracker.update(value)) feedback(ManualFeedback.Tick)
+    }
     val density = LocalDensity.current
-    val steer by rememberUpdatedState(onSteering)
+    val steer by rememberUpdatedState(::applySteering)
     val cancel by rememberUpdatedState(onCancel)
     BoxWithConstraints(modifier) {
         val knobSize = (maxWidth * 0.29f).coerceIn(44.dp, 84.dp)

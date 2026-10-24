@@ -154,7 +154,7 @@ class MapViewModel @Inject constructor(
         stopMapSnapshotLoop()
         currentMapId = mapId
         lastFrame = null
-        MapBuildSessionStream.begin()
+        MapBuildSessionStream.begin(mapId, preserveViewport = MapBuildSessionStream.snapshotFor(mapId) != null)
         MapImageStream.reset()
         _uiState.update { it.copy(mapImageBytes = null, mapImageSize = null, mapGeo = null,
             mapLoadMessage = "地图加载中...", mapLoadFailed = false) }

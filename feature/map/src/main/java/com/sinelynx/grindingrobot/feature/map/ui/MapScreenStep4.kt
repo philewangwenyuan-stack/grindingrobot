@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -83,7 +85,7 @@ fun MapScreenStep4(
         }
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .background(
@@ -91,23 +93,26 @@ fun MapScreenStep4(
                     colors = listOf(Color(0xFFD1DBE8), Color(0xFFEBEEF2))
                 )
             )
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .padding(12.dp)
     ) {
+        val sideWidth = workflowSideWidth(maxWidth)
         Column(modifier = Modifier.fillMaxSize()) {
-            Step4TopBar()
-            Spacer(modifier = Modifier.height(12.dp))
+            MapWorkflowHeader(4, viewModel::emergencyStop)
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                WorkflowGuidePanel("预览与保存", "双指缩放地图\n拖动查看细节\n\n确认工作区后保存", Modifier.width(sideWidth).fillMaxHeight())
                 Surface(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(16.dp)),
+                        .clip(RoundedCornerShape(16.dp))
+                        .testTag("workflow_map"),
                     color = Color(0xFFF6F8FB),
                     shape = RoundedCornerShape(16.dp),
                     shadowElevation = 4.dp
@@ -115,26 +120,7 @@ fun MapScreenStep4(
                     if (uiState.isPlanning) {
                         MapDataLoadingPage(text = "路径规划中...")
                     } else if (mapImageBitmap != null) {
-                        val totalRotation =
-                            (uiState.mapGeo?.alignmentYawDeg ?: 0f) +
-                                    (uiState.mapGeo?.rotationAlignmentDeltaDeg ?: 0f)
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Image(
-                                bitmap = mapImageBitmap,
-                                contentDescription = "地图图片",
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .graphicsLayer {
-                                        rotationZ = totalRotation
-                                    }
-                            )
-                            Step4MapOverlays(
-                                state = uiState,
-                                bitmapSize = uiState.bitmapDecodeSize
-                                    ?: (mapImageBitmap.width to mapImageBitmap.height),
-                                rotationDeg = totalRotation
-                            )
-                        }
+                        WorkflowMapPreview(uiState, mapImageBitmap, mapId)
                     } else {
                         Box(
                             modifier = Modifier
@@ -149,62 +135,10 @@ fun MapScreenStep4(
                     }
                 }
 
-                Surface(
-                    modifier = Modifier
-                        .width(336.dp)
-                        .fillMaxHeight(),
-                    color = Color(0xFFFEFEFF),
-                    shape = RoundedCornerShape(16.dp),
-                    shadowElevation = 4.dp
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 24.dp, vertical = 16.dp)
-                    ) {
-                        Text(
-                            text = "保存地图",
-                            fontSize = 32.sp,
-                            color = Color(0xFF202937),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        PanelDivider()
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        SaveMapRow(
-                            label = "地图名称",
-                            enabled = true,
-                            value = uiState.mapName,
-                            onValueChange = viewModel::updateMapName
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SaveMapRow(
-                            label = "预计面积(m²)",
-                            enabled = false,
-                            value = formatStep4Number(uiState.estimatedAreaM2),
-                            onValueChange = {}
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SaveMapRow(
-                            label = "预计耗时(h)",
-                            enabled = false,
-                            value = formatStep4Number(uiState.estimatedDurationHours),
-                            onValueChange = {}
-                        )
-                        /*Spacer(modifier = Modifier.height(16.dp))
-                        OutlinedButton(
-                            onClick = { viewModel.openLegacyPreview(mapId) },
-                            enabled = uiState.canPreviewLegacyPlan,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("测试：旧版规划图")
-                        }*/
-                    }
-                }
+                WorkflowSavePanel(uiState, viewModel::updateMapName, Modifier.width(sideWidth).fillMaxHeight())
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             BottomStep4Actions(
                 canSave = uiState.canSave,
                 onCancelBuild = {
@@ -453,68 +387,15 @@ internal fun Step4MapOverlays(
 }
 
 @Composable
-private fun Step4TopBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(1000.dp))
-                .background(Color(0xFFE5EAF1))
-                .border(1.dp, Color(0x80FFFFFF), RoundedCornerShape(1000.dp))
-                .padding(horizontal = 16.dp, vertical = 9.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(1000.dp))
-                    .background(Color(0xFF00A0E9))
-                    .padding(horizontal = 8.dp, vertical = 2.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "⚙",
-                    color = Color.White,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Step4PathText(text = "1.扫描地图", active = true)
-            Step4PathText(text = ">", active = true)
-            Step4PathText(text = "2.编辑地图", active = true)
-            Step4PathText(text = ">", active = true)
-            Step4PathText(text = "3.划分工作区", active = true)
-            Step4PathText(text = ">", active = true)
-            Step4PathText(text = "4.保存地图", active = true)
-        }
-        DeviceStatusBar()
-    }
-}
-
-@Composable
-private fun Step4PathText(text: String, active: Boolean) {
-    Text(
-        text = text,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Medium,
-        color = if (active) Color(0xFF00A0E9) else Color(0xFF9DA3AF)
-    )
-}
-
-@Composable
 private fun SaveMapRow(
     label: String,
     enabled: Boolean,
     value: String,
     onValueChange: (String) -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
             text = label,
@@ -536,7 +417,7 @@ private fun SaveMapRow(
             ),
             cursorBrush = SolidColor(Color(0xFF00A0E9)),
             modifier = Modifier
-                .width(180.dp)
+                .fillMaxWidth()
                 .height(36.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(if (enabled) Color.White else Color(0xFFF3F4F6))
@@ -553,62 +434,56 @@ private fun BottomStep4Actions(
     onPreviousStep: () -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Step4ActionButton(
-            text = "取消建图",
-            bg = Color(0xFFD82B2A),
-            color = Color.White,
-            onClick = onCancelBuild
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Step4ActionButton(
-                text = "◀  上一步",
-                bg = Color(0xFFF6F8FB),
-                color = Color(0xFF202937),
-                onClick = onPreviousStep
-            )
-            Step4ActionButton(
-                text = "▶  保存",
-                enabled = canSave,
-                bg = Color(0xFF00A0E9),
-                color = Color.White,
-                onClick = onSaveClick
-            )
-        }
-    }
+    MapWorkflowActions(onCancelBuild, onPreviousStep, onSaveClick, save = true, enabled = canSave)
 }
+
 
 @Composable
-private fun Step4ActionButton(
-    text: String,
-    bg: Color,
-    color: Color,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    Box(
-        modifier = Modifier
-            .width(200.dp)
-            .height(56.dp)
-            .clip(RoundedCornerShape(1000.dp))
-            .background(if (enabled) bg else bg.copy(alpha = 0.4f))
-            .clickable(enabled = enabled, onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            color = color,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
+internal fun WorkflowSavePanel(uiState: MapScreenStep4UiState, onNameChange: (String) -> Unit, modifier: Modifier) {
+    Surface(modifier, color = Color(0xFFFEFEFF), shape = RoundedCornerShape(16.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 12.dp, vertical = 16.dp)
+                    ) {
+                        Text(
+                            text = "保存地图",
+                            fontSize = 20.sp,
+                            color = Color(0xFF202937),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        PanelDivider()
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        SaveMapRow(
+                            label = "地图名称",
+                            enabled = true,
+                            value = uiState.mapName,
+                            onValueChange = onNameChange
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        SaveMapRow(
+                            label = "预计面积(m²)",
+                            enabled = false,
+                            value = formatStep4Number(uiState.estimatedAreaM2),
+                            onValueChange = {}
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        SaveMapRow(
+                            label = "预计耗时(h)",
+                            enabled = false,
+                            value = formatStep4Number(uiState.estimatedDurationHours),
+                            onValueChange = {}
+                        )
+                        /*Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedButton(
+                            onClick = { viewModel.openLegacyPreview(mapId) },
+                            enabled = uiState.canPreviewLegacyPlan,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("测试：旧版规划图")
+                        }*/
+                    }
     }
 }
-
-

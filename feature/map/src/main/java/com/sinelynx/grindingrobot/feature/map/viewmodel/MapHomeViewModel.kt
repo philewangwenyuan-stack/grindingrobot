@@ -933,19 +933,9 @@ class MapHomeViewModel @Inject constructor(
     private fun writeRelocalizationTurnSpeed(turnSpeedPercent: Int) {
         val maxTurnSpeedRatio = (turnSpeedPercent / 100f)
             .coerceIn(MIN_RELOCALIZATION_TURN_SPEED_RATIO, MAX_RELOCALIZATION_TURN_SPEED_RATIO)
-        val settings = SlLink.ChassisSettings.newBuilder()
-            .setMaxTurnSpeedRatio(maxTurnSpeedRatio)
-            .build()
-        LogUtils.d(
-            "MapHomeViewModel",
-            "requestSettingWrite ChassisSettings: maxTurnSpeedRatio=${settings.maxTurnSpeedRatio}"
-        )
-        val sent = tcpManager.requestSettingWrite(chassisSettings = settings)
+        val sent = tcpManager.requestTurnRatioSettingsWrite(maxTurnSpeedRatio)
         if (!sent) {
-            LogUtils.w(
-                "MapHomeViewModel",
-                "requestSettingWrite relocalization maxTurnSpeedRatio 发送失败"
-            )
+            ToastUtils.show("转向力度未发送，请等待底盘参数读取完成后重试")
         }
     }
 
@@ -985,16 +975,9 @@ class MapHomeViewModel @Inject constructor(
 
     private fun writeRelocalizationSettings() {
         val state = _uiState.value
-        val settings = SlLink.ChassisSettings.newBuilder()
-            .setDiscEnabled(true)
-            .setDiscSpeedRpm(state.relocalizationTurnCount)
-            .build()
-        LogUtils.d(
-            "MapHomeViewModel",
-            "requestSettingWrite ChassisSettings: discEnabled=${settings.discEnabled}, " +
-                "discSpeedRpm=${settings.discSpeedRpm}"
-        )
-        tcpManager.requestSettingWrite(settings)
+        if (!tcpManager.requestDiscSettingsWrite(state.relocalizationTurnCount, enabled = true)) {
+            ToastUtils.show("磨盘设置未发送，请等待底盘参数读取完成后重试")
+        }
     }
 
     fun onRelocalizationCommandStart(command: DirectionCommand) {

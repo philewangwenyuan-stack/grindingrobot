@@ -58,4 +58,20 @@ class MapBuildSessionStreamTest {
         assertFalse(MapBuildSessionStream.freeze(null, frame().copy(resolution = Float.NaN)))
         assertFalse(MapBuildSessionStream.freeze(null, frame().copy(mapWidth = 0)))
     }
+    @Test fun viewportIsScopedPreservedOnReturnAndClearedForNewBuild() {
+        MapBuildSessionStream.begin("a")
+        val view = MapBuildViewport(3f, 0.7f, 0.4f)
+        MapBuildSessionStream.updateViewport("a", view)
+        assertEquals(view, MapBuildSessionStream.viewportFor("a"))
+        assertEquals(MapBuildViewport(), MapBuildSessionStream.viewportFor("b"))
+        MapBuildSessionStream.begin("a", preserveViewport = true)
+        assertEquals(view, MapBuildSessionStream.viewportFor("a"))
+        MapBuildSessionStream.updateViewport("b", MapBuildViewport(8f))
+        assertEquals(view, MapBuildSessionStream.viewportFor("a"))
+        MapBuildSessionStream.begin("a")
+        assertEquals(MapBuildViewport(), MapBuildSessionStream.viewportFor("a"))
+        MapBuildSessionStream.updateViewport("a", view)
+        MapBuildSessionStream.clear()
+        assertEquals(MapBuildViewport(), MapBuildSessionStream.viewportFor("a"))
+    }
 }

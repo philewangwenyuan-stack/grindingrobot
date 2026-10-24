@@ -160,6 +160,8 @@ class MapScreenStep2ViewModel @Inject constructor(
     }
 
     /** 只从会话恢复底图并刷新区域；缓存丢失时禁止回退到预览接口，以免编辑坐标基准变化。 */
+    fun emergencyStop() { tcpManager.sendEmergencyStop() }
+
     fun loadMapData(mapId: String? = null) {
         currentMapId = mapId
         loadJob?.cancel()

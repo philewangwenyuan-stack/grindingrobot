@@ -317,6 +317,8 @@ class MapScreenStep3ViewModel @Inject constructor(
     }
 
     /** 从冻结帧恢复底图，仅查询最新区域；同会话保留编辑面板，跨 Step1 会话重置草稿状态。 */
+    fun emergencyStop() { tcpManager.sendEmergencyStop() }
+
     fun loadMapData(mapId: String?) {
         currentMapId = mapId
         loadJob?.cancel()

@@ -12,6 +12,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.asImageBitmap
+import android.graphics.BitmapFactory
+import com.sinelynx.grindingrobot.core.model.state.MapBuildSessionStream
+import com.sinelynx.grindingrobot.feature.common.component.LocalManualFeedback
+import com.sinelynx.grindingrobot.feature.common.component.LocalManualFeedbackAllowed
+import com.sinelynx.grindingrobot.feature.common.component.ManualFeedback
+import com.sinelynx.grindingrobot.feature.map.viewmodel.MapScreenStep4UiState
+import com.sinelynx.grindingrobot.feature.map.viewmodel.EditToolMode
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -44,6 +56,7 @@ class ManualDriveUiTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Before fun landscapeTablet() {
+        MapBuildSessionStream.begin()
         compose.activityRule.scenario.onActivity {
             it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
@@ -170,6 +183,117 @@ class ManualDriveUiTest {
         compose.onNodeWithTag("mapping_zoom_reset").performClick()
         assertEquals(1f, zoom(), 0f)
         compose.runOnIdle { assertEquals("Map gestures must not issue drive input", 0, motionEvents) }
+    }
+
+    @Test fun feedbackOnlyComesFromAcceptedInputAndDoesNotRepeatWhileHeld() {
+        val events = mutableListOf<ManualFeedback>()
+        var allow by mutableStateOf(true)
+        var enabled by mutableStateOf(true)
+        compose.setContent {
+            CompositionLocalProvider(LocalManualFeedback provides { events.add(it) },
+                LocalManualFeedbackAllowed provides { allow }) {
+                MaterialTheme {
+                    ManualRemoteControlContent(ManualDriveState(enabled = enabled), 300,
+                        {}, { _, _ -> }, {}, {}, {}, {}, {}, {})
+                }
+            }
+        }
+        compose.onNodeWithTag("travel_forward").performClick()
+        assertEquals(listOf(ManualFeedback.Tick), events)
+        repeat(6) {
+            compose.onNodeWithTag("steering_joystick").performSemanticsAction(SemanticsActions.SetProgress) { it(1f) }
+        }
+        assertEquals(2, events.size)
+        compose.onNodeWithTag("steering_joystick").performSemanticsAction(SemanticsActions.SetProgress) { it(0f) }
+        compose.onNodeWithTag("manual_stop").performClick()
+        assertEquals(ManualFeedback.Stop, events.last())
+        val count = events.size
+        compose.runOnIdle { allow = false }
+        compose.onNodeWithTag("travel_forward").performClick()
+        compose.onNodeWithTag("steering_joystick").performSemanticsAction(SemanticsActions.SetProgress) { it(-1f) }
+        compose.runOnIdle { enabled = false; allow = true }
+        compose.onNodeWithTag("travel_forward").assertIsNotEnabled()
+        compose.onNodeWithTag("steering_joystick").performSemanticsAction(SemanticsActions.SetProgress) { it(1f) }
+        compose.runOnIdle { assertEquals(count, events.size) }
+    }
+
+    /** Production header/actions/map/editor/panels with offline data, without network ViewModels. */
+    @Test fun workflowNavigationKeepsMapBoundsButtonsAndViewportThenCaptures() {
+        val bytes = sampleMap()
+        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size).asImageBitmap()
+        val geo = MapGeo(1400, 450, 0.02f, 0.0, 0.0, 0f, 0)
+        val state = MapScreenStep4UiState(mapImageBytes = bytes, mapImageSize = 1400 to 450,
+            bitmapDecodeSize = 1400 to 450, mapGeo = geo, mapName = "边角研磨区",
+            estimatedAreaM2 = 132f, estimatedDurationHours = 0.45f,
+            robotPose = DevicePosePayload(22f, 5f, 25f), robotWidth = 0.7, robotLength = 1.0)
+        var step by mutableStateOf(1)
+        compose.setContent {
+            MaterialTheme {
+                if (step == 1) {
+                    MapScreenContent(MapUiState(mapImageBytes = bytes, mapImageSize = state.mapImageSize,
+                        mapGeo = geo, drive = ManualDriveState(enabled = true)), {}, {}, {}, { _, _ -> },
+                        {}, {}, {}, {}, {}, { step = 2 })
+                } else {
+                    BoxWithConstraints(Modifier.fillMaxSize().background(Color(0xFFEBEEF2)).padding(12.dp)) {
+                        val sideWidth = workflowSideWidth(maxWidth)
+                        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            MapWorkflowHeader(step, {})
+                            Box(Modifier.weight(1f).fillMaxWidth()) {
+                                Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    if (step == 2) Column(Modifier.width(sideWidth).fillMaxHeight().padding(top = 12.dp),
+                                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                        ModeToolButton(true, com.sinelynx.grindingrobot.feature.map.R.drawable.ic_gesture_selected,
+                                            com.sinelynx.grindingrobot.feature.map.R.drawable.ic_gesture_unselcted, "手势模式", {})
+                                        ModeToolButton(false, com.sinelynx.grindingrobot.feature.map.R.drawable.ic_eraser_selected,
+                                            com.sinelynx.grindingrobot.feature.map.R.drawable.ic_eraser_unselected, "橡皮擦模式", {})
+                                    } else WorkflowGuidePanel(if (step == 3) "划分工作区" else "预览与保存",
+                                        if (step == 3) "双指缩放地图\n拖动查看细节\n\n在右侧添加或编辑工作区"
+                                        else "双指缩放地图\n拖动查看细节\n\n确认工作区后保存", Modifier.width(sideWidth).fillMaxHeight())
+                                    Surface(Modifier.weight(1f).fillMaxHeight().testTag("workflow_map"),
+                                        color = Color(0xFFF6F8FB), shape = RoundedCornerShape(16.dp)) {
+                                        if (step == 2) MapEditingPanel(null, bitmap, EditToolMode.Gesture,
+                                            0f, geo, state.mapImageSize, state.bitmapDecodeSize,
+                                            state.robotPose, 0.7, 1.0, emptyList(), emptyList(),
+                                            emptyList(), emptyList(), emptyList(), null, false,
+                                            {}, {}, {}, {})
+                                        else WorkflowMapPreview(state, bitmap, null)
+                                    }
+                                    if (step == 4) WorkflowSavePanel(state, {}, Modifier.width(sideWidth).fillMaxHeight())
+                                    else if (step == 3) Surface(Modifier.width(sideWidth).fillMaxHeight(),
+                                        color = Color(0xFFFEFEFF), shape = RoundedCornerShape(16.dp)) {
+                                        WorkspaceListPanel(emptyList(), {}, {}, {}, {})
+                                    } else Box(Modifier.width(sideWidth).fillMaxHeight()) {
+                                        UndoRedoDock(false, false, {}, {},
+                                            Modifier.align(Alignment.BottomEnd).padding(end = 10.dp, bottom = 20.dp))
+                                        MapRotationController(0f, true, {}, {},
+                                            Modifier.align(Alignment.BottomEnd).padding(end = 10.dp, bottom = 120.dp))
+                                    }
+                                }
+                            }
+                            MapWorkflowActions({}, { step-- }, { if (step < 4) step++ }, save = step == 4)
+                        }
+                    }
+                }
+            }
+        }
+        fun bounds(tag: String) = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
+        val mapBounds = bounds("workflow_map")
+        val cancelBounds = bounds("workflow_取消建图")
+        val nextBounds = bounds("workflow_下一步")
+        compose.onNodeWithTag("mapping_viewport").performSemanticsAction(SemanticsActions.SetProgress) { it(2f) }
+        val initialView = MapBuildSessionStream.viewportFor(null)
+        for (page in 2..4) {
+            compose.onNodeWithTag("workflow_下一步").performClick()
+            assertEquals(mapBounds, bounds("workflow_map"))
+            assertEquals(cancelBounds, bounds("workflow_取消建图"))
+            assertEquals(nextBounds, bounds(if (page == 4) "workflow_保存地图" else "workflow_下一步"))
+            assertEquals(initialView, MapBuildSessionStream.viewportFor(null))
+            capture("mapping-step$page.png")
+        }
+        repeat(3) { compose.onNodeWithTag("workflow_上一步").performClick() }
+        assertEquals(mapBounds, bounds("workflow_map"))
+        assertEquals(2f, compose.onNodeWithTag("mapping_viewport").fetchSemanticsNode()
+            .config[SemanticsProperties.ProgressBarRangeInfo].current, 0f)
     }
 
     private fun capture(name: String) {

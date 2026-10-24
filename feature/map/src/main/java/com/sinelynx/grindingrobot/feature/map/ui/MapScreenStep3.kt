@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -315,8 +317,12 @@ fun MapScreenStep3(
     var startPoint by remember { mutableStateOf<Offset?>(null) }
     var endPoint by remember { mutableStateOf<Offset?>(null) }
     var pendingAnchorPlacement by remember { mutableStateOf<PendingAnchorPlacement?>(null) }
-    var mapZoom by remember { mutableStateOf(1f) }
-    var mapPan by remember { mutableStateOf(Offset.Zero) }
+    val workflow = rememberWorkflowViewport(mapId)
+    val imageSize = mapImageBitmap?.let { IntSize(it.width, it.height) } ?: IntSize.Zero
+    val displayRotation = (uiState.mapGeo?.alignmentYawDeg ?: 0f) + (uiState.mapGeo?.rotationAlignmentDeltaDeg ?: 0f)
+    val viewTransform = workflow.view.toTransform(mapPanelSize, imageSize, displayRotation)
+    val mapZoom = viewTransform.scale
+    val mapPan = viewTransform.offset
     val currentMapZoom by rememberUpdatedState(mapZoom)
     val currentMapPan by rememberUpdatedState(mapPan)
     var baseScale by remember { mutableStateOf(1f) }
@@ -654,7 +660,7 @@ fun MapScreenStep3(
         nextForbiddenId = (forbiddenShapes.maxOfOrNull { it.id } ?: 0L) + 1L
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .background(
@@ -662,23 +668,200 @@ fun MapScreenStep3(
                     colors = listOf(Color(0xFFD1DBE8), Color(0xFFEBEEF2))
                 )
             )
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .padding(12.dp)
     ) {
+        val sideWidth = workflowSideWidth(maxWidth)
         Column(modifier = Modifier.fillMaxSize()) {
-            Step3TopBar()
-            Spacer(modifier = Modifier.height(12.dp))
+            MapWorkflowHeader(3, viewModel::emergencyStop)
+            Spacer(modifier = Modifier.height(8.dp))
 
+            val workspacePanel: @Composable (Modifier) -> Unit = { panelModifier ->
+                WorkspacePanel(
+                    panelMode = uiState.panelMode,
+                    workspaces = uiState.workspaces,
+                    workspaceDraft = uiState.workspaceDraft,
+                    isEditingWorkspace = uiState.editingWorkspaceRegionId != null,
+                    isWorkspaceSaving = uiState.isWorkspaceSaving,
+                    onAddWorkspace = {
+                        clearCurrentWorkspaceGeometry()
+                        viewModel.addWorkspace()
+                    },
+                    onEditWorkspace = { regionId ->
+                        val draft = viewModel.editWorkspace(regionId)
+                        if (draft != null) loadWorkspaceGeometry(regionId, draft)
+                    },
+                    onCancelAddWorkspace = {
+                        clearCurrentWorkspaceGeometry()
+                        viewModel.cancelAddWorkspace()
+                    },
+                    onSaveWorkspace = {
+                        val rectanglePoints = forbiddenShapes.mapNotNull { shape ->
+                            shape.rect?.let { rect ->
+                                rotatedRectCorners(
+                                    rect.topLeft,
+                                    rect.width,
+                                    rect.height,
+                                    shape.rotationDeg
+                                )
+                                    .map { it.x to it.y }
+                            }
+                        }
+                        val circles = forbiddenShapes.mapNotNull { shape ->
+                            shape.circleCenter?.let { center -> (center.x to center.y) to shape.circleRadius }
+                        }
+                        viewModel.replaceForbiddenGeometry(rectanglePoints, circles)
+                        val geometrySnapshot = currentWorkspaceGeometryOrNull("pending")
+                        coroutineScope.launch {
+                            val savedRegionId = viewModel.saveWorkspace()
+                            val geometry =
+                                savedRegionId?.let { geometrySnapshot?.copy(regionId = it) }
+                            if (savedRegionId != null && geometry != null) {
+                                savedWorkspaceGeometries =
+                                    savedWorkspaceGeometries.filterNot { it.regionId == savedRegionId } + geometry
+                                clearCurrentWorkspaceGeometry()
+                            }
+                        }
+                    },
+                    onOpenBoundaryEditor = {
+                        confirmedBoundaryRectCorners = emptyList()
+                        confirmedBoundaryPolygon = emptyList()
+                        polygonPoints = emptyList()
+                        showBoundaryRect = true
+                        placeInitialBoundaryRect()
+                        viewModel.openBoundaryEditor()
+                    },
+                    onCloseBoundaryEditor = viewModel::closeBoundaryEditor,
+                    onSelectBoundaryDrawMode = { mode ->
+                        pendingAnchorPlacement = null
+                        showBoundaryRect = true
+                        if (mode == BoundaryDrawMode.POLYGON) {
+                            polygonPoints = emptyList()
+                        } else if (uiState.workspaceDraft.boundaryDrawMode != BoundaryDrawMode.RECTANGLE) {
+                            placeInitialBoundaryRect()
+                        }
+                        viewModel.setBoundaryDrawMode(mode)
+                    },
+                    onOpenForbiddenEditor = {
+                        pendingAnchorPlacement = null
+                        forbiddenShapes = emptyList()
+                        editingForbiddenId = null
+                        nextForbiddenId = 1L
+                        // Entering the editor means the previous forbidden regions are replaced.
+                        pendingForbiddenMode = ForbiddenDrawMode.RECTANGLE
+                        viewModel.openForbiddenEditor()
+                    },
+                    onCloseForbiddenEditor = {
+                        pendingAnchorPlacement = null
+                        pendingForbiddenMode = null
+                        val editingId = editingForbiddenId
+                        if (editingId != null) {
+                            // Drop the in-progress forbidden shape when leaving editor without confirm.
+                            forbiddenShapes = forbiddenShapes.filterNot { it.id == editingId }
+                            editingForbiddenId = null
+                        }
+                        viewModel.closeForbiddenEditor()
+                    },
+                    onSelectForbiddenDrawMode = { mode ->
+                        pendingAnchorPlacement = null
+                        pendingForbiddenMode = mode
+                        viewModel.setForbiddenDrawMode(mode)
+                    },
+                    onCloseRobotSettingsEditor = viewModel::closeRobotSettingsEditor,
+                    onOpenProcessSettingsEditor = viewModel::openProcessSettingsEditor,
+                    onCloseProcessSettingsEditor = viewModel::closeProcessSettingsEditor,
+                    onDecreaseRobotWidth = viewModel::decreaseRobotWidth,
+                    onIncreaseRobotWidth = viewModel::increaseRobotWidth,
+                    onRobotWidthChange = viewModel::updateRobotWidth,
+                    onDecreaseRobotLength = viewModel::decreaseRobotLength,
+                    onIncreaseRobotLength = viewModel::increaseRobotLength,
+                    onRobotLengthChange = viewModel::updateRobotLength,
+                    onDecreaseRobotPathSpacing = viewModel::decreaseRobotPathSpacing,
+                    onIncreaseRobotPathSpacing = viewModel::increaseRobotPathSpacing,
+                    onRobotPathSpacingChange = viewModel::updateRobotPathSpacing,
+                    onDecreaseRobotCoverage = viewModel::decreaseRobotCoverage,
+                    onIncreaseRobotCoverage = viewModel::increaseRobotCoverage,
+                    onRobotCoverageChange = viewModel::updateRobotCoverage,
+                    onSaveRobotSettings = {
+                        viewModel.saveRobotSettings()
+                        viewModel.closeRobotSettingsEditor()
+                    },
+                    onClearWorkspaces = {
+                        coroutineScope.launch {
+                            val deletedRegionIds = viewModel.deleteAllWorkspaces()
+                            savedWorkspaceGeometries =
+                                savedWorkspaceGeometries.filterNot { it.regionId in deletedRegionIds }
+                            clearCurrentWorkspaceGeometry()
+                        }
+                    },
+                    onDeleteWorkspace = { regionId ->
+                        coroutineScope.launch {
+                            if (viewModel.deleteWorkspace(regionId)) {
+                                savedWorkspaceGeometries =
+                                    savedWorkspaceGeometries.filterNot { it.regionId == regionId }
+                            }
+                        }
+                    },
+                    onAreaCodeChange = viewModel::updateAreaCode,
+                    onToggleBoundaryConfigured = viewModel::setBoundaryConfigured,
+                    onToggleForbiddenConfigured = viewModel::setForbiddenConfigured,
+                    onToggleStartConfigured = { configured ->
+                        viewModel.setStartConfigured(configured)
+                        if (!configured) {
+                            startPoint = null
+                            if (pendingAnchorPlacement == PendingAnchorPlacement.START) {
+                                pendingAnchorPlacement = null
+                            }
+                        }
+                    },
+                    onToggleEndConfigured = { configured ->
+                        viewModel.setEndConfigured(configured)
+                        if (!configured) {
+                            endPoint = null
+                            if (pendingAnchorPlacement == PendingAnchorPlacement.END) {
+                                pendingAnchorPlacement = null
+                            }
+                        }
+                    },
+                    onPlaceStartPoint = { pendingAnchorPlacement = PendingAnchorPlacement.START },
+                    onPlaceEndPoint = { pendingAnchorPlacement = PendingAnchorPlacement.END },
+                    onAddWorkspaceScreenEnter = viewModel::onAddWorkspaceScreenEnter,
+                    onDecreasePathSpacing = viewModel::decreasePathSpacing,
+                    onIncreasePathSpacing = viewModel::increasePathSpacing,
+                    onPreviousScanDirection = viewModel::previousScanDirection,
+                    onNextScanDirection = viewModel::nextScanDirection,
+                    onOpenRobotSettings = viewModel::openRobotSettingsEditor,
+                    onOpenProcessSettings = viewModel::openProcessSettingsEditor,
+                    onSelectProcessType = viewModel::setProcessType,
+                    onSelectGrindingParameter = viewModel::setGrindingParameter,
+                    onSelectConcreteStrength = viewModel::setConcreteStrength,
+                    onDecreaseProcessSpeed = viewModel::decreaseProcessSpeed,
+                    onIncreaseProcessSpeed = viewModel::increaseProcessSpeed,
+                    onProcessSpeedChange = viewModel::updateProcessSpeed,
+                    onDecreaseProcessPressure = viewModel::decreaseProcessPressure,
+                    onIncreaseProcessPressure = viewModel::increaseProcessPressure,
+                    onProcessPressureChange = viewModel::updateProcessPressure,
+                    onDecreaseDiscSpeed = viewModel::decreaseDiscSpeed,
+                    onIncreaseDiscSpeed = viewModel::increaseDiscSpeed,
+                    onDiscSpeedChange = viewModel::updateDiscSpeed,
+                    onSaveProcessSettings = {
+                        viewModel.saveProcessSettings()
+                        viewModel.closeProcessSettingsEditor()
+                    },
+                    modifier = panelModifier
+                )
+            }
+            Box(Modifier.fillMaxWidth().weight(1f)) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                WorkflowGuidePanel("划分工作区", "双指缩放地图\n拖动查看细节\n\n在右侧添加或编辑工作区", Modifier.width(sideWidth).fillMaxHeight())
                 Surface(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(16.dp)),
+                        .clip(RoundedCornerShape(16.dp))
+                        .testTag("workflow_map"),
                     color = Color(0xFFF6F8FB),
                     shape = RoundedCornerShape(16.dp),
                     shadowElevation = 4.dp
@@ -687,15 +870,12 @@ fun MapScreenStep3(
                         modifier = Modifier
                             .fillMaxSize()
                             .onSizeChanged { mapPanelSize = it }
-                            .pointerInput(mapImageBitmap, mapPanelSize) {
+                            .workflowViewportSemantics(workflow, mapPanelSize, imageSize, displayRotation)
+                            .pointerInput(mapImageBitmap, mapPanelSize, displayRotation) {
                                 val bmp = mapImageBitmap ?: return@pointerInput
                                 detectTransformGestures { centroid, panChange, zoomChange, _ ->
-                                    val oldZoom = currentMapZoom
-                                    val oldPan = currentMapPan
-                                    val newZoom = (oldZoom * zoomChange).coerceIn(0.5f, 6f)
-                                    val zoomRatio = if (oldZoom == 0f) 1f else newZoom / oldZoom
-                                    mapZoom = newZoom
-                                    mapPan = centroid - (centroid - oldPan) * zoomRatio + panChange
+                                    workflow.gesture(mapPanelSize, IntSize(bmp.width, bmp.height), displayRotation,
+                                        centroid, panChange, zoomChange)
                                 }
                             }
                     ) {
@@ -1994,187 +2174,22 @@ fun MapScreenStep3(
                                 )
                             }
                         }
+                        WorkflowZoomControl(workflow, Modifier.align(Alignment.BottomStart).padding(8.dp))
                     }
                 }
 
-                WorkspacePanel(
-                    panelMode = uiState.panelMode,
-                    workspaces = uiState.workspaces,
-                    workspaceDraft = uiState.workspaceDraft,
-                    isEditingWorkspace = uiState.editingWorkspaceRegionId != null,
-                    isWorkspaceSaving = uiState.isWorkspaceSaving,
-                    onAddWorkspace = {
-                        clearCurrentWorkspaceGeometry()
-                        viewModel.addWorkspace()
-                    },
-                    onEditWorkspace = { regionId ->
-                        val draft = viewModel.editWorkspace(regionId)
-                        if (draft != null) loadWorkspaceGeometry(regionId, draft)
-                    },
-                    onCancelAddWorkspace = {
-                        clearCurrentWorkspaceGeometry()
-                        viewModel.cancelAddWorkspace()
-                    },
-                    onSaveWorkspace = {
-                        val rectanglePoints = forbiddenShapes.mapNotNull { shape ->
-                            shape.rect?.let { rect ->
-                                rotatedRectCorners(
-                                    rect.topLeft,
-                                    rect.width,
-                                    rect.height,
-                                    shape.rotationDeg
-                                )
-                                    .map { it.x to it.y }
-                            }
-                        }
-                        val circles = forbiddenShapes.mapNotNull { shape ->
-                            shape.circleCenter?.let { center -> (center.x to center.y) to shape.circleRadius }
-                        }
-                        viewModel.replaceForbiddenGeometry(rectanglePoints, circles)
-                        val geometrySnapshot = currentWorkspaceGeometryOrNull("pending")
-                        coroutineScope.launch {
-                            val savedRegionId = viewModel.saveWorkspace()
-                            val geometry =
-                                savedRegionId?.let { geometrySnapshot?.copy(regionId = it) }
-                            if (savedRegionId != null && geometry != null) {
-                                savedWorkspaceGeometries =
-                                    savedWorkspaceGeometries.filterNot { it.regionId == savedRegionId } + geometry
-                                clearCurrentWorkspaceGeometry()
-                            }
-                        }
-                    },
-                    onOpenBoundaryEditor = {
-                        confirmedBoundaryRectCorners = emptyList()
-                        confirmedBoundaryPolygon = emptyList()
-                        polygonPoints = emptyList()
-                        showBoundaryRect = true
-                        placeInitialBoundaryRect()
-                        viewModel.openBoundaryEditor()
-                    },
-                    onCloseBoundaryEditor = viewModel::closeBoundaryEditor,
-                    onSelectBoundaryDrawMode = { mode ->
-                        pendingAnchorPlacement = null
-                        showBoundaryRect = true
-                        if (mode == BoundaryDrawMode.POLYGON) {
-                            polygonPoints = emptyList()
-                        } else if (uiState.workspaceDraft.boundaryDrawMode != BoundaryDrawMode.RECTANGLE) {
-                            placeInitialBoundaryRect()
-                        }
-                        viewModel.setBoundaryDrawMode(mode)
-                    },
-                    onOpenForbiddenEditor = {
-                        pendingAnchorPlacement = null
-                        forbiddenShapes = emptyList()
-                        editingForbiddenId = null
-                        nextForbiddenId = 1L
-                        // Entering the editor means the previous forbidden regions are replaced.
-                        pendingForbiddenMode = ForbiddenDrawMode.RECTANGLE
-                        viewModel.openForbiddenEditor()
-                    },
-                    onCloseForbiddenEditor = {
-                        pendingAnchorPlacement = null
-                        pendingForbiddenMode = null
-                        val editingId = editingForbiddenId
-                        if (editingId != null) {
-                            // Drop the in-progress forbidden shape when leaving editor without confirm.
-                            forbiddenShapes = forbiddenShapes.filterNot { it.id == editingId }
-                            editingForbiddenId = null
-                        }
-                        viewModel.closeForbiddenEditor()
-                    },
-                    onSelectForbiddenDrawMode = { mode ->
-                        pendingAnchorPlacement = null
-                        pendingForbiddenMode = mode
-                        viewModel.setForbiddenDrawMode(mode)
-                    },
-                    onCloseRobotSettingsEditor = viewModel::closeRobotSettingsEditor,
-                    onOpenProcessSettingsEditor = viewModel::openProcessSettingsEditor,
-                    onCloseProcessSettingsEditor = viewModel::closeProcessSettingsEditor,
-                    onDecreaseRobotWidth = viewModel::decreaseRobotWidth,
-                    onIncreaseRobotWidth = viewModel::increaseRobotWidth,
-                    onRobotWidthChange = viewModel::updateRobotWidth,
-                    onDecreaseRobotLength = viewModel::decreaseRobotLength,
-                    onIncreaseRobotLength = viewModel::increaseRobotLength,
-                    onRobotLengthChange = viewModel::updateRobotLength,
-                    onDecreaseRobotPathSpacing = viewModel::decreaseRobotPathSpacing,
-                    onIncreaseRobotPathSpacing = viewModel::increaseRobotPathSpacing,
-                    onRobotPathSpacingChange = viewModel::updateRobotPathSpacing,
-                    onDecreaseRobotCoverage = viewModel::decreaseRobotCoverage,
-                    onIncreaseRobotCoverage = viewModel::increaseRobotCoverage,
-                    onRobotCoverageChange = viewModel::updateRobotCoverage,
-                    onSaveRobotSettings = {
-                        viewModel.saveRobotSettings()
-                        viewModel.closeRobotSettingsEditor()
-                    },
-                    onClearWorkspaces = {
-                        coroutineScope.launch {
-                            val deletedRegionIds = viewModel.deleteAllWorkspaces()
-                            savedWorkspaceGeometries =
-                                savedWorkspaceGeometries.filterNot { it.regionId in deletedRegionIds }
-                            clearCurrentWorkspaceGeometry()
-                        }
-                    },
-                    onDeleteWorkspace = { regionId ->
-                        coroutineScope.launch {
-                            if (viewModel.deleteWorkspace(regionId)) {
-                                savedWorkspaceGeometries =
-                                    savedWorkspaceGeometries.filterNot { it.regionId == regionId }
-                            }
-                        }
-                    },
-                    onAreaCodeChange = viewModel::updateAreaCode,
-                    onToggleBoundaryConfigured = viewModel::setBoundaryConfigured,
-                    onToggleForbiddenConfigured = viewModel::setForbiddenConfigured,
-                    onToggleStartConfigured = { configured ->
-                        viewModel.setStartConfigured(configured)
-                        if (!configured) {
-                            startPoint = null
-                            if (pendingAnchorPlacement == PendingAnchorPlacement.START) {
-                                pendingAnchorPlacement = null
-                            }
-                        }
-                    },
-                    onToggleEndConfigured = { configured ->
-                        viewModel.setEndConfigured(configured)
-                        if (!configured) {
-                            endPoint = null
-                            if (pendingAnchorPlacement == PendingAnchorPlacement.END) {
-                                pendingAnchorPlacement = null
-                            }
-                        }
-                    },
-                    onPlaceStartPoint = { pendingAnchorPlacement = PendingAnchorPlacement.START },
-                    onPlaceEndPoint = { pendingAnchorPlacement = PendingAnchorPlacement.END },
-                    onAddWorkspaceScreenEnter = viewModel::onAddWorkspaceScreenEnter,
-                    onDecreasePathSpacing = viewModel::decreasePathSpacing,
-                    onIncreasePathSpacing = viewModel::increasePathSpacing,
-                    onPreviousScanDirection = viewModel::previousScanDirection,
-                    onNextScanDirection = viewModel::nextScanDirection,
-                    onOpenRobotSettings = viewModel::openRobotSettingsEditor,
-                    onOpenProcessSettings = viewModel::openProcessSettingsEditor,
-                    onSelectProcessType = viewModel::setProcessType,
-                    onSelectGrindingParameter = viewModel::setGrindingParameter,
-                    onSelectConcreteStrength = viewModel::setConcreteStrength,
-                    onDecreaseProcessSpeed = viewModel::decreaseProcessSpeed,
-                    onIncreaseProcessSpeed = viewModel::increaseProcessSpeed,
-                    onProcessSpeedChange = viewModel::updateProcessSpeed,
-                    onDecreaseProcessPressure = viewModel::decreaseProcessPressure,
-                    onIncreaseProcessPressure = viewModel::increaseProcessPressure,
-                    onProcessPressureChange = viewModel::updateProcessPressure,
-                    onDecreaseDiscSpeed = viewModel::decreaseDiscSpeed,
-                    onIncreaseDiscSpeed = viewModel::increaseDiscSpeed,
-                    onDiscSpeedChange = viewModel::updateDiscSpeed,
-                    onSaveProcessSettings = {
-                        viewModel.saveProcessSettings()
-                        viewModel.closeProcessSettingsEditor()
-                    },
-                    modifier = Modifier
-                        .width(336.dp)
-                        .fillMaxHeight()
-                )
+                if (uiState.panelMode == WorkspacePanelMode.LIST) {
+                    workspacePanel(Modifier.width(sideWidth).fillMaxHeight())
+                } else {
+                    WorkflowGuidePanel("编辑工作区", "编辑面板已展开\n地图视角保持不变", Modifier.width(sideWidth).fillMaxHeight())
+                }
+            }
+                if (uiState.panelMode != WorkspacePanelMode.LIST) {
+                    workspacePanel(Modifier.align(Alignment.TopEnd).width(368.dp).fillMaxHeight())
+                }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             uiState.mapLoadError?.let { error ->
                 Text(
                     error,
@@ -2969,70 +2984,6 @@ private fun BoundaryRotateHandleButton(
 }
 
 @Composable
-private fun Step3TopBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(1000.dp))
-                .background(Color(0xFFE5EAF1))
-                .border(1.dp, Color(0x80FFFFFF), RoundedCornerShape(1000.dp))
-                .padding(horizontal = 16.dp, vertical = 9.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .background(Color(0xFF00A0E9), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "⚙",
-                    color = Color.White,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Step3PathText(
-                text = "1.扫描地图",
-                active = true
-            )
-            Step3PathText(text = ">", active = true)
-            Step3PathText(
-                text = "2.编辑地图",
-                active = true
-            )
-            Step3PathText(text = ">", active = true)
-            Step3PathText(
-                text = "3.划分工作区",
-                active = true
-            )
-            Step3PathText(text = ">", active = false)
-            Step3PathText(
-                text = "4.保存地图",
-                active = false
-            )
-        }
-
-        DeviceStatusBar()
-    }
-}
-
-@Composable
-private fun Step3PathText(text: String, active: Boolean) {
-    Text(
-        text = text,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Medium,
-        color = if (active) Color(0xFF00A0E9) else Color(0xFF9DA3AF)
-    )
-}
-
-@Composable
 private fun WorkspacePanel(
     panelMode: WorkspacePanelMode,
     workspaces: List<WorkspaceItem>,
@@ -3183,7 +3134,7 @@ private fun WorkspacePanel(
 }
 
 @Composable
-private fun WorkspaceListPanel(
+internal fun WorkspaceListPanel(
     workspaces: List<WorkspaceItem>,
     onAddWorkspace: () -> Unit,
     onClearWorkspaces: () -> Unit,
@@ -3193,7 +3144,7 @@ private fun WorkspaceListPanel(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 10.dp, vertical = 12.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -3202,7 +3153,7 @@ private fun WorkspaceListPanel(
         ) {
             Text(
                 text = "工作区",
-                fontSize = 32.sp,
+                fontSize = 18.sp,
                 color = Color(0xFF202937),
                 fontWeight = FontWeight.Bold
             )
@@ -3351,68 +3302,6 @@ private fun BottomStep3Actions(
     onPreviousStep: () -> Unit,
     onNextStep: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Step3ActionButton(
-            text = "✕  取消建图",
-            background = Color(0xFFD82B2A),
-            contentColor = Color.White,
-            onClick = onCancelBuild
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Step3ActionButton(
-                text = "◀  上一步",
-                background = Color(0xFFF6F8FB),
-                contentColor = Color(0xFF202937),
-                onClick = onPreviousStep
-            )
-            Step3ActionButton(
-                text = "▶  下一步",
-                background = Color(0xFF00A0E9),
-                contentColor = Color.White,
-                onClick = onNextStep
-            )
-        }
-    }
+    MapWorkflowActions(onCancelBuild, onPreviousStep, onNextStep)
 }
-
-@Composable
-private fun Step3ActionButton(
-    text: String,
-    background: Color,
-    contentColor: Color,
-    onClick: () -> Unit
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Box(
-        modifier = Modifier
-            .size(width = 200.dp, height = 56.dp)
-            .clip(RoundedCornerShape(1000.dp))
-            .background(background)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick
-            )
-            .padding(horizontal = 10.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = contentColor,
-            style = TextStyle(
-                shadow = Shadow(
-                    color = Color(0x1A000000),
-                    blurRadius = 4f
-                )
-            )
-        )
-    }
-}
-
 

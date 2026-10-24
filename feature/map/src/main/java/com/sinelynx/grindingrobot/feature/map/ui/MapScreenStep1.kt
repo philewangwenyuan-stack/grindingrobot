@@ -75,7 +75,7 @@ fun MapScreenStep1(
         onRadarMapSync = viewModel::requestRadarMapSync,
         onCancelBuild = { viewModel.onCancelBuild(); onCancelBuild() },
         onNextStep = { if (viewModel.onNextStep()) onNextStep() },
-        modifier = modifier,
+        modifier = modifier, mapId = mapId,
     )
 }
 
@@ -93,12 +93,13 @@ internal fun MapScreenContent(
     onCancelBuild: () -> Unit,
     onNextStep: () -> Unit,
     modifier: Modifier = Modifier,
+    mapId: String? = null,
 ) {
     BoxWithConstraints(modifier.fillMaxSize().background(Color(0xFFEBEEF2)).padding(12.dp)) {
-        val sideWidth = (maxWidth * 0.15f).coerceIn(132.dp, 172.dp)
+        val sideWidth = workflowSideWidth(maxWidth)
         val dialSize = (sideWidth - 16.dp).coerceAtMost(168.dp)
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            TopBar(onEmergencyStop)
+            MapWorkflowHeader(1, onEmergencyStop)
             Row(Modifier.fillMaxWidth().weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -116,7 +117,7 @@ internal fun MapScreenContent(
                 }
                 MapPanel(
                     modifier = Modifier.weight(1f).fillMaxHeight(),
-                    mapImageBytes = uiState.mapImageBytes, mapImageSize = uiState.mapImageSize,
+                    mapId = mapId, mapImageBytes = uiState.mapImageBytes, mapImageSize = uiState.mapImageSize,
                     mapGeo = uiState.mapGeo, mapLoadMessage = uiState.mapLoadMessage,
                     mapLoadFailed = uiState.mapLoadFailed, robotPose = uiState.robotPose,
                     robotWidth = uiState.robotWidth, robotLength = uiState.robotLength,
@@ -134,49 +135,19 @@ internal fun MapScreenContent(
                     Spacer(Modifier.weight(1f))
                 }
             }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom,
+            Row(Modifier.fillMaxWidth().height(80.dp), verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                MapActionButton("取消建图", false, onCancelBuild)
+                MapWorkflowAction("取消建图", false, onCancelBuild)
                 ManualDriveFooter(uiState.drive, onStop, Modifier.weight(1f))
-                MapActionButton("下一步", true, onNextStep)
+                MapWorkflowAction("下一步", true, onNextStep)
             }
-        }
-    }
-}
-
-@Composable
-private fun TopBar(onEmergencyStop: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        GlobalTopBar(
-            onEmergencyClick = onEmergencyStop,
-            title = {
-                Text("扫描建图", color = Color(0xFF202937), fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            },
-            // Content has 12dp padding; match the global header's 24dp / 14dp screen inset.
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp),
-        )
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            listOf("1  扫描地图", "2  选择工作区", "3  划分工作区", "4  保存地图").forEachIndexed { index, text ->
-                Text(text, color = if (index == 0) Color(0xFF00A0E9) else Color(0xFF9DA3AF),
-                    fontSize = 13.sp, fontWeight = if (index == 0) FontWeight.Bold else FontWeight.Normal)
-            }
-        }
-    }
-}
-
-@Composable
-private fun MapActionButton(text: String, primary: Boolean, onClick: () -> Unit) {
-    Surface(onClick = onClick, color = if (primary) Color(0xFF00A0E9) else Color(0xFFE0E6ED),
-        shape = RoundedCornerShape(14.dp), modifier = Modifier.width(160.dp).height(44.dp)) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(text, color = if (primary) Color.White else Color(0xFF606C7C),
-                fontSize = 17.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @Composable
 private fun MapPanel(
+    mapId: String?,
     mapImageBytes: ByteArray?,
     mapImageSize: Pair<Int, Int>?,
     mapGeo: com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo?,
@@ -197,16 +168,18 @@ private fun MapPanel(
         }
     }
     // LIVE_MAP frames replace the bitmap frequently; viewport state belongs to the screen.
-    var viewport by remember { mutableStateOf(MapViewportTransform()) }
+    val workflow = rememberWorkflowViewport(mapId)
     var viewportSize by remember { mutableStateOf(IntSize.Zero) }
+    val imageSize = mapImageBitmap?.let { IntSize(it.width, it.height) } ?: IntSize.Zero
+    val rotation = (mapGeo?.alignmentYawDeg ?: 0f) + (mapGeo?.rotationAlignmentDeltaDeg ?: 0f)
+    val viewport = workflow.view.toTransform(viewportSize, imageSize, rotation)
     val currentBitmap by rememberUpdatedState(mapImageBitmap)
 
     fun changeViewport(centroid: Offset, pan: Offset, zoom: Float) {
         val bitmap = currentBitmap ?: return
         val canvasSize = Size(viewportSize.width.toFloat(), viewportSize.height.toFloat())
         if (canvasSize.width <= 0f || canvasSize.height <= 0f) return
-        viewport = viewport.zoomAndPan(centroid, pan, zoom, canvasSize,
-            previewImageRect(canvasSize, bitmap.width, bitmap.height))
+        workflow.gesture(viewportSize, IntSize(bitmap.width, bitmap.height), rotation, centroid, pan, zoom)
     }
 
     Box(
@@ -214,7 +187,7 @@ private fun MapPanel(
             .fillMaxHeight()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFF6F8FB))
-            .border(2.dp, Color.White, RoundedCornerShape(16.dp))
+            .border(2.dp, Color.White, RoundedCornerShape(16.dp)).testTag("workflow_map")
     ) {
         if (mapImageBitmap != null) {
             Box(
@@ -235,29 +208,30 @@ private fun MapPanel(
                             } else false
                         }
                     }
-                    .pointerInput(Unit) {
+                    .pointerInput(rotation) {
                         detectTransformGestures { centroid, pan, zoom, _ ->
                             changeViewport(centroid, pan, zoom)
                         }
                     }
             ) {
+                Box(Modifier.fillMaxSize().graphicsLayer {
+                    transformOrigin = TransformOrigin(0f, 0f)
+                    scaleX = viewport.scale; scaleY = viewport.scale
+                    translationX = viewport.offset.x; translationY = viewport.offset.y
+                }) {
                 androidx.compose.foundation.Image(
                     bitmap = mapImageBitmap,
                     contentDescription = "雷达图",
-                    modifier = Modifier.fillMaxSize().graphicsLayer {
-                        transformOrigin = TransformOrigin(0f, 0f)
-                        scaleX = viewport.scale
-                        scaleY = viewport.scale
-                        translationX = viewport.offset.x
-                        translationY = viewport.offset.y
-                    }
+                    modifier = Modifier.fillMaxSize().graphicsLayer { rotationZ = rotation }
                 )
+                }
+
                 FittedMapRobotMarker(
                     pose = robotPose,
                     geo = mapGeo,
                     mapImageSize = mapImageSize,
                     bitmapSize = mapImageBitmap.width to mapImageBitmap.height,
-                    viewportScale = viewport.scale,
+                    mapRotationDeg = rotation, viewportScale = viewport.scale,
                     viewportOffset = viewport.offset,
                     robotWidth = robotWidth,
                     robotLength = robotLength,
@@ -269,14 +243,7 @@ private fun MapPanel(
         }
 
         if (mapImageBitmap != null) {
-            TextButton(
-                onClick = { viewport = MapViewportTransform() },
-                modifier = Modifier.align(Alignment.BottomStart).padding(8.dp)
-                    .background(Color.White, RoundedCornerShape(12.dp)).testTag("mapping_zoom_reset"),
-            ) {
-                Text(String.format(Locale.US, "%.1f× · 复位", viewport.scale),
-                    color = Color(0xFF202937), fontSize = 14.sp)
-            }
+            WorkflowZoomControl(workflow, Modifier.align(Alignment.BottomStart).padding(8.dp))
         }
 
         Surface(

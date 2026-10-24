@@ -1216,9 +1216,26 @@ class TcpManager @Inject constructor(
         return sendData(frameData)
     }
 
-    /**
-     * 写入参数设置
-     */
+    /** Disc edits must not overwrite the persisted task speed with proto3's absent-field zero. */
+    fun requestDiscSettingsWrite(speedRpm: Int, enabled: Boolean, dstId: UByte = 0x10u): Boolean {
+        val settings = buildDiscSettingsUpdate(appState.chassisSettings.value, speedRpm, enabled)
+        if (settings == null) {
+            requestSettingRead(readChassis = true, readMap = null, dstId = dstId)
+            return false
+        }
+        return requestSettingWrite(chassisSettings = settings, dstId = dstId)
+    }
+
+    fun requestTurnRatioSettingsWrite(ratio: Float, dstId: UByte = 0x10u): Boolean {
+        val settings = buildTurnRatioSettingsUpdate(appState.chassisSettings.value, ratio)
+        if (settings == null) {
+            requestSettingRead(readChassis = true, readMap = null, dstId = dstId)
+            return false
+        }
+        return requestSettingWrite(chassisSettings = settings, dstId = dstId)
+    }
+
+    /** Chassis writes replace all scalar fields. Use the dedicated snapshot helpers for partial edits. */
     fun requestSettingWrite(
         chassisSettings: SlLink.ChassisSettings? = null,
         mapSettings: SlLink.MapSettings? = null,

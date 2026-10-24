@@ -3,6 +3,9 @@ package com.sinelynx.grindingrobot.core.model.state
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/** View center in unrotated image coordinates, independent of screen pixels and display angle. */
+data class MapBuildViewport(val zoom: Float = 1f, val centerX: Float = 0.5f, val centerY: Float = 0.5f)
+
 /** sessionId 区分每次进入 Step1；requestedMapId 是页面查询参数，不等同于协议中的数值 mapId。 */
 data class FrozenMapSnapshot(
     val sessionId: Long,
@@ -16,12 +19,26 @@ data class FrozenMapSnapshot(
  */
 object MapBuildSessionStream {
     private var sessionId = 0L
+    private var viewportMapId = ""
+    private var viewport = MapBuildViewport()
     private val _snapshot = MutableStateFlow<FrozenMapSnapshot?>(null)
     val snapshot = _snapshot.asStateFlow()
 
-    fun begin() {
+    fun begin(mapId: String? = null, preserveViewport: Boolean = false) {
+        val retained = if (preserveViewport) viewportFor(mapId) else MapBuildViewport()
         sessionId++
         clear()
+        viewportMapId = mapId.orEmpty()
+        viewport = retained
+    }
+
+    fun viewportFor(mapId: String?): MapBuildViewport =
+        if (viewportMapId == mapId.orEmpty()) viewport else MapBuildViewport()
+
+    fun updateViewport(mapId: String?, value: MapBuildViewport) {
+        if (viewportMapId != mapId.orEmpty() || !value.zoom.isFinite() ||
+            !value.centerX.isFinite() || !value.centerY.isFinite()) return
+        viewport = value.copy(zoom = value.zoom.coerceIn(1f, 8f))
     }
 
     /** 页面先确认图片可解码；这里校验投影所需几何，并复制字节以隔离后续帧的数据修改。 */
@@ -49,5 +66,9 @@ object MapBuildSessionStream {
         ))
     }
 
-    fun clear() { _snapshot.value = null }
+    fun clear() {
+        _snapshot.value = null
+        viewportMapId = ""
+        viewport = MapBuildViewport()
+    }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.draw.clip
@@ -99,7 +101,7 @@ fun MapScreenStep2(
         }
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .background(
@@ -107,11 +109,12 @@ fun MapScreenStep2(
                     colors = listOf(Color(0xFFD1DBE8), Color(0xFFEBEEF2))
                 )
             )
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .padding(12.dp)
     ) {
+        val sideWidth = workflowSideWidth(maxWidth)
         Column(modifier = Modifier.fillMaxSize()) {
-            Step2TopBar()
-            Spacer(modifier = Modifier.height(12.dp))
+            MapWorkflowHeader(2, viewModel::emergencyStop)
+            Spacer(modifier = Modifier.height(8.dp))
 
             Box(
                 modifier = Modifier
@@ -120,8 +123,10 @@ fun MapScreenStep2(
             ) {
                 Surface(
                     modifier = Modifier
+                        .padding(horizontal = sideWidth + 8.dp)
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(16.dp)),
+                        .clip(RoundedCornerShape(16.dp))
+                        .testTag("workflow_map"),
                     color = Color(0xFFF6F8FB),
                     shape = RoundedCornerShape(16.dp),
                     shadowElevation = 4.dp
@@ -130,10 +135,8 @@ fun MapScreenStep2(
                         MapDataLoadingPage()
                     } else {
                         MapEditingPanel(
-                        mapImageBitmap = mapImageBitmap,
+                        mapId = mapId, mapImageBitmap = mapImageBitmap,
                         toolMode = uiState.toolMode,
-                        zoom = uiState.zoom,
-                        pan = uiState.pan,
                         alignmentYaw = uiState.alignmentYaw,
                         mapGeo = uiState.mapGeo,
                         mapImageSize = uiState.mapImageSize,
@@ -149,7 +152,6 @@ fun MapScreenStep2(
                         activeAreaId = uiState.activeAreaId,
                         showDebugTap = showDebugInfo,
                         onDebugTapBitmap = viewModel::reportDebugTapBitmapPixel,
-                        onTransform = viewModel::updateTransform,
                         onCreateArea = viewModel::createAreaAt,
                         onConfirmArea = viewModel::confirmActiveArea,
                             onRemoveArea = viewModel::removeActiveArea
@@ -158,11 +160,12 @@ fun MapScreenStep2(
                 }
 
                 if (mapImageBitmap != null) {
-                    Row(
+                    Column(
                     modifier = Modifier
-                        .align(Alignment.TopCenter)
+                        .align(Alignment.TopStart)
+                        .width(sideWidth)
                         .padding(top = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                         ModeToolButton(
                         selected = uiState.toolMode == EditToolMode.Gesture,
@@ -252,7 +255,7 @@ fun MapScreenStep2(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             BottomStep2Actions(
                 onCancelBuild = {
                     viewModel.onCancelBuild()
@@ -317,55 +320,7 @@ private fun DebugInfoPanel(
 }
 
 @Composable
-private fun Step2TopBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(1000.dp))
-                .background(Color(0xFFE5EAF1))
-                .border(1.dp, Color(0x80FFFFFF), RoundedCornerShape(1000.dp))
-                .padding(horizontal = 16.dp, vertical = 9.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .background(Color(0xFF00A0E9), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "⚙", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            }
-
-            StepText(text = "1.扫描地图", active = true)
-            StepText(text = ">", active = true)
-            StepText(text = "2.编辑地图", active = true)
-            StepText(text = ">", active = false)
-            StepText(text = "3.划分工作区", active = false)
-            StepText(text = ">", active = false)
-            StepText(text = "4.保存地图", active = false)
-        }
-
-        DeviceStatusBar()
-    }
-}
-
-@Composable
-private fun StepText(text: String, active: Boolean) {
-    Text(
-        text = text,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Medium,
-        color = if (active) Color(0xFF00A0E9) else Color(0xFF9DA3AF)
-    )
-}
-
-@Composable
-private fun ModeToolButton(
+internal fun ModeToolButton(
     selected: Boolean,
     selectedIcon: Int,
     unselectedIcon: Int,
@@ -391,11 +346,10 @@ private fun ModeToolButton(
 }
 
 @Composable
-private fun MapEditingPanel(
+internal fun MapEditingPanel(
+    mapId: String?,
     mapImageBitmap: androidx.compose.ui.graphics.ImageBitmap?,
     toolMode: EditToolMode,
-    zoom: Float,
-    pan: Offset,
     alignmentYaw: Float,
     mapGeo: MapGeo?,
     mapImageSize: Pair<Int, Int>?,
@@ -411,7 +365,6 @@ private fun MapEditingPanel(
     activeAreaId: Long?,
     showDebugTap: Boolean,
     onDebugTapBitmap: (Offset) -> Unit,
-    onTransform: (Float, Offset) -> Unit,
     onCreateArea: (Offset) -> Unit,
     onConfirmArea: (List<Offset>) -> Unit,
     onRemoveArea: () -> Unit
@@ -420,8 +373,11 @@ private fun MapEditingPanel(
     var baseScale by remember { mutableStateOf(1f) }
     var baseOffset by remember { mutableStateOf(Offset.Zero) }
 
-    val minZoom = 0.5f
-    val maxZoom = 6f
+    val workflow = rememberWorkflowViewport(mapId)
+    val imageSize = mapImageBitmap?.let { IntSize(it.width, it.height) } ?: IntSize.Zero
+    val transform = workflow.view.toTransform(viewportSize, imageSize, alignmentYaw)
+    val zoom = transform.scale
+    val pan = transform.offset
 
     val mapWidthPx = mapImageBitmap?.width?.toFloat() ?: 1f
     val mapHeightPx = mapImageBitmap?.height?.toFloat() ?: 1f
@@ -490,35 +446,13 @@ private fun MapEditingPanel(
                     radius = 900f
                 )
             )
+            .workflowViewportSemantics(workflow, viewportSize, imageSize, alignmentYaw)
             .pointerInput(toolMode, mapImageBitmap, viewportSize) {
                 if (toolMode == EditToolMode.Gesture) {
                     val bmp = mapImageBitmap ?: return@pointerInput
                     detectTransformGestures { centroid, panChange, zoomChange, _ ->
-                        val vw = viewportSize.width.toFloat()
-                        val vh = viewportSize.height.toFloat()
-                        if (vw <= 0f || vh <= 0f) return@detectTransformGestures
-                        val bs = minOf(vw / bmp.width, vh / bmp.height)
-                        val bo = Offset(
-                            x = (vw - bmp.width * bs) / 2f,
-                            y = (vh - bmp.height * bs) / 2f
-                        )
-                        val oldZoom = currentZoom
-                        val oldPan = currentPan
-                        val newZoom = (oldZoom * zoomChange).coerceIn(minZoom, maxZoom)
-                        val zoomRatio = if (oldZoom == 0f) 1f else newZoom / oldZoom
-                        var newPan = centroid - (centroid - oldPan) * zoomRatio + panChange
-                        newPan = clampMapPanToRotatedBounds(
-                            pan = newPan,
-                            zoom = newZoom,
-                            canvasW = viewportSize.width,
-                            canvasH = viewportSize.height,
-                            baseOffset = bo,
-                            baseScale = bs,
-                            imgW = bmp.width.toFloat(),
-                            imgH = bmp.height.toFloat(),
-                            alignmentYaw = currentAlignmentYaw
-                        )
-                        onTransform(newZoom, newPan)
+                        workflow.gesture(viewportSize, IntSize(bmp.width, bmp.height), currentAlignmentYaw,
+                            centroid, panChange, zoomChange)
                     }
                 }
             }
@@ -931,6 +865,7 @@ private fun MapEditingPanel(
                 )
             }
         }
+        WorkflowZoomControl(workflow, Modifier.align(Alignment.BottomStart).padding(8.dp))
     }
 }
 
@@ -958,7 +893,7 @@ private fun HandleButton(
 }
 
 @Composable
-private fun UndoRedoDock(
+internal fun UndoRedoDock(
     canRedo: Boolean,
     canUndo: Boolean,
     onRedo: () -> Unit,
@@ -1026,63 +961,7 @@ private fun BottomStep2Actions(
     onPreviousStep: () -> Unit,
     onNextStep: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        StepActionButton(
-            text = "✕  取消建图",
-            background = Color(0xFFD82B2A),
-            contentColor = Color.White,
-            onClick = onCancelBuild
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            StepActionButton(
-                text = "◀  上一步",
-                background = Color(0xFFF6F8FB),
-                contentColor = Color(0xFF202937),
-                onClick = onPreviousStep
-            )
-            StepActionButton(
-                text = "▶  下一步",
-                background = Color(0xFF00A0E9),
-                contentColor = Color.White,
-                onClick = onNextStep
-            )
-        }
-    }
-}
-
-@Composable
-private fun StepActionButton(
-    text: String,
-    background: Color,
-    contentColor: Color,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(width = 200.dp, height = 56.dp)
-            .clip(RoundedCornerShape(1000.dp))
-            .background(background)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 10.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = contentColor,
-            style = TextStyle(
-                shadow = Shadow(
-                    color = Color(0x1A000000),
-                    blurRadius = 4f
-                )
-            )
-        )
-    }
+    MapWorkflowActions(onCancelBuild, onPreviousStep, onNextStep)
 }
 
 /**
@@ -1090,7 +969,7 @@ private fun StepActionButton(
  * alignmentYaw 使用 [-180, 180] 度；向上拖动为正方向，完整轨道对应 360 度。
  */
 @Composable
-private fun MapRotationController(
+internal fun MapRotationController(
     alignmentYaw: Float,
     enabled: Boolean,
     onYawChange: (Float) -> Unit,

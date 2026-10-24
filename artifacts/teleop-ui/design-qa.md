@@ -31,3 +31,15 @@ final result: passed
 - ManualDriveUiTest: 4 passed after moving settings into side panels; final instrumentation log .planning/linear-teleop/map-side-settings-ui.log.
 - Broader existing map suite: 130 passed, 4 TaskPathGeometryTest color assertions failed in unchanged path-rendering behavior.
 - Broader main test compilation blocked by obsolete GnssData field references in MainViewModelGnssDataEquivalenceTest. Main production/app compilation succeeded; GNSS tests were not rewritten.
+
+## 2026-10-24 连续转向、触感及四步一致性
+
+- 已撤回整车先停的提前放行实验。新板端单轮过零和另一轮协同控制91项回归通过；没有改灯态掩盖停车。普通弧线转向不人为全车固定停车；满杆目标前后速度为0，允许必要的瞬时归零。未部署或做实机/ROS验证。
+- 20项common测试（含10项控制器、1项触感事件）、5项会话和2项视口测试通过。生产/测试APK成功，日志 phase14-final-captures-build.log。旧NMEA8项、GNSS与轨迹颜色的广泛测试限制与本次变更分开记录。
+- 最终6项 ManualDriveUiTest 通过，日志 phase14-native-ui.log。触感计数覆盖端点保持不重复、回中、停止、禁用与确认门控；不声称模拟器能验证平板物理触感。
+- 新图 mapping-control.png、mapping-step2.png、mapping-step3.png、mapping-step4.png、mapping-zoom.png、remote-control.png 均1600×966。Step1/遥控为实际内容组件，Step2–4为生产共同顶栏/导航/地图/编辑工具/列表/保存面板的离线组合，没有运行网络ViewModel或提交地图编辑。Step3列表态的地图预览用共同投影渲染器，未截图所有编辑子模式。
+- 同尺寸下地图边界、取消及下一步/保存位置一致；范围1–8倍，图中后续步骤保持前一步2倍视角，返回扫描仍为2倍。保存面板采用纵向输入，不挤压字段。标题、急停、状态沿用全局位置。
+- 原MuMu数据分区只读；新建隔离实例完成测试，不修改原实例磁盘或用户应用。新建index1实例测试后已关闭并删除，原实例保留。
+
+## 2026-10-24 任务零速补丁
+修复遥控磨盘及重定位磨盘/转向三处不完整底盘参数写入，避免遗漏run_speed被板端当成0覆盖。TCP88项（新增7项）与板端执行/临时参数/急停34项通过，最新APK构建成功，日志task-zero-speed-fix-build.log。UI布局未变，无需重拍截图。已被清零的工艺速度须由操作员恢复原值；没有现场参数写入、部署或机器人操作。

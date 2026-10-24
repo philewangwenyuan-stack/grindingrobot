@@ -224,6 +224,8 @@ class MapScreenStep4ViewModel @Inject constructor(
     private var loadJob: Job? = null
 
     /** 每次进入重新查询区域和规划路径；图片固定取 Step1 快照，不能用旧成功路径结束本轮加载。 */
+    fun emergencyStop() { tcpManager.sendEmergencyStop() }
+
     fun loadMapData(mapId: String? = null) {
         closeLegacyPreview()
         loadJob?.cancel()

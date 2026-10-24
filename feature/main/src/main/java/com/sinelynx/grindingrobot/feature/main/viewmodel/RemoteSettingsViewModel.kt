@@ -103,6 +103,8 @@ class RemoteSettingsViewModel @Inject constructor(
         controller.refreshAvailability()
     }
 
+    fun acceptsManualFeedback(): Boolean = controller.state.enabled && !needsAutoConfirmation()
+
     fun onTravelClick(direction: TravelDirection) {
         if (!controller.state.enabled) return
         if (needsAutoConfirmation()) {
@@ -139,9 +141,10 @@ class RemoteSettingsViewModel @Inject constructor(
     }
 
     fun commitTurnCount() {
-        // Keep the pre-existing explicit disc adjustment; drive/steering never invoke this write.
-        tcpManager.requestSettingWrite(SlLink.ChassisSettings.newBuilder()
-            .setDiscEnabled(true).setDiscSpeedRpm(_uiState.value.turnCount).build())
+        // Preserve the existing enable rule, including at zero RPM, and the read task settings.
+        if (!tcpManager.requestDiscSettingsWrite(_uiState.value.turnCount, enabled = true)) {
+            ToastUtils.showError("磨盘设置未发送，请等待底盘参数读取完成后重试")
+        }
     }
 
     fun confirmAutoModeJoystickDialog() {

@@ -1,6 +1,8 @@
 package com.sinelynx.grindingrobot.feature.main.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.CompositionLocalProvider
+import com.sinelynx.grindingrobot.feature.common.component.LocalManualFeedbackAllowed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,6 +16,7 @@ import com.sinelynx.grindingrobot.feature.main.viewmodel.RemoteSettingsViewModel
 fun RemoteSettingsScreen(viewModel: RemoteSettingsViewModel, modifier: Modifier = Modifier) {
     val uiState by viewModel.uiState.collectAsState()
     ManualDriveLifecycle(viewModel::onScreenEnter, viewModel::onScreenExit)
+    CompositionLocalProvider(LocalManualFeedbackAllowed provides viewModel::acceptsManualFeedback) {
     ManualRemoteControlContent(
         state = uiState.drive, discRpm = uiState.turnCount,
         onTravel = viewModel::onTravelClick,
@@ -26,6 +29,7 @@ fun RemoteSettingsScreen(viewModel: RemoteSettingsViewModel, modifier: Modifier 
         onDiscFinished = viewModel::commitTurnCount,
         modifier = modifier.fillMaxSize(),
     )
+    }
     if (uiState.showAutoModeJoystickDialog) {
         ConfirmOverlayDialog(
             title = "确定退出自动驾驶?",
