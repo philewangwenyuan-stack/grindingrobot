@@ -2,6 +2,8 @@ package com.sinelynx.grindingrobot.core.tcp
 
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
+import com.sinelynx.grindingrobot.core.model.state.DeviceWorkTimeStatisticsPayload
+import java.time.LocalDate
 import java.nio.ByteBuffer
 import java.nio.charset.CodingErrorAction
 import java.nio.charset.StandardCharsets
@@ -49,7 +51,26 @@ internal object TaskExecutionHistoryParser {
             startTime = root.long("start_time") ?: 0L,
             endTime = root.long("end_time") ?: 0L,
             totalRecordCount = root.int("total_record_count") ?: records.size,
-            records = records
+            records = records,
+            workTimeStatistics = parseWorkTimeStatistics(root)
+        )
+    }
+
+    private fun parseWorkTimeStatistics(root: JsonObject): DeviceWorkTimeStatisticsPayload? {
+        if (!root.containsKey("work_time_statistics")) return null
+        val value = root["work_time_statistics"] as? JsonObject
+            ?: return DeviceWorkTimeStatisticsPayload(available = false)
+        val total = value.long("total_work_seconds")
+        val today = value.long("today_work_seconds")
+        val incomplete = value.int("incomplete_record_count")
+        val day = value.string("day").orEmpty()
+        val available = value.int("schema_version") == 1 &&
+            value.primitive("available")?.booleanOrNull == true &&
+            total != null && total >= 0L && today != null && today in 0L..total &&
+            incomplete != null && incomplete >= 0 && runCatching { LocalDate.parse(day) }.isSuccess
+        return DeviceWorkTimeStatisticsPayload(
+            available = available, totalWorkSeconds = total ?: 0L, todayWorkSeconds = today ?: 0L,
+            day = day, incompleteRecordCount = incomplete ?: 0
         )
     }
 

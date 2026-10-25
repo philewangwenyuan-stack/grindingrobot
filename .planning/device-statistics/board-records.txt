@@ -1,0 +1,160 @@
+clock 2026-10-26T00:23:57.788508+08:00 epoch 1792945437 registry_mtime 1792846222.5867515 saved_at 1792846222
+record_count 9 map_tasks_count 3
+by_start_day {"2026-10-24": {"count": 9, "seconds": 239678}}
+app_equivalent {"today_seconds": 2874, "total_seconds": 239678, "difference_seconds": 236804}
+records [{"execution_id": "task_1792811866918_1792811902364", "map_id": "20261024_111754", "task_id": "task_1792811866918", "final_state": "STOPPED", "stop_reason": "stopped_by_command", "started_at": 1792811902, "finished_at": 1792812015, "executed_area_m2": 0.0, "progress": 0.0, "start_local": "2026-10-24T11:18:22+08:00", "duration_seconds": 113, "today_seconds": 0}, {"execution_id": "task_1792812046838_1792812070210", "map_id": "20261024_111754", "task_id": "task_1792812046838", "final_state": "RUNNING", "stop_reason": "", "started_at": 1792812070, "finished_at": 0, "executed_area_m2": 0.0, "progress": 0.0, "start_local": "2026-10-24T11:21:10+08:00", "duration_seconds": 133367, "today_seconds": 1437}, {"execution_id": "task_1792834804161_1792834855117", "map_id": "20261024_174014", "task_id": "task_1792834804161", "final_state": "STOPPED", "stop_reason": "stopped_by_command", "started_at": 1792834855, "finished_at": 1792834891, "executed_area_m2": 0.0, "progress": 0.0, "start_local": "2026-10-24T17:40:55+08:00", "duration_seconds": 36, "today_seconds": 0}, {"execution_id": "task_1792839791389_1792839856249", "map_id": "20261024_174014", "task_id": "task_1792839791389", "final_state": "STOPPED", "stop_reason": "stopped_by_command", "started_at": 1792839856, "finished_at": 1792839870, "executed_area_m2": 0.0, "progress": 0.0, "start_local": "2026-10-24T19:04:16+08:00", "duration_seconds": 14, "today_seconds": 0}, {"execution_id": "task_1792841538225_1792841582315", "map_id": "20261024_192942", "task_id": "task_1792841538225", "final_state": "STOPPED", "stop_reason": "stopped_by_command", "started_at": 1792841582, "finished_at": 1792841805, "executed_area_m2": 2.1311803143568535, "progress": 0.0054446460980036296, "start_local": "2026-10-24T19:33:02+08:00", "duration_seconds": 223, "today_seconds": 0}, {"execution_id": "task_1792842206141_1792842301687", "map_id": "20261024_192942", "task_id": "task_1792842206141", "final_state": "RUNNING", "stop_reason": "", "started_at": 1792842301, "finished_at": 0, "executed_area_m2": 0.0, "progress": 0.0, "start_local": "2026-10-24T19:45:01+08:00", "duration_seconds": 103136, "today_seconds": 1437}, {"execution_id": "task_1792842719013_1792842804037", "map_id": "20261024_192942", "task_id": "task_1792842719013", "final_state": "STOPPED", "stop_reason": "stopped_by_command", "started_at": 1792842804, "finished_at": 1792843012, "executed_area_m2": 14.885243913937517, "progress": 0.038028169014084505, "start_local": "2026-10-24T19:53:24+08:00", "duration_seconds": 208, "today_seconds": 0}, {"execution_id": "task_1792843464461_1792843519403", "map_id": "20261024_192942", "task_id": "task_1792843464461", "final_state": "STOPPED", "stop_reason": "stopped_by_command", "started_at": 1792843519, "finished_at": 1792845366, "executed_area_m2": 249.43127144333204, "progress": 0.6372360844529751, "start_local": "2026-10-24T20:05:19+08:00", "duration_seconds": 1847, "today_seconds": 0}, {"execution_id": "task_1792845395109_1792845488963", "map_id": "20261024_192942", "task_id": "task_1792845395109", "final_state": "COMPLETED", "stop_reason": "completed", "started_at": 1792845488, "finished_at": 1792846222, "executed_area_m2": 391.4267844035421, "progress": 1.0, "start_local": "2026-10-24T20:38:08+08:00", "duration_seconds": 734, "today_seconds": 0}]
+param /grinder_scheduler/persist_state_enabled [1, 'Parameter [/grinder_scheduler/persist_state_enabled]', True]
+param /grinder_scheduler/persist_state_dir [1, 'Parameter [/grinder_scheduler/persist_state_dir]', 'temp/grinder_scheduler_state']
+param /grinder_scheduler/persist_runtime_task_state [-1, 'Parameter [/grinder_scheduler/persist_runtime_task_state] is not set', 0]
+runtime_start 2831
+method _load_task_registry_state     def _load_task_registry_state(self):
+        if not self._persist_state_enabled:
+            return
+        try:
+            if not os.path.exists(self._task_registry_state_file):
+                return
+            with open(self._task_registry_state_file, "r", encoding="utf-8") as handle:
+                payload = json.load(handle)
+            map_tasks = payload.get("map_tasks", {}) if isinstance(payload, dict) else {}
+            if not isinstance(map_tasks, dict):
+                return
+            raw_executions = payload.get("task_executions", []) if isinstance(payload, dict) else []
+            self._task_execution_records = [
+                dict(item)
+                for item in list(raw_executions or [])
+                if isinstance(item, dict) and str(item.get("execution_id", "") or "").strip()
+            ]
+            restored = 0
+            for map_id, item in map_tasks.items():
+                if not isinstance(item, dict):
+                    continue
+                map_id_text = str(map_id or item.get("map_id", "")).strip()
+                task_id_text = str(item.get("task_id", "")).strip() or "task"
+                if not map_id_text:
+                    continue
+                key = "{}::{}".format(map_id_text, task_id_text)
+                self._task_bindings[key] = {
+                    "task_id": task_id_text,
+                    "map_id": map_id_text,
+                    "selected_work_region_ids": list(item.get("selected_work_region_ids", []) or []),
+                    "region_repeat_config": dict(item.get("region_repeat_config", {}) or {}),
+                    "active_work_region_id": str(item.get("active_work_region_id", "") or ""),
+                    "updated_at": int(item.get("updated_at", int(time.time())) or int(time.time())),
+                    "task_result": dict(item.get("task_result", {}) or {}),
+                }
+                restored += 1
+            if restored > 0:
+                rospy.loginfo("Loaded task registry state: %d map-bound tasks", restored)
+            if self._task_execution_records:
+                rospy.loginfo(
+                    "Loaded task execution history: records=%d",
+                    len(self._task_execution_records),
+                )
+        except Exception as exc:
+            rospy.logwarn("Failed to load task registry state: %s", exc)
+
+method build_task_execution_history_chunks     def build_task_execution_history_chunks(self, payload):
+        pb = self.sl_link_server.pb
+        request = pb.TaskExecutionHistoryRequest()
+        request.ParseFromString(payload)
+        requested_map_id = str(request.map_id or "").strip()
+        requested_task_id = str(request.task_id or "").strip()
+        start_time = int(request.start_time or 0)
+        end_time = int(request.end_time or 0)
+        chunk_size = max(256, min(4096, int(request.max_chunk_size or 2048)))
+
+        valid_range = not (start_time > 0 and end_time > 0 and start_time > end_time)
+        records = []
+        if valid_range:
+            for source in list(self._task_execution_records or []):
+                if not isinstance(source, dict):
+                    continue
+                map_id = str(source.get("map_id", "") or "").strip()
+                task_id = str(source.get("task_id", "") or "").strip()
+                started_at = int(source.get("started_at", 0) or 0)
+                if requested_map_id and map_id != requested_map_id:
+                    continue
+                if requested_task_id and task_id != requested_task_id:
+                    continue
+                if start_time > 0 and started_at < start_time:
+                    continue
+                if end_time > 0 and started_at > end_time:
+                    continue
+                records.append(
+                    {
+                        "execution_id": str(source.get("execution_id", "") or ""),
+                        "map_id": map_id,
+                        "task_id": task_id,
+                        "final_state": str(source.get("final_state", "") or ""),
+                        "stop_reason": str(source.get("stop_reason", "") or ""),
+                        "started_at": started_at,
+                        "finished_at": int(source.get("finished_at", 0) or 0),
+                        "planned_area_m2": float(source.get("planned_area_m2", 0.0) or 0.0),
+                        "executed_area_m2": float(source.get("executed_area_m2", 0.0) or 0.0),
+                        "progress": float(source.get("progress", 0.0) or 0.0),
+                        "path_version": int(source.get("path_version", 0) or 0),
+                        "all_completed": bool(source.get("all_completed", False)),
+                        "image_format": str(source.get("image_format", "") or ""),
+                        "image_width": int(source.get("image_width", 0) or 0),
+                        "image_height": int(source.get("image_height", 0) or 0),
+                        "image_base64": self._task_execution_preview_base64(source),
+                        "trajectory_point_count": int(
+                            source.get("trajectory_point_count", 0) or 0
+                        ),
+                    }
+                )
+        records.sort(
+            key=lambda item: (int(item["started_at"]), str(item["execution_id"])),
+            reverse=True,
+        )
+        result_text = "success" if valid_range else "failed"
+        message = (
+            "task_execution_history_ready"
+            if valid_range
+            else "start_time must be less than or equal to end_time"
+        )
+        history_json = json.dumps(
+            {
+                "result": result_text,
+                "message": message,
+                "map_id": requested_map_id,
+                "task_id": requested_task_id,
+                "start_time": start_time,
+                "end_time": end_time,
+                "total_record_count": len(records),
+                "records": records,
+            },
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        total_chunks = max(1, int(math.ceil(len(history_json) / float(chunk_size))))
+        outputs = []
+        for index in range(total_chunks):
+            chunk = pb.TaskExecutionHistoryChunk()
+            chunk.result = pb.RESULT_SUCCESS if valid_range else pb.RESULT_INVALID_PARAM
+            chunk.message = message
+            chunk.chunk_index = int(index)
+            chunk.total_chunks = int(total_chunks)
+            chunk.total_record_count = int(len(records))
+            chunk.data = history_json[index * chunk_size : (index + 1) * chunk_size]
+            chunk.start_time = int(start_time)
+            chunk.end_time = int(end_time)
+            outputs.append(
+                (
+                    chunk.SerializeToString(),
+                    pb.MSG_ID_TASK_EXECUTION_HISTORY_CHUNK,
+                    pb.COMP_SCHEDULER,
+                )
+            )
+        rospy.loginfo(
+            "Task execution history query: map_id=%s task_id=%s start_time=%d end_time=%d records=%d chunks=%d bytes=%d",
+            requested_map_id or "<all>",
+            requested_task_id or "<all>",
+            start_time,
+            end_time,
+            len(records),
+            total_chunks,
+            len(history_json),
+        )
+        return outputs
+

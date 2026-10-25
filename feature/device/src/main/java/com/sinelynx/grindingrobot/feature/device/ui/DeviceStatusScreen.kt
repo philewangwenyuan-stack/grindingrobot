@@ -257,8 +257,8 @@ private fun TaskStatsCard(uiState: DeviceStatusUiState, modifier: Modifier = Mod
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.weight(1f)) { StatusTitle(CommonR.drawable.ic_task_info, "任务统计") }
-            uiState.statisticsError?.let {
-                SidebarText(it, color = Color(0xFFD82B2A))
+            (uiState.statisticsError ?: uiState.statisticsNotice)?.let {
+                SidebarText(it, color = if (uiState.statisticsError != null) Color(0xFFD82B2A) else Color(0xFF9A6200))
             }
         }
         val hasTask = uiState.taskState != DeviceTaskUiState.IDLE

@@ -37,6 +37,7 @@ import com.sinelynx.grindingrobot.core.model.state.MapCatalogStream
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withTimeoutOrNull
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
+import com.sinelynx.grindingrobot.core.model.state.DeviceWorkTimeStatisticsPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate
 import java.util.Locale
 import sl_link.SlLink
@@ -76,6 +77,7 @@ data class DeviceStatusUiState(
     val todayWorkTimeText: String = "-",
     val totalWorkTimeText: String = "-",
     val statisticsError: String? = null,
+    val statisticsNotice: String? = null,
     val remainTimeText: String = "未知",
     val mapImageBytes: ByteArray? = null,
     val mapTransform: TaskMapTransformUiState? = null,
@@ -194,6 +196,7 @@ class DeviceStatusViewModel @Inject constructor(
     private var statisticsRefreshJob: Job? = null
     private var statisticsRequestJob: Job? = null
     private var statisticsRecords: List<TaskExecutionHistoryRecordPayload>? = null
+    private var statisticsWorkTime: DeviceWorkTimeStatisticsPayload? = null
     private var navigationWasConnected = false
     private var navigationConnectedAtMs = Long.MAX_VALUE
     private val navigationPauseTracker = NavigationPauseNoticeTracker()
@@ -292,6 +295,7 @@ class DeviceStatusViewModel @Inject constructor(
                 val reportTaskId = payload.taskId
                 val taskState = payload.toTaskUiState()
                 val taskStateChanged = taskState != _uiState.value.taskState
+                val taskIdentityChanged = reportTaskId != _uiState.value.currentTaskId
                 val taskEnded = taskState == DeviceTaskUiState.IDLE &&
                     _uiState.value.taskState != DeviceTaskUiState.IDLE
                 val runtimeInvalidated = reportTaskId != _uiState.value.currentTaskId ||
@@ -346,7 +350,8 @@ class DeviceStatusViewModel @Inject constructor(
                 )
                 if (runtimeInvalidated || taskStateChanged) refreshRuntimeSettings()
                 refreshNavigationPauseNotice()
-                if (taskEnded) refreshStatistics()
+                if (taskEnded || taskStateChanged || taskIdentityChanged) refreshStatistics()
+                if (taskStateChanged || taskIdentityChanged) updateStatisticsDisplay()
             }
         }
 
@@ -598,6 +603,7 @@ class DeviceStatusViewModel @Inject constructor(
                 }
                 if (response?.isSuccess == true) {
                     statisticsRecords = response.records
+                    statisticsWorkTime = response.workTimeStatistics
                     updateStatisticsDisplay()
                     _uiState.update { it.copy(statisticsError = null) }
                 } else {
@@ -612,13 +618,22 @@ class DeviceStatusViewModel @Inject constructor(
 
     private fun updateStatisticsDisplay() {
         val records = statisticsRecords ?: return
-        val summary = summarizeDeviceStatistics(records, System.currentTimeMillis() / 1000L)
+        val summary = summarizeDeviceStatistics(
+            records, System.currentTimeMillis() / 1000L, workTimeStatistics = statisticsWorkTime
+        )
+        val incomplete = summary.unsettledRecordCount > 0
         _uiState.update {
             it.copy(
                 todayAreaText = String.format(Locale.US, "%.2fm²", summary.todayAreaM2),
                 totalAreaText = String.format(Locale.US, "%.2fm²", summary.totalAreaM2),
-                todayWorkTimeText = formatStatisticsDuration(summary.todayWorkSeconds),
-                totalWorkTimeText = formatStatisticsDuration(summary.totalWorkSeconds)
+                todayWorkTimeText = formatStatisticsDuration(summary.todayWorkSeconds, incomplete),
+                totalWorkTimeText = formatStatisticsDuration(summary.totalWorkSeconds, incomplete),
+                statisticsNotice = when {
+                    statisticsWorkTime == null -> "需更新板端"
+                    statisticsWorkTime?.available != true -> "计时读取异常"
+                    incomplete -> "计时不完整"
+                    else -> null
+                }
             )
         }
     }

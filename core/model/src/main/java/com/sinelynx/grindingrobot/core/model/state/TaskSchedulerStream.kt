@@ -88,6 +88,15 @@ data class TaskExecutionHistoryRecordPayload(
     val taskName: String = ""
 )
 
+/** Board-owned counters, stored independently of deletable execution records. */
+data class DeviceWorkTimeStatisticsPayload(
+    val available: Boolean,
+    val totalWorkSeconds: Long = 0L,
+    val todayWorkSeconds: Long = 0L,
+    val day: String = "",
+    val incompleteRecordCount: Int = 0
+)
+
 data class TaskExecutionHistoryPayload(
     val isSuccess: Boolean,
     val message: String,
@@ -96,7 +105,8 @@ data class TaskExecutionHistoryPayload(
     val startTime: Long = 0L,
     val endTime: Long = 0L,
     val totalRecordCount: Int = 0,
-    val records: List<TaskExecutionHistoryRecordPayload> = emptyList()
+    val records: List<TaskExecutionHistoryRecordPayload> = emptyList(),
+    val workTimeStatistics: DeviceWorkTimeStatisticsPayload? = null
 )
 
 data class TaskExecutionDeletePayload(

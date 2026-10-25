@@ -1,0 +1,388 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Type-safe project accessors is an incubating feature.
+> Task :build-logic:convention:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:convention:pluginDescriptors UP-TO-DATE
+> Task :build-logic:convention:processResources UP-TO-DATE
+> Task :build-logic:convention:compileKotlin
+> Task :build-logic:convention:compileJava NO-SOURCE
+> Task :build-logic:convention:classes UP-TO-DATE
+> Task :build-logic:convention:jar UP-TO-DATE
+
+> Configure project :navigation
+����ģ��: :navigation �������ռ�Ϊ: com.sinelynx.grindingrobot.navigation
+
+> Configure project :core:bluetooth
+����ģ��: :core:bluetooth �������ռ�Ϊ: com.sinelynx.grindingrobot.core.bluetooth
+
+> Configure project :core:common
+����ģ��: :core:common �������ռ�Ϊ: com.sinelynx.grindingrobot.core.common
+
+> Configure project :core:data
+����ģ��: :core:data �������ռ�Ϊ: com.sinelynx.grindingrobot.core.data
+
+> Configure project :core:database
+����ģ��: :core:database �������ռ�Ϊ: com.sinelynx.grindingrobot.core.database
+
+> Configure project :core:datastore
+����ģ��: :core:datastore �������ռ�Ϊ: com.sinelynx.grindingrobot.core.datastore
+
+> Configure project :core:designsystem
+����ģ��: :core:designsystem �������ռ�Ϊ: com.sinelynx.grindingrobot.core.designsystem
+
+> Configure project :core:model
+����ģ��: :core:model �������ռ�Ϊ: com.sinelynx.grindingrobot.core.model
+
+> Configure project :core:network
+����ģ��: :core:network �������ռ�Ϊ: com.sinelynx.grindingrobot.core.network
+
+> Configure project :core:result
+����ģ��: :core:result �������ռ�Ϊ: com.sinelynx.grindingrobot.core.result
+
+> Configure project :core:sllink
+����ģ��: :core:sllink �������ռ�Ϊ: com.sinelynx.grindingrobot.core.sllink
+
+> Configure project :core:tcp
+����ģ��: :core:tcp �������ռ�Ϊ: com.sinelynx.grindingrobot.core.tcp
+
+> Configure project :core:udp
+����ģ��: :core:udp �������ռ�Ϊ: com.sinelynx.grindingrobot.core.udp
+
+> Configure project :core:ui
+����ģ��: :core:ui �������ռ�Ϊ: com.sinelynx.grindingrobot.core.ui
+
+> Configure project :core:util
+����ģ��: :core:util �������ռ�Ϊ: com.sinelynx.grindingrobot.core.util
+
+> Configure project :core:websocket
+����ģ��: :core:websocket �������ռ�Ϊ: com.sinelynx.grindingrobot.core.websocket
+
+> Configure project :feature:common
+����ģ��: :feature:common �������ռ�Ϊ: com.sinelynx.grindingrobot.feature.common
+
+> Configure project :feature:connect
+����ģ��: :feature:connect �������ռ�Ϊ: com.sinelynx.grindingrobot.feature.connect
+
+> Configure project :feature:device
+����ģ��: :feature:device �������ռ�Ϊ: com.sinelynx.grindingrobot.feature.device
+
+> Configure project :feature:main
+����ģ��: :feature:main �������ռ�Ϊ: com.sinelynx.grindingrobot.feature.main
+
+> Configure project :feature:map
+����ģ��: :feature:map �������ռ�Ϊ: com.sinelynx.grindingrobot.feature.map
+
+> Configure project :feature:remote
+����ģ��: :feature:remote �������ռ�Ϊ: com.sinelynx.grindingrobot.feature.remote
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :navigation:preBuild UP-TO-DATE
+> Task :navigation:preDevDebugBuild UP-TO-DATE
+> Task :navigation:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :navigation:generateDevDebugBuildConfig UP-TO-DATE
+> Task :navigation:generateDevDebugResValues UP-TO-DATE
+> Task :navigation:generateDevDebugResources UP-TO-DATE
+> Task :navigation:packageDevDebugResources UP-TO-DATE
+> Task :navigation:processDevDebugNavigationResources UP-TO-DATE
+> Task :navigation:parseDevDebugLocalResources UP-TO-DATE
+> Task :navigation:generateDevDebugRFile UP-TO-DATE
+> Task :core:model:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:model:preBuild UP-TO-DATE
+> Task :core:model:preDevDebugBuild UP-TO-DATE
+> Task :core:model:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:model:generateDevDebugResValues UP-TO-DATE
+> Task :core:model:generateDevDebugResources UP-TO-DATE
+> Task :core:model:packageDevDebugResources UP-TO-DATE
+> Task :core:model:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:model:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:model:generateDevDebugRFile UP-TO-DATE
+> Task :core:model:compileDevDebugKotlin UP-TO-DATE
+> Task :core:model:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:model:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:model:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :navigation:kspDevDebugKotlin UP-TO-DATE
+> Task :navigation:compileDevDebugKotlin UP-TO-DATE
+> Task :navigation:javaPreCompileDevDebug UP-TO-DATE
+> Task :navigation:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:model:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :navigation:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :navigation:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :navigation:processDevDebugJavaRes UP-TO-DATE
+> Task :core:common:preBuild UP-TO-DATE
+> Task :core:common:preDevDebugBuild UP-TO-DATE
+> Task :navigation:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:common:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:common:generateDevDebugResValues UP-TO-DATE
+> Task :core:common:generateDevDebugResources UP-TO-DATE
+> Task :core:common:packageDevDebugResources UP-TO-DATE
+> Task :core:common:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:common:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:common:generateDevDebugRFile UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDevDebugBuild UP-TO-DATE
+> Task :core:data:generateDevDebugResValues UP-TO-DATE
+> Task :core:data:generateDevDebugResources UP-TO-DATE
+> Task :core:data:packageDevDebugResources UP-TO-DATE
+> Task :core:data:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:data:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDevDebugRFile UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:database:preBuild UP-TO-DATE
+> Task :core:database:preDevDebugBuild UP-TO-DATE
+> Task :core:database:generateDevDebugResValues UP-TO-DATE
+> Task :core:database:generateDevDebugResources UP-TO-DATE
+> Task :core:database:packageDevDebugResources UP-TO-DATE
+> Task :core:database:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:database:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:database:generateDevDebugRFile UP-TO-DATE
+> Task :core:database:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:database:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:database:kspDevDebugKotlin UP-TO-DATE
+> Task :core:database:compileDevDebugKotlin UP-TO-DATE
+> Task :core:database:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:database:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:database:copyRoomSchemas NO-SOURCE
+> Task :core:database:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:database:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:datastore:preBuild UP-TO-DATE
+> Task :core:datastore:preDevDebugBuild UP-TO-DATE
+> Task :core:datastore:generateDevDebugResValues UP-TO-DATE
+> Task :core:datastore:generateDevDebugResources UP-TO-DATE
+> Task :core:datastore:packageDevDebugResources UP-TO-DATE
+> Task :core:datastore:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:datastore:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:datastore:generateDevDebugRFile UP-TO-DATE
+> Task :core:datastore:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:datastore:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:util:preBuild UP-TO-DATE
+> Task :core:util:preDevDebugBuild UP-TO-DATE
+> Task :core:util:generateDevDebugResValues UP-TO-DATE
+> Task :core:util:generateDevDebugResources UP-TO-DATE
+> Task :core:util:packageDevDebugResources UP-TO-DATE
+> Task :core:util:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:util:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:util:generateDevDebugRFile UP-TO-DATE
+> Task :core:designsystem:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:designsystem:preBuild UP-TO-DATE
+> Task :core:designsystem:preDevDebugBuild UP-TO-DATE
+> Task :core:designsystem:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:designsystem:generateDevDebugResValues UP-TO-DATE
+> Task :core:designsystem:generateDevDebugResources UP-TO-DATE
+> Task :core:designsystem:packageDevDebugResources UP-TO-DATE
+> Task :core:designsystem:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:designsystem:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:designsystem:generateDevDebugRFile UP-TO-DATE
+> Task :core:designsystem:compileDevDebugKotlin UP-TO-DATE
+> Task :core:designsystem:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:designsystem:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:designsystem:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:designsystem:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:util:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:util:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:util:kspDevDebugKotlin UP-TO-DATE
+> Task :core:util:compileDevDebugKotlin UP-TO-DATE
+> Task :core:util:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:util:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:util:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:util:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:datastore:kspDevDebugKotlin UP-TO-DATE
+> Task :core:datastore:compileDevDebugKotlin UP-TO-DATE
+> Task :core:datastore:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:datastore:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:util:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:datastore:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:datastore:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:network:preBuild UP-TO-DATE
+> Task :core:network:preDevDebugBuild UP-TO-DATE
+> Task :core:network:generateDevDebugResValues UP-TO-DATE
+> Task :core:network:generateDevDebugResources UP-TO-DATE
+> Task :core:network:packageDevDebugResources UP-TO-DATE
+> Task :core:network:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:network:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:network:generateDevDebugRFile UP-TO-DATE
+> Task :core:datastore:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:network:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:network:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:network:kspDevDebugKotlin UP-TO-DATE
+> Task :core:network:compileDevDebugKotlin UP-TO-DATE
+> Task :core:network:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:network:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:network:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:network:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:result:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:result:preBuild UP-TO-DATE
+> Task :core:result:preDevDebugBuild UP-TO-DATE
+> Task :core:result:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:result:generateDevDebugResValues UP-TO-DATE
+> Task :core:result:generateDevDebugResources UP-TO-DATE
+> Task :core:result:packageDevDebugResources UP-TO-DATE
+> Task :core:result:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:result:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:result:generateDevDebugRFile UP-TO-DATE
+> Task :core:result:compileDevDebugKotlin UP-TO-DATE
+> Task :core:result:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:result:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:result:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:sllink:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:sllink:preBuild UP-TO-DATE
+> Task :core:sllink:preDevDebugBuild UP-TO-DATE
+> Task :core:sllink:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:sllink:generateDevDebugResValues UP-TO-DATE
+> Task :core:sllink:generateDevDebugResources UP-TO-DATE
+> Task :core:sllink:packageDevDebugResources UP-TO-DATE
+> Task :core:sllink:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:sllink:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:sllink:generateDevDebugRFile UP-TO-DATE
+> Task :core:sllink:compileDevDebugKotlin UP-TO-DATE
+> Task :core:sllink:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:sllink:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:sllink:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:data:kspDevDebugKotlin UP-TO-DATE
+> Task :core:data:compileDevDebugKotlin UP-TO-DATE
+> Task :core:data:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:data:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:database:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:network:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:result:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:sllink:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:data:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:data:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:common:kspDevDebugKotlin UP-TO-DATE
+> Task :core:common:compileDevDebugKotlin UP-TO-DATE
+> Task :core:common:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:common:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:common:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:common:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:common:processDevDebugJavaRes UP-TO-DATE
+> Task :core:data:processDevDebugJavaRes UP-TO-DATE
+> Task :core:database:processDevDebugJavaRes UP-TO-DATE
+> Task :core:datastore:processDevDebugJavaRes UP-TO-DATE
+> Task :core:designsystem:processDevDebugJavaRes UP-TO-DATE
+> Task :core:model:processDevDebugJavaRes UP-TO-DATE
+> Task :core:network:processDevDebugJavaRes UP-TO-DATE
+> Task :core:result:processDevDebugJavaRes UP-TO-DATE
+> Task :core:sllink:processDevDebugJavaRes UP-TO-DATE
+> Task :core:tcp:preBuild UP-TO-DATE
+> Task :core:tcp:preDevDebugBuild UP-TO-DATE
+> Task :core:common:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :core:tcp:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:tcp:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:tcp:generateDevDebugResValues UP-TO-DATE
+> Task :core:tcp:generateDevDebugResources UP-TO-DATE
+> Task :core:tcp:packageDevDebugResources UP-TO-DATE
+> Task :core:tcp:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:tcp:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:tcp:generateDevDebugRFile UP-TO-DATE
+> Task :core:tcp:kspDevDebugKotlin UP-TO-DATE
+> Task :core:tcp:compileDevDebugKotlin UP-TO-DATE
+> Task :core:tcp:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:tcp:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:tcp:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :core:tcp:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:tcp:processDevDebugJavaRes UP-TO-DATE
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDevDebugBuild UP-TO-DATE
+> Task :core:ui:generateDevDebugBuildConfig UP-TO-DATE
+> Task :core:ui:generateDevDebugResValues UP-TO-DATE
+> Task :core:ui:generateDevDebugResources UP-TO-DATE
+> Task :core:ui:packageDevDebugResources UP-TO-DATE
+> Task :core:ui:processDevDebugNavigationResources UP-TO-DATE
+> Task :core:ui:parseDevDebugLocalResources UP-TO-DATE
+> Task :core:ui:generateDevDebugRFile UP-TO-DATE
+> Task :core:ui:compileDevDebugKotlin UP-TO-DATE
+> Task :core:ui:javaPreCompileDevDebug UP-TO-DATE
+> Task :core:ui:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :core:ui:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :core:ui:processDevDebugJavaRes UP-TO-DATE
+> Task :core:util:processDevDebugJavaRes UP-TO-DATE
+> Task :feature:common:preBuild UP-TO-DATE
+> Task :feature:common:preDevDebugBuild UP-TO-DATE
+> Task :core:ui:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :feature:common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:common:generateDevDebugBuildConfig UP-TO-DATE
+> Task :feature:common:generateDevDebugResValues UP-TO-DATE
+> Task :feature:common:generateDevDebugResources UP-TO-DATE
+> Task :feature:common:packageDevDebugResources UP-TO-DATE
+> Task :feature:common:processDevDebugNavigationResources UP-TO-DATE
+> Task :feature:common:parseDevDebugLocalResources UP-TO-DATE
+> Task :feature:common:generateDevDebugRFile UP-TO-DATE
+> Task :feature:common:kspDevDebugKotlin UP-TO-DATE
+> Task :feature:common:compileDevDebugKotlin UP-TO-DATE
+> Task :feature:common:javaPreCompileDevDebug UP-TO-DATE
+> Task :feature:common:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :feature:common:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :feature:common:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :feature:common:processDevDebugJavaRes UP-TO-DATE
+> Task :feature:device:preBuild UP-TO-DATE
+> Task :feature:device:preDevDebugBuild UP-TO-DATE
+> Task :core:tcp:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :feature:common:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :feature:device:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:device:generateDevDebugBuildConfig UP-TO-DATE
+> Task :feature:device:generateDevDebugResValues UP-TO-DATE
+> Task :feature:device:generateDevDebugResources UP-TO-DATE
+> Task :feature:device:packageDevDebugResources UP-TO-DATE
+> Task :feature:device:processDevDebugNavigationResources UP-TO-DATE
+> Task :feature:device:parseDevDebugLocalResources UP-TO-DATE
+> Task :feature:device:generateDevDebugRFile UP-TO-DATE
+> Task :feature:map:preBuild UP-TO-DATE
+> Task :feature:map:preDevDebugBuild UP-TO-DATE
+> Task :feature:map:generateDevDebugResValues UP-TO-DATE
+> Task :feature:map:generateDevDebugResources UP-TO-DATE
+> Task :feature:map:packageDevDebugResources UP-TO-DATE
+> Task :feature:map:processDevDebugNavigationResources UP-TO-DATE
+> Task :feature:map:parseDevDebugLocalResources UP-TO-DATE
+> Task :feature:map:generateDevDebugRFile UP-TO-DATE
+> Task :feature:map:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:map:generateDevDebugBuildConfig UP-TO-DATE
+> Task :feature:map:kspDevDebugKotlin UP-TO-DATE
+> Task :feature:map:compileDevDebugKotlin UP-TO-DATE
+> Task :feature:map:javaPreCompileDevDebug UP-TO-DATE
+> Task :feature:map:compileDevDebugJavaWithJavac UP-TO-DATE
+> Task :feature:map:transformDevDebugClassesWithAsm UP-TO-DATE
+> Task :feature:map:bundleLibCompileToJarDevDebug UP-TO-DATE
+> Task :feature:device:javaPreCompileDevDebug UP-TO-DATE
+> Task :feature:map:bundleLibRuntimeToJarDevDebug UP-TO-DATE
+> Task :feature:device:preDevDebugUnitTestBuild UP-TO-DATE
+> Task :feature:device:generateDevDebugUnitTestStubRFile UP-TO-DATE
+> Task :feature:map:processDevDebugJavaRes UP-TO-DATE
+> Task :feature:map:createFullJarDevDebug UP-TO-DATE
+> Task :feature:common:createFullJarDevDebug UP-TO-DATE
+> Task :core:ui:createFullJarDevDebug UP-TO-DATE
+> Task :core:tcp:createFullJarDevDebug UP-TO-DATE
+> Task :core:common:createFullJarDevDebug UP-TO-DATE
+> Task :navigation:createFullJarDevDebug UP-TO-DATE
+> Task :core:data:createFullJarDevDebug UP-TO-DATE
+> Task :core:result:createFullJarDevDebug UP-TO-DATE
+> Task :core:sllink:createFullJarDevDebug UP-TO-DATE
+> Task :core:network:createFullJarDevDebug UP-TO-DATE
+> Task :core:datastore:createFullJarDevDebug UP-TO-DATE
+> Task :core:util:createFullJarDevDebug UP-TO-DATE
+> Task :core:designsystem:createFullJarDevDebug UP-TO-DATE
+> Task :core:database:createFullJarDevDebug UP-TO-DATE
+> Task :core:model:createFullJarDevDebug UP-TO-DATE
+> Task :feature:device:javaPreCompileDevDebugUnitTest UP-TO-DATE
+> Task :feature:device:kspDevDebugKotlin
+> Task :feature:device:compileDevDebugKotlin
+> Task :feature:device:compileDevDebugJavaWithJavac
+> Task :feature:device:processDevDebugJavaRes UP-TO-DATE
+> Task :feature:device:transformDevDebugClassesWithAsm
+> Task :feature:device:bundleLibRuntimeToJarDevDebug
+> Task :feature:device:bundleLibCompileToJarDevDebug
+> Task :feature:device:createFullJarDevDebug
+> Task :feature:device:kspDevDebugUnitTestKotlin
+> Task :feature:device:compileDevDebugUnitTestKotlin
+> Task :feature:device:compileDevDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :feature:device:hiltAggregateDepsDevDebugUnitTest UP-TO-DATE
+> Task :feature:device:hiltJavaCompileDevDebugUnitTest NO-SOURCE
+> Task :feature:device:processDevDebugUnitTestJavaRes UP-TO-DATE
+> Task :feature:device:transformDevDebugUnitTestClassesWithAsm
+> Task :feature:device:testDevDebugUnitTest
+
+BUILD SUCCESSFUL in 1m 18s
+258 actionable tasks: 12 executed, 246 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

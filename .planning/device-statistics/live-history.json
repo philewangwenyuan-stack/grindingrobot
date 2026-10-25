@@ -1,0 +1,146 @@
+{
+  "captured_at": "2026-10-26T00:25:07.562134+08:00",
+  "current_reports": [
+    {
+      "task_id": "",
+      "state": "TASK_STATE_IDLE"
+    }
+  ],
+  "history": {
+    "result": "success",
+    "message": "task_execution_history_ready",
+    "map_id": "",
+    "task_id": "",
+    "start_time": 0,
+    "end_time": 0,
+    "total_record_count": 9,
+    "records": [
+      {
+        "execution_id": "task_1792845395109_1792845488963",
+        "map_id": "20261024_192942",
+        "task_id": "task_1792845395109",
+        "final_state": "COMPLETED",
+        "stop_reason": "completed",
+        "started_at": 1792845488,
+        "finished_at": 1792846222,
+        "planned_area_m2": 391.4267844035421,
+        "executed_area_m2": 391.4267844035421,
+        "progress": 1.0,
+        "path_version": 1,
+        "all_completed": true
+      },
+      {
+        "execution_id": "task_1792843464461_1792843519403",
+        "map_id": "20261024_192942",
+        "task_id": "task_1792843464461",
+        "final_state": "STOPPED",
+        "stop_reason": "stopped_by_command",
+        "started_at": 1792843519,
+        "finished_at": 1792845366,
+        "planned_area_m2": 391.4267844035421,
+        "executed_area_m2": 249.43127144333204,
+        "progress": 0.6372360844529751,
+        "path_version": 2,
+        "all_completed": true
+      },
+      {
+        "execution_id": "task_1792842719013_1792842804037",
+        "map_id": "20261024_192942",
+        "task_id": "task_1792842719013",
+        "final_state": "STOPPED",
+        "stop_reason": "stopped_by_command",
+        "started_at": 1792842804,
+        "finished_at": 1792843012,
+        "planned_area_m2": 391.4267844035421,
+        "executed_area_m2": 14.885243913937517,
+        "progress": 0.038028169014084505,
+        "path_version": 1,
+        "all_completed": true
+      },
+      {
+        "execution_id": "task_1792842206141_1792842301687",
+        "map_id": "20261024_192942",
+        "task_id": "task_1792842206141",
+        "final_state": "RUNNING",
+        "stop_reason": "",
+        "started_at": 1792842301,
+        "finished_at": 0,
+        "planned_area_m2": 391.4267844035421,
+        "executed_area_m2": 0.0,
+        "progress": 0.0,
+        "path_version": 1,
+        "all_completed": false
+      },
+      {
+        "execution_id": "task_1792841538225_1792841582315",
+        "map_id": "20261024_192942",
+        "task_id": "task_1792841538225",
+        "final_state": "STOPPED",
+        "stop_reason": "stopped_by_command",
+        "started_at": 1792841582,
+        "finished_at": 1792841805,
+        "planned_area_m2": 391.4267844035421,
+        "executed_area_m2": 2.1311803143568535,
+        "progress": 0.0054446460980036296,
+        "path_version": 2,
+        "all_completed": true
+      },
+      {
+        "execution_id": "task_1792839791389_1792839856249",
+        "map_id": "20261024_174014",
+        "task_id": "task_1792839791389",
+        "final_state": "STOPPED",
+        "stop_reason": "stopped_by_command",
+        "started_at": 1792839856,
+        "finished_at": 1792839870,
+        "planned_area_m2": 786.8187901492568,
+        "executed_area_m2": 0.0,
+        "progress": 0.0,
+        "path_version": 1,
+        "all_completed": true
+      },
+      {
+        "execution_id": "task_1792834804161_1792834855117",
+        "map_id": "20261024_174014",
+        "task_id": "task_1792834804161",
+        "final_state": "STOPPED",
+        "stop_reason": "stopped_by_command",
+        "started_at": 1792834855,
+        "finished_at": 1792834891,
+        "planned_area_m2": 786.8187901492568,
+        "executed_area_m2": 0.0,
+        "progress": 0.0,
+        "path_version": 2,
+        "all_completed": true
+      },
+      {
+        "execution_id": "task_1792812046838_1792812070210",
+        "map_id": "20261024_111754",
+        "task_id": "task_1792812046838",
+        "final_state": "RUNNING",
+        "stop_reason": "",
+        "started_at": 1792812070,
+        "finished_at": 0,
+        "planned_area_m2": 242.455142443333,
+        "executed_area_m2": 0.0,
+        "progress": 0.0,
+        "path_version": 4,
+        "all_completed": false
+      },
+      {
+        "execution_id": "task_1792811866918_1792811902364",
+        "map_id": "20261024_111754",
+        "task_id": "task_1792811866918",
+        "final_state": "STOPPED",
+        "stop_reason": "stopped_by_command",
+        "started_at": 1792811902,
+        "finished_at": 1792812015,
+        "planned_area_m2": 242.455142443333,
+        "executed_area_m2": 0.0,
+        "progress": 0.0,
+        "path_version": 3,
+        "all_completed": true
+      }
+    ]
+  }
+}

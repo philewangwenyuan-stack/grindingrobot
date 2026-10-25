@@ -134,4 +134,36 @@ class TaskExecutionHistoryProtocolTest {
     fun parserRejectsMalformedJson() {
         TaskExecutionHistoryParser.parse("not-json".encodeToByteArray())
     }
+
+    @Test fun parserReadsIndependentTimeWithEmptyDeletedHistory() {
+        val payload = TaskExecutionHistoryParser.parse("""
+            {"result":"success","records":[],"work_time_statistics":{
+              "schema_version":1,"available":true,"total_work_seconds":3175,
+              "today_work_seconds":0,"day":"2026-10-26","incomplete_record_count":2}}
+        """.trimIndent().encodeToByteArray())
+        assertTrue(payload.workTimeStatistics!!.available)
+        assertEquals(3175L, payload.workTimeStatistics!!.totalWorkSeconds)
+        assertEquals(0L, payload.workTimeStatistics!!.todayWorkSeconds)
+        assertEquals(2, payload.workTimeStatistics!!.incompleteRecordCount)
+        assertTrue(payload.records.isEmpty())
+    }
+
+    @Test fun absentCountersAreRecognizableAsOldBoard() {
+        val payload = TaskExecutionHistoryParser.parse("""{"result":"success","records":[]}""".encodeToByteArray())
+        assertEquals(null, payload.workTimeStatistics)
+    }
+
+    @Test fun invalidOrUnavailableCountersNeverLookLikeSuccessfulZero() {
+        val valid = """{"schema_version":1,"available":true,"total_work_seconds":100,"today_work_seconds":10,"day":"2026-10-26","incomplete_record_count":0}"""
+        val bad = listOf("null", "[]", "{}", valid.replace("true", "false"),
+            valid.replace("\"schema_version\":1", "\"schema_version\":2"),
+            valid.replace("\"total_work_seconds\":100", "\"total_work_seconds\":-1"),
+            valid.replace("\"today_work_seconds\":10", "\"today_work_seconds\":101"),
+            valid.replace("2026-10-26", "not-a-date"),
+            valid.replace("\"incomplete_record_count\":0", "\"incomplete_record_count\":-1"))
+        bad.forEach { value ->
+            val payload = TaskExecutionHistoryParser.parse("""{"result":"success","records":[],"work_time_statistics":$value}""".encodeToByteArray())
+            assertFalse("must reject $value", payload.workTimeStatistics!!.available)
+        }
+    }
 }
