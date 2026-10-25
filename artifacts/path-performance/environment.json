@@ -15,5 +15,23 @@
   "gradle_max_workers": 1,
   "percentile_method": "nearest rank: sorted[ceil(0.95*n)-1]",
   "timings": "wall-clock System.nanoTime, normalized by batch_ops",
-  "status": "synthetic benchmark, not physical tablet or network RTT"
+  "status": "synthetic benchmark, not physical tablet or network RTT",
+  "android": {
+    "release": "12",
+    "sdk": "32",
+    "abi": "x86_64",
+    "cores": "4",
+    "heap_size": "512m",
+    "heap_growth_limit": "192m",
+    "renderer": "Compose CanvasDrawScope on software ImageBitmap 1200x800",
+    "build": "DevDebug",
+    "vm": "isolated MuMu12 temporary instance"
+  },
+  "measurement_times": {
+    "jvm_geometry_started_utc": "2026-10-25T11:31:05.397Z",
+    "jvm_receive_started_utc": "2026-10-25T11:30:52.735Z",
+    "native_runner_elapsed_s": 515.5,
+    "native_csv_modified_at": "2026-10-25T19:46:42.5727366+08:00",
+    "export_started_at": "2026-10-25T19:49:10.7800959+08:00"
+  }
 }

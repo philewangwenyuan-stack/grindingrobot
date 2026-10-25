@@ -1,0 +1,5 @@
+points,segments,legacy_group_point_reads,new_group_point_reads,cache_hit_point_reads,legacy_edges,new_paths
+1000,10,15510,4116,0,990,10
+10000,100,1505100,41534,0,9900,100
+50000,500,37525500,208848,0,49500,500
+100000,1000,150051000,418700,0,99000,1000

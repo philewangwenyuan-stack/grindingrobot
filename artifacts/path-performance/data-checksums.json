@@ -1,0 +1,13 @@
+{
+  "jvm-geometry-raw.csv": "4df9e43701c1150574567eb1472a58a0f8d5d6146193d6a8fc6aef3c96cfa6ab",
+  "jvm-receive-raw.csv": "94a005359ad650b3f9eb1a7b2d738e374b5a0d01afb3d071d514c16abfe4fd1f",
+  "android-render-raw.csv": "d92d654583875cfce532bbffccc30431352e1e53f7c25973d2d50ac30a0e9773",
+  "operation-counts.csv": "51c35208d5ac2a61d03bcc4009e0f743880098739bcd804a117452782beb7420",
+  "summary.csv": "ba9f8a28b59076212f5abe5cbbb784a8f524e87f9fe99be1378d1e2885249e5e",
+  "收益汇总.csv": "42c4846dc314983105f5d9288db24f6948452dcfd16c92c629f68273bc43a67a",
+  "environment.json": "86fa2077543d2bf050a35cf3cfb6bcf826940079aba3f25afafe700c7cdea2ea",
+  "source-manifest.json": "521c735052411abf728429817e923612661f0604312d867f20e2aba04a17dab1",
+  "benchmark-source-checksums.json": "a9f9eed9590bbfb868862cf8ffc601596989693017244904bfce9c3ec6085a8e",
+  "原始数据.xlsx": "6014bba64b8324cc4a6964cfc51adf14f3eb04def2355ccc46715f32058f9d4a",
+  "收益报告.md": "84d5b5b333d69883f72846e2d924910edb56a97140192ae5f8b6a7ba0ec06c92"
+}
