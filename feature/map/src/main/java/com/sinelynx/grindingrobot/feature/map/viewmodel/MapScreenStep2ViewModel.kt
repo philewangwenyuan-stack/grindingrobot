@@ -16,6 +16,8 @@ import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -33,7 +35,8 @@ import kotlin.math.sin
 
 enum class EditToolMode {
     Gesture,
-    Erase
+    Erase,
+    Brush
 }
 
 data class EraseRectArea(
@@ -44,7 +47,9 @@ data class EraseRectArea(
     val bottom: Float,
     val confirmed: Boolean,
     /** 地图旋转后的像素坐标，仅用于保持 UI 选区与本地擦除显示一致。 */
-    val alignedCorners: List<Offset> = emptyList()
+    val alignedCorners: List<Offset> = emptyList(),
+    /** 涂抹的一笔，存储原始位图多边形；撤销按笔，提交按多边形。 */
+    val bitmapPolygons: List<List<Offset>> = emptyList()
 )
 
 /** 擦除矩形四角在世界坐标系中的位置（米），y 轴向上。 */
@@ -53,7 +58,9 @@ data class EraseAreaWorldOutput(
     val leftBottomM: Offset,
     val rightBottomM: Offset,
     val rightTopM: Offset,
-    val leftTopM: Offset
+    val leftTopM: Offset,
+    val polygonM: List<Offset> = emptyList(),
+    val partIndex: Int = 0
 )
 
 data class EditOutput(
@@ -93,6 +100,8 @@ data class MapScreenStep2UiState(
     val isMapLoading: Boolean = false,
     val mapLoadError: String? = null,
     val isSubmitting: Boolean = false,
+    val submittedRegions: Int = 0,
+    val submittingRegions: Int = 0,
     /** 协议中的逻辑像素宽高，用于边界与世界坐标换算 */
     val mapImageSize: Pair<Int, Int>? = null,
     /** 解码后的位图尺寸，可能与协议略有差异，用于缩放映射 */
@@ -107,7 +116,6 @@ data class MapScreenStep2UiState(
     val redoAreas: List<EraseRectArea> = emptyList(),
     val canUndo: Boolean = false,
     val canRedo: Boolean = false,
-    val editOutput: EditOutput = EditOutput(),
     val robotPose: DevicePosePayload? = null,
     /** Debug：最近一次点击在位图内对应的世界坐标（米），图外或未加载时为 null */
     val debugTapWorldM: Offset? = null,
@@ -139,6 +147,8 @@ class MapScreenStep2ViewModel @Inject constructor(
     private var loadedSessionId: Long? = null
     private var loadJob: Job? = null
     private var submitJob: Job? = null
+    private val acknowledgedEraseParts = mutableSetOf<Pair<Long, Int>>()
+    private val editBatchId = java.util.UUID.randomUUID().toString()
 
     init {
         viewModelScope.launch {
@@ -174,6 +184,7 @@ class MapScreenStep2ViewModel @Inject constructor(
         val frame = snapshot.frame
         // 同会话返回页面保留未提交擦除和手动角度；新 Step1 会话才重置编辑态。
         val newSession = loadedSessionId != snapshot.sessionId
+        if (newSession) acknowledgedEraseParts.clear()
         loadedSessionId = snapshot.sessionId
         _uiState.update {
             val state = if (newSession) MapScreenStep2UiState(
@@ -197,6 +208,7 @@ class MapScreenStep2ViewModel @Inject constructor(
                 previewWorkRegions = regions.workRegions.map { region -> region.region.toUiItem() },
                 previewObstacleRegions = regions.obstacleRegions.map { region -> region.toUiItem() },
                 previewEraseRegions = regions.eraseRegions.map { region -> region.toUiItem() }) }
+            loadedSessionId?.let { MapWorkflowErasePreview.store(it, _uiState.value.previewEraseRegions) }
         }
     }
 
@@ -258,6 +270,18 @@ class MapScreenStep2ViewModel @Inject constructor(
         }
     }
 
+    fun selectBrushMode() {
+        _uiState.update { it.copy(toolMode = EditToolMode.Brush) }
+    }
+
+    fun addBrushStroke(polygons: List<List<Offset>>) {
+        if (polygons.isEmpty() || polygons.any { polygon -> polygon.size < 3 ||
+                polygon.any { !it.x.isFinite() || !it.y.isFinite() } }) return
+        val area = EraseRectArea(nextAreaId++, 0f, 0f, 0f, 0f, true, bitmapPolygons = polygons)
+        _uiState.update { state -> state.copy(eraseAreas = state.eraseAreas + area,
+            undoAreas = (state.undoAreas + area).takeLast(MAX_HISTORY), redoAreas = emptyList()).refreshDerived() }
+    }
+
     fun updateTransform(zoom: Float, pan: Offset) {
         _uiState.update { it.copy(zoom = zoom, pan = pan) }
     }
@@ -275,23 +299,34 @@ class MapScreenStep2ViewModel @Inject constructor(
         }
     }
 
+    fun createAreaFromAlignedCorners(corners: List<Offset>) {
+        if (corners.size != 4 || corners.any { !it.x.isFinite() || !it.y.isFinite() }) return
+        val area = EraseRectArea(nextAreaId++, corners.minOf { it.x }, corners.minOf { it.y },
+            corners.maxOf { it.x }, corners.maxOf { it.y }, false, alignedCorners = corners)
+        _uiState.update { if (it.activeAreaId != null) it else it.copy(
+            eraseAreas = it.eraseAreas + area, activeAreaId = area.id) }
+    }
+
     fun createAreaAt(pointInBitmapPx: Offset) {
         _uiState.update { state ->
+            if (state.activeAreaId != null) return@update state
             val mapSize = state.mapImageSize ?: return@update state
             val bmpW = state.bitmapDecodeSize?.first ?: return@update state
             val bmpH = state.bitmapDecodeSize?.second ?: return@update state
             val tcpPoint =
                 bitmapPxToTcpPx(pointInBitmapPx, bmpW, bmpH, mapSize.first, mapSize.second)
-            val maxLeft = (mapSize.first.toFloat() - DEFAULT_AREA_WIDTH).coerceAtLeast(0f)
-            val maxTop = (mapSize.second.toFloat() - DEFAULT_AREA_HEIGHT).coerceAtLeast(0f)
-            val left = (tcpPoint.x - DEFAULT_AREA_WIDTH / 2f).coerceIn(0f, maxLeft)
-            val top = (tcpPoint.y - DEFAULT_AREA_HEIGHT / 2f).coerceIn(0f, maxTop)
+            val width = DEFAULT_AREA_WIDTH.coerceAtMost(mapSize.first.toFloat())
+            val height = DEFAULT_AREA_HEIGHT.coerceAtMost(mapSize.second.toFloat())
+            val maxLeft = (mapSize.first.toFloat() - width).coerceAtLeast(0f)
+            val maxTop = (mapSize.second.toFloat() - height).coerceAtLeast(0f)
+            val left = (tcpPoint.x - width / 2f).coerceIn(0f, maxLeft)
+            val top = (tcpPoint.y - height / 2f).coerceIn(0f, maxTop)
             val tcpRect = EraseRectArea(
                 id = nextAreaId++,
                 left = left,
                 top = top,
-                right = left + DEFAULT_AREA_WIDTH,
-                bottom = top + DEFAULT_AREA_HEIGHT,
+                right = left + width,
+                bottom = top + height,
                 confirmed = false
             )
             val area = tcpRectToBitmapRect(tcpRect, bmpW, bmpH, mapSize.first, mapSize.second)
@@ -437,31 +472,44 @@ class MapScreenStep2ViewModel @Inject constructor(
             ToastUtils.showError(state.mapLoadError ?: "请等待地图区域加载完成")
             return
         }
+        if (state.activeAreaId != null) {
+            ToastUtils.showError("请先确认或取消当前擦除矩形")
+            return
+        }
         _uiState.update { it.copy(isSubmitting = true) }
         submitJob = viewModelScope.launch {
             try {
-                val batchId = System.currentTimeMillis()
-                for (area in state.editOutput.confirmedAreas) {
+                val batchId = "${loadedSessionId}_$editBatchId"
+                val output = withContext(Dispatchers.Default) { state.buildEditOutput() }
+                val areas = output.confirmedAreas.filterNot { (it.id to it.partIndex) in acknowledgedEraseParts }
+                val lastByArea = areas.associate { it.id to it.partIndex }
+                _uiState.update { it.copy(submittedRegions = 0, submittingRegions = areas.size) }
+                for ((index, area) in areas.withIndex()) {
+                    val points = area.polygonM.ifEmpty { listOf(area.leftTopM, area.rightTopM, area.rightBottomM, area.leftBottomM) }
+                    val regionId = "${batchId}_${area.id}_${area.partIndex}"
                     MapEditStream.reset()
                     val reply = async(start = CoroutineStart.UNDISPATCHED) {
                         withTimeoutOrNull(MAP_TCP_REQUEST_TIMEOUT_MS) { MapEditStream.payload.filterNotNull().first() }
                     }
                     val sent = tcpManager.sendMapEditClearRegion(
-                        editId = "${batchId}_${area.id}", mapId = currentMapId,
-                        points = listOf(area.leftTopM, area.rightTopM, area.rightBottomM, area.leftBottomM).map { it.x to it.y }
+                        editId = regionId, mapId = currentMapId,
+                        points = points.map { it.x to it.y }
                     )
                     val response = if (sent) reply.await() else { reply.cancel(); null }
                     if (response?.isSuccess != true) {
                         ToastUtils.showError(response?.message?.ifBlank { null } ?: "擦除区域提交失败，请重试")
                         return@launch
                     }
+                    acknowledgedEraseParts.add(area.id to area.partIndex)
                     // 已确认项移入服务端区域展示；重试或返回时不重复提交，也不再参与本地撤销。
-                    _uiState.update { it.copy(eraseAreas = it.eraseAreas.filterNot { item -> item.id == area.id },
+                    _uiState.update { it.copy(eraseAreas = if (area.partIndex == lastByArea[area.id])
+                            it.eraseAreas.filterNot { item -> item.id == area.id } else it.eraseAreas,
+                        submittedRegions = index + 1,
                         previewEraseRegions = it.previewEraseRegions + MapPreviewRegionItem(
-                            regionId = "${batchId}_${area.id}", regionName = "",
-                            points = listOf(area.leftTopM, area.rightTopM, area.rightBottomM, area.leftBottomM)
-                                .map { point -> MapPreviewPointItem(point.x, point.y) }),
-                        undoAreas = emptyList(), redoAreas = emptyList()).refreshDerived() }
+                            regionId = "erase_region_$regionId", regionName = "",
+                            points = points.map { point -> MapPreviewPointItem(point.x, point.y) }),
+                        undoAreas = emptyList(), redoAreas = emptyList(), canUndo = false, canRedo = false) }
+                    loadedSessionId?.let { MapWorkflowErasePreview.store(it, _uiState.value.previewEraseRegions) }
                 }
                 if (!tcpManager.sendMapAlignment(currentMapId.orEmpty(), state.alignmentYaw)) {
                     ToastUtils.showError("地图对准角发送失败，请重试")
@@ -476,34 +524,14 @@ class MapScreenStep2ViewModel @Inject constructor(
         }
     }
 
-    private fun MapScreenStep2UiState.refreshDerived(): MapScreenStep2UiState {
-        val confirmedBitmap = eraseAreas.filter { it.confirmed }
-        val geo = mapGeo
-        val bmpW = bitmapDecodeSize?.first
-        val bmpH = bitmapDecodeSize?.second
-        val mapSize = mapImageSize
-        val output = if (geo != null && bmpW != null && bmpH != null && mapSize != null) {
-            EditOutput(
-                confirmedAreas = confirmedBitmap.map {
-                    bitmapAreaToWorldOutput(
-                        area = it,
-                        bmpW = bmpW,
-                        bmpH = bmpH,
-                        mapW = mapSize.first,
-                        mapH = mapSize.second,
-                        geo = geo,
-                        alignmentYaw = alignmentYaw
-                    )
-                }
-            )
-        } else {
-            EditOutput()
-        }
-        return copy(
-            canUndo = undoAreas.isNotEmpty(),
-            canRedo = redoAreas.isNotEmpty(),
-            editOutput = output
-        )
+    private fun MapScreenStep2UiState.refreshDerived(): MapScreenStep2UiState = copy(
+        canUndo = undoAreas.isNotEmpty(), canRedo = redoAreas.isNotEmpty())
+
+    private fun MapScreenStep2UiState.buildEditOutput(): EditOutput {
+        val geo = mapGeo ?: return EditOutput()
+        val bitmap = bitmapDecodeSize ?: return EditOutput()
+        val map = mapImageSize ?: return EditOutput()
+        return compileEraseOutput(eraseAreas, bitmap, map, geo, alignmentYaw)
     }
 
     private fun decodeImageSize(bytes: ByteArray?): Pair<Int, Int>? {
@@ -587,76 +615,4 @@ class MapScreenStep2ViewModel @Inject constructor(
         return Offset(wx, wy)
     }
 
-    private fun tcpRectToWorldOutput(area: EraseRectArea, geo: MapGeo): EraseAreaWorldOutput {
-        val lt = tcpPixelToWorld(area.left, area.top, geo)
-        val rt = tcpPixelToWorld(area.right, area.top, geo)
-        val rb = tcpPixelToWorld(area.right, area.bottom, geo)
-        val lb = tcpPixelToWorld(area.left, area.bottom, geo)
-        return EraseAreaWorldOutput(
-            id = area.id,
-            leftBottomM = lb,
-            rightBottomM = rb,
-            rightTopM = rt,
-            leftTopM = lt
-        )
-    }
-
-    private fun bitmapAreaToWorldOutput(
-        area: EraseRectArea,
-        bmpW: Int,
-        bmpH: Int,
-        mapW: Int,
-        mapH: Int,
-        geo: MapGeo,
-        alignmentYaw: Float
-    ): EraseAreaWorldOutput {
-        // alignedCorners 属于“地图已旋转后的内容空间”，不能直接用于世界坐标换算。
-        // 先绕图片中心反向旋转，恢复原始 Bitmap 坐标，再走 Bitmap -> TCP 像素 -> 世界坐标。
-        val bitmapCorners = if (area.alignedCorners.size == 4) {
-            val center = Offset(bmpW / 2f, bmpH / 2f)
-            area.alignedCorners.map { alignedPoint ->
-                rotateBitmapPoint(
-                    point = alignedPoint,
-                    center = center,
-                    angleDeg = -alignmentYaw
-                )
-            }
-        } else {
-            listOf(
-                Offset(area.left, area.top),
-                Offset(area.right, area.top),
-                Offset(area.right, area.bottom),
-                Offset(area.left, area.bottom)
-            )
-        }
-        val worldCorners = bitmapCorners.map { bitmapPoint ->
-            val tcpPoint = bitmapPxToTcpPx(
-                p = bitmapPoint,
-                bmpW = bmpW,
-                bmpH = bmpH,
-                mapW = mapW,
-                mapH = mapH
-            )
-            tcpPixelToWorld(tcpPoint.x, tcpPoint.y, geo)
-        }
-        return EraseAreaWorldOutput(
-            id = area.id,
-            leftTopM = worldCorners[0],
-            rightTopM = worldCorners[1],
-            rightBottomM = worldCorners[2],
-            leftBottomM = worldCorners[3]
-        )
-    }
-
-    private fun rotateBitmapPoint(point: Offset, center: Offset, angleDeg: Float): Offset {
-        val radians = Math.toRadians(angleDeg.toDouble())
-        val cosValue = cos(radians).toFloat()
-        val sinValue = sin(radians).toFloat()
-        val dx = point.x - center.x
-        val dy = point.y - center.y
-        return Offset(
-            x = center.x + dx * cosValue - dy * sinValue,
-            y = center.y + dx * sinValue + dy * cosValue
-        )
-    }
 }

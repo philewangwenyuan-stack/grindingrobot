@@ -1,0 +1,26 @@
+[
+  {
+    "Suite": "com.sinelynx.grindingrobot.feature.map.ui.EraseBrushGeometryTest",
+    "Tests": "6",
+    "Failures": "0",
+    "Errors": "0"
+  },
+  {
+    "Suite": "com.sinelynx.grindingrobot.feature.map.ui.EraseSubmissionGeometryTest",
+    "Tests": "5",
+    "Failures": "0",
+    "Errors": "0"
+  },
+  {
+    "Suite": "com.sinelynx.grindingrobot.feature.map.ui.MapScreenStep2EraseGeometryTest",
+    "Tests": "9",
+    "Failures": "0",
+    "Errors": "0"
+  },
+  {
+    "Suite": "com.sinelynx.grindingrobot.feature.map.ui.MapWorkflowViewportTest",
+    "Tests": "2",
+    "Failures": "0",
+    "Errors": "0"
+  }
+]

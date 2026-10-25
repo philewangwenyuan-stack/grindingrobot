@@ -26,6 +26,36 @@ internal val MapWorkBorderColor = Color(0xFF24BE1C)
 internal val MapObstacleBorderColor = Color(0xFFD82B2A)
 private val MapConfirmedObstacleColor = Color(0xFF808080)
 
+/** Per viewport cache; independent of zoom, pan and display rotation. No global geometry retention. */
+internal class MapRegionPathCache {
+    private data class Entry(val regions: List<MapPreviewRegionItem>, val projection: Any?, val paths: List<Pair<String, Path>>)
+    private val entries = mutableMapOf<MapRegionOverlayKind, Entry>()
+    fun paths(kind: MapRegionOverlayKind, regions: List<MapPreviewRegionItem>, projection: Any?,
+              mapper: (MapPreviewPointItem) -> Offset?): List<Pair<String, Path>> {
+        entries[kind]?.let { if (it.regions === regions && it.projection == projection) return it.paths }
+        val eraseFill = if (kind == MapRegionOverlayKind.Erase) Path() else null
+        val paths = regions.filter { it.enabled }.mapNotNull { region ->
+            val points = region.points.map { mapper(it) }
+            if (points.size < 3 || points.any { it == null }) null
+            else {
+                val polygon = points.filterNotNull()
+                if (eraseFill != null) {
+                    // Give every contour the same winding so overlapping white regions remain filled.
+                    var signedArea = 0f
+                    polygon.indices.forEach { i ->
+                        val a = polygon[i]; val b = polygon[(i + 1) % polygon.size]
+                        signedArea += a.x * b.y - b.x * a.y
+                    }
+                    eraseFill.addPolygon(if (signedArea < 0f) polygon.asReversed() else polygon)
+                    null
+                } else region.regionId to Path().apply { addPolygon(polygon) }
+            }
+        }.let { if (eraseFill != null) listOf("" to eraseFill) else it }
+        entries[kind] = Entry(regions, projection, paths)
+        return paths
+    }
+}
+
 /**
  * 地图坐标（米）→ 未施加页面变换的图片像素：减原点、撤销地图朝向、除分辨率并翻转 Y。
  * 最后乘“实际图片尺寸 / 响应地图尺寸”；不额外乘 previewScaleX/Y，页面负责显示旋转和适配。
@@ -69,9 +99,29 @@ internal fun DrawScope.drawMapRegionOverlays(
     contentScale: Float = 1f,
     selectedRegionIds: Set<String> = emptySet(),
     drawBorder: Boolean = true,
-    workFillColor: Color = Color.White
+    workFillColor: Color = Color.White,
+    cache: MapRegionPathCache? = null,
+    projectionKey: Any? = null
 ) {
     val safeScale = contentScale.coerceAtLeast(0.0001f)
+    if (cache != null) {
+        val fill = when (kind) {
+            MapRegionOverlayKind.Erase -> Color.White
+            MapRegionOverlayKind.Work -> workFillColor
+            MapRegionOverlayKind.Obstacle -> MapConfirmedObstacleColor
+        }
+        val border = when (kind) {
+            MapRegionOverlayKind.Erase -> MapEraseBorderColor
+            MapRegionOverlayKind.Work -> MapWorkBorderColor
+            MapRegionOverlayKind.Obstacle -> MapConfirmedObstacleColor
+        }
+        cache.paths(kind, regions, projectionKey, pointMapper).forEach { (id, path) ->
+            if (fill.alpha > 0f) drawPath(path, fill)
+            if (drawBorder) drawPath(path, border, style = Stroke(
+                (if (kind == MapRegionOverlayKind.Work && id in selectedRegionIds) 2.dp else 1.dp).toPx() / safeScale))
+        }
+        return
+    }
     regions.asSequence()
         .filter { it.enabled }
         .forEach { region ->

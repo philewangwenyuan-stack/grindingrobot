@@ -283,6 +283,7 @@ fun MapScreenStep3(
     onNextStep: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val eraseRegionCache = remember { MapRegionPathCache() }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
@@ -290,13 +291,7 @@ fun MapScreenStep3(
         viewModel.loadMapData(mapId)
         onDispose { viewModel.cancelMapLoading() }
     }
-    val mapImageBitmap = remember(uiState.mapImageBytes) {
-        uiState.mapImageBytes?.let { bytes ->
-            runCatching {
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
+    val mapImageBitmap = rememberWorkflowBitmap(uiState.mapImageBytes)
     var mapPanelSize by remember { mutableStateOf(IntSize.Zero) }
     var showBoundaryRect by remember { mutableStateOf(true) }
     var boundaryTopLeft by remember { mutableStateOf(Offset(120f, 120f)) }
@@ -938,7 +933,10 @@ fun MapScreenStep3(
                                         regions = uiState.previewEraseRegions,
                                         kind = MapRegionOverlayKind.Erase,
                                         pointMapper = mapper,
-                                        contentScale = contentScale
+                                        contentScale = contentScale,
+                                        drawBorder = false,
+                                        cache = eraseRegionCache,
+                                        projectionKey = Triple(geo, logicalSize, decodedSize)
                                     )
                                     drawMapRegionOverlays(
                                         regions = uiState.previewWorkRegions.filterNot {

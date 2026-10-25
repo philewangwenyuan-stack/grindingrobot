@@ -11,3 +11,6 @@
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/TaskPathCacheRenderTest.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceFixtures.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/PathRenderPerformanceBenchmarkTest.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/EraseBrushGeometryTest.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/EraseSubmissionGeometryTest.kt
+!/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/EraseEditorUiTest.kt

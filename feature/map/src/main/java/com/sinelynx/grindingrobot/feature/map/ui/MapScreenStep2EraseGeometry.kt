@@ -138,3 +138,10 @@ internal fun resizeEraseRectBottomRight(
         bottom = resizedBottom
     )
 }
+
+internal fun drawEraseRect(start: Offset, end: Offset, bounds: Rect): Rect = Rect(
+    min(start.x, end.x).coerceIn(bounds.left, bounds.right),
+    min(start.y, end.y).coerceIn(bounds.top, bounds.bottom),
+    max(start.x, end.x).coerceIn(bounds.left, bounds.right),
+    max(start.y, end.y).coerceIn(bounds.top, bounds.bottom)
+)

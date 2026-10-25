@@ -1,13 +1,11 @@
 package com.sinelynx.grindingrobot.feature.map.ui
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,19 +20,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
-import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
@@ -44,31 +42,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.unit.sp
-import com.sinelynx.grindingrobot.feature.common.component.DeviceStatusBar
-import com.sinelynx.grindingrobot.feature.map.R
 import com.sinelynx.grindingrobot.feature.map.viewmodel.EraseRectArea
 import com.sinelynx.grindingrobot.feature.map.viewmodel.EditToolMode
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
@@ -93,13 +84,7 @@ fun MapScreenStep2(
         viewModel.loadMapData(mapId)
         onDispose { viewModel.cancelPendingOperations() }
     }
-    val mapImageBitmap = remember(uiState.mapImageBytes) {
-        uiState.mapImageBytes?.let { bytes ->
-            runCatching {
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
+    val mapImageBitmap = rememberWorkflowBitmap(uiState.mapImageBytes)
 
     BoxWithConstraints(
         modifier = modifier
@@ -153,6 +138,8 @@ fun MapScreenStep2(
                         showDebugTap = showDebugInfo,
                         onDebugTapBitmap = viewModel::reportDebugTapBitmapPixel,
                         onCreateArea = viewModel::createAreaAt,
+                        onCreateRectangle = viewModel::createAreaFromAlignedCorners,
+                        onBrushStroke = viewModel::addBrushStroke,
                         onConfirmArea = viewModel::confirmActiveArea,
                             onRemoveArea = viewModel::removeActiveArea
                         )
@@ -161,32 +148,20 @@ fun MapScreenStep2(
 
                 if (mapImageBitmap != null) {
                     Column(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .width(sideWidth)
-                        .padding(top = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                        ModeToolButton(
-                        selected = uiState.toolMode == EditToolMode.Gesture,
-                        selectedIcon = R.drawable.ic_gesture_selected,
-                        unselectedIcon = R.drawable.ic_gesture_unselcted,
-                        contentDescription = "手势模式",
-                        onClick = {
-                            viewModel.selectGestureMode()
-                            onMoveModeClick()
+                        modifier = Modifier.align(Alignment.TopStart).width(sideWidth),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        listOf(EditToolMode.Gesture to "移动", EditToolMode.Erase to "矩形擦除",
+                            EditToolMode.Brush to "涂抹擦除").forEach { (mode, title) ->
+                            TextButton(onClick = {
+                                when (mode) {
+                                    EditToolMode.Gesture -> { viewModel.selectGestureMode(); onMoveModeClick() }
+                                    EditToolMode.Erase -> { viewModel.selectEraseMode(); onEraseModeClick() }
+                                    EditToolMode.Brush -> viewModel.selectBrushMode()
+                                }
+                            }) { Text(title, color = if (uiState.toolMode == mode) Color(0xFF00A0E9) else Color(0xFF647080)) }
                         }
-                        )
-                        ModeToolButton(
-                        selected = uiState.toolMode == EditToolMode.Erase,
-                        selectedIcon = R.drawable.ic_eraser_selected,
-                        unselectedIcon = R.drawable.ic_eraser_unselected,
-                        contentDescription = "橡皮擦模式",
-                        onClick = {
-                            viewModel.selectEraseMode()
-                            onEraseModeClick()
-                        }
-                        )
+                        Text("双指缩放 / 移动", fontSize = 12.sp, color = Color(0xFF647080))
                     }
                 }
 
@@ -274,7 +249,7 @@ fun MapScreenStep2(
                 Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.15f)).clickable {},
                 contentAlignment = Alignment.Center
             ) {
-                Text("正在提交地图编辑…", color = Color.White)
+                Text("正在提交擦除区域 ${uiState.submittedRegions}/${uiState.submittingRegions}…", color = Color.White)
             }
         }
     }
@@ -366,262 +341,108 @@ internal fun MapEditingPanel(
     showDebugTap: Boolean,
     onDebugTapBitmap: (Offset) -> Unit,
     onCreateArea: (Offset) -> Unit,
+    onCreateRectangle: (List<Offset>) -> Unit = {},
+    onBrushStroke: (List<List<Offset>>) -> Unit = {},
     onConfirmArea: (List<Offset>) -> Unit,
     onRemoveArea: () -> Unit
 ) {
     var viewportSize by remember { mutableStateOf(IntSize.Zero) }
-    var baseScale by remember { mutableStateOf(1f) }
-    var baseOffset by remember { mutableStateOf(Offset.Zero) }
-
     val workflow = rememberWorkflowViewport(mapId)
     val imageSize = mapImageBitmap?.let { IntSize(it.width, it.height) } ?: IntSize.Zero
     val transform = workflow.view.toTransform(viewportSize, imageSize, alignmentYaw)
     val zoom = transform.scale
     val pan = transform.offset
-
-    val mapWidthPx = mapImageBitmap?.width?.toFloat() ?: 1f
-    val mapHeightPx = mapImageBitmap?.height?.toFloat() ?: 1f
-    val contentCenter = Offset(mapWidthPx / 2f, mapHeightPx / 2f)
-
-    // Screen -> 原始 Content：依次撤销 pan/zoom、适配变换和地图旋转。
-    fun toContentPoint(screen: Offset): Offset {
-        val pointAfterPanZoom = (screen - pan) / zoom
-        val rawContent = (pointAfterPanZoom - baseOffset) / baseScale
-        return rotatePoint(rawContent, contentCenter, -alignmentYaw)
-    }
-    // Screen -> 已对齐 Content：确认擦除区时沿用现有下发链要求的 alignedCorners。
-    fun toAlignedContentPoint(screen: Offset): Offset {
-        val pointAfterPanZoom = (screen - pan) / zoom
-        return (pointAfterPanZoom - baseOffset) / baseScale
-    }
-    // 已对齐 Content -> Screen：该坐标已经包含旋转效果，因此这里不能再次应用 alignmentYaw。
-    fun alignedContentToScreenPoint(alignedContent: Offset): Offset {
-        val pointBeforePanZoom = Offset(
-            x = alignedContent.x * baseScale + baseOffset.x,
-            y = alignedContent.y * baseScale + baseOffset.y
-        )
-        return Offset(
-            x = pointBeforePanZoom.x * zoom + pan.x,
-            y = pointBeforePanZoom.y * zoom + pan.y
-        )
-    }
-    // 原始 Content -> Screen：先绕图片中心应用地图对齐角，再应用适配和手势变换。
-    fun toScreenPoint(content: Offset): Offset {
-        val rotatedContent = rotatePoint(content, contentCenter, alignmentYaw)
-        val p = Offset(
-            x = rotatedContent.x * baseScale + baseOffset.x,
-            y = rotatedContent.y * baseScale + baseOffset.y
-        )
-        return Offset(x = p.x * zoom + pan.x, y = p.y * zoom + pan.y)
-    }
+    val mapWidthPx = imageSize.width.toFloat().coerceAtLeast(1f)
+    val mapHeightPx = imageSize.height.toFloat().coerceAtLeast(1f)
+    val contentCenter = Offset(mapWidthPx / 2, mapHeightPx / 2)
+    val baseScale = if (viewportSize.width > 0 && viewportSize.height > 0)
+        minOf(viewportSize.width / mapWidthPx, viewportSize.height / mapHeightPx) else 1f
+    val baseOffset = Offset((viewportSize.width - mapWidthPx * baseScale) / 2,
+        (viewportSize.height - mapHeightPx * baseScale) / 2)
+    fun toAlignedContentPoint(screen: Offset) = ((screen - pan) / zoom - baseOffset) / baseScale
+    fun toContentPoint(screen: Offset) = rotatePoint(toAlignedContentPoint(screen), contentCenter, -alignmentYaw)
+    fun alignedContentToScreenPoint(point: Offset) = (point * baseScale + baseOffset) * zoom + pan
+    fun toScreenPoint(point: Offset) = alignedContentToScreenPoint(rotatePoint(point, contentCenter, alignmentYaw))
     val activeArea = eraseAreas.lastOrNull { it.id == activeAreaId }
-    val initialAlignedAreaRect = activeArea?.let { area ->
-        if (area.alignedCorners.size == 4) {
-            boundsOfPoints(area.alignedCorners)
-        } else {
-            rotatedRectBounds(
-                rect = Rect(area.left, area.top, area.right, area.bottom),
-                center = contentCenter,
-                angleDeg = alignmentYaw
-            )
+    var editableAlignedAreaRect by remember(activeArea?.id) { mutableStateOf(activeArea?.let {
+        if (it.alignedCorners.size == 4) boundsOfPoints(it.alignedCorners)
+        else rotatedRectBounds(Rect(it.left, it.top, it.right, it.bottom), contentCenter, alignmentYaw)
+    }) }
+    var brushSizeDp by remember { mutableStateOf(32f) }
+    var liveBrush by remember { mutableStateOf<List<List<Offset>>>(emptyList()) }
+    val bounds = Rect(0f, 0f, mapWidthPx, mapHeightPx)
+    val density = LocalDensity.current
+    val regionCache = remember { MapRegionPathCache() }
+    // Stable bitmap-space paths: viewport changes affect only the Canvas matrix.
+    val confirmedPath = remember(eraseAreas, alignmentYaw, imageSize) {
+        Path().apply {
+            eraseAreas.filter { it.confirmed }.forEach { area ->
+                val polygons = area.bitmapPolygons.ifEmpty {
+                    listOf(if (area.alignedCorners.size == 4) area.alignedCorners.map {
+                        rotatePoint(it, contentCenter, -alignmentYaw)
+                    } else rectCorners(Rect(area.left, area.top, area.right, area.bottom)))
+                }
+                polygons.forEach { addPolygon(it) }
+            }
         }
     }
-    var editableAlignedAreaRect by remember(activeArea?.id) {
-        mutableStateOf(initialAlignedAreaRect)
-    }
-    var moveGestureStartRect by remember(activeArea?.id) { mutableStateOf<Rect?>(null) }
-    var resizeGestureStartRect by remember(activeArea?.id) { mutableStateOf<Rect?>(null) }
-    val currentEditableAlignedAreaRect by rememberUpdatedState(editableAlignedAreaRect)
-    val currentZoom by rememberUpdatedState(zoom)
-    val currentPan by rememberUpdatedState(pan)
-    val currentAlignmentYaw by rememberUpdatedState(alignmentYaw)
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .onSizeChanged { viewportSize = it }
-            .background(
-                Brush.radialGradient(
-                    colors = listOf(Color(0xFFE7EBF2), Color(0xFFADB6C2)),
-                    radius = 900f
-                )
-            )
-            .workflowViewportSemantics(workflow, viewportSize, imageSize, alignmentYaw)
-            .pointerInput(toolMode, mapImageBitmap, viewportSize) {
-                if (toolMode == EditToolMode.Gesture) {
-                    val bmp = mapImageBitmap ?: return@pointerInput
-                    detectTransformGestures { centroid, panChange, zoomChange, _ ->
-                        workflow.gesture(viewportSize, IntSize(bmp.width, bmp.height), currentAlignmentYaw,
-                            centroid, panChange, zoomChange)
-                    }
-                }
-            }
-            .pointerInput(showDebugTap, toolMode, mapImageBitmap, pan, zoom, baseScale, baseOffset) {
-                val bmp = mapImageBitmap ?: return@pointerInput
-                if (!showDebugTap && toolMode != EditToolMode.Erase) return@pointerInput
-                detectTapGestures { tap ->
-                    val content = toContentPoint(tap)
-                    if (showDebugTap) {
-                        onDebugTapBitmap(content)
-                    }
-                    if (toolMode == EditToolMode.Erase) {
-                        onCreateArea(content)
-                    }
-                }
-            }
-    ) {
-        Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
-                .align(Alignment.Center)
-                .pointerInput(Unit) {}
-                .background(Color.Transparent)
-                .then(
-                    Modifier
-                )
-        ) {
+    val liveBrushPath = remember(liveBrush) { Path().apply { liveBrush.forEach { addPolygon(it) } } }
+    val latest by rememberUpdatedState(EraseEditorCallbacks(
+        mode = toolMode, activeRect = editableAlignedAreaRect,
+        screenToAligned = ::toAlignedContentPoint, screenToBitmap = ::toContentPoint,
+        onRect = { editableAlignedAreaRect = it },
+        onNewRectangle = { onCreateRectangle(rectCorners(it)) },
+        onCancelNewRectangle = { editableAlignedAreaRect = null }, onTap = { point ->
+            val content = toContentPoint(point)
+            if (showDebugTap) onDebugTapBitmap(content)
+            if (toolMode == EditToolMode.Erase && activeAreaId == null && bounds.contains(content)) onCreateArea(content)
+        }, onTransform = { centroid, delta, factor -> workflow.gesture(viewportSize, imageSize, alignmentYaw, centroid, delta, factor) },
+        onBrushPreview = { liveBrush = it }, onBrush = onBrushStroke,
+        bounds = bounds, alignedBounds = rotatedMapBounds(mapWidthPx, mapHeightPx, alignmentYaw),
+        totalScale = baseScale * zoom, brushRadius = with(density) { brushSizeDp.dp.toPx() } / (2 * baseScale * zoom),
+        handleRadius = with(density) { 24.dp.toPx() } / (baseScale * zoom)
+    ))
+    Box(Modifier.fillMaxSize().onSizeChanged { viewportSize = it }.clip(RoundedCornerShape(12.dp))
+        .background(Color(0xFFDDE5EE))
+        .workflowViewportSemantics(workflow, viewportSize, imageSize, alignmentYaw)
+        .pointerInput(mapImageBitmap, toolMode) { detectEraseEditorGestures { latest } }) {
+        Canvas(Modifier.fillMaxSize()) {
             if (mapImageBitmap == null) return@Canvas
-
-            baseScale = minOf(
-                size.width / mapImageBitmap.width.toFloat(),
-                size.height / mapImageBitmap.height.toFloat()
-            )
-            baseOffset = Offset(
-                (size.width - mapImageBitmap.width * baseScale) / 2f,
-                (size.height - mapImageBitmap.height * baseScale) / 2f
-            )
-
             withTransform({
-                translate(left = pan.x, top = pan.y)
-                scale(scaleX = zoom, scaleY = zoom, pivot = Offset.Zero)
-                translate(left = baseOffset.x, top = baseOffset.y)
-                scale(scaleX = baseScale, scaleY = baseScale, pivot = Offset.Zero)
-                // 必须与 toScreenPoint 使用相同的中心和正角度，保证图片与交互坐标重合。
-                rotate(degrees = alignmentYaw, pivot = contentCenter)
+                translate(pan.x, pan.y); scale(zoom, zoom, Offset.Zero)
+                translate(baseOffset.x, baseOffset.y); scale(baseScale, baseScale, Offset.Zero)
+                rotate(alignmentYaw, contentCenter)
             }) {
                 drawImage(mapImageBitmap)
                 val geo = mapGeo
-                val logicalSize = mapImageSize
-                val decodedSize = bitmapDecodeSize ?: (mapImageBitmap.width to mapImageBitmap.height)
-                if (geo != null && logicalSize != null) {
-                    val mapper: (com.sinelynx.grindingrobot.feature.map.viewmodel.MapPreviewPointItem) -> Offset? = { point ->
-                        worldPointToBitmapOffset(point, geo, logicalSize, decodedSize)
+                val logical = mapImageSize
+                val decoded = bitmapDecodeSize ?: (imageSize.width to imageSize.height)
+                if (geo != null && logical != null) {
+                    val mapper: (com.sinelynx.grindingrobot.feature.map.viewmodel.MapPreviewPointItem) -> Offset? = {
+                        worldPointToBitmapOffset(it, geo, logical, decoded)
                     }
-                    val contentScale = baseScale * zoom
-                    drawMapRegionOverlays(
-                        regions = previewEraseRegions,
-                        kind = MapRegionOverlayKind.Erase,
-                        pointMapper = mapper,
-                        contentScale = contentScale
-                    )
-                    drawMapRegionOverlays(
-                        regions = previewWorkRegions,
-                        kind = MapRegionOverlayKind.Work,
-                        pointMapper = mapper,
-                        contentScale = contentScale,
-                        workFillColor = Color.Transparent
-                    )
-                    drawMapRegionOverlays(
-                        regions = previewObstacleRegions,
-                        kind = MapRegionOverlayKind.Obstacle,
-                        pointMapper = mapper,
-                        contentScale = contentScale
-                    )
+                    val projectionKey = Triple(geo, logical, decoded)
+                    drawMapRegionOverlays(previewEraseRegions, MapRegionOverlayKind.Erase, mapper,
+                        baseScale * zoom, drawBorder = false, cache = regionCache, projectionKey = projectionKey)
+                    drawMapRegionOverlays(previewWorkRegions, MapRegionOverlayKind.Work, mapper,
+                        baseScale * zoom, workFillColor = Color.Transparent, cache = regionCache, projectionKey = projectionKey)
+                    drawMapRegionOverlays(previewObstacleRegions, MapRegionOverlayKind.Obstacle, mapper,
+                        baseScale * zoom, cache = regionCache, projectionKey = projectionKey)
+                }
+                clipRect(0f, 0f, mapWidthPx, mapHeightPx) {
+                    drawPath(confirmedPath, Color.White)
+                    drawPath(liveBrushPath, Color.White)
                 }
             }
-
-            fun screenPathFor(area: EraseRectArea): Path {
-                val corners = if (area.alignedCorners.size == 4) {
-                    area.alignedCorners.map(::alignedContentToScreenPoint)
-                } else {
-                    listOf(
-                        Offset(area.left, area.top),
-                        Offset(area.right, area.top),
-                        Offset(area.right, area.bottom),
-                        Offset(area.left, area.bottom)
-                    ).map(::toScreenPoint)
-                }
-                return Path().apply {
-                    moveTo(corners[0].x, corners[0].y)
-                    lineTo(corners[1].x, corners[1].y)
-                    lineTo(corners[2].x, corners[2].y)
-                    lineTo(corners[3].x, corners[3].y)
-                    close()
-                }
-            }
-
-            eraseAreas.forEach { area ->
-                if (area.confirmed) {
-                    drawPath(
-                        path = screenPathFor(area),
-                        color = Color.Transparent,
-                        blendMode = BlendMode.Clear
-                    )
-                }
-            }
-
-            val gridSpacing = 40.dp.toPx()
-            val gridStrokeWidth = 1.dp.toPx()
-            val gridPathEffect = PathEffect.dashPathEffect(
-                intervals = floatArrayOf(6.dp.toPx(), 6.dp.toPx())
-            )
-            val gridColor = Color(0x4D00A0E9)
-
-            var gridX = 0f
-            while (gridX <= size.width) {
-                drawLine(
-                    color = gridColor,
-                    start = Offset(gridX, 0f),
-                    end = Offset(gridX, size.height),
-                    strokeWidth = gridStrokeWidth,
-                    pathEffect = gridPathEffect
-                )
-                gridX += gridSpacing
-            }
-
-            var gridY = 0f
-            while (gridY <= size.height) {
-                drawLine(
-                    color = gridColor,
-                    start = Offset(0f, gridY),
-                    end = Offset(size.width, gridY),
-                    strokeWidth = gridStrokeWidth,
-                    pathEffect = gridPathEffect
-                )
-                gridY += gridSpacing
-            }
-
-            if (toolMode == EditToolMode.Erase && editableAlignedAreaRect != null) {
-                val activeScreenBounds = requireNotNull(
-                    boundsOfPoints(
-                        rectCorners(editableAlignedAreaRect!!).map(::alignedContentToScreenPoint)
-                    )
-                )
-                val activePath = Path().apply {
-                    moveTo(activeScreenBounds.left, activeScreenBounds.top)
-                    lineTo(activeScreenBounds.right, activeScreenBounds.top)
-                    lineTo(activeScreenBounds.right, activeScreenBounds.bottom)
-                    lineTo(activeScreenBounds.left, activeScreenBounds.bottom)
-                    close()
-                }
-                drawPath(
-                    path = activePath,
-                    color = Color(0x5539B54A)
-                )
-                drawPath(
-                    path = activePath,
-                    color = Color(0xFF3AB54A),
-                    style = Stroke(
-                        width = 2.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(
-                            floatArrayOf(12.dp.toPx(), 12.dp.toPx())
-                        )
-                    )
-                )
+            if (toolMode == EditToolMode.Erase) editableAlignedAreaRect?.let { rect ->
+                val topLeft = alignedContentToScreenPoint(rect.topLeft)
+                val sizePx = androidx.compose.ui.geometry.Size(rect.width * baseScale * zoom, rect.height * baseScale * zoom)
+                drawRect(Color(0x5539B54A), topLeft, sizePx)
+                drawRect(Color(0xFF3AB54A), topLeft, sizePx,
+                    style = Stroke(2.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(12.dp.toPx(), 12.dp.toPx()))))
+                drawCircle(Color(0xFF2D9CDB), 14.dp.toPx(), alignedContentToScreenPoint(rect.bottomRight))
             }
         }
-
         robotPoseToBitmapPoint(
             pose = robotPose,
             geo = mapGeo,
@@ -671,202 +492,33 @@ internal fun MapEditingPanel(
             }
         }
 
-        if (
-            toolMode == EditToolMode.Erase &&
-            activeArea != null &&
-            editableAlignedAreaRect != null &&
-            mapImageBitmap != null
-        ) {
-            val density = LocalDensity.current
-            val activeAlignedRect = editableAlignedAreaRect!!
-            val mapAlignedBounds = rotatedMapBounds(mapWidthPx, mapHeightPx, alignmentYaw)
-            val currentMapAlignedBounds by rememberUpdatedState(mapAlignedBounds)
-            val activeScreenBounds = requireNotNull(
-                boundsOfPoints(rectCorners(activeAlignedRect).map(::alignedContentToScreenPoint))
-            )
-            val handleHalfPx = with(density) { 16.dp.toPx() }
-
-            // 命中层在一次拖动期间固定在起始位置；擦除框预览独立更新，避免局部坐标系
-            // 随组件移动而抵消连续 dragAmount。
-            val moveHitRect = moveGestureStartRect ?: activeAlignedRect
-            val moveHitScreenBounds = requireNotNull(
-                boundsOfPoints(rectCorners(moveHitRect).map(::alignedContentToScreenPoint))
-            )
-            val moveHitWidthDp = with(density) {
-                moveHitScreenBounds.width.coerceAtLeast(1f).toDp()
+        if (toolMode == EditToolMode.Erase) editableAlignedAreaRect?.let { rect ->
+            fun buttonPosition(point: Offset): IntOffset {
+                val half = with(density) { 16.dp.toPx() }
+                val screen = alignedContentToScreenPoint(point)
+                return IntOffset((screen.x - half).coerceIn(0f, (viewportSize.width - 2 * half).coerceAtLeast(0f)).toInt(),
+                    (screen.y - half).coerceIn(0f, (viewportSize.height - 2 * half).coerceAtLeast(0f)).toInt())
             }
-            val moveHitHeightDp = with(density) {
-                moveHitScreenBounds.height.coerceAtLeast(1f).toDp()
-            }
-            Box(
-                modifier = Modifier
-                    .offset {
-                        IntOffset(
-                            moveHitScreenBounds.left.toInt(),
-                            moveHitScreenBounds.top.toInt()
-                        )
-                    }
-                    .size(width = moveHitWidthDp, height = moveHitHeightDp)
-                    .pointerInput(
-                        activeArea.id,
-                        zoom,
-                        baseScale,
-                        mapAlignedBounds
-                    ) {
-                        var accumulatedScreenDelta = Offset.Zero
-                        var gestureStartRect: Rect? = null
-                        detectDragGestures(
-                            onDragStart = {
-                                val startRect = currentEditableAlignedAreaRect
-                                accumulatedScreenDelta = Offset.Zero
-                                gestureStartRect = startRect
-                                moveGestureStartRect = startRect
-                            },
-                            onDragEnd = {
-                                accumulatedScreenDelta = Offset.Zero
-                                gestureStartRect = null
-                                moveGestureStartRect = null
-                            },
-                            onDragCancel = {
-                                gestureStartRect?.let { editableAlignedAreaRect = it }
-                                accumulatedScreenDelta = Offset.Zero
-                                gestureStartRect = null
-                                moveGestureStartRect = null
-                            }
-                        ) { change, dragAmount ->
-                            change.consume()
-                            val startRect = gestureStartRect
-                            if (startRect != null) {
-                                accumulatedScreenDelta += dragAmount
-                                val requestedAlignedDelta = screenDeltaToAlignedContent(
-                                    screenDelta = accumulatedScreenDelta,
-                                    zoom = zoom,
-                                    baseScale = baseScale
-                                )
-                                editableAlignedAreaRect = moveEraseRectWithinBounds(
-                                    rect = startRect,
-                                    requestedDelta = requestedAlignedDelta,
-                                    bounds = currentMapAlignedBounds
-                                )
-                            }
-                        }
-                    }
-            )
-
-            HandleButton(
-                symbol = "✕",
-                bg = Color(0xFFE53935),
-                onClick = onRemoveArea,
-                modifier = Modifier.offset {
-                    IntOffset(
-                        (activeScreenBounds.left - handleHalfPx).toInt(),
-                        (activeScreenBounds.top - handleHalfPx).toInt()
-                    )
-                }
-            )
-            HandleButton(
-                symbol = "✓",
-                bg = Color(0xFF3AB54A),
-                onClick = {
-                    onConfirmArea(
-                        rectCorners(activeScreenBounds).map(::toAlignedContentPoint)
-                    )
-                },
-                modifier = Modifier.offset {
-                    IntOffset(
-                        (activeScreenBounds.right - handleHalfPx).toInt(),
-                        (activeScreenBounds.top - handleHalfPx).toInt()
-                    )
-                }
-            )
-
-            val minWidthPx = mapImageSize?.first
-                ?.takeIf { it > 0 }
-                ?.let { 24f * mapWidthPx / it.toFloat() }
-                ?: 24f
-            val minHeightPx = mapImageSize?.second
-                ?.takeIf { it > 0 }
-                ?.let { 24f * mapHeightPx / it.toFloat() }
-                ?: 24f
-            val resizeHitRect = resizeGestureStartRect ?: activeAlignedRect
-            val resizeHitScreenCorner = alignedContentToScreenPoint(
-                Offset(resizeHitRect.right, resizeHitRect.bottom)
-            )
-            val activeResizeScreenCorner = alignedContentToScreenPoint(
-                Offset(activeAlignedRect.right, activeAlignedRect.bottom)
-            )
-            val resizeVisualDelta = activeResizeScreenCorner - resizeHitScreenCorner
-            Box(
-                modifier = Modifier
-                    .offset {
-                        IntOffset(
-                            (resizeHitScreenCorner.x - handleHalfPx).toInt(),
-                            (resizeHitScreenCorner.y - handleHalfPx).toInt()
-                        )
-                    }
-                    .size(32.dp)
-                    .pointerInput(
-                        activeArea.id,
-                        zoom,
-                        baseScale,
-                        mapAlignedBounds,
-                        minWidthPx,
-                        minHeightPx
-                    ) {
-                        var accumulatedScreenDelta = Offset.Zero
-                        var gestureStartRect: Rect? = null
-                        detectDragGestures(
-                            onDragStart = {
-                                val startRect = currentEditableAlignedAreaRect
-                                accumulatedScreenDelta = Offset.Zero
-                                gestureStartRect = startRect
-                                resizeGestureStartRect = startRect
-                            },
-                            onDragEnd = {
-                                accumulatedScreenDelta = Offset.Zero
-                                gestureStartRect = null
-                                resizeGestureStartRect = null
-                            },
-                            onDragCancel = {
-                                gestureStartRect?.let { editableAlignedAreaRect = it }
-                                accumulatedScreenDelta = Offset.Zero
-                                gestureStartRect = null
-                                resizeGestureStartRect = null
-                            }
-                        ) { change, dragAmount ->
-                            change.consume()
-                            val startRect = gestureStartRect
-                            if (startRect != null) {
-                                accumulatedScreenDelta += dragAmount
-                                val requestedAlignedDelta = screenDeltaToAlignedContent(
-                                    screenDelta = accumulatedScreenDelta,
-                                    zoom = zoom,
-                                    baseScale = baseScale
-                                )
-                                editableAlignedAreaRect = resizeEraseRectBottomRight(
-                                    rect = startRect,
-                                    requestedDelta = requestedAlignedDelta,
-                                    bounds = currentMapAlignedBounds,
-                                    minimumWidth = minWidthPx,
-                                    minimumHeight = minHeightPx
-                                )
-                            }
-                        }
-                    }
-            ) {
-                HandleButton(
-                    symbol = "↘",
-                    bg = Color(0xFF2D9CDB),
-                    onClick = {},
-                    modifier = Modifier.graphicsLayer {
-                        translationX = resizeVisualDelta.x
-                        translationY = resizeVisualDelta.y
-                    }
-                )
+            HandleButton("✕", Color(0xFFE53935), onRemoveArea, Modifier.offset { buttonPosition(rect.topLeft) })
+            HandleButton("✓", Color(0xFF3AB54A), { onConfirmArea(rectCorners(rect)) },
+                Modifier.offset { buttonPosition(rect.topRight) })
+        }
+        if (toolMode == EditToolMode.Brush) {
+            Row(Modifier.align(Alignment.TopCenter).padding(8.dp).background(Color.White, RoundedCornerShape(20.dp))
+                .padding(horizontal = 12.dp).width(260.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("笔宽 ${brushSizeDp.toInt()}", fontSize = 12.sp)
+                Slider(brushSizeDp, { brushSizeDp = it }, valueRange = 12f..80f, modifier = Modifier.weight(1f))
             }
         }
         WorkflowZoomControl(workflow, Modifier.align(Alignment.BottomStart).padding(8.dp))
     }
+}
+
+internal fun Path.addPolygon(points: List<Offset>) {
+    if (points.size < 3) return
+    moveTo(points[0].x, points[0].y)
+    for (i in 1 until points.size) lineTo(points[i].x, points[i].y)
+    close()
 }
 
 @Composable

@@ -338,7 +338,8 @@ class MapScreenStep3ViewModel @Inject constructor(
             ) else it
             state.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
                 bitmapDecodeSize = decodeImageSize(frame.imageBytes), mapGeo = frame.toMapGeo(),
-                isMapLoading = true, mapLoadError = null)
+                isMapLoading = true, mapLoadError = null,
+                previewEraseRegions = MapWorkflowErasePreview.forSession(snapshot.sessionId))
         }
         loadJob = viewModelScope.launch {
             val payload = tcpManager.loadMapRegions(mapId)
