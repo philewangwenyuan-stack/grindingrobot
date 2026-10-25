@@ -41,6 +41,7 @@ import com.sinelynx.grindingrobot.core.model.state.DeviceWorkTimeStatisticsPaylo
 import com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate
 import java.util.Locale
 import sl_link.SlLink
+import com.sinelynx.grindingrobot.feature.map.ui.grindingDiscLocalCenter
 import kotlin.math.roundToInt
 
 /**
@@ -84,7 +85,7 @@ data class DeviceStatusUiState(
     val plannedPath: TaskPathPayload? = null,
     val taskMap: DeviceTaskMapState = DeviceTaskMapState(),
     val reportedPathVersion: Int = 0,
-    val trajectory: List<TaskPoseUiItem> = emptyList(),
+    val trajectory: TaskTrajectorySnapshot = TaskTrajectorySnapshot.Empty,
     val showCameraOverlay: Boolean = false,
     val videoStreamUrl: String? = null,
     val robotWidth: Double? = null,
@@ -128,25 +129,6 @@ data class TaskMapTransformUiState(
         get() = alignmentYawDeg + rotationAlignmentDeltaDeg
 }
 
-/**
- * 实际行驶轨迹独立于底图刷新：同任务追加位置，完整姿态/颜色重复才跳过，最多保留 maxPoints。
- * 换任务清空旧轨迹；本次没上报位置则保留已有轨迹，空闲或空任务 ID 则清空。
- */
-internal fun nextTaskTrajectory(
-    currentTaskId: String,
-    reportTaskId: String,
-    taskState: DeviceTaskUiState,
-    currentTrajectory: List<TaskPoseUiItem>,
-    pose: TaskPoseUiItem?,
-    maxPoints: Int = 500
-): List<TaskPoseUiItem> {
-    if (taskState == DeviceTaskUiState.IDLE || reportTaskId.isBlank()) return emptyList()
-    if (reportTaskId != currentTaskId) return pose?.let(::listOf).orEmpty()
-    pose ?: return currentTrajectory
-    if (currentTrajectory.lastOrNull() == pose) return currentTrajectory
-    return (currentTrajectory + pose).takeLast(maxPoints)
-}
-
 internal fun DeviceStatusUiState.afterTaskStopped(): DeviceStatusUiState {
     return copy(
         taskState = DeviceTaskUiState.IDLE,
@@ -158,7 +140,7 @@ internal fun DeviceStatusUiState.afterTaskStopped(): DeviceStatusUiState {
         navigationPauseNotice = null,
         plannedPath = null,
         reportedPathVersion = 0,
-        trajectory = emptyList()
+        trajectory = TaskTrajectorySnapshot.Empty
     )
 }
 
@@ -176,7 +158,6 @@ class DeviceStatusViewModel @Inject constructor(
 
     private companion object {
         const val CLICK_DEBOUNCE_MS = 300L
-        const val MAX_TRAJECTORY_POINTS = 500
     }
 
     private enum class PendingTaskCommandType {
@@ -197,6 +178,10 @@ class DeviceStatusViewModel @Inject constructor(
     private var statisticsRequestJob: Job? = null
     private var statisticsRecords: List<TaskExecutionHistoryRecordPayload>? = null
     private var statisticsWorkTime: DeviceWorkTimeStatisticsPayload? = null
+    private val trajectoryAccumulator = TaskTrajectoryAccumulator()
+    private var trajectoryDiscLocalX: Float? = null
+    private var trajectoryDiscLocalY: Float? = null
+    private var lastTrajectoryReportAtMs = 0L
     private var navigationWasConnected = false
     private var navigationConnectedAtMs = Long.MAX_VALUE
     private val navigationPauseTracker = NavigationPauseNoticeTracker()
@@ -243,6 +228,11 @@ class DeviceStatusViewModel @Inject constructor(
                 runtime to connection
             }.collect { (runtime, connection) ->
                 val connected = connection == ConnectionState.CONNECTED
+                if (navigationWasConnected && !connected) {
+                    val broken = trajectoryAccumulator.breakContinuity()
+                    lastTrajectoryReportAtMs = 0L
+                    _uiState.update { it.copy(trajectory = broken) }
+                }
                 if (connected && !navigationWasConnected) navigationConnectedAtMs = SystemClock.elapsedRealtime()
                 navigationWasConnected = connected
                 val hasCurrentReport = connected && runtime.receivedAtElapsedMs >= navigationConnectedAtMs &&
@@ -276,11 +266,16 @@ class DeviceStatusViewModel @Inject constructor(
 
         viewModelScope.launch {
             appState.robotSettings.collect { settings ->
+                val disc = grindingDiscLocalCenter(settings?.footprint.orEmpty(), settings?.robotLength)
+                trajectoryDiscLocalX = disc?.x
+                trajectoryDiscLocalY = disc?.y
+                val geometry = trajectoryAccumulator.configure(disc?.x, disc?.y)
                 _uiState.update { current ->
                     current.copy(
                         robotWidth = settings?.robotWidth,
                         robotLength = settings?.robotLength,
-                        robotFootprint = settings?.footprint.orEmpty()
+                        robotFootprint = settings?.footprint.orEmpty(),
+                        trajectory = geometry
                     )
                 }
             }
@@ -304,17 +299,16 @@ class DeviceStatusViewModel @Inject constructor(
                 if (taskState != _uiState.value.taskState || reportTaskId != _uiState.value.currentTaskId) {
                     LogUtils.i("TaskControl", "UI status taskId=$reportTaskId state=${payload.stateValue} label=$taskState")
                 }
+                val receivedAt = SystemClock.elapsedRealtime()
+                if (lastTrajectoryReportAtMs > 0L && receivedAt - lastTrajectoryReportAtMs > 3_000L) {
+                    trajectoryAccumulator.breakContinuity()
+                }
+                val nextTrajectory = trajectoryAccumulator.accept(reportTaskId, taskState, payload.toPoseItem(),
+                    trajectoryDiscLocalX, trajectoryDiscLocalY)
+                lastTrajectoryReportAtMs = if (taskState == DeviceTaskUiState.IDLE) 0L else receivedAt
                 _uiState.update { current ->
                     val doneTaskArea = payload.totalWorkArea - payload.remainWorkArea
                     val taskChanged = reportTaskId.isNotBlank() && reportTaskId != current.currentTaskId
-                    val nextTrajectory = nextTaskTrajectory(
-                        currentTaskId = current.currentTaskId,
-                        reportTaskId = reportTaskId,
-                        taskState = taskState,
-                        currentTrajectory = current.trajectory,
-                        pose = payload.toPoseItem(),
-                        maxPoints = MAX_TRAJECTORY_POINTS
-                    )
                     current.copy(
                         taskState = taskState,
                         navigationPauseNotice = current.navigationPauseNotice.takeIf {
@@ -698,6 +692,8 @@ class DeviceStatusViewModel @Inject constructor(
                 }
             }
             PendingTaskCommandType.STOP -> {
+                trajectoryAccumulator.reset()
+                lastTrajectoryReportAtMs = 0L
                 taskMapController.onTask(null, 0)
                 TaskPathStream.reset(taskId)
                 _uiState.update {

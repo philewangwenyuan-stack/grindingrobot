@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace = "com.sinelynx.grindingrobot.feature.device"
+    defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 }
 
 dependencies {

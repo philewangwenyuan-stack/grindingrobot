@@ -26,8 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.feature.map.ui.FootprintRobotMarker
-import com.sinelynx.grindingrobot.feature.map.ui.grindingDiscWorldCenter
-import com.sinelynx.grindingrobot.feature.map.ui.GRINDING_DISC_DIAMETER_M
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -71,6 +69,7 @@ import com.sinelynx.grindingrobot.feature.device.viewmodel.DeviceStatusViewModel
 import com.sinelynx.grindingrobot.feature.device.viewmodel.DeviceTaskUiState
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskMapTransformUiState
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskPoseUiItem
+import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskTrajectorySnapshot
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskRuntimeField
 import com.sinelynx.grindingrobot.feature.device.viewmodel.canEditTaskRuntime
 import java.util.Locale
@@ -799,12 +798,12 @@ private fun CenterRobotMarker(
 /**
  * 实际轨迹和机器人使用 0x0504 的位置，与 0x0506 的规划路径是两套数据。
  * 轨迹颜色沿用遍数规则，不能替换成规划路径的 within_region/between_regions 红蓝规则。
- * 先画轨迹线和采样点，再画机器人；机器人取最后一个可投影点，越界/无效点会被过滤。
+ * 先画分块缓存的连续磨盘覆盖带，再画独立的最新机器人位置；无效位置不跨段连线。
  * 图标尺寸沿用配置长宽比和屏幕尺寸限制，不是地图中的实际占地轮廓。
  */
 @Composable
 private fun ZoomableTaskTrajectoryOverlay(
-    trajectory: List<TaskPoseUiItem>,
+    trajectory: TaskTrajectorySnapshot,
     mapTransform: TaskMapTransformUiState?,
     bitmapWidth: Int,
     bitmapHeight: Int,
@@ -815,22 +814,12 @@ private fun ZoomableTaskTrajectoryOverlay(
     robotFootprint: List<AppState.FootprintPoint>,
     modifier: Modifier = Modifier
 ) {
-    if (trajectory.isEmpty() || mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
+    if (mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
 
-    val bitmapTrajectory = remember(trajectory, mapTransform, bitmapWidth, bitmapHeight, robotFootprint, robotLength) {
-        trajectory.mapNotNull { pose ->
-            pose.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)?.let { offset ->
-                TaskTrajectoryDrawPoint(
-                    offset = offset,
-                    lineColor = Color(pose.lineColorArgb),
-                    headingDeg = pose.headingDeg,
-                    discOffset = grindingDiscWorldCenter(pose.x, pose.y, pose.headingDeg, robotFootprint, robotLength)
-                        ?.let { pose.copy(x = it.x, y = it.y).toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight) }
-                )
-            }
-        }
-    }
-    val robotPoint = bitmapTrajectory.lastOrNull() ?: return
+    val drawing = remember { TaskTrajectoryDrawingCache() }
+    drawing.update(trajectory, mapTransform, bitmapWidth, bitmapHeight)
+    val robotPose = trajectory.latestPose
+    val robotOffset = robotPose?.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)
     val density = LocalDensity.current
     var viewportSize by remember { mutableStateOf(IntSize.Zero) }
 
@@ -849,44 +838,11 @@ private fun ZoomableTaskTrajectoryOverlay(
         }
 
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val finalMapBounds = mapBounds ?: calculateImageBounds(
-                containerWidth = size.width,
-                containerHeight = size.height,
-                imageWidth = bitmapWidth,
-                imageHeight = bitmapHeight
-            )
-            for (index in 1 until bitmapTrajectory.size) {
-                val start = bitmapTrajectory[index - 1].discOffset ?: continue
-                val end = bitmapTrajectory[index].discOffset ?: continue
-                drawLine(
-                    color = bitmapTrajectory[index].lineColor,
-                    start = start
-                        .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
-                        .transformBy(zoom, pan),
-                    end = end
-                        .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
-                        .transformBy(zoom, pan),
-                    strokeWidth = GRINDING_DISC_DIAMETER_M * finalMapBounds.width /
-                        mapTransform.width / mapTransform.resolution * zoom,
-                    cap = androidx.compose.ui.graphics.StrokeCap.Round
-                )
-            }
-            bitmapTrajectory.forEach { point ->
-                val disc = point.discOffset ?: return@forEach
-                val center = disc
-                    .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
-                    .transformBy(zoom, pan)
-                drawCircle(
-                    color = point.lineColor,
-                    radius = GRINDING_DISC_DIAMETER_M / 2f * finalMapBounds.width /
-                        mapTransform.width / mapTransform.resolution * zoom,
-                    center = center
-                )
-            }
+            drawing.draw(this, mapTransform, bitmapWidth, bitmapHeight, zoom, pan)
         }
 
-        if (viewportSize.width <= 0 || viewportSize.height <= 0 || mapBounds == null) return@Box
-        val robotCenter = robotPoint.offset
+        if (viewportSize.width <= 0 || viewportSize.height <= 0 || mapBounds == null || robotPose == null || robotOffset == null) return@Box
+        val robotCenter = robotOffset
             .toTaskDrawOffset(mapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg)
             .transformBy(zoom, pan)
 
@@ -916,7 +872,7 @@ private fun ZoomableTaskTrajectoryOverlay(
         if (robotFootprint.size >= 3) {
             FootprintRobotMarker(
                 center = robotCenter,
-                headingDeg = 90f - taskRobotRotationDeg(robotPoint.headingDeg, mapTransform),
+                headingDeg = 90f - taskRobotRotationDeg(robotPose.headingDeg, mapTransform),
                 footprint = robotFootprint,
                 pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * zoom,
                 pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution * zoom,
@@ -935,7 +891,7 @@ private fun ZoomableTaskTrajectoryOverlay(
                         )
                     }
                     .graphicsLayer {
-                        rotationZ = taskRobotRotationDeg(robotPoint.headingDeg, mapTransform)
+                        rotationZ = taskRobotRotationDeg(robotPose.headingDeg, mapTransform)
                     }
             )
         }
@@ -944,7 +900,7 @@ private fun ZoomableTaskTrajectoryOverlay(
 
 @Composable
 private fun TaskTrajectoryOverlay(
-    trajectory: List<TaskPoseUiItem>,
+    trajectory: TaskTrajectorySnapshot,
     mapTransform: TaskMapTransformUiState?,
     bitmapWidth: Int,
     bitmapHeight: Int,
@@ -953,22 +909,12 @@ private fun TaskTrajectoryOverlay(
     robotFootprint: List<AppState.FootprintPoint>,
     modifier: Modifier = Modifier
 ) {
-    if (trajectory.isEmpty() || mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
+    if (mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
 
-    val bitmapTrajectory = remember(trajectory, mapTransform, bitmapWidth, bitmapHeight, robotFootprint, robotLength) {
-        trajectory.mapNotNull { pose ->
-            pose.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)?.let { offset ->
-                TaskTrajectoryDrawPoint(
-                    offset = offset,
-                    lineColor = Color(pose.lineColorArgb),
-                    headingDeg = pose.headingDeg,
-                    discOffset = grindingDiscWorldCenter(pose.x, pose.y, pose.headingDeg, robotFootprint, robotLength)
-                        ?.let { pose.copy(x = it.x, y = it.y).toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight) }
-                )
-            }
-        }
-    }
-    val robotPoint = bitmapTrajectory.lastOrNull() ?: return
+    val drawing = remember { TaskTrajectoryDrawingCache() }
+    drawing.update(trajectory, mapTransform, bitmapWidth, bitmapHeight)
+    val robotPose = trajectory.latestPose
+    val robotOffset = robotPose?.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)
     val density = LocalDensity.current
 
     BoxWithConstraints(modifier = modifier) {
@@ -1000,39 +946,11 @@ private fun TaskTrajectoryOverlay(
         }
 
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val finalMapBounds = mapBounds
-            for (index in 1 until bitmapTrajectory.size) {
-                val start = bitmapTrajectory[index - 1].discOffset ?: continue
-                val end = bitmapTrajectory[index].discOffset ?: continue
-                drawLine(
-                    color = bitmapTrajectory[index].lineColor,
-                    start = start
-                        .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg),
-                    end = end
-                        .toTaskDrawOffset(finalMapBounds, bitmapWidth, bitmapHeight, mapTransform.totalRotationDeg),
-                    strokeWidth = GRINDING_DISC_DIAMETER_M * finalMapBounds.width /
-                        mapTransform.width / mapTransform.resolution,
-                    cap = androidx.compose.ui.graphics.StrokeCap.Round
-                )
-            }
-            bitmapTrajectory.forEach { point ->
-                val disc = point.discOffset ?: return@forEach
-                val center = disc.toTaskDrawOffset(
-                    finalMapBounds,
-                    bitmapWidth,
-                    bitmapHeight,
-                    mapTransform.totalRotationDeg
-                )
-                drawCircle(
-                    color = point.lineColor,
-                    radius = GRINDING_DISC_DIAMETER_M / 2f * finalMapBounds.width /
-                        mapTransform.width / mapTransform.resolution,
-                    center = center
-                )
-            }
+            drawing.draw(this, mapTransform, bitmapWidth, bitmapHeight)
         }
 
-        val robotCenter = robotPoint.offset.toTaskDrawOffset(
+        if (robotPose == null || robotOffset == null) return@BoxWithConstraints
+        val robotCenter = robotOffset.toTaskDrawOffset(
             mapBounds,
             bitmapWidth,
             bitmapHeight,
@@ -1043,7 +961,7 @@ private fun TaskTrajectoryOverlay(
         if (robotFootprint.size >= 3) {
             FootprintRobotMarker(
                 center = robotCenter,
-                headingDeg = 90f - taskRobotRotationDeg(robotPoint.headingDeg, mapTransform),
+                headingDeg = 90f - taskRobotRotationDeg(robotPose.headingDeg, mapTransform),
                 footprint = robotFootprint,
                 pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * 1f,
                 pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution,
@@ -1060,19 +978,14 @@ private fun TaskTrajectoryOverlay(
                         y = (drawY - drawLength.value / 2f).dp
                     )
                     .graphicsLayer {
-                        rotationZ = taskRobotRotationDeg(robotPoint.headingDeg, mapTransform)
+                        rotationZ = taskRobotRotationDeg(robotPose.headingDeg, mapTransform)
                     }
             )
         }
     }
 }
 
-private data class TaskTrajectoryDrawPoint(
-    val offset: Offset,
-    val lineColor: Color,
-    val headingDeg: Float,
-    val discOffset: Offset? = null
-)
+
 
 internal data class MapDrawBounds(
     val left: Float,
