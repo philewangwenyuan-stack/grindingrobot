@@ -7,6 +7,9 @@ enum class TaskRuntimeField(val label: String, val unit: String) {
     RUN_SPEED("直行速度", "m/s"), DISC_RPM("研磨转速", "rpm")
 }
 
+internal fun canEditTaskRuntime(taskId: String, taskState: DeviceTaskUiState): Boolean =
+    taskId.isNotBlank() && taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)
+
 internal fun TaskRuntimeSettingsPayload.isUsableFor(taskId: String): Boolean =
     this.taskId == taskId && temporary && runSpeed?.let { it.isFinite() && it > 0f && it <= maxRunSpeed } == true &&
         maxRunSpeed.isFinite() && maxRunSpeed > 0f && discSpeedRpm?.let { it in 0..maxDiscSpeedRpm } == true &&

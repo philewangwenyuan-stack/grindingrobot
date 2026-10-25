@@ -28,6 +28,8 @@
 
 15. Task start blocked by zero run_speed — complete locally. Found three APP partial ChassisSettings writes (remote disc, relocalization disc/turn gain). Proto3 scalar defaults are applied as a full snapshot by the board, so omitted run_speed becomes persisted zero. Preserve the last read chassis snapshot for these edits, refuse a partial write when unavailable, keep intentional zero and board start guard, wire regressions and final production APK build passed (88 TCP tests, including 7 new, and 34 board execution/runtime/safety tests). Existing zero must be reset through process settings; no device writes authorized or performed.
 
+16. Fullscreen and setting-entry follow-up — complete locally. Immersive systemBars hide on create/resume/focus, allow transient edge reveal, keep APP status/header. User chose gray/disabled settings before start; shared canEditTaskRuntime gates UI and ViewModel with runtime-only semantics. Production/test APK build passed, device unit tests 50 passed and native UI tests 7 passed (including system-bar hide/show/re-hide). Fullscreen captures at 1600×1000 inspected; physical tablet confirmation remains pending.
+
 ## Errors
 - First compile: Compose DSL scoped maxHeight reference in inner Box. Fixed with outer captured label inset.
 - Baseline main build error: navigationPauseNotice argument belonged to state copy, not trajectory helper. Minimal correction made.

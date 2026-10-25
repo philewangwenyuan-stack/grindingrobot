@@ -218,9 +218,14 @@ internal class StartGrindingSessionController(
      * 先保存此次输入副本；等待中配置若改变，后续 matchesPlan 会拒绝复用旧规划。
      * 面积/耗时来自本轮路径响应，缺失保持 null，不反推耗时或使用旧统计兜底。
      */
+    private var pendingPlanKey: List<Any?>? = null
+
     fun requestPlan(taskId: String, taskName: String, repeats: Map<String, Int>, obstacles: List<TaskObstacleRegionConfig>) {
         val mapId = state.value.mapId ?: return
         if (state.value.frame == null || state.value.isMapLoading) return
+        val key = listOf(mapId, state.value.frame, taskId, taskName.trim(), repeats.toMap(), obstacles.toList())
+        if (planJob?.isActive == true && key == pendingPlanKey) return
+        pendingPlanKey = key
         closeLegacyPreview()
         planJob?.cancel()
         regionJob?.cancel()

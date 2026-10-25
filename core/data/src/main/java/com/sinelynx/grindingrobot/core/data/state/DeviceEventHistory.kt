@@ -25,7 +25,7 @@ internal fun nextDeviceEventId(now: Long, latestId: Long, readThrough: Long): Lo
 object DeviceEventHistory {
     private const val KEY = "device_event_history_v1"
     private const val READ_KEY = "device_event_read_through_v1"
-    private const val BATTERY_KEY = "device_event_battery_tier_v1"
+    private const val BATTERY_KEY = "tablet_event_battery_tier_v2"
     private const val LIMIT = 500
     private val gson = Gson()
     private val records by lazy {
@@ -39,7 +39,9 @@ object DeviceEventHistory {
         // Upgrade old records without IDs deterministically, including equal timestamps.
         val legacyBase = saved.maxOfOrNull { it.occurredAtMillis } ?: 0L
         MutableStateFlow(saved.mapIndexed { index, event ->
-            if (event.eventId > 0L) event else event.copy(eventId = legacyBase + saved.size - index)
+            val migrated = event.copy(title = event.title.replace("设备电量过低(", "平板电量过低(")
+                .replace("设备电量严重不足(", "平板电量严重不足("))
+            if (migrated.eventId > 0L) migrated else migrated.copy(eventId = legacyBase + saved.size - index)
         })
     }
     val events by lazy { records.asStateFlow() }
@@ -72,8 +74,8 @@ object DeviceEventHistory {
         batteryTier = tier
         runCatching { MMKVUtils.putLong(BATTERY_KEY, tier.toLong()) }
         when (tier) {
-            1 -> append(DeviceEventLevel.WARNING, "设备电量过低($percent%)")
-            2 -> append(DeviceEventLevel.ERROR, "设备电量严重不足($percent%)")
+            1 -> append(DeviceEventLevel.WARNING, "平板电量过低($percent%)")
+            2 -> append(DeviceEventLevel.ERROR, "平板电量严重不足($percent%)")
         }
     }
 

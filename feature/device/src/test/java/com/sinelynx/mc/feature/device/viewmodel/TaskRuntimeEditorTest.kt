@@ -7,6 +7,17 @@ import org.junit.Test
 class TaskRuntimeEditorTest {
     private val settings = TaskRuntimeSettingsPayload("task", 0.06f, 1200, 0.15f, 1500, true)
 
+    @Test fun settingsAreDisabledBeforeStartAndWithoutAnActiveTask() {
+        for (state in listOf(DeviceTaskUiState.IDLE, DeviceTaskUiState.READY)) {
+            assertFalse(canEditTaskRuntime("task", state))
+        }
+        for (state in listOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)) {
+            assertTrue(canEditTaskRuntime("task", state))
+            assertFalse(canEditTaskRuntime("", state))
+            assertFalse(canEditTaskRuntime(" ", state))
+        }
+    }
+
     @Test fun missingOrPersistentOrDifferentTaskReplyCannotEnableEditing() {
         assertTrue(settings.isUsableFor("task"))
         assertFalse(settings.isUsableFor("other"))

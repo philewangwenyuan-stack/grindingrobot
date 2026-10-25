@@ -175,3 +175,14 @@ OTA 还依赖以下约定：
 自动任务接管仍需确认；仅打开自动模式提示但未接管时不发送遥控运动。
 板端也需同步最新指令队列、执行代号和0.5秒失联兜底配置，参见Grinder根README 7.3。
 平板代码修改后需重新构建并安装APK；CPU/USB灯效不能代替实车停车反馈验收。
+
+
+## 现场控制与状态修正（2026-10-25）
+
+TCP输出统一串行写；手动发送只保留最新待发速度，停车优先，移动在写入前检查500ms有效期和连接会话。
+不等待上一条手动ACK、不重试旧移动。页面退出/后台/断连继续调用既有遥控停止逻辑。
+同输入在途规划合并；输入改变取消旧等待，响应使用已有request_id隔离，不展示虚构百分比。
+状态栏/消息中心电量明确为平板电量，首次有效Android广播前显示未知；不代表底盘电池。
+里程计置信度与导航就绪分开，过期状态不显示为正常。RPP通过既有任务消息提供侧障/前障距离、扫描过期和TF失败原因。
+本轮不增加Protobuf字段、不安装APK。模块验证使用DevDebug flavor：
+`gradlew :core:tcp:testDevDebugUnitTest :feature:common:testDevDebugUnitTest :feature:device:testDevDebugUnitTest :feature:map:testDevDebugUnitTest`。

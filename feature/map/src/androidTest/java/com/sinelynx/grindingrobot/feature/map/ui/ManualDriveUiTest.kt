@@ -20,6 +20,10 @@ import com.sinelynx.grindingrobot.core.model.state.MapBuildSessionStream
 import com.sinelynx.grindingrobot.feature.common.component.LocalManualFeedback
 import com.sinelynx.grindingrobot.feature.common.component.LocalManualFeedbackAllowed
 import com.sinelynx.grindingrobot.feature.common.component.ManualFeedback
+import com.sinelynx.grindingrobot.feature.common.component.applyRobotFullscreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapScreenStep4UiState
 import com.sinelynx.grindingrobot.feature.map.viewmodel.EditToolMode
 import androidx.compose.material3.Surface
@@ -62,6 +66,32 @@ class ManualDriveUiTest {
         }
         compose.waitUntil(15_000) {
             compose.activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        }
+        compose.activityRule.scenario.onActivity { applyRobotFullscreen(it.window) }
+        compose.waitUntil(10_000) {
+            ViewCompat.getRootWindowInsets(compose.activity.window.decorView)?.let {
+                !it.isVisible(WindowInsetsCompat.Type.statusBars()) &&
+                    !it.isVisible(WindowInsetsCompat.Type.navigationBars())
+            } == true
+        }
+    }
+
+    @Test fun fullscreenHidesBothSystemBarsAndCanBeRestoredAfterTemporaryReveal() {
+        compose.setContent { MaterialTheme { Text("全屏测试", Modifier.fillMaxSize()) } }
+        compose.activityRule.scenario.onActivity {
+            WindowCompat.getInsetsController(it.window, it.window.decorView)
+                .show(WindowInsetsCompat.Type.systemBars())
+        }
+        compose.waitUntil(10_000) {
+            ViewCompat.getRootWindowInsets(compose.activity.window.decorView)
+                ?.isVisible(WindowInsetsCompat.Type.statusBars()) == true
+        }
+        compose.activityRule.scenario.onActivity { applyRobotFullscreen(it.window) }
+        compose.waitUntil(10_000) {
+            ViewCompat.getRootWindowInsets(compose.activity.window.decorView)?.let {
+                !it.isVisible(WindowInsetsCompat.Type.statusBars()) &&
+                    !it.isVisible(WindowInsetsCompat.Type.navigationBars())
+            } == true
         }
     }
 

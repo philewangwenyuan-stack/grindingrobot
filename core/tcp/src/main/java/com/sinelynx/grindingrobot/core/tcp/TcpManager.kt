@@ -1126,7 +1126,7 @@ class TcpManager @Inject constructor(
     ): Boolean {
         val command = buildRobotControlCommand(remoteX, remoteY, speed, maxSpeedMps)
         val data = slLinkManager.sendControlCommand(command.toByteArray())
-        return sendData(data)
+        return tcpService.sendManualData(data, speed <= 0f || (remoteX == 0f && remoteY == 0f))
     }
 
     /** Independent manual axes; gain and wheel envelope apply only to this command. */
@@ -1139,7 +1139,8 @@ class TcpManager @Inject constructor(
     ): Boolean {
         val command = buildRobotControlCommand(remoteX, remoteY, speedRatio,
             maxSpeedMps, maxTurnSpeedRatio)
-        return sendData(slLinkManager.sendControlCommand(command.toByteArray()))
+        return tcpService.sendManualData(slLinkManager.sendControlCommand(command.toByteArray()),
+            speedRatio <= 0f || (remoteX == 0f && remoteY == 0f))
     }
 
     /**

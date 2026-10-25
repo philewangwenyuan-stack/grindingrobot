@@ -16,6 +16,7 @@ import com.sinelynx.grindingrobot.core.designsystem.theme.AppTheme
 import com.sinelynx.grindingrobot.navigation.AppNavHost
 import com.sinelynx.grindingrobot.navigation.AppNavigator
 import com.sinelynx.grindingrobot.feature.main.ota.ApkOtaManager
+import com.sinelynx.grindingrobot.feature.common.component.applyRobotFullscreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,8 +34,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        applyRobotFullscreen(window)
         // 安装结果广播只创建进程；主页面进入前台后才确认新版本已被打开。
         apkOtaManager.onForegroundLaunch()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) applyRobotFullscreen(window)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +50,7 @@ class MainActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        applyRobotFullscreen(window)
         setContent {
             AppTheme {
                 RequestLocationPermissionOnStart()

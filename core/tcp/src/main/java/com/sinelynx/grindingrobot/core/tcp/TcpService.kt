@@ -29,6 +29,14 @@ import kotlin.coroutines.suspendCoroutine
  * @author Dreamj
  */
 class TcpService {
+    private val wireLock = Any()
+    private val manualLease = ManualSendLease()
+    private val manualQueueLock = Any()
+    private data class ManualEnvelope(val data: ByteArray, val stream: BufferedOutputStream,
+        val connection: Int, val ticket: ManualSendLease.Ticket)
+    private var pendingManual: ManualEnvelope? = null
+    private var pendingStop: ManualEnvelope? = null
+    private var manualWriterRunning = false
     private var socket: Socket? = null
     private var outputStream: BufferedOutputStream? = null
     private var inputStream: BufferedInputStream? = null
@@ -294,12 +302,15 @@ class TcpService {
         // 必须在 launch 内捕获：write/flush 在协程里异步执行，外层 try 捕不到 IOException
         scope.launch {
             try {
-                stream.write(data)
-                stream.flush()
+                synchronized(wireLock) {
+                    if (stream !== outputStream || !isConnected) return@launch
+                    stream.write(data)
+                    stream.flush()
+                }
                 onWritten?.invoke()
             } catch (e: IOException) {
                 LogUtils.e("TcpService", "sendData failed: ${e.message}")
-                handleDisconnection("Send failed: ${e.message}")
+                if (stream === outputStream) handleDisconnection("Send failed: ${e.message}")
             }
         }
         return true
@@ -311,20 +322,52 @@ class TcpService {
      * @param data 要发送的数据
      * @return 发送是否成功
      */
-    suspend fun sendDataAsync(data: ByteArray): Boolean = suspendCoroutine { continuation ->
-        if (isConnected && outputStream != null) {
-            scope.launch {
-                try {
-                    outputStream?.write(data)
-                    outputStream?.flush()
-                    continuation.resume(true)
-                } catch (e: IOException) {
-                    continuation.resume(false)
+    suspend fun sendDataAsync(data: ByteArray): Boolean = withContext(Dispatchers.IO) {
+        val stream = outputStream ?: return@withContext false
+        try {
+            synchronized(wireLock) {
+                if (stream !== outputStream || !isConnected) false else {
+                    stream.write(data); stream.flush(); true
                 }
             }
-        } else {
-            continuation.resume(false)
+        } catch (e: IOException) {
+            if (stream === outputStream) handleDisconnection("Send failed: ${e.message}")
+            false
         }
+    }
+
+    fun sendManualData(data: ByteArray, stop: Boolean): Boolean {
+        val stream = outputStream ?: return false
+        if (!isConnected) return false
+        synchronized(manualQueueLock) {
+            val envelope = ManualEnvelope(data.copyOf(), stream, connectionGeneration,
+                manualLease.issue(android.os.SystemClock.elapsedRealtime(), stop))
+            if (stop) { pendingStop = envelope; pendingManual = null } else pendingManual = envelope
+            if (manualWriterRunning) return true
+            manualWriterRunning = true
+        }
+        scope.launch {
+            while (true) {
+                val item = synchronized(manualQueueLock) {
+                    val next = pendingStop ?: pendingManual
+                    if (pendingStop != null) pendingStop = null else pendingManual = null
+                    if (next == null) manualWriterRunning = false
+                    next
+                } ?: break
+                try {
+                    synchronized(wireLock) {
+                        if (item.connection == connectionGeneration && item.stream === outputStream && isConnected &&
+                            manualLease.valid(item.ticket, android.os.SystemClock.elapsedRealtime())) {
+                            item.stream.write(item.data)
+                            item.stream.flush()
+                        }
+                    }
+                } catch (e: IOException) {
+                    if (item.connection == connectionGeneration) handleDisconnection("Manual send failed: ${e.message}")
+                }
+            }
+        }
+        return true
     }
 
     /**
@@ -350,8 +393,10 @@ class TcpService {
                     // Log heartbeat payload in hex for debugging
                     val heartbeatHex = heartbeatData.joinToString(" ") { byte -> "%02X".format(byte) }
 //                    LogUtils.d("TcpService: 发送心跳 -> $heartbeatHex")
-                    outputStream?.write(heartbeatData)
-                    outputStream?.flush()
+                    synchronized(wireLock) {
+                        outputStream?.write(heartbeatData)
+                        outputStream?.flush()
+                    }
                     withContext(Dispatchers.Main) {
                         callback?.onHeartbeatSent()
                     }
@@ -410,6 +455,8 @@ class TcpService {
      * 处理断开连接
      */
     private fun handleDisconnection(reason: String) {
+        manualLease.cancel()
+        synchronized(manualQueueLock) { pendingManual = null; pendingStop = null }
         LogUtils.d("TcpService: 连接已断开 -> $reason","isConnected:$isConnected")
         // 已处于断开则避免重复清理；原逻辑误写为 if (isConnected) return 会导致永不清理
         if (!isConnected) return

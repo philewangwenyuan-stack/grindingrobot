@@ -44,3 +44,11 @@
 任务零速修复验证：core:tcp全套88项通过（新增ChassisSettingsUpdateTest7项），板端执行速度/任务临时参数/急停34项通过。测试覆盖旧局部写入解码run_speed=0、磨盘0rpm保留任务速度与既有enable规则、转向保留其余参数、缺失快照不构建请求、原来明确为0不自动替换。生产APK打包仍在进行；没有更改或连接现场机器人参数，未改变板端启动保护或协议。
 
 2026-10-24 任务零速修复交付：生产APK构建成功（task-zero-speed-fix-build.log，4m31s），TCP88项含新增7项、板端相关34项通过。APP三处入口已接专用完整快照API；协议、板端实现、任务启动零速保护均未改。没有读取现场日志或写现场参数，用户本次现场最后一次写入来源未由日志证实，但旧局部报文零速覆盖链路已由源码与协议往返测试复现。已有持久化0需用户在工艺设置恢复原值，新APK仅防止再次误写。未部署或操作机器人。
+
+2026-10-24：新问题全屏+设定入口。MainActivity此前仅enableEdgeToEdge/setDecorFitsSystemWindows(false)，没有hide systemBars，故系统图标覆盖顶栏。新增公共applyRobotFullscreen用WindowInsetsControllerCompat/临时边缘滑动，并在onCreate/onResume/onWindowFocusChanged调用。用户已确认设定时任务未启动；DeviceStatusScreen运行中/暂停才clickable，保持蓝字造成无反馈。编辑VM相同门控。等待用户选择未启动持久化设定还是保留任务临时调节。未改运行参数或操作机器人。
+
+全屏/灰显决策确认：用户回复“未启动不能设置就灰显”，不开放待机持久化设定。两处设定文案禁用时改灰色，UI与VM统一使用canEditTaskRuntime（非空任务ID且运行/暂停），新增状态策略回归。MainActivity在创建/恢复/焦点恢复时隐藏系统栏，保留系统边缘临时呼出与APP内状态；新增原生hide/show/re-hide断言，现有界面用例在全屏下重跑。
+
+2026-10-24 全屏与灰显验收：生产及测试APK构建成功（3m54s，fullscreen-disabled-settings-build.log），设备模块50项单测0失败，ManualDriveUiTest原生7项通过（fullscreen-native-ui.log），含systemBars隐藏/显示/再次隐藏。6张新截图1600×1000保存artifacts/fullscreen-ui，已目视核对扫描/遥控/保存页，底部按钮完整。主Activity接入同一全屏函数；实际现场平板未安装验证，未连接机器人或写参数。
+
+本轮隔离MuMu index1（created_timestamp=1792813383927200）已关闭并删除，最终info all仅保留原index0；原实例磁盘未修改。git diff --check通过。

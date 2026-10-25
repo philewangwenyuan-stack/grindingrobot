@@ -95,7 +95,7 @@ fun DeviceStatusBar(
     val timeText = rememberCurrentTimeText(currentTime)
     val wifiText = wifiName ?: systemWifiName
     val resolvedBatteryPercent = batteryPercent ?: systemBatteryPercent
-    val batteryValue = resolvedBatteryPercent.coerceIn(0, 100)
+    val batteryValue = resolvedBatteryPercent?.coerceIn(0, 100) ?: 0
     val history by DeviceEventHistory.events.collectAsState()
     val hasUnread by DeviceEventHistory.hasUnread.collectAsState()
     val eventFormatter = remember { SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()) }
@@ -116,7 +116,7 @@ fun DeviceStatusBar(
     var messageButtonBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
 
     LaunchedEffect(resolvedBatteryPercent) {
-        DeviceEventHistory.reportBatteryLevel(resolvedBatteryPercent)
+        resolvedBatteryPercent?.let { DeviceEventHistory.reportBatteryLevel(it) }
     }
     LaunchedEffect(showMessageDialog, history.firstOrNull()?.eventId) {
         if (showMessageDialog) history.firstOrNull()?.let { DeviceEventHistory.markReadThrough(it.eventId) }
@@ -161,7 +161,7 @@ fun DeviceStatusBar(
         ) {
             VerticalBatteryView(modifier = Modifier.size(12.dp, height = 24.dp), level = batteryValue)
             Text(
-                text = "$batteryValue%",
+                text = resolvedBatteryPercent?.let { "平板 $it%" } ?: "平板 --",
                 fontSize = 14.sp,
                 color = Color(0xFF202937),
                 fontWeight = FontWeight.Bold
@@ -381,18 +381,16 @@ fun rememberCurrentTimeText(externalTime: String? = null): String {
 }
 
 @Composable
-private fun rememberBatteryPercent(): androidx.compose.runtime.State<Int> {
+private fun rememberBatteryPercent(): androidx.compose.runtime.State<Int?> {
     val context = LocalContext.current
-    val batteryPercent = remember { mutableIntStateOf(0) }
+    val batteryPercent = remember { mutableStateOf<Int?>(null) }
 
     DisposableEffect(context) {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
                 val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-                if (level >= 0 && scale > 0) {
-                    batteryPercent.intValue = (level * 100 / scale).coerceIn(0, 100)
-                }
+                validTabletBatteryPercent(level, scale)?.let { batteryPercent.value = it }
             }
         }
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
@@ -592,3 +590,6 @@ fun VerticalBatteryView(
         )
     }
 }
+
+internal fun validTabletBatteryPercent(level: Int, scale: Int): Int? =
+    if (scale <= 0 || level !in 0..scale) null else (level.toLong() * 100 / scale).toInt()

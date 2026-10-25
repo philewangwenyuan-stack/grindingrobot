@@ -216,6 +216,16 @@ class DeviceStatusViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            while (isActive) {
+                delay(500L)
+                val received = appState.runtimeTaskState.value.receivedAtElapsedMs
+                if (received <= 0L || SystemClock.elapsedRealtime() - received > 3_000L) {
+                    _uiState.update { it.copy(navRadarStatus = "状态过期", obstacleRadarStatus = "状态过期",
+                        localizationQualityAvailable = false) }
+                }
+            }
+        }
+        viewModelScope.launch {
             appState.chassisSettings.collect { settings ->
                 _uiState.update {
                     it.copy(
@@ -232,17 +242,18 @@ class DeviceStatusViewModel @Inject constructor(
                 val connected = connection == ConnectionState.CONNECTED
                 if (connected && !navigationWasConnected) navigationConnectedAtMs = SystemClock.elapsedRealtime()
                 navigationWasConnected = connected
-                val hasCurrentReport = connected && runtime.receivedAtElapsedMs >= navigationConnectedAtMs
+                val hasCurrentReport = connected && runtime.receivedAtElapsedMs >= navigationConnectedAtMs &&
+                    SystemClock.elapsedRealtime() - runtime.receivedAtElapsedMs <= 3_000L
                 _uiState.update { current ->
                     current.copy(
                         navRadarStatus = if (!hasCurrentReport) "—" else navigationRadarLabel(
                             runtime.localizationReady, runtime.localizationStatusReason,
                             runtime.localizationPoseAvailable
                         ),
-                        obstacleRadarStatus = if (runtime.collisionImminent) "异常" else "正常",
+                        obstacleRadarStatus = if (!hasCurrentReport) "状态过期" else if (runtime.collisionImminent) "检测到障碍/数据异常" else "正常",
                         straightSpeedText = "${runtime.vehicleSpeedMps} m/s",
                         grindRpmText = "${runtime.discSpeedRpm} rpm",
-                        localizationQualityAvailable = runtime.localizationQualityAvailable,
+                        localizationQualityAvailable = hasCurrentReport && runtime.localizationQualityAvailable,
                         localizationQuality = runtime.localizationQuality
                     )
                 }
@@ -276,6 +287,8 @@ class DeviceStatusViewModel @Inject constructor(
             // 不受地图 loading 状态控制；收到状态上报就更新，实际频率由嵌入式决定。
             TaskSchedulerStream.taskStatusReport.collect { payload ->
                 payload ?: return@collect
+                val rpp = payload.message.substringAfter("rpp:", "").takeIf { it.isNotBlank() }
+                if (rpp != null) _uiState.update { it.copy(obstacleRadarStatus = collisionDetailLabel(rpp)) }
                 val reportTaskId = payload.taskId
                 val taskState = payload.toTaskUiState()
                 val taskStateChanged = taskState != _uiState.value.taskState
@@ -492,8 +505,8 @@ class DeviceStatusViewModel @Inject constructor(
         }
     }
 
-    private fun canEditRuntime(state: DeviceStatusUiState): Boolean = state.currentTaskId.isNotBlank() &&
-        state.taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED)
+    private fun canEditRuntime(state: DeviceStatusUiState): Boolean =
+        canEditTaskRuntime(state.currentTaskId, state.taskState)
 
     private fun runtimeFailure(result: DeviceCommandResult): String = when (result) {
         is DeviceCommandResult.Confirmed -> "板端未返回有效的临时运行参数，请更新板端"

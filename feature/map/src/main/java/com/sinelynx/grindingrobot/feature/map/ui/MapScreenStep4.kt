@@ -118,7 +118,7 @@ fun MapScreenStep4(
                     shadowElevation = 4.dp
                 ) {
                     if (uiState.isPlanning) {
-                        MapDataLoadingPage(text = "路径规划中...")
+                        MapDataLoadingPage(text = "设备正在规划，请等待结果…")
                     } else if (mapImageBitmap != null) {
                         WorkflowMapPreview(uiState, mapImageBitmap, mapId)
                     } else {
@@ -252,7 +252,7 @@ internal fun Step4LegacyPreviewMap(
             preview.isLoading -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator()
                 Spacer(Modifier.height(12.dp))
-                Text("旧版路径规划中...")
+                Text("旧版设备正在规划，请等待结果…")
             }
 
             preview.error != null -> Text(preview.error, color = Color(0xFFC62828))

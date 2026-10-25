@@ -45,4 +45,26 @@ class StartGrindingSessionControllerTest {
             scope.cancel()
         }
     }
+    @Test fun repeatedInFlightPlanIsCoalescedButChangedInputsReplaceWaiter() {
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
+        var sends = 0
+        val regions = MapRegionPointPayload("map", 1, true, "", listOf(
+            WorkRegionPointPayload(MapPreviewRegionPayload("region", "区域", emptyList()), null, null)
+        ), emptyList(), emptyList(), null)
+        val controller = StartGrindingSessionController(
+            scope=scope, imports=flowOf(MapImportToRadarPayload(0,true,"")),
+            frames=flowOf(MapImagePayload(byteArrayOf(1),10,10,1f,0.0,0.0,0f)),
+            regions=flowOf(regions), configs=kotlinx.coroutines.flow.MutableSharedFlow(), paths=flowOf(),
+            sendImport={true}, sendMap={true}, sendRegions={true},
+            sendConfig={_,_,_,_,_-> sends++; true}, sendPath={_,_,_->false}, decodeSize={10 to 10})
+        try {
+            controller.open("map")
+            controller.requestPlan("task","A",mapOf("region" to 1),emptyList())
+            controller.requestPlan("task","A",mapOf("region" to 1),emptyList())
+            assertEquals(1,sends)
+            controller.requestPlan("task","B",mapOf("region" to 2),emptyList())
+            assertEquals(2,sends)
+        } finally { controller.close(); scope.cancel() }
+    }
+
 }

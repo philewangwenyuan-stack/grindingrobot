@@ -72,6 +72,7 @@ import com.sinelynx.grindingrobot.feature.device.viewmodel.DeviceTaskUiState
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskMapTransformUiState
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskPoseUiItem
 import com.sinelynx.grindingrobot.feature.device.viewmodel.TaskRuntimeField
+import com.sinelynx.grindingrobot.feature.device.viewmodel.canEditTaskRuntime
 import java.util.Locale
 import com.sinelynx.grindingrobot.feature.map.ui.FittedTaskPathOverlay
 import com.sinelynx.grindingrobot.feature.map.ui.drawTaskDisplayAnchors
@@ -206,8 +207,8 @@ private fun DeviceStatusContent(
             else -> SidebarSecondaryColor
         })
         StatusRow("避障雷达", uiState.obstacleRadarStatus, if (uiState.obstacleRadarStatus == "正常") Color(0xFF33C461) else Color(0xFFD82B2A))
-        StatusRow("定位质量", uiState.localizationQuality.toString(), Color(0xFF33C461))
-        val runtimeEditable = uiState.taskState in setOf(DeviceTaskUiState.RUNNING, DeviceTaskUiState.PAUSED) && !uiState.runtimeApplying
+        StatusRow("里程计置信度", if (uiState.localizationQualityAvailable) uiState.localizationQuality.toString() else "—", SidebarSecondaryColor)
+        val runtimeEditable = canEditTaskRuntime(uiState.currentTaskId, uiState.taskState) && !uiState.runtimeApplying
         RuntimeSettingRow(
             "直行速度", (uiState.runtimeSettings?.runSpeed ?: uiState.configuredRunSpeed)
                 ?.let { String.format(Locale.US, "%.3f m/s", it) },
@@ -232,7 +233,7 @@ private fun RuntimeSettingRow(label: String, setpoint: String?, actual: String, 
         SidebarText(
             text = "设定 ${sidebarDisplayValue(setpoint)}",
             modifier = Modifier.weight(1f).clickable(enabled = enabled, onClick = onClick),
-            color = Color(0xFF00A0E9)
+            color = if (enabled) Color(0xFF00A0E9) else Color(0xFFA8AFB9)
         )
         SidebarText(text = "实际 ${sidebarDisplayValue(actual)}", color = SidebarSecondaryColor)
     }
