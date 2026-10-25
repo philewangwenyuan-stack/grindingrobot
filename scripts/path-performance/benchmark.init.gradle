@@ -1,0 +1,6 @@
+// Re-run only selected benchmark test tasks; their production compilation remains incremental.
+allprojects {
+    tasks.withType(Test).configureEach {
+        outputs.upToDateWhen { false }
+    }
+}

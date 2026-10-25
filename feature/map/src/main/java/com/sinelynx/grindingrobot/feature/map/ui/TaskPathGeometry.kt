@@ -1,21 +1,14 @@
 package com.sinelynx.grindingrobot.feature.map.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.IntSize
 import com.sinelynx.grindingrobot.core.model.state.TaskPathPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskPathPointPayload
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
@@ -23,9 +16,9 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-private val PlannedTaskPathColor = Color(0xFF00FF00)
+internal val PlannedTaskPathColor = Color(0xFF00FF00)
 internal val ConnectingTaskPathColor = Color(0xFF1976D2)
-private const val PlannedTaskPathStrokeWidthPx = 1.5f
+internal const val PlannedTaskPathStrokeWidthPx = 1.5f
 
 internal data class TaskPathRenderSegment(val points: List<TaskPathPointPayload>, val color: Color)
 
@@ -35,7 +28,7 @@ internal fun taskPathRenderSegments(path: TaskPathPayload): List<TaskPathRenderS
     // 标记已被摘要覆盖的数组位置；未覆盖点可回退，但不能跨已覆盖区段连线。
     val claimed = BooleanArray(path.points.size)
 
-    fun appendRuns(scope: String? = null, include: (Int, TaskPathPointPayload) -> Boolean) {
+    fun appendRuns(positions: Iterable<Int>, scope: String? = null) {
         var run = mutableListOf<TaskPathPointPayload>()
         var runColor = PlannedTaskPathColor
         var runScope: String? = null
@@ -43,14 +36,18 @@ internal fun taskPathRenderSegments(path: TaskPathPayload): List<TaskPathRenderS
             if (run.isNotEmpty()) rendered.add(TaskPathRenderSegment(run.toList(), runColor))
             run = mutableListOf()
         }
-        path.points.forEachIndexed { position, point ->
-            if (!include(position, point) || !point.x.isFinite() || !point.y.isFinite()) {
+        var previousPosition = -2
+        positions.forEach { position ->
+            val point = path.points[position]
+            if (position != previousPosition + 1) flush()
+            previousPosition = position
+            if (!point.x.isFinite() || !point.y.isFinite()) {
                 flush()
             } else {
                 val pointScope = scope ?: point.pathScope
                 val color = if (pointScope == "between_regions")
                     ConnectingTaskPathColor else PlannedTaskPathColor
-                // 即使两个 scope 最终都显示红色，也保留分组边界，不按颜色相同擅自合段。
+                // 即使颜色相同，也保留 scope 边界，不擅自合段。
                 if (pointScope != runScope) flush()
                 runScope = pointScope
                 runColor = color
@@ -60,20 +57,36 @@ internal fun taskPathRenderSegments(path: TaskPathPayload): List<TaskPathRenderS
         flush()
     }
 
+    // 按有效 index 建一次查找表；摘要只访问命中的点，再恢复数组顺序。
+    // 稀疏/乱序/重复 index 都合法，不能把 index 当数组下标，也不能跨数组间隙连线。
+    val indexedPositions = if (path.segments.isNotEmpty())
+        path.points.indices.sortedBy { path.points[it].index.takeIf { index -> index >= 0 } ?: it }
+        else emptyList()
+    fun pointIndex(position: Int) = path.points[position].index.takeIf { it >= 0 } ?: position
+    fun lowerBound(index: Int): Int {
+        var low = 0
+        var high = indexedPositions.size
+        while (low < high) {
+            val middle = (low + high) ushr 1
+            if (pointIndex(indexedPositions[middle]) < index) low = middle + 1 else high = middle
+        }
+        return low
+    }
     path.segments.forEach { segment ->
         if (segment.startPointIndex < 0 || segment.endPointIndex < segment.startPointIndex) return@forEach
-        val range = segment.startPointIndex..segment.endPointIndex
-        fun matches(position: Int, point: TaskPathPointPayload) =
-            (if (point.index >= 0) point.index else position) in range
-        if (path.points.withIndex().none { matches(it.index, it.value) &&
-                it.value.x.isFinite() && it.value.y.isFinite() }) return@forEach
-        val scope = segment.pathScope.takeIf { it == "within_region" || it == "between_regions" }
-        appendRuns(scope) { position, point ->
-            matches(position, point).also { if (it) claimed[position] = true }
+        val positions = mutableListOf<Int>()
+        var cursor = lowerBound(segment.startPointIndex)
+        while (cursor < indexedPositions.size && pointIndex(indexedPositions[cursor]) <= segment.endPointIndex) {
+            positions.add(indexedPositions[cursor++])
         }
+        if (positions.none { path.points[it].let { point -> point.x.isFinite() && point.y.isFinite() } }) return@forEach
+        positions.sort()
+        positions.forEach { claimed[it] = true }
+        val scope = segment.pathScope.takeIf { it == "within_region" || it == "between_regions" }
+        appendRuns(positions, scope)
     }
     // 缺失/不可用摘要及未覆盖点按点序回退；已覆盖点、无效坐标均构成断点，避免虚构跨段连线。
-    appendRuns { position, _ -> !claimed[position] }
+    appendRuns(path.points.indices.filter { !claimed[it] })
     return rendered
 }
 
@@ -150,23 +163,16 @@ fun BoxScope.FittedTaskPathOverlay(
     colorByScope: Boolean = false
 ) {
     if (path == null || geo == null || bitmapSize == null) return
-    var viewportSize by remember { mutableStateOf(IntSize.Zero) }
-    Box(modifier = modifier.fillMaxSize().onSizeChanged { viewportSize = it })
-    if (viewportSize.width <= 0 || viewportSize.height <= 0) return
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        drawFittedTaskPath(
-            path = path,
-            geo = geo,
-            mapImageSize = mapImageSize,
-            bitmapSize = bitmapSize,
-            mapRotationDeg = mapRotationDeg,
-            viewportScale = viewportScale,
-            viewportOffset = viewportOffset,
-            colorByScope = colorByScope
-        )
+    // 每个图层只保留当前路径的几何；位姿、缩放、平移和显示旋转不触发逐点投影。
+    val cache = remember { TaskPathDrawingCache() }
+    val drawing = cache.get(path, geo, mapImageSize, bitmapSize, colorByScope)
+    Canvas(modifier = modifier.fillMaxSize()) {
+        drawCachedTaskPath(drawing, bitmapSize, mapRotationDeg, viewportScale, viewportOffset)
     }
 }
 
+/** Compatibility for one-shot drawing; production screens use the retained overlay above. */
+@Deprecated("Use FittedTaskPathOverlay to retain geometry between frames")
 fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFittedTaskPath(
     path: TaskPathPayload,
     geo: MapGeo,
@@ -177,46 +183,8 @@ fun androidx.compose.ui.graphics.drawscope.DrawScope.drawFittedTaskPath(
     viewportOffset: Offset = Offset.Zero,
     colorByScope: Boolean = false
 ) {
-    // 新建图 Step4 启用分段配色；默认分支保留其他页面原有的单色路径行为。
-    val renderSegments = if (colorByScope) taskPathRenderSegments(path)
-        else listOf(TaskPathRenderSegment(path.points, PlannedTaskPathColor))
-    renderSegments.forEach { renderSegment ->
-        var previous: Offset? = null
-        var segmentPointCount = 0
-        fun drawIsolatedPointIfNeeded() {
-            if (segmentPointCount == 1 && previous != null) {
-                drawCircle(
-                    color = renderSegment.color,
-                    radius = PlannedTaskPathStrokeWidthPx * viewportScale,
-                    center = previous!!
-                )
-            }
-        }
-        renderSegment.points.forEach { point ->
-            val fitted = taskPathPointToBitmapPoint(point, geo, mapImageSize, bitmapSize)
-                ?.let { taskBitmapPointToFittedPoint(it, size, bitmapSize, mapRotationDeg) }
-                ?.let { Offset(it.x * viewportScale + viewportOffset.x, it.y * viewportScale + viewportOffset.y) }
-            if (fitted == null) {
-                // 越界或无效点不仅不绘制，还必须清空前点，否则会连过不可显示的路径区间。
-                drawIsolatedPointIfNeeded()
-                previous = null
-                segmentPointCount = 0
-            } else {
-                previous?.let { start ->
-                    drawLine(
-                        color = renderSegment.color,
-                        start = start,
-                        end = fitted,
-                        strokeWidth = PlannedTaskPathStrokeWidthPx * viewportScale,
-                        cap = StrokeCap.Round
-                    )
-                }
-                previous = fitted
-                segmentPointCount++
-            }
-        }
-        drawIsolatedPointIfNeeded()
-    }
+    val drawing = TaskPathDrawingCache().get(path, geo, mapImageSize, bitmapSize, colorByScope)
+    drawCachedTaskPath(drawing, bitmapSize, mapRotationDeg, viewportScale, viewportOffset)
 }
 
 private fun Offset.rotateTaskPointAround(center: Offset, rotationDeg: Float): Offset {

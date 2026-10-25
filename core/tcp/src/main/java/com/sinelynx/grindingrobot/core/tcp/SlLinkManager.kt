@@ -1,6 +1,7 @@
 package com.sinelynx.grindingrobot.core.tcp
 
 import com.sinelynx.grindingrobot.core.data.state.AppState
+import com.sinelynx.grindingrobot.core.data.di.ApplicationScope
 import com.sinelynx.grindingrobot.core.model.state.DevicePosePayload
 import com.sinelynx.grindingrobot.core.model.state.DeviceStatusStream
 import com.sinelynx.grindingrobot.core.model.state.LiveMapCacheClearPayload
@@ -68,6 +69,8 @@ import java.io.ByteArrayOutputStream
 import java.util.TreeMap
 import java.util.zip.CRC32
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 internal fun SlLink.TaskConfigResponse.toPayload() = TaskConfigResponsePayload(
     resultValue = resultValue,
@@ -109,6 +112,7 @@ internal fun SlLink.SystemCacheClearResponse.toPayload() = SystemCacheClearPaylo
  */
 class SlLinkManager @Inject constructor(
     private val appState: AppState,
+    @param:ApplicationScope applicationScope: CoroutineScope,
 ) {
     
     private val parser = SlFrameParser()
@@ -147,6 +151,23 @@ class SlLinkManager @Inject constructor(
         mapChunkAssembly = null
     }
     private val taskPathChunkAssembler = TaskPathChunkAssembler()
+    private val taskPathTransferLock = Any()
+    private val taskPathDecoder = TaskPathDecodeQueue(
+        scope = CoroutineScope(applicationScope.coroutineContext + Dispatchers.Default),
+        publish = { payload ->
+            TaskPathStream.publish(payload)
+            LogUtils.d("任务路径处理完成: taskId=${payload.taskId}, " +
+                "pathVersion=${payload.pathVersion}, points=${payload.points.size}")
+        },
+        decode = { bytes, response ->
+            TaskPathJsonParser.parse(bytes, response) { LogUtils.e("解析任务路径JSON失败: ${it.message}") }
+        }
+    )
+
+    fun clearTaskPathTransfer() = synchronized(taskPathTransferLock) {
+        taskPathChunkAssembler.clear()
+        taskPathDecoder.reset()
+    }
     private val taskExecutionHistoryChunkAssembler = TaskExecutionHistoryChunkAssembler()
     private val taskTrajectoryChunkAssembler = TaskTrajectoryChunkAssembler()
     private var onRadarMapSyncResponse: (() -> Unit)? = null
@@ -526,11 +547,11 @@ class SlLinkManager @Inject constructor(
         }
     }
 
-    private fun handlePathPointPlanResponse(frame: SlFrame) {
+    private fun handlePathPointPlanResponse(frame: SlFrame) = synchronized(taskPathTransferLock) {
         try {
             if (frame.payload.isEmpty()) {
                 LogUtils.w("任务路径分片payload为空")
-                return
+                return@synchronized
             }
             val chunk = SlLink.PathPointPlanResponse.parseFrom(frame.payload)
             val mergedBytes = taskPathChunkAssembler.append(
@@ -540,16 +561,9 @@ class SlLinkManager @Inject constructor(
                 totalChunks = chunk.totalChunks,
                 data = chunk.data.toByteArray(),
                 requestId = chunk.requestId
-            ) ?: return
-            // 即使完整 JSON 无法解码，也要发布解析器给出的空路径，让页面结束本轮等待。
-            val payload = TaskPathJsonParser.parse(mergedBytes, chunk) {
-                LogUtils.e("解析任务路径JSON失败: ${it.message}")
-            }
-            TaskPathStream.publish(payload)
-            LogUtils.d(
-                "任务路径组包完成: taskId=${payload.taskId}, " +
-                    "pathVersion=${payload.pathVersion}, points=${payload.points.size}"
-            )
+            ) ?: return@synchronized
+            // 完整JSON交给有界单工作者；接收循环可继续处理紧随其后的ACK和状态帧。
+            if (!taskPathDecoder.submit(mergedBytes, chunk)) LogUtils.w("任务路径解析队列已满")
         } catch (e: Exception) {
             LogUtils.e("解析任务路径分片失败: ${e.message}")
         }

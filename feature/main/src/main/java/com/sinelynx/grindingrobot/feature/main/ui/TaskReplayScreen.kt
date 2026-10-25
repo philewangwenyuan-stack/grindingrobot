@@ -58,7 +58,7 @@ import com.sinelynx.grindingrobot.feature.main.viewmodel.TaskReplayUiState
 import com.sinelynx.grindingrobot.feature.map.ui.RobotPoseIcon
 import com.sinelynx.grindingrobot.feature.map.ui.FootprintRobotMarker
 import com.sinelynx.grindingrobot.feature.map.ui.GRINDING_DISC_DIAMETER_M
-import com.sinelynx.grindingrobot.feature.map.ui.drawFittedTaskPath
+import com.sinelynx.grindingrobot.feature.map.ui.FittedTaskPathOverlay
 import com.sinelynx.grindingrobot.feature.map.ui.taskBitmapPointToFittedPoint
 import com.sinelynx.grindingrobot.feature.map.viewmodel.MapGeo
 
@@ -203,8 +203,6 @@ fun TaskReplayScreen(
                         val bitmap = mapBitmap ?: return@Canvas
                         val frame = mapFrame ?: return@Canvas
                         val geo = mapGeo ?: return@Canvas
-                        val bitmapSize = uiState.bitmapSize ?: (bitmap.width to bitmap.height)
-                        val logicalSize = frame.mapWidth to frame.mapHeight
                         val fitScale = minOf(
                             size.width / bitmap.width.toFloat(),
                             size.height / bitmap.height.toFloat()
@@ -225,19 +223,18 @@ fun TaskReplayScreen(
                         }) {
                             drawImage(bitmap)
                         }
-
-                        // 与 Step4 一致，完整规划路径位于按回放进度增长的实际轨迹下方。
-                        uiState.plannedPath?.let { path ->
-                            drawFittedTaskPath(
-                                path = path,
-                                geo = geo,
-                                mapImageSize = logicalSize,
-                                bitmapSize = bitmapSize,
-                                mapRotationDeg = totalMapRotation,
-                                colorByScope = true
-                            )
-                        }
-
+                    }
+                    // 静态规划路径独立于回放进度/实际轨迹，位于实际轨迹下方。
+                    FittedTaskPathOverlay(uiState.plannedPath, mapGeo,
+                        mapFrame?.let { it.mapWidth to it.mapHeight },
+                        uiState.bitmapSize ?: mapBitmap?.let { it.width to it.height },
+                        totalMapRotation, colorByScope = true)
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val bitmap = mapBitmap ?: return@Canvas
+                        val frame = mapFrame ?: return@Canvas
+                        val geo = mapGeo ?: return@Canvas
+                        val bitmapSize = uiState.bitmapSize ?: (bitmap.width to bitmap.height)
+                        val logicalSize = frame.mapWidth to frame.mapHeight
                         val routeWidthPx = trajectoryMetersToScreenPx(
                             meters = GRINDING_DISC_DIAMETER_M.toDouble(),
                             geo = geo,

@@ -3,5 +3,11 @@
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/
 /src/test/java/com/sinelynx/grindingrobot/feature/map/ui/*
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/MapWorkflowViewportTest.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/TaskPathCacheTest.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceFixtures.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceBenchmarkTest.kt
 /src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/*
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/ManualDriveUiTest.kt
+!/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/TaskPathCacheRenderTest.kt
+!/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceFixtures.kt
+!/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/PathRenderPerformanceBenchmarkTest.kt

@@ -228,6 +228,7 @@ class TcpManager @Inject constructor(
                 slLinkManager.deviceEvents.onConnected()
                 LogUtils.d("TCP连接已建立")
                 slLinkManager.clearMapTransfer()
+                slLinkManager.clearTaskPathTransfer()
                 resetCommandReplies()
                 // 连接成功，取消重连任务
                 cancelReconnect()
@@ -251,6 +252,7 @@ class TcpManager @Inject constructor(
                 slLinkManager.deviceEvents.onDisconnected()
                 LogUtils.d("TCP连接已断开: $reason")
                 slLinkManager.clearMapTransfer()
+                slLinkManager.clearTaskPathTransfer()
                 resetCommandReplies()
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
@@ -265,6 +267,7 @@ class TcpManager @Inject constructor(
                 slLinkManager.deviceEvents.onDisconnected()
                 LogUtils.d("TCP连接失败: ${error.message}")
                 slLinkManager.clearMapTransfer()
+                slLinkManager.clearTaskPathTransfer()
                 resetCommandReplies()
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()

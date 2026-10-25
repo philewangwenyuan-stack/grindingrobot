@@ -325,10 +325,13 @@ internal fun TaskMapPanel(
 
         // 机器人位于路径下方；起终点最后绘制，避免被禁区或路径遮挡。
         if (step == StartTaskStep.Preview && mapPreview != null && mapPreviewBitmap != null) {
+            FittedTaskPathOverlay(planPreview?.plannedPath, markerGeo,
+                markerGeo?.let { it.mapWidth to it.mapHeight }, markerBitmapSize,
+                activeMapRotationDeg, colorByScope = true)
             Canvas(Modifier.fillMaxSize()) {
-                drawStartGrindingPlanOverlays(
+                drawStartGrindingPlanAnchors(
                     preview = mapPreview, bitmapSize = mapPreviewBitmap.width to mapPreviewBitmap.height,
-                    plan = planPreview, workRegions = workRegionPoints,
+                    workRegions = workRegionPoints,
                     selectedRegionIds = selectedWorkspaces.filterValues { it }.keys,
                     rotationDeg = activeMapRotationDeg
                 )
@@ -468,19 +471,15 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMapPreview(
 }
 
 /** 所有点使用冻结底图投影；不从路径端点推导区域锚点，也不叠加路径响应的对齐角。 */
-internal fun androidx.compose.ui.graphics.drawscope.DrawScope.drawStartGrindingPlanOverlays(
+internal fun androidx.compose.ui.graphics.drawscope.DrawScope.drawStartGrindingPlanAnchors(
     preview: MapPreviewUiState,
     bitmapSize: Pair<Int, Int>,
-    plan: StartGrindingPlanPreviewUiState?,
     workRegions: List<WorkRegionPointPayload>,
     selectedRegionIds: Set<String>,
     rotationDeg: Float
 ) {
     val geo = preview.toMapGeo()
     val logicalSize = geo.mapWidth to geo.mapHeight
-    plan?.plannedPath?.let {
-        drawFittedTaskPath(it, geo, logicalSize, bitmapSize, rotationDeg, colorByScope = true)
-    }
     val regions = workRegions.filter { it.region.enabled && it.region.regionId in selectedRegionIds }
     fun project(x: Float, y: Float): Offset? =
         worldPointToBitmapOffset(MapPreviewPointItem(x, y), geo, logicalSize, bitmapSize)

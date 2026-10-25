@@ -9,6 +9,10 @@ internal data class TaskPathChunkKey(val requestId: String, val taskId: String, 
 internal class TaskPathChunkAssembler {
     private val assemblies = mutableMapOf<TaskPathChunkKey, Assembly>()
 
+    @Synchronized
+    fun clear() = assemblies.clear()
+
+    @Synchronized
     fun append(
         taskId: String,
         pathVersion: Int,

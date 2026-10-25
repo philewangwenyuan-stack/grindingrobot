@@ -347,17 +347,9 @@ internal fun Step4MapOverlays(
             robotFootprint = state.robotFootprint,
             mapRotationDeg = rotationDeg
         )
+        FittedTaskPathOverlay(state.plannedPath, geo, logicalSize, bitmapSize, rotationDeg,
+            colorByScope = true)
         Canvas(Modifier.fillMaxSize()) {
-            state.plannedPath?.let { path ->
-                drawFittedTaskPath(
-                    path,
-                    geo,
-                    logicalSize,
-                    bitmapSize,
-                    rotationDeg,
-                    colorByScope = true
-                )
-            }
             // 路径之上先画全部起点、再画全部终点，保证跨工作区重合时终点也位于最上层。
             val regions = state.workRegions.filter { it.region.enabled }
             // 圆点半径使用屏幕 dp；中心位置使用地图投影，两者不共享地图缩放倍率。

@@ -14,20 +14,22 @@ import sl_link.SlLink
  * 坐标、统计和摘要分别读取；无法解码时也返回空结果，让本轮等待立即结束。
  */
 internal object TaskPathJsonParser {
+    fun emptyPayload(response: SlLink.PathPointPlanResponse, message: String = response.message) = TaskPathPayload(
+        taskId = response.taskId, pathVersion = response.pathVersion,
+        frameId = response.frameId.ifEmpty { "map" }, alignmentYawDeg = 0f, points = emptyList(),
+        planned = response.planned, result = response.result.name, message = message,
+        pathPointCount = response.pathPointCount,
+        pathLengthM = response.pathLengthM.takeIf { it.isFinite() } ?: 0f,
+        requestId = response.requestId, mapId = response.mapId, mapVersion = response.mapVersion
+    )
+
     fun parse(
         bytes: ByteArray,
         response: SlLink.PathPointPlanResponse,
         onDecodeFailure: ((Exception) -> Unit)? = null
     ): TaskPathPayload {
         // 外层元数据用于 JSON 缺字段或解码失败时的回退；统计 float 没有 presence，不能拿默认 0 填空。
-        val envelope = TaskPathPayload(
-            taskId = response.taskId, pathVersion = response.pathVersion,
-            frameId = response.frameId.ifEmpty { "map" }, alignmentYawDeg = 0f, points = emptyList(),
-            planned = response.planned, result = response.result.name, message = response.message,
-            pathPointCount = response.pathPointCount,
-            pathLengthM = response.pathLengthM.takeIf { it.isFinite() } ?: 0f,
-            requestId = response.requestId, mapId = response.mapId, mapVersion = response.mapVersion
-        )
+        val envelope = emptyPayload(response)
         val root = try {
             val json = StandardCharsets.UTF_8.newDecoder()
                 .onMalformedInput(CodingErrorAction.REPORT)
