@@ -91,7 +91,8 @@ internal class StartGrindingSessionController(
     private val timeoutMs: Long = 180_000L,
     legacyResponses: Flow<PathPlanPayload?> = emptyFlow(),
     sendLegacy: (mapId: String, taskId: String, requestId: String) -> Boolean = { _, _, _ -> false },
-    decodeLegacySize: (ByteArray) -> Pair<Int, Int>? = decodeSize
+    decodeLegacySize: (ByteArray) -> Pair<Int, Int>? = decodeSize,
+    private val onPlanTiming: (String, String, Double, Long) -> Unit = { _, _, _, _ -> }
 ) {
     private val _state = MutableStateFlow(StartGrindingSessionUiState())
     val state = _state.asStateFlow()
@@ -235,6 +236,13 @@ internal class StartGrindingSessionController(
         plannedObstacles = obstacles.toList()
         _state.update { it.copy(configuredTaskId = null, plan = StartGrindingPlanPreviewUiState(isPlanning = true,
             taskId = taskId, regionRepeats = repeats.toMap())) }
+        val requestId = UUID.randomUUID().toString()
+        val started = System.nanoTime()
+        fun timing(stage: String) {
+            val now = System.nanoTime()
+            onPlanTiming(requestId, stage, (now-started)/1_000_000.0, now)
+        }
+        timing("preview_click")
         planJob = scope.launch {
             try {
                 if (taskName.isBlank()) throw LoadFailure("请输入任务名称")
@@ -243,18 +251,21 @@ internal class StartGrindingSessionController(
                 val available = state.value.regions?.workRegions.orEmpty().filter { it.region.enabled }.map { it.region.regionId }.toSet()
                 if (repeats.isEmpty()) throw LoadFailure("请至少选择一个工作区")
                 if (!available.containsAll(repeats.keys)) throw LoadFailure("所选工作区已变更，请返回重新选择")
+                timing("regions_ready")
                 prepareConfig()
                 val config = request(configs, { sendConfig(taskId, taskName.trim(), mapId, repeats, obstacles) },
                     "任务配置发送失败", "任务配置响应超时") { it.taskId.isBlank() || it.taskId == taskId }
                 if (!config.isSuccess) throw LoadFailure(config.message.ifBlank { "任务配置失败" })
+                timing("config_ack")
                 val resolvedId = config.taskId.ifBlank { taskId }
                 _state.update { it.copy(configuredTaskId = resolvedId) }
                 // 同一任务重试也必须使用全新 ID；旧请求即使任务/版本相同，也不能结束本轮等待。
-                val requestId = UUID.randomUUID().toString()
+                timing("path_request")
                 val path = request(paths, { sendPath(mapId, resolvedId, requestId) }, "路径规划请求发送失败", "路径规划未返回数据") {
                     it.requestId == requestId
                 }
                 if (round != session) return@launch
+                timing("path_parsed_ui_publish")
                 _state.update { it.copy(plan = StartGrindingPlanPreviewUiState(
                     taskId = resolvedId, regionRepeats = repeats.toMap(), plannedPath = path.takeIf { it.hasRenderablePoints },
                     estimatedAreaM2 = path.totalWorkAreaM2, estimatedTimeH = step4EstimatedHours(path.estimatedTimeS),

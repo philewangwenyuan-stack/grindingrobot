@@ -160,7 +160,10 @@ class SlLinkManager @Inject constructor(
                 "pathVersion=${payload.pathVersion}, points=${payload.points.size}")
         },
         decode = { bytes, response ->
-            TaskPathJsonParser.parse(bytes, response) { LogUtils.e("解析任务路径JSON失败: ${it.message}") }
+            val started = System.nanoTime()
+            TaskPathJsonParser.parse(bytes, response) { LogUtils.e("解析任务路径JSON失败: ${it.message}") }.also {
+                LogUtils.d("PlanTiming requestId=${response.requestId} stage=json_parsed mono_ns=${System.nanoTime()} parse_ms=${(System.nanoTime()-started)/1_000_000.0} bytes=${bytes.size}")
+            }
         }
     )
 
@@ -563,6 +566,7 @@ class SlLinkManager @Inject constructor(
                 requestId = chunk.requestId
             ) ?: return@synchronized
             // 完整JSON交给有界单工作者；接收循环可继续处理紧随其后的ACK和状态帧。
+            LogUtils.d("PlanTiming requestId=${chunk.requestId} stage=all_chunks_received mono_ns=${System.nanoTime()} chunks=${chunk.totalChunks} bytes=${mergedBytes.size}")
             if (!taskPathDecoder.submit(mergedBytes, chunk)) LogUtils.w("任务路径解析队列已满")
         } catch (e: Exception) {
             LogUtils.e("解析任务路径分片失败: ${e.message}")

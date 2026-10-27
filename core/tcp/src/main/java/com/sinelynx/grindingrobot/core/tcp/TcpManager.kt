@@ -981,7 +981,9 @@ class TcpManager @Inject constructor(
             forceReplan
         ).toByteArray()
         val frameData = slLinkManager.requestPathPointPlan(payload, dstId)
-        return sendData(frameData)
+        return sendData(frameData) {
+            LogUtils.d("PlanTiming requestId=$requestId stage=request_written mono_ns=${System.nanoTime()}")
+        }
     }
 
     /**

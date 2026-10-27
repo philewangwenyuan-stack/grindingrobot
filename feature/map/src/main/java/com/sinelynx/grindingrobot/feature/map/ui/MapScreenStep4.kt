@@ -77,13 +77,7 @@ fun MapScreenStep4(
         viewModel.loadMapData(mapId)
         onDispose { viewModel.cancelMapLoading() }
     }
-    val mapImageBitmap = remember(uiState.mapImageBytes) {
-        uiState.mapImageBytes?.let { bytes ->
-            runCatching {
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
+    val mapImageBitmap = rememberWorkflowBitmap(uiState.mapImageBytes)
 
     BoxWithConstraints(
         modifier = modifier
@@ -117,10 +111,13 @@ fun MapScreenStep4(
                     shape = RoundedCornerShape(16.dp),
                     shadowElevation = 4.dp
                 ) {
-                    if (uiState.isPlanning) {
-                        MapDataLoadingPage(text = "设备正在规划，请等待结果…")
-                    } else if (mapImageBitmap != null) {
-                        WorkflowMapPreview(uiState, mapImageBitmap, mapId)
+                    if (mapImageBitmap != null) {
+                        Box(Modifier.fillMaxSize()) {
+                            WorkflowMapPreview(uiState, mapImageBitmap, mapId)
+                            if (uiState.isPlanning) MapPlanningProgress(Modifier.align(Alignment.TopCenter).padding(12.dp))
+                        }
+                    } else if (uiState.isPlanning) {
+                        MapDataLoadingPage(text = "正在准备地图，设备规划中…")
                     } else {
                         Box(
                             modifier = Modifier

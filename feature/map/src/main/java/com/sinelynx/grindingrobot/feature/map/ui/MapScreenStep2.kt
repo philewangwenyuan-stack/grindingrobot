@@ -161,7 +161,6 @@ fun MapScreenStep2(
                                 }
                             }) { Text(title, color = if (uiState.toolMode == mode) Color(0xFF00A0E9) else Color(0xFF647080)) }
                         }
-                        Text("双指缩放 / 移动", fontSize = 12.sp, color = Color(0xFF647080))
                     }
                 }
 
@@ -205,7 +204,7 @@ fun MapScreenStep2(
                 if (mapImageBitmap != null) {
                     MapRotationController(
                         alignmentYaw = uiState.alignmentYaw,
-                        enabled = uiState.toolMode != EditToolMode.Erase,
+                        enabled = true,
                         onYawChange = viewModel::updateAlignmentYaw,
                         onAdjust = viewModel::adjustAlignmentYaw,
                         modifier = Modifier
@@ -434,13 +433,37 @@ internal fun MapEditingPanel(
                     drawPath(liveBrushPath, Color.White)
                 }
             }
+            // Screen-fixed alignment ruler stays horizontal/vertical while the map rotates.
+            val ruler = Path().apply {
+                val spacing = 40.dp.toPx()
+                var x = size.width / 2 % spacing
+                while (x <= size.width) { moveTo(x, 0f); lineTo(x, size.height); x += spacing }
+                var y = size.height / 2 % spacing
+                while (y <= size.height) { moveTo(0f, y); lineTo(size.width, y); y += spacing }
+            }
+            drawPath(ruler, Color(0x6600A0E9), style = Stroke(1.dp.toPx(),
+                pathEffect = PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 6.dp.toPx()))))
             if (toolMode == EditToolMode.Erase) editableAlignedAreaRect?.let { rect ->
                 val topLeft = alignedContentToScreenPoint(rect.topLeft)
                 val sizePx = androidx.compose.ui.geometry.Size(rect.width * baseScale * zoom, rect.height * baseScale * zoom)
                 drawRect(Color(0x5539B54A), topLeft, sizePx)
                 drawRect(Color(0xFF3AB54A), topLeft, sizePx,
                     style = Stroke(2.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(12.dp.toPx(), 12.dp.toPx()))))
-                drawCircle(Color(0xFF2D9CDB), 14.dp.toPx(), alignedContentToScreenPoint(rect.bottomRight))
+                val center = alignedContentToScreenPoint(rect.bottomRight)
+                val r = 17.dp.toPx()
+                drawCircle(Color(0xFF2D9CDB), r, center)
+                // Two opposite arrowheads, like the supplied resize handle.
+                val arrow = Path().apply {
+                    moveTo(center.x - r * .55f, center.y - r * .55f)
+                    lineTo(center.x + r * .55f, center.y + r * .55f)
+                    moveTo(center.x - r * .55f, center.y - r * .12f)
+                    lineTo(center.x - r * .55f, center.y - r * .55f)
+                    lineTo(center.x - r * .12f, center.y - r * .55f)
+                    moveTo(center.x + r * .55f, center.y + r * .12f)
+                    lineTo(center.x + r * .55f, center.y + r * .55f)
+                    lineTo(center.x + r * .12f, center.y + r * .55f)
+                }
+                drawPath(arrow, Color.White, style = Stroke(3.dp.toPx()))
             }
         }
         robotPoseToBitmapPoint(
@@ -510,6 +533,9 @@ internal fun MapEditingPanel(
                 Slider(brushSizeDp, { brushSizeDp = it }, valueRange = 12f..80f, modifier = Modifier.weight(1f))
             }
         }
+        Text("双指缩放、移动地图", fontSize = 12.sp, color = Color(0xFF647080),
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
+                .background(Color.White.copy(alpha = .85f), RoundedCornerShape(12.dp)).padding(8.dp))
         WorkflowZoomControl(workflow, Modifier.align(Alignment.BottomStart).padding(8.dp))
     }
 }

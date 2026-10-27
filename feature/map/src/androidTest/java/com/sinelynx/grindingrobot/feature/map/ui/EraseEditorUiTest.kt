@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
@@ -53,6 +54,9 @@ class EraseEditorUiTest {
         panel(EditToolMode.Erase)
         compose.onNodeWithTag("panel").performTouchInput { swipe(Offset(150f, 150f), Offset(190f, 180f), 250) }
         compose.onNodeWithTag("panel").performTouchInput { click(Offset(340f, 330f)) }
+        val preview = compose.onNodeWithTag("panel").captureToImage().asAndroidBitmap()
+        val directory = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext.getExternalFilesDir(null)!!
+        java.io.File(directory, "erase-refinement.png").outputStream().use { preview.compress(Bitmap.CompressFormat.PNG, 100, it) }
         compose.onNodeWithText("✓").performClick()
         assertEquals(0, taps)
         assertEquals(140f, confirmed[0].x, 1f)
@@ -121,5 +125,48 @@ class EraseEditorUiTest {
         assertEquals(android.graphics.Color.WHITE, bitmap.getPixel(40, 40))
         assertEquals(android.graphics.Color.WHITE, bitmap.getPixel(70, 70))
         assertEquals(android.graphics.Color.BLACK, bitmap.getPixel(90, 90))
+    }
+
+    @Test fun brushSegmentsMergeIntoOneRegion() {
+        val polygons = (0..59).map { i -> eraseBrushSegment(Offset(20f + i * 2, 50f),
+            Offset(22f + i * 2, 50f), 8f, androidx.compose.ui.geometry.Rect(0f, 0f, 200f, 200f)) }
+        val merged = mergeErasePolygons(polygons)
+        assertEquals(1, merged.size)
+        assertTrue(merged.single().size <= 256)
+        assertMergedPixels(polygons, merged)
+    }
+
+    @Test fun closedBrushLoopKeepsItsHoleAfterUnion() {
+        val corners = listOf(Offset(30f, 30f), Offset(130f, 30f), Offset(130f, 130f), Offset(30f, 130f), Offset(30f, 30f))
+        val polygons = corners.zipWithNext().flatMap { (a, b) -> (0..9).map { i ->
+            eraseBrushSegment(a + (b-a) * (i / 10f), a + (b-a) * ((i+1) / 10f), 8f,
+                androidx.compose.ui.geometry.Rect(0f, 0f, 200f, 200f))
+        } }
+        val merged = mergeErasePolygons(polygons)
+        assertTrue("closed loop should require fewer requests", merged.size < polygons.size)
+        assertMergedPixels(polygons, merged)
+    }
+
+    private fun assertMergedPixels(original: List<List<Offset>>, merged: List<List<Offset>>) {
+        fun render(polygons: List<List<Offset>>): Bitmap {
+            val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
+            val canvas = android.graphics.Canvas(bitmap)
+            val paint = android.graphics.Paint().apply { color = android.graphics.Color.WHITE }
+            polygons.forEach { points ->
+                val path = android.graphics.Path().apply {
+                    moveTo(points[0].x, points[0].y); points.drop(1).forEach { lineTo(it.x, it.y) }; close()
+                }
+                canvas.drawPath(path, paint)
+            }
+            return bitmap
+        }
+        val expected = render(original); val actual = render(merged)
+        // Individual overlapping draws and a union rasterize shared AA boundaries differently.
+        // Every interior/exterior pixel farther than one pixel from the original edge must match.
+        for (y in 1..198) for (x in 1..198) if (expected.getPixel(x,y) != actual.getPixel(x,y)) {
+            val edge = (-1..1).any { dy -> (-1..1).any { dx -> expected.getPixel(x+dx,y+dy) != expected.getPixel(x,y) } }
+            assertTrue("union changed non-boundary pixel $x,$y", edge)
+        }
+        assertEquals(expected.getPixel(80,80), actual.getPixel(80,80))
     }
 }

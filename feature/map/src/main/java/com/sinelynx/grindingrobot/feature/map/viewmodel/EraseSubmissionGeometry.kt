@@ -6,7 +6,8 @@ import kotlin.math.sin
 
 /** Frozen bitmap -> world projection, shared by rectangle and brush submission. */
 internal fun compileEraseOutput(areas: List<EraseRectArea>, bitmapSize: Pair<Int, Int>,
-    mapSize: Pair<Int, Int>, geo: MapGeo, alignmentYaw: Float): EditOutput {
+    mapSize: Pair<Int, Int>, geo: MapGeo, alignmentYaw: Float,
+    polygonMerger: (List<List<Offset>>) -> List<List<Offset>> = { it }): EditOutput {
     require(bitmapSize.first > 0 && bitmapSize.second > 0 && mapSize.first > 0 && mapSize.second > 0)
     val radians = Math.toRadians(geo.headingDeg.toDouble())
     val c = cos(radians).toFloat(); val s = sin(radians).toFloat()
@@ -19,7 +20,7 @@ internal fun compileEraseOutput(areas: List<EraseRectArea>, bitmapSize: Pair<Int
         return Offset((geo.originX + c * xm - s * ym).toFloat(), (geo.originY + s * xm + c * ym).toFloat())
     }
     return EditOutput(areas.filter { it.confirmed }.flatMap { area ->
-        val polygons = area.bitmapPolygons.ifEmpty {
+        val polygons = polygonMerger(area.bitmapPolygons).ifEmpty {
             listOf(if (area.alignedCorners.size == 4) area.alignedCorners.map {
                 val p = it - center
                 center + Offset(p.x * cy - p.y * sy, p.x * sy + p.y * cy)

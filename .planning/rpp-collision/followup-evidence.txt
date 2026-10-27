@@ -1,0 +1,142 @@
+
+=== LIVE COLLISION DETAIL ===
+data: "rpp: reason=self_filter_invalid front_m=inf side_m=inf front_hits=0 side_hits=0 body_hits=0\
+  \ self_hits=0 nearest_x=0 nearest_y=0 scan_age_s=0.0228667 latched=1"
+---
+
+
+=== LIVE COLLISION BOOLEAN ===
+data: True
+---
+
+
+=== FOOTPRINT PARAMETERS ===
+'[[-0.4,0.47],[1.2,0.47],[1.2,-0.47],[-0.4,-0.47]]'
+
+'[[-0.4,0.47],[1.2,0.47],[1.2,-0.47],[-0.4,-0.47]]'
+
+base_link
+regulated_pure_pursuit_controller/RegulatedPurePursuitController
+
+
+=== SCAN HEADER ===
+seq: 3153
+stamp: 
+  secs: 1793007457
+  nsecs:  29953003
+frame_id: "base_laser_link"
+---
+
+
+=== FILTER SETTINGS IN DEPLOYED CONFIG ===
+/home/ztl/work/Grinder/catkin_ws/src/2-dnavigation-package/2dnavigation/teb_local_planner_tutorials/cfg/diff_drive/rpp_local_planner_params.yaml:65:  collision_self_filter_enabled: true
+/home/ztl/work/Grinder/catkin_ws/src/2-dnavigation-package/2dnavigation/teb_local_planner_tutorials/cfg/diff_drive/rpp_local_planner_params.yaml:66:  collision_self_filter_polygon: [] # flat [x,y,...] in base_link, not navigation footprint
+
+
+=== DEPLOYED RPP SOURCE ===
+sha256=d49322ebe4978e932064fad09d08f798a1cb6a734c9ff075346cd130298ade4a
+153:    private_node_->param("collision_self_filter_enabled", self_filter_enabled, false);
+154:    if (self_filter_enabled) {
+155:      std::vector<double> xy;
+156:      private_node_->getParam("collision_self_filter_polygon", xy);
+157:      self_filter_invalid_ = xy.size() < 6 || xy.size() % 2 != 0;
+158:      for (std::size_t i=0; !self_filter_invalid_ && i<xy.size(); i+=2) {
+159:        if (!std::isfinite(xy[i]) || !std::isfinite(xy[i+1])) self_filter_invalid_ = true;
+160:        self_filter_polygon_.push_back({xy[i],xy[i+1]});
+161:      }
+162:    }
+163:    collision_imminent_pub_ = node_->advertise<std_msgs::Bool>(
+164:      "/rpp/collision_imminent", 1, true);
+165:    std_msgs::Bool collision_state;
+166:    collision_state.data = false;
+167:    collision_imminent_pub_.publish(collision_state);
+168:    scan_sub_ = node_->subscribe(
+169:      params_->collision_scan_topic, 1,
+154:    if (self_filter_enabled) {
+155:      std::vector<double> xy;
+156:      private_node_->getParam("collision_self_filter_polygon", xy);
+157:      self_filter_invalid_ = xy.size() < 6 || xy.size() % 2 != 0;
+158:      for (std::size_t i=0; !self_filter_invalid_ && i<xy.size(); i+=2) {
+159:        if (!std::isfinite(xy[i]) || !std::isfinite(xy[i+1])) self_filter_invalid_ = true;
+160:        self_filter_polygon_.push_back({xy[i],xy[i+1]});
+161:      }
+162:    }
+163:    collision_imminent_pub_ = node_->advertise<std_msgs::Bool>(
+164:      "/rpp/collision_imminent", 1, true);
+165:    std_msgs::Bool collision_state;
+166:    collision_state.data = false;
+167:    collision_imminent_pub_.publish(collision_state);
+168:    scan_sub_ = node_->subscribe(
+169:      params_->collision_scan_topic, 1,
+170:      &RegulatedPurePursuitController::scanCallback, this);
+155:      std::vector<double> xy;
+156:      private_node_->getParam("collision_self_filter_polygon", xy);
+157:      self_filter_invalid_ = xy.size() < 6 || xy.size() % 2 != 0;
+158:      for (std::size_t i=0; !self_filter_invalid_ && i<xy.size(); i+=2) {
+159:        if (!std::isfinite(xy[i]) || !std::isfinite(xy[i+1])) self_filter_invalid_ = true;
+160:        self_filter_polygon_.push_back({xy[i],xy[i+1]});
+161:      }
+162:    }
+163:    collision_imminent_pub_ = node_->advertise<std_msgs::Bool>(
+164:      "/rpp/collision_imminent", 1, true);
+165:    std_msgs::Bool collision_state;
+166:    collision_state.data = false;
+167:    collision_imminent_pub_.publish(collision_state);
+168:    scan_sub_ = node_->subscribe(
+169:      params_->collision_scan_topic, 1,
+170:      &RegulatedPurePursuitController::scanCallback, this);
+171:    // Keep clearing the fixed-distance collision latch while the navigation
+842:    fixed_collision_confirm_count_, fixed_collision_clear_count_, scan_sequence, hit_count,
+843:    params_->collision_min_valid_points, params_->collision_clear_confirm_scans);
+844:}
+845:
+846:void RegulatedPurePursuitController::publishCollisionDetail(const FixedObstacleStats& s, bool blocked) const
+847:{
+848:  std::ostringstream text;
+849:  text << "rpp: reason=" << (s.reason != "clear" ? s.reason :
+850:    (s.side_hits ? "side_obstacle" : s.front_hits ? "front_obstacle" : blocked ? "clearing" : "clear"))
+851:    << " front_m=" << s.nearest_front_clearance << " side_m=" << s.nearest_side_clearance
+852:    << " front_hits=" << s.front_hits << " side_hits=" << s.side_hits
+853:    << " body_hits=" << s.body_hits << " self_hits=" << s.self_hits
+854:    << " nearest_x=" << s.nearest_x << " nearest_y=" << s.nearest_y
+855:    << " scan_age_s=" << s.scan_age << " latched=" << blocked;
+856:  std_msgs::String message; message.data=text.str(); collision_detail_pub_.publish(message);
+857:}
+858:
+870:  }
+871:
+872:  stats = FixedObstacleStats();
+873:  stats.scan_age = received.isZero() ? -1.0 : (ros::Time::now() - received).toSec();
+874:  if (self_filter_invalid_) { stats.reason = "self_filter_invalid"; return false; }
+875:  const double sample_age = !scan || scan->header.stamp.isZero() ?
+876:    std::numeric_limits<double>::infinity() : (ros::Time::now() - scan->header.stamp).toSec();
+877:  if (!scan || received.isZero() || !freshScanAge(stats.scan_age, sample_age, params_->collision_scan_timeout_s)) {
+878:    stats.reason = "scan_timeout";
+879:    return false;
+880:  }
+881:  stats.scan_age = sample_age;
+882:  if (scan->ranges.empty() || !std::isfinite(scan->angle_min) ||
+883:      !std::isfinite(scan->angle_increment) || !std::isfinite(scan->range_min) ||
+884:      scan->range_min < 0 || !(scan->range_max > scan->range_min)) {
+885:    stats.reason = "scan_invalid";
+886:    return false;
+
+=== MATCHING ROSOUT ERRORS ===
+3007443.1270659 reason=iteration_limit iterations=4/4 update_inf=0.0011490349425002933 quit_eps=0.001 max_component=velocity_x
+1793007444.563853300 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007444.5270133 reason=iteration_limit iterations=4/4 update_inf=0.0010291734943166375 quit_eps=0.001 max_component=velocity_y
+1793007445.855659305 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007445.8270066 reason=iteration_limit iterations=4/4 update_inf=0.0014022240648046136 quit_eps=0.001 max_component=velocity_x
+1793007446.859055031 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007446.8269851 reason=iteration_limit iterations=4/4 update_inf=0.0012380816042423248 quit_eps=0.001 max_component=velocity_x
+1793007448.115746021 INFO /grinder_scheduler [scheduler_node.py:1851(SchedulerNode._tick)] [topics: /cmd_vel, /move_base_simple/goal, /chassis/emergency_stop, /slamware_ros_sdk_server_node/right_image_raw, /chassis/task_enable, /rpp/collision_detail, /chassis/wheel_speed_cmd, /chassis/light_cmd, /map, /move_base/RegulatedPurePursuitController/parameter_descriptions, /chassis/motion_safety, /odom_wheel, /diagnostics, /move_base/RegulatedPurePursuitController/parameter_updates, /slamware_ros_sdk_server_node/left_image_raw, /rosout, /chassis/wheel_speed_state, /rpp/collision_imminent, /grinder/GlobalPlanner/plan, /chassis/status, /super_lio/localization_status, /scheduler/motion_safety, /chassis/work_mode_cmd, /scheduler/map_preview_metadata, /move_base/cancel, /slamware_ros_sdk_server_node/system_status, /scheduler/indicator_emergency, /lio/odom, /scheduler/control_activity, /scheduler/status, /chassis/disc_lift_cmd, /chassis/disc_speed_cmd, /grinder/navigation/active_segment_plan, /slamware_ros_sdk_server_node/relocalization_status, /chassis/disc_enable_cmd] Skip live raw map update because saved map is active: active_map_id=20261024_111754
+1793007450.250882497 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007450.226886 reason=iteration_limit iterations=4/4 update_inf=0.0013828271767124534 quit_eps=0.001 max_component=velocity_y
+1793007451.549184877 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007451.5269647 reason=iteration_limit iterations=4/4 update_inf=0.0011772392317652702 quit_eps=0.001 max_component=velocity_x
+1793007453.119990110 INFO /grinder_scheduler [scheduler_node.py:1851(SchedulerNode._tick)] [topics: /cmd_vel, /move_base_simple/goal, /chassis/emergency_stop, /slamware_ros_sdk_server_node/right_image_raw, /chassis/task_enable, /rpp/collision_detail, /chassis/wheel_speed_cmd, /chassis/light_cmd, /map, /move_base/RegulatedPurePursuitController/parameter_descriptions, /chassis/motion_safety, /odom_wheel, /diagnostics, /move_base/RegulatedPurePursuitController/parameter_updates, /slamware_ros_sdk_server_node/left_image_raw, /rosout, /chassis/wheel_speed_state, /rpp/collision_imminent, /grinder/GlobalPlanner/plan, /chassis/status, /super_lio/localization_status, /scheduler/motion_safety, /chassis/work_mode_cmd, /scheduler/map_preview_metadata, /move_base/cancel, /slamware_ros_sdk_server_node/system_status, /scheduler/indicator_emergency, /lio/odom, /scheduler/control_activity, /scheduler/status, /chassis/disc_lift_cmd, /chassis/disc_speed_cmd, /grinder/navigation/active_segment_plan, /slamware_ros_sdk_server_node/relocalization_status, /chassis/disc_enable_cmd] Skip live raw map update because saved map is active: active_map_id=20261024_111754
+1793007453.345319683 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007453.3269255 reason=iteration_limit iterations=4/4 update_inf=0.0011373816523700953 quit_eps=0.001 max_component=velocity_x
+1793007454.549359845 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007454.5268171 reason=iteration_limit iterations=4/4 update_inf=0.0018142075277864933 quit_eps=0.001 max_component=velocity_x
+1793007455.555234530 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007455.5267887 reason=iteration_limit iterations=4/4 update_inf=0.0011391746811568737 quit_eps=0.001 max_component=velocity_y
+1793007456.748932650 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007456.7267694 reason=iteration_limit iterations=4/4 update_inf=0.0016904992517083883 quit_eps=0.001 max_component=velocity_x
+1793007457.422986984 INFO /grinder_scheduler [sl_linka_adapter.py:315(SlLinkAServer._log_rx_frame)] [topics: /cmd_vel, /move_base_simple/goal, /chassis/emergency_stop, /slamware_ros_sdk_server_node/right_image_raw, /chassis/task_enable, /rpp/collision_detail, /chassis/wheel_speed_cmd, /chassis/light_cmd, /map, /move_base/RegulatedPurePursuitController/parameter_descriptions, /chassis/motion_safety, /odom_wheel, /diagnostics, /move_base/RegulatedPurePursuitController/parameter_updates, /slamware_ros_sdk_server_node/left_image_raw, /rosout, /chassis/wheel_speed_state, /rpp/collision_imminent, /grinder/GlobalPlanner/plan, /chassis/status, /super_lio/localization_status, /scheduler/motion_safety, /chassis/work_mode_cmd, /scheduler/map_preview_metadata, /move_base/cancel, /slamware_ros_sdk_server_node/system_status, /scheduler/indicator_emergency, /lio/odom, /scheduler/control_activity, /scheduler/status, /chassis/disc_lift_cmd, /chassis/disc_speed_cmd, /grinder/navigation/active_segment_plan, /slamware_ros_sdk_server_node/relocalization_status, /chassis/disc_enable_cmd] SL-LinkA RX sample: version=1 flags=0x00 seq=1580 ack=0 src=1 dst=16 comp=8 msg_id=0x0530 name=MSG_ID_TASK_EXECUTION_HISTORY_REQUEST payload_len=3
+1793007457.430450201 INFO /grinder_scheduler [sl_linka_adapter.py:332(SlLinkAServer._log_rx_frame)] [topics: /cmd_vel, /move_base_simple/goal, /chassis/emergency_stop, /slamware_ros_sdk_server_node/right_image_raw, /chassis/task_enable, /rpp/collision_detail, /chassis/wheel_speed_cmd, /chassis/light_cmd, /map, /move_base/RegulatedPurePursuitController/parameter_descriptions, /chassis/motion_safety, /odom_wheel, /diagnostics, /move_base/RegulatedPurePursuitController/parameter_updates, /slamware_ros_sdk_server_node/left_image_raw, /rosout, /chassis/wheel_speed_state, /rpp/collision_imminent, /grinder/GlobalPlanner/plan, /chassis/status, /super_lio/localization_status, /scheduler/motion_safety, /chassis/work_mode_cmd, /scheduler/map_preview_metadata, /move_base/cancel, /slamware_ros_sdk_server_node/system_status, /scheduler/indicator_emergency, /lio/odom, /scheduler/control_activity, /scheduler/status, /chassis/disc_lift_cmd, /chassis/disc_speed_cmd, /grinder/navigation/active_segment_plan, /slamware_ros_sdk_server_node/relocalization_status, /chassis/disc_enable_cmd] SL-LinkA RX stats: interval_sec=60.0 frames=2 frames_per_sec=0.0 payload_bytes=6
+1793007457.439723491 INFO /grinder_scheduler [scheduler_node.py:10509(SchedulerNode.build_task_execution_history_chunks)] [topics: /cmd_vel, /move_base_simple/goal, /chassis/emergency_stop, /slamware_ros_sdk_server_node/right_image_raw, /chassis/task_enable, /rpp/collision_detail, /chassis/wheel_speed_cmd, /chassis/light_cmd, /map, /move_base/RegulatedPurePursuitController/parameter_descriptions, /chassis/motion_safety, /odom_wheel, /diagnostics, /move_base/RegulatedPurePursuitController/parameter_updates, /slamware_ros_sdk_server_node/left_image_raw, /rosout, /chassis/wheel_speed_state, /rpp/collision_imminent, /grinder/GlobalPlanner/plan, /chassis/status, /super_lio/localization_status, /scheduler/motion_safety, /chassis/work_mode_cmd, /scheduler/map_preview_metadata, /move_base/cancel, /slamware_ros_sdk_server_node/system_status, /scheduler/indicator_emergency, /lio/odom, /scheduler/control_activity, /scheduler/status, /chassis/disc_lift_cmd, /chassis/disc_speed_cmd, /grinder/navigation/active_segment_plan, /slamware_ros_sdk_server_node/relocalization_status, /chassis/disc_enable_cmd] Task execution history query: map_id=<all> task_id=<all> start_time=0 end_time=0 records=2 chunks=1 bytes=1121
+1793007458.316803693 INFO /grinder_scheduler [scheduler_node.py:1851(SchedulerNode._tick)] [topics: /cmd_vel, /move_base_simple/goal, /chassis/emergency_stop, /slamware_ros_sdk_server_node/right_image_raw, /chassis/task_enable, /rpp/collision_detail, /chassis/wheel_speed_cmd, /chassis/light_cmd, /map, /move_base/RegulatedPurePursuitController/parameter_descriptions, /chassis/motion_safety, /odom_wheel, /diagnostics, /move_base/RegulatedPurePursuitController/parameter_updates, /slamware_ros_sdk_server_node/left_image_raw, /rosout, /chassis/wheel_speed_state, /rpp/collision_imminent, /grinder/GlobalPlanner/plan, /chassis/status, /super_lio/localization_status, /scheduler/motion_safety, /chassis/work_mode_cmd, /scheduler/map_preview_metadata, /move_base/cancel, /slamware_ros_sdk_server_node/system_status, /scheduler/indicator_emergency, /lio/odom, /scheduler/control_activity, /scheduler/status, /chassis/disc_lift_cmd, /chassis/disc_speed_cmd, /grinder/navigation/active_segment_plan, /slamware_ros_sdk_server_node/relocalization_status, /chassis/disc_enable_cmd] Skip live raw map update because saved map is active: active_map_id=20261024_111754
+1793007458.751341142 WARN /relocation_node [/home/ztl/work/Grinder/catkin_ws/src/localization/Super-LIO/src/super_lio/src/apps/relocation.cpp:883(SuperLIOReLoc::Output)] [topics: /rosout, /lio/global_map, /super_lio/registration_diagnostics, /tf, /super_lio/wheel_fusion_diagnostics, /diagnostics, /lio/odom, /lio/path, /path_robot, /lio/odom_x, /lio/odom_y, /lio/odom_z, /lio/robo/odom, /scan, /lio/map_cloud] Super-LIO iteration diagnostic: stamp=1793007458.7266665 reason=iteration_limit iterations=4/4 update_inf=0.0013941641664132476 quit_eps=0.001 max_component=velocity_x
+

@@ -294,8 +294,9 @@ class MapScreenStep4ViewModel @Inject constructor(
     }
 
     fun prefillMapName(mapName: String?) {
-        val normalized = mapName?.trim().orEmpty()
-        if (normalized.isEmpty()) return
+        val normalized = mapName?.trim().orEmpty().ifEmpty {
+            java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.US).format(java.util.Date())
+        }
         _uiState.update { state ->
             if (state.mapName.isBlank()) {
                 state.copy(mapName = normalized)

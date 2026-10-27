@@ -531,7 +531,7 @@ class MapScreenStep2ViewModel @Inject constructor(
         val geo = mapGeo ?: return EditOutput()
         val bitmap = bitmapDecodeSize ?: return EditOutput()
         val map = mapImageSize ?: return EditOutput()
-        return compileEraseOutput(eraseAreas, bitmap, map, geo, alignmentYaw)
+        return compileEraseOutput(eraseAreas, bitmap, map, geo, alignmentYaw, ::mergeErasePolygons)
     }
 
     private fun decodeImageSize(bytes: ByteArray?): Pair<Int, Int>? {

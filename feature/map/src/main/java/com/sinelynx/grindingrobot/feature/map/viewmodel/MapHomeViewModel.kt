@@ -309,6 +309,9 @@ class MapHomeViewModel @Inject constructor(
             )
         },
         prepareConfig = { TaskSchedulerStream.resetTaskConfigResponse() },
+        onPlanTiming = { requestId, stage, elapsed, now ->
+            LogUtils.d("PlanTiming requestId=$requestId stage=$stage elapsed_ms=$elapsed mono_ns=$now")
+        },
         sendPath = { mapId, taskId, requestId ->
             tcpManager.requestPathPointPlan(
                 taskId = taskId, mapId = mapId,

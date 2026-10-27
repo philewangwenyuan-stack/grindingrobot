@@ -339,7 +339,9 @@ internal fun TaskMapPanel(
         }
 
         val error = mapLoadError ?: planPreview?.errorMessage.takeIf { step == StartTaskStep.Preview }
-        if (isMapPreviewLoading || (step == StartTaskStep.Preview && planPreview?.isPlanning == true)) {
+        if (step == StartTaskStep.Preview && planPreview?.isPlanning == true && mapPreviewBitmap != null) {
+            MapPlanningProgress(Modifier.align(Alignment.TopCenter).padding(12.dp))
+        } else if (isMapPreviewLoading || (step == StartTaskStep.Preview && planPreview?.isPlanning == true)) {
             MapDataLoadingPage(text = if (step == StartTaskStep.Preview) "设备正在规划，请等待结果…" else "地图区域加载中...")
         } else if (error != null) {
             Column(

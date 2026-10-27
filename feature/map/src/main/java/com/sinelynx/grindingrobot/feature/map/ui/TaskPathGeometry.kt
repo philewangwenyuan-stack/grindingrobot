@@ -166,8 +166,13 @@ fun BoxScope.FittedTaskPathOverlay(
     // 每个图层只保留当前路径的几何；位姿、缩放、平移和显示旋转不触发逐点投影。
     val cache = remember { TaskPathDrawingCache() }
     val drawing = cache.get(path, geo, mapImageSize, bitmapSize, colorByScope)
+    val firstDraw = remember(path.requestId, path.pathVersion) { booleanArrayOf(true) }
     Canvas(modifier = modifier.fillMaxSize()) {
         drawCachedTaskPath(drawing, bitmapSize, mapRotationDeg, viewportScale, viewportOffset)
+        if (firstDraw[0]) {
+            firstDraw[0] = false
+            com.sinelynx.grindingrobot.core.util.log.LogUtils.d("PlanTiming requestId=${path.requestId} stage=first_draw_submitted mono_ns=${System.nanoTime()} points=${path.points.size}")
+        }
     }
 }
 

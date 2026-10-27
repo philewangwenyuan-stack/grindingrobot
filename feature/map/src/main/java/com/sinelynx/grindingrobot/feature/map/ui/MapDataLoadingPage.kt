@@ -3,6 +3,8 @@ package com.sinelynx.grindingrobot.feature.map.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -17,6 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+/** Keep the frozen map visible while the controller waits for a fresh plan. */
+@Composable
+internal fun MapPlanningProgress(modifier: Modifier = Modifier) {
+    Row(modifier.background(Color(0xF2FFFFFF), androidx.compose.foundation.shape.RoundedCornerShape(14.dp))
+        .padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        CircularProgressIndicator(Modifier.size(20.dp), color = Color(0xFF00A0E9), strokeWidth = 2.dp)
+        Text("设备正在规划，请等待结果…", color = Color(0xFF202937), fontSize = 16.sp)
+    }
+}
 
 @Composable
 fun MapDataLoadingPage(

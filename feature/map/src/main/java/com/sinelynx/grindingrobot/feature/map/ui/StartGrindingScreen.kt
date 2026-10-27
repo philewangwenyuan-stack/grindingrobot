@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -113,9 +114,7 @@ internal fun StartGrindingScreen(
     var selectionInitialized by remember { mutableStateOf(false) }
     val passCounts = remember { mutableStateMapOf<String, Int>() }
     val manuallyChangedPassCounts = remember { mutableStateMapOf<String, Boolean>() }
-    val mapPreviewBitmap = remember(mapPreview?.imageBytes) {
-        mapPreview?.imageBytes?.let(::decodeMapPreviewBitmap)
-    }
+    val mapPreviewBitmap = rememberWorkflowBitmap(mapPreview?.imageBytes)?.asAndroidBitmap()
 
     LaunchedEffect(session.mapId, session.bitmapSize, session.mapError) {
         val mapId = session.mapId
