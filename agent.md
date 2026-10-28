@@ -39,7 +39,7 @@ Compose 页面 / ViewModel
 .\gradlew.bat testDevDebugUnitTest
 ```
 
-本工作区当前无法直接运行 Gradle 验证，因为终端没有配置 `JAVA_HOME` 且 PATH 中没有 `java`。具备 JDK 后，应至少运行受影响模块的编译和单元测试；涉及入口、依赖、构建逻辑或全局状态时再运行完整构建/测试。
+构建前在当前终端配置有效的 `JAVA_HOME`；此工作区可用 `D:/jdk-21.0.8`。应至少运行受影响模块的编译和单元测试；涉及入口、依赖、构建逻辑或全局状态时再运行完整构建/测试。
 
 ## 模块职责
 
@@ -53,7 +53,7 @@ Compose 页面 / ViewModel
 
 - `feature:connect`：设备连接页面和连接流程。
 - `feature:main`：主框架、首页、任务记录/回放、统计、OTA。
-  遥控松手与任务停止回执交错见 `viewmodel/ManualControlSession.kt`、`RemoteSettingsViewModel.kt`，离线回归 `ManualControlSessionTest.kt`；松手零速直接发送，不能等任务STOP回执。
+  遥控目标与松手零速见 `feature:common/control/ManualDriveController.kt`、`viewmodel/RemoteSettingsViewModel.kt`，回归为 `ManualDriveControllerTest.kt`；传输层独立定时发送及停车回归见 `core:tcp` 的 `PairedTcpServiceTest.kt`，松手零速不能等任务STOP回执。
 - `feature:map`：地图目录、编辑步骤、区域/禁区、路径规划、开始研磨。
 - `feature:device`：设备状态、任务地图及设备侧业务。
 - `feature:common`：跨功能公共 UI、弹窗、状态栏和资源。
@@ -64,7 +64,7 @@ Compose 页面 / ViewModel
 - `core:model`：请求/响应模型、业务模型、地图/任务模型和跨页面状态流。
 - `core:data`：Repository、全局 `AppState` 和数据层编排。
 - `core:tcp`：TCP 连接、请求发送、响应解析、任务数据分片组装。
-  生产双通道入口是 `PairedTcpService.kt`，`ChannelRouting.kt` 分流，`ChannelRuntime.kt` 提供时钟/主线程健康/Wi-Fi事件；原 `TcpService` 仅保留旧接口。数据8002、控制8003，先获取连接组令牌再绑定控制端。
+  双通道入口是 `PairedTcpService.kt`，通过其 `Callback` 向 `TcpManager` 交付完整帧；`ChannelRouting.kt` 分流，`ChannelRuntime.kt` 提供时钟/主线程健康/Wi-Fi事件。数据8002、控制8003，先获取连接组令牌再绑定控制端。
   亮屏恢复、单平板占用、独立100ms遥控发送、ACK/主线程健康超时见 `PairedTcpServiceTest.kt`；改连接逻辑必须验证旧令牌、旧socket收尾和旧速度不能复活，数据重连不得清理控制确认。
 - `core:sllink`：SLLink 帧、CRC、消息构建和生成的消息代码。
 - `core:network`：HTTP/Retrofit、OTA 服务及网络数据源。

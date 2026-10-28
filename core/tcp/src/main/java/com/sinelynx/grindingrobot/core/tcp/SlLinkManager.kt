@@ -48,7 +48,6 @@ import com.sinelynx.grindingrobot.core.model.state.TaskExecutionDeletePayload
 import com.sinelynx.grindingrobot.core.model.state.TaskTrajectoryPagePayload
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.TaskStatusReportPayload
-import com.sinelynx.grindingrobot.core.model.state.TaskPathPayload
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPointPayload
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPointStream
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPosePayload
@@ -61,7 +60,6 @@ import com.sinelynx.grindingrobot.core.model.state.MapImportToRadarStream
 import com.sinelynx.grindingrobot.core.model.entity.WifiStatus
 import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import sl_link.SlFrame
-import sl_link.SlFrameParser
 import sl_link.SlLink
 import sl_link.SlLinkMonitor
 import sl_link.SlMessageBuilder
@@ -115,7 +113,6 @@ class SlLinkManager @Inject constructor(
     @param:ApplicationScope applicationScope: CoroutineScope,
 ) {
     
-    private val parser = SlFrameParser()
     internal val taskCommandReplies = CommandReplyTracker()
     internal val emergencyStopReplies = CommandReplyTracker()
     internal val emergencyReleaseReplies = CommandReplyTracker()
@@ -417,26 +414,6 @@ class SlLinkManager @Inject constructor(
         return SlMessageBuilder.buildVideoStreamInfoRequestRaw(serializedData, dstId)
     }
 
-
-    /**
-     * 处理从串口接收到的数据
-     *
-     * @param data 接收到的原始数据
-      * @return 解析出的帧列表
-     * @author Dreamj
-     */
-    fun handleReceivedData(
-        data: ByteArray,
-        arrivalMonotonicS: Double = -1.0
-    ): List<SlFrame> {
-//        val hex = data.joinToString(separator = " ") { byte -> "%02X".format(byte) }
-//        LogUtils.d("handleReceivedData: $hex")
-        val frames = parser.parse(data)
-        for (frame in frames) {
-            processFrame(frame, arrivalMonotonicS)
-        }
-        return frames
-    }
 
     /** Paired transport owns one parser per socket and rejects old peer callbacks. */
     fun handleParsedFrame(frame: SlFrame, arrivalMonotonicS: Double, controlChannel: Boolean) {
@@ -1982,13 +1959,6 @@ class SlLinkManager @Inject constructor(
         monitor.logStats()
     }
     
-    /**
-     * 获取解析器实例
-     *
-     * @return SlFrameParser实例
-     * @author Dreamj
-     */
-    fun getParser(): SlFrameParser = parser
     
     /**
      * 获取链路监控器

@@ -1,5 +1,6 @@
 /build
 /src/test/java/com/sinelynx/grindingrobot/feature/map/*
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/RelocalizationSettingsReadTest.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/
 /src/test/java/com/sinelynx/grindingrobot/feature/map/ui/*
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/MapWorkflowViewportTest.kt

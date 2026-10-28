@@ -1,6 +1,5 @@
 package com.sinelynx.grindingrobot.feature.map.viewmodel
 
-import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sinelynx.grindingrobot.core.data.state.AppState
@@ -1240,19 +1239,6 @@ class MapScreenStep3ViewModel @Inject constructor(
 
     private fun formatOneDecimal(value: Double): Double {
         return round(value * 10.0) / 10.0
-    }
-
-    private fun decodeImageSize(bytes: ByteArray?): Pair<Int, Int>? {
-        if (bytes == null) return null
-        return runCatching {
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
-            if (options.outWidth > 0 && options.outHeight > 0) {
-                options.outWidth to options.outHeight
-            } else {
-                null
-            }
-        }.getOrNull()
     }
 
     /** 输入已由页面撤销手势和显示旋转；这里仅反算图片尺寸比例、分辨率、地图朝向和原点。 */

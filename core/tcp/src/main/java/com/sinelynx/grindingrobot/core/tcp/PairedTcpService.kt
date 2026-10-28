@@ -21,6 +21,13 @@ import sl_link.SlMessageBuilder
 
 /** One tablet, two independently recoverable streams. All blocking I/O stays off Main. */
 class PairedTcpService internal constructor(private val runtime: ChannelRuntime, private val controlPort: Int = 8003) {
+    interface Callback {
+        fun onFrameReceived(frame: SlFrame, arrivalMonotonicS: Double, controlChannel: Boolean)
+        fun onControlConnectionChanged(ready: Boolean)
+        fun onConnected()
+        fun onDisconnected(reason: String)
+    }
+
     constructor(context: Context) : this(AndroidChannelRuntime(context))
     data class Status(val dataReady: Boolean = false, val controlReady: Boolean = false,
                       val occupied: Boolean = false, val message: String = "未连接")
@@ -41,7 +48,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     @Volatile private var enabled = false
     @Volatile private var foreground = false
     @Volatile private var mainPulseAt = 0L
-    private var callback: TcpService.TcpCallback? = null
+    private var callback: Callback? = null
     private var recovery: Job? = null
     private val probePending = AtomicBoolean()
     private val recoveryWake = Channel<Unit>(Channel.CONFLATED)
@@ -314,7 +321,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
             }
         }
     }
-    fun setCallback(value: TcpService.TcpCallback) { callback = value }
+    fun setCallback(value: Callback) { callback = value }
     fun connect(host: String, port: Int) {
         if (this.host != host || dataPort != port) {
             disconnect()
@@ -391,9 +398,6 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     }
     fun isConnected() = dataPeer?.ready == true
     fun isControlReady() = controlPeer?.ready == true
-    fun getConnectionStatus() = _status.value.message
-    fun setHeartbeatData(@Suppress("UNUSED_PARAMETER") bytes: ByteArray) { /* Framed session heartbeats only. */ }
-    fun reconnect() = recoverNow(probe = true)
     fun disconnect() {
         enabled = false
         recovery?.cancel()

@@ -1,7 +1,6 @@
 package com.sinelynx.grindingrobot.feature.map.ui
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -403,12 +402,6 @@ internal fun TaskMapPanel(
             }
         }
     }
-}
-
-internal fun decodeMapPreviewBitmap(bytes: ByteArray): Bitmap? {
-    return runCatching {
-        BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-    }.getOrNull()
 }
 
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMapPreview(

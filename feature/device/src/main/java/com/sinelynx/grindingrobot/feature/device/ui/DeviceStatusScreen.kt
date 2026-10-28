@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -43,8 +42,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -352,135 +349,6 @@ private fun StatusTitle(@DrawableRes icon: Int, title: String) {
 
         Text(text = title, color = Color(0xFF202937),
             style = SidebarTextStyle.copy(fontSize = 12.sp, fontWeight = FontWeight.Medium))
-    }
-}
-
-/** 保留的旧非缩放面板；当前 DeviceStatusContent 的实际入口是 ZoomableTaskPreviewPanel。 */
-@Composable
-private fun TaskPreviewPanel(
-    uiState: DeviceStatusUiState,
-    onCameraClick: () -> Unit,
-    onStartTaskClick: () -> Unit,
-    onStopTaskClick: () -> Unit,
-    onPauseTaskClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val mapBitmap = rememberWorkflowBitmap(uiState.mapImageBytes)
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(24.dp))
-            .background(Color(0xFFF6F8FB))
-            .border(2.dp, Color.White, RoundedCornerShape(24.dp))
-    ) {
-        if (mapBitmap != null) {
-            Image(
-                bitmap = mapBitmap,
-                contentDescription = "路径规划地图",
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        rotationZ = uiState.mapTransform?.totalRotationDeg ?: 0f
-                    }
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Brush.radialGradient(listOf(Color(0xFFE7EBF2), Color(0xFFADB6C2)), radius = 900f))
-            )
-        }
-
-        if (uiState.mapTransform == null) {
-            Image(
-                painter = painterResource(MapR.drawable.ic_robot),
-                contentDescription = "机器人图标",
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(width = 36.dp, height = 48.dp)
-            )
-        }
-
-        TaskTrajectoryOverlay(
-            trajectory = uiState.trajectory,
-            mapTransform = uiState.mapTransform,
-            bitmapWidth = mapBitmap?.width ?: 0,
-            bitmapHeight = mapBitmap?.height ?: 0,
-            robotWidth = uiState.robotWidth,
-            robotLength = uiState.robotLength,
-            robotFootprint = uiState.robotFootprint,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        val cameraButtonActive = uiState.showCameraOverlay
-        val cameraButtonShape = RoundedCornerShape(16.dp)
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(14.dp)
-                .shadow(elevation = 8.dp, spotColor = Color(0x1A000000), ambientColor = Color(0x1A000000))
-                .size(48.dp)
-                .clip(cameraButtonShape)
-                .background(if (cameraButtonActive) Color(0xFF00A0E9) else Color.White)
-                .border(
-                    width = if (cameraButtonActive) 0.dp else 1.dp,
-                    color = if (cameraButtonActive) Color.Transparent else Color(0xFFF0F2F5),
-                    shape = cameraButtonShape
-                )
-                .clickable(onClick = onCameraClick),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(MapR.drawable.ic_robot_camera),
-                contentDescription = "机器人摄像头",
-                tint = if (cameraButtonActive) Color.White else Color(0xFF202937),
-                modifier = Modifier.size(20.dp)
-            )
-        }
-
-        Image(
-            painter = painterResource(CommonR.drawable.ic_repeat_diagram),
-            contentDescription = "遍数示意图",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 14.dp)
-                .size(width = 26.dp, height = 226.dp)
-        )
-
-        if (uiState.taskState != DeviceTaskUiState.IDLE && uiState.currentTaskId.isNotBlank()) {
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ActionButton(
-                    text = "结束任务",
-                    iconRes = CommonR.drawable.ic_task_stop,
-                    color = Color(0xFFD82B2A),
-                    onClick = onStopTaskClick
-                )
-                ActionButton(
-                    text = when (uiState.taskState) {
-                        DeviceTaskUiState.READY -> "开始任务"
-                        DeviceTaskUiState.PAUSED -> "继续研磨"
-                        else -> "暂停任务"
-                    },
-                    iconRes = if (uiState.taskState == DeviceTaskUiState.READY || uiState.taskState == DeviceTaskUiState.PAUSED) {
-                        CommonR.drawable.ic_task_resume
-                    } else {
-                        CommonR.drawable.ic_task_pause
-                    },
-                    color = if (uiState.taskState == DeviceTaskUiState.READY || uiState.taskState == DeviceTaskUiState.PAUSED) {
-                        Color(0xFF00A0E9)
-                    } else {
-                        Color(0xFFF19F21)
-                    },
-                    onClick = if (uiState.taskState == DeviceTaskUiState.READY) onStartTaskClick else onPauseTaskClick
-                )
-            }
-        }
     }
 }
 
@@ -889,95 +757,6 @@ private fun ZoomableTaskTrajectoryOverlay(
         }
     }
 }
-
-@Composable
-private fun TaskTrajectoryOverlay(
-    trajectory: TaskTrajectorySnapshot,
-    mapTransform: TaskMapTransformUiState?,
-    bitmapWidth: Int,
-    bitmapHeight: Int,
-    robotWidth: Double?,
-    robotLength: Double?,
-    robotFootprint: List<AppState.FootprintPoint>,
-    modifier: Modifier = Modifier
-) {
-    if (mapTransform == null || bitmapWidth <= 0 || bitmapHeight <= 0) return
-
-    val drawing = remember { TaskTrajectoryDrawingCache() }
-    drawing.update(trajectory, mapTransform, bitmapWidth, bitmapHeight)
-    val robotPose = trajectory.latestPose
-    val robotOffset = robotPose?.toTaskBitmapPoint(mapTransform, bitmapWidth, bitmapHeight)
-    val density = LocalDensity.current
-
-    BoxWithConstraints(modifier = modifier) {
-        val mapBounds = remember(bitmapWidth, bitmapHeight, maxWidth, maxHeight) {
-            calculateImageBounds(
-                containerWidth = maxWidth.value * density.density,
-                containerHeight = maxHeight.value * density.density,
-                imageWidth = bitmapWidth,
-                imageHeight = bitmapHeight
-            )
-        }
-
-        val (drawWidth, drawLength) = remember(robotWidth, robotLength) {
-            val defaultSize = 42.dp
-            if (robotWidth != null && robotWidth > 0.0 && robotLength != null && robotLength > 0.0) {
-                val baseWidth: Dp
-                val baseLength: Dp
-                if (robotLength >= robotWidth) {
-                    baseLength = defaultSize
-                    baseWidth = defaultSize * (robotWidth / robotLength).toFloat()
-                } else {
-                    baseWidth = defaultSize
-                    baseLength = defaultSize * (robotLength / robotWidth).toFloat()
-                }
-                baseWidth to baseLength
-            } else {
-                defaultSize to defaultSize
-            }
-        }
-
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawing.draw(this, mapTransform, bitmapWidth, bitmapHeight)
-        }
-
-        if (robotPose == null || robotOffset == null) return@BoxWithConstraints
-        val robotCenter = robotOffset.toTaskDrawOffset(
-            mapBounds,
-            bitmapWidth,
-            bitmapHeight,
-            mapTransform.totalRotationDeg
-        )
-        val drawX = robotCenter.x / density.density
-        val drawY = robotCenter.y / density.density
-        if (robotFootprint.size >= 3) {
-            FootprintRobotMarker(
-                center = robotCenter,
-                headingDeg = 90f - taskRobotRotationDeg(robotPose.headingDeg, mapTransform),
-                footprint = robotFootprint,
-                pixelsPerMeterX = mapBounds.width / mapTransform.width / mapTransform.resolution * 1f,
-                pixelsPerMeterY = mapBounds.height / mapTransform.height / mapTransform.resolution,
-                showGrindingDisc = true
-            )
-        } else {
-            Image(
-                painter = painterResource(MapR.drawable.ic_robot),
-                contentDescription = "机器人当前位置",
-                modifier = Modifier
-                    .size(width = drawWidth, height = drawLength)
-                    .offset(
-                        x = (drawX - drawWidth.value / 2f).dp,
-                        y = (drawY - drawLength.value / 2f).dp
-                    )
-                    .graphicsLayer {
-                        rotationZ = taskRobotRotationDeg(robotPose.headingDeg, mapTransform)
-                    }
-            )
-        }
-    }
-}
-
-
 
 internal data class MapDrawBounds(
     val left: Float,

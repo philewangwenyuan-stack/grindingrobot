@@ -376,19 +376,6 @@ class MapScreenStep4ViewModel @Inject constructor(
         return _uiState.value.toSaveDraft(mapId?.takeIf { it.isNotBlank() } ?: "map_${now}")
     }
 
-    private fun decodeImageSize(bytes: ByteArray?): Pair<Int, Int>? {
-        if (bytes == null) return null
-        return runCatching {
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
-            if (options.outWidth > 0 && options.outHeight > 0) {
-                options.outWidth to options.outHeight
-            } else {
-                null
-            }
-        }.getOrNull()
-    }
-
     /**
      * 插入数据库保存数据
      */

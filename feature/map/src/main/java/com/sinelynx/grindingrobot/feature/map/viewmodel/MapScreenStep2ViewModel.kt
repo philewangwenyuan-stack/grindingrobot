@@ -1,6 +1,5 @@
 package com.sinelynx.grindingrobot.feature.map.viewmodel
 
-import android.graphics.BitmapFactory
 import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -532,19 +531,6 @@ class MapScreenStep2ViewModel @Inject constructor(
         val bitmap = bitmapDecodeSize ?: return EditOutput()
         val map = mapImageSize ?: return EditOutput()
         return compileEraseOutput(eraseAreas, bitmap, map, geo, alignmentYaw, ::mergeErasePolygons)
-    }
-
-    private fun decodeImageSize(bytes: ByteArray?): Pair<Int, Int>? {
-        if (bytes == null) return null
-        return runCatching {
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
-            if (options.outWidth > 0 && options.outHeight > 0) {
-                options.outWidth to options.outHeight
-            } else {
-                null
-            }
-        }.getOrNull()
     }
 
     private fun bitmapPxToTcpPx(

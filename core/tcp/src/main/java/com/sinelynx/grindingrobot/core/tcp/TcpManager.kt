@@ -6,10 +6,7 @@ import com.sinelynx.grindingrobot.core.model.state.TaskRegionRepeatConfig
 import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -19,6 +16,7 @@ import sl_link.SlLink.MapEditCommand
 import java.time.LocalTime
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Singleton
 
 internal fun buildEmergencyStopCommand(enabled: Boolean): ControlCommand =
     ControlCommand.newBuilder().setEmergencyStop(
@@ -195,6 +193,7 @@ internal fun buildDeleteRegionCommand(
  * @param appState 应用全局状态
  * @author Dreamj
  */
+@Singleton
 class TcpManager @Inject constructor(
     private val tcpService: PairedTcpService,
     private val slLinkManager: SlLinkManager,
@@ -203,16 +202,9 @@ class TcpManager @Inject constructor(
     // 协程作用域
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    // 重连任务Job
-    private var reconnectJob: Job? = null
-
-    // 重连延迟时间（5秒）
-    private val reconnectDelayMs = 5000L
-
     // 记录最后一次连接参数
     private var lastHost: String? = null
     private var lastPort: Int? = null
-    private var skipNextReconnect = false
 
     init {
         slLinkManager.setOnRadarMapSyncResponse {
@@ -223,7 +215,7 @@ class TcpManager @Inject constructor(
         }
 
         // 设置回调
-        tcpService.setCallback(object : TcpService.TcpCallback {
+        tcpService.setCallback(object : PairedTcpService.Callback {
             override fun onFrameReceived(frame: sl_link.SlFrame, arrivalMonotonicS: Double, controlChannel: Boolean) {
                 slLinkManager.handleParsedFrame(frame, arrivalMonotonicS, controlChannel)
             }
@@ -236,21 +228,10 @@ class TcpManager @Inject constructor(
                 slLinkManager.clearMapTransfer()
                 slLinkManager.clearTaskPathTransfer()
                 resetCommandReplies(controlChannel = false)
-                // 连接成功，取消重连任务
-                cancelReconnect()
                 // Read actual settings on every connection, including automatic reconnects.
                 // Never write the cached footprint back to the controller.
                 if (!requestSettingRead(readChassis = true, readMap = true, readRpp = true)) {
                     LogUtils.w("TCP 重连后读取机器参数发送失败")
-                }
-            }
-
-            override fun onDataReceived(data: ByteArray, arrivalMonotonicS: Double) {
-                // 使用SlLinkManager解析数据，自动处理粘包拆包
-                try {
-                    slLinkManager.handleReceivedData(data, arrivalMonotonicS)
-                } catch (e: Exception) {
-                    LogUtils.e("解析数据帧失败: ${e.message}")
                 }
             }
 
@@ -262,65 +243,9 @@ class TcpManager @Inject constructor(
                 resetCommandReplies(controlChannel = false)
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
-                // 断开后启动重连任务
-                if (skipReconnectOnce()) {
-                    return
-                }
-                scheduleReconnect()
             }
 
-            override fun onFailure(error: Throwable) {
-                slLinkManager.deviceEvents.onDisconnected()
-                LogUtils.d("TCP连接失败: ${error.message}")
-                slLinkManager.clearMapTransfer()
-                slLinkManager.clearTaskPathTransfer()
-                resetCommandReplies(controlChannel = false)
-                // 清除设备状态，更新系统状态为连接错误
-                appState.clearDeviceStatus()
-                // 失败后启动重连任务
-                scheduleReconnect()
-            }
-
-            override fun onHeartbeatSent() {
-//                LogUtils.d("心跳已发送")
-            }
         })
-    }
-
-    /**
-     * 连接到TCP服务器
-     *
-     * @param host 服务器地址
-     * @param port 服务器端口
-     */
-    fun connect(host: String, port: Int) {
-        appState.prepareDeviceSettings(AppState.TcpEndpoint(host, port))
-        // 记录连接参数
-        lastHost = host
-        lastPort = port
-        // 取消之前的重连任务
-        cancelReconnect()
-        // 连接
-        tcpService.connect(host, port)
-    }
-
-    /**
-     * 异步连接TCP服务器
-     * 
-     * @param host 服务器地址
-     * @param port 服务器端口
-     * @return 连接是否成功
-     */
-    suspend fun connectAsync(host: String, port: Int): Boolean {
-        appState.prepareDeviceSettings(AppState.TcpEndpoint(host, port))
-        // 记录连接参数
-        lastHost = host
-        lastPort = port
-        // 取消之前的重连任务
-        cancelReconnect()
-
-//        setHeartbeatData(slLinkManager.buildTestFrame(0xFFu)) 心跳由嵌入式主动发送
-        return tcpService.connectAsync(host, port)
     }
 
     suspend fun connectConfiguredEndpoint(forceReconnect: Boolean = true): Boolean {
@@ -347,13 +272,11 @@ class TcpManager @Inject constructor(
             return true
         }
 
-        cancelReconnect()
         appState.prepareDeviceSettings(AppState.TcpEndpoint(host, port))
         lastHost = host
         lastPort = port
 
         if (tcpService.isConnected() || forceReconnect) {
-            skipNextReconnect = true
             tcpService.disconnect()
         }
 
@@ -390,47 +313,10 @@ class TcpManager @Inject constructor(
     }
 
     /**
-     * 发送文本消息
-     *
-     * @param message 文本消息
-     * @return 发送是否成功
-     */
-    fun sendText(message: String): Boolean {
-        return sendData(message.toByteArray(Charsets.UTF_8))
-    }
-
-    /**
-     * 设置心跳数据
-     *
-     * @param data 心跳数据
-     */
-    fun setHeartbeatData(data: ByteArray) {
-        tcpService.setHeartbeatData(data)
-    }
-
-    /**
-     * 设置心跳文本
-     *
-     * @param message 心跳文本
-     */
-    fun setHeartbeatText(message: String) {
-        setHeartbeatData(message.toByteArray(Charsets.UTF_8))
-    }
-
-    /**
      * 断开连接
      */
     fun disconnect() {
         tcpService.disconnect()
-    }
-
-    /**
-     * 获取连接状态
-     *
-     * @return 连接状态描述
-     */
-    fun getConnectionStatus(): String {
-        return tcpService.getConnectionStatus()
     }
 
     /**
@@ -447,34 +333,6 @@ class TcpManager @Inject constructor(
     val manualCancellation get() = tcpService.manualCancellation
     fun onForeground() = tcpService.onForeground()
     fun onBackground() = tcpService.onBackground()
-
-    /**
-     * 手动重连
-     */
-    fun reconnect() {
-        tcpService.reconnect()
-    }
-
-    /**
-     * 设置自定义回调
-     *
-     * @param callback 回调接口
-     */
-    fun setCallback(callback: TcpService.TcpCallback) {
-        tcpService.setCallback(callback)
-    }
-
-    /**
-     * 释放资源
-     */
-    fun release() {
-        // 取消重连任务
-        cancelReconnect()
-        // 取消协程作用域
-        scope.cancel()
-        // 释放TCP服务
-        tcpService.release()
-    }
 
     /**
      * 请求地图快照
@@ -1299,35 +1157,6 @@ class TcpManager @Inject constructor(
         slLinkManager.logLinkStats()
     }
 
-    /**
-     * 计划重连任务
-     * 在连接失败或断开后，延迟5秒重新连接
-     *
-     * @author Dreamj
-     */
-    private fun scheduleReconnect() {
-        tcpService.recoverNow()
-    }
-
-    /**
-     * 取消重连任务
-     *
-     * @author Dreamj
-     */
-    private fun cancelReconnect() {
-        reconnectJob?.let {
-            it.cancel()
-            LogUtils.d("取消重连任务")
-        }
-        reconnectJob = null
-    }
-
-    private fun skipReconnectOnce(): Boolean {
-        if (!skipNextReconnect) return false
-        skipNextReconnect = false
-        LogUtils.d("TCP endpoint switch in progress, skip reconnect once")
-        return true
-    }
 }
 
 internal fun buildRobotControlCommand(
