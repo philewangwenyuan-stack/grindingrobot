@@ -155,10 +155,8 @@ class ManualDriveController(
             }
             prepared = true
             if (!sendLatest()) return@launch
-            while (isActive && requestedGeneration == generation) {
-                delay(100L)
-                if (!state.hasMotion || !sendLatest()) break
-            }
+            // Transport owns the periodic sender. Main only publishes a new
+            // target or an explicit zero; a blocked UI cannot hold up the wire.
         }
     }
 }

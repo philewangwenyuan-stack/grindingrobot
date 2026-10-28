@@ -106,11 +106,7 @@ internal fun RelocalizationDialog(
     onCommandEnd: (DirectionCommand) -> Unit,
     onPositionChanged: (JoystickPosition) -> Unit
 ) {
-    val previewBitmap = remember(mapPreview?.imageBytes) {
-        mapPreview?.imageBytes
-            ?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-            ?.asImageBitmap()
-    }
+    val previewBitmap = rememberWorkflowBitmap(mapPreview?.imageBytes)
     // 只在弹窗打开/地图切换时从板端取一次初始位姿。
     // 重定位状态轮询会持续刷新 robotPose，但不能覆盖用户正在编辑的本地 pose。
     var pose by remember(mapPreview?.imageBytes, mapPreview?.mapWidth, mapPreview?.mapHeight) {

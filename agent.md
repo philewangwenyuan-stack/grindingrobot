@@ -64,6 +64,8 @@ Compose 页面 / ViewModel
 - `core:model`：请求/响应模型、业务模型、地图/任务模型和跨页面状态流。
 - `core:data`：Repository、全局 `AppState` 和数据层编排。
 - `core:tcp`：TCP 连接、请求发送、响应解析、任务数据分片组装。
+  生产双通道入口是 `PairedTcpService.kt`，`ChannelRouting.kt` 分流，`ChannelRuntime.kt` 提供时钟/主线程健康/Wi-Fi事件；原 `TcpService` 仅保留旧接口。数据8002、控制8003，先获取连接组令牌再绑定控制端。
+  亮屏恢复、单平板占用、独立100ms遥控发送、ACK/主线程健康超时见 `PairedTcpServiceTest.kt`；改连接逻辑必须验证旧令牌、旧socket收尾和旧速度不能复活，数据重连不得清理控制确认。
 - `core:sllink`：SLLink 帧、CRC、消息构建和生成的消息代码。
 - `core:network`：HTTP/Retrofit、OTA 服务及网络数据源。
 - `core:database`：Room 数据库和本地数据源。
@@ -110,7 +112,7 @@ OTA 修改后至少检查：
 
 ## 配置与安全
 
-- 默认设备 TCP 地址在业务代码中存在 `192.168.11.2` 约定；修改连接配置时同时检查 MMKV 持久化、断线清理和连接页面回显。
+- 默认设备 TCP 地址为 `192.168.1.3`；修改连接配置时同时检查 MMKV 持久化、断线清理和连接页面回显。
 - convention plugin 中的 `BASE_URL` 当前是硬编码服务地址；变更环境时同时检查 `dev`/`prod` flavor。
 - `app/build.gradle.kts` 保留了带固定密码的签名配置模板。不要提交真实密钥、密码或生产签名；正式构建应迁移到本地未跟踪配置或安全 CI Secret，并保持 release 配置可审计。
 - 不要把 `local.properties`、keystore、APK、`build/` 产物或调试日志作为业务代码提交。

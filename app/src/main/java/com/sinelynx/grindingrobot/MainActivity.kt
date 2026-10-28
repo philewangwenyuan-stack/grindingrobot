@@ -31,9 +31,11 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var appNavigator: AppNavigator
     @Inject lateinit var apkOtaManager: ApkOtaManager
+    @Inject lateinit var tcpManager: com.sinelynx.grindingrobot.core.tcp.TcpManager
 
     override fun onResume() {
         super.onResume()
+        tcpManager.onForeground()
         applyRobotFullscreen(window)
         // 安装结果广播只创建进程；主页面进入前台后才确认新版本已被打开。
         apkOtaManager.onForegroundLaunch()
@@ -42,6 +44,11 @@ class MainActivity : ComponentActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) applyRobotFullscreen(window)
+    }
+
+    override fun onPause() {
+        tcpManager.onBackground()
+        super.onPause()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

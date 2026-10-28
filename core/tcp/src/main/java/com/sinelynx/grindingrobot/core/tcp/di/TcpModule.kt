@@ -11,6 +11,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import com.sinelynx.grindingrobot.core.tcp.PairedTcpService
 
 /**
  * TCP模块 - 提供TCP通信和SL-Link协议相关依赖注入
@@ -35,8 +38,8 @@ object TcpModule {
     @Singleton
     @Provides
     @Esp32Tcp
-    fun provideEsp32TcpService(): TcpService {
-        return TcpService()
+    fun provideEsp32TcpService(@ApplicationContext context: Context): PairedTcpService {
+        return PairedTcpService(context)
     }
 
 
@@ -52,7 +55,7 @@ object TcpModule {
     @Singleton
     @Provides
     fun provideTcpManager(
-        @Esp32Tcp tcpService: TcpService,
+        @Esp32Tcp tcpService: PairedTcpService,
         slLinkManager: SlLinkManager,
         appState: AppState
     ): TcpManager {

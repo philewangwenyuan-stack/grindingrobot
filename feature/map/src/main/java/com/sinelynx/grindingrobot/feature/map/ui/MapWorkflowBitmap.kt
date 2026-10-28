@@ -28,7 +28,7 @@ private object WorkflowBitmapCache {
 }
 
 @Composable
-internal fun rememberWorkflowBitmap(bytes: ByteArray?): ImageBitmap? {
+fun rememberWorkflowBitmap(bytes: ByteArray?): ImageBitmap? {
     val bitmap by produceState(WorkflowBitmapCache.peek(bytes), bytes) {
         value = WorkflowBitmapCache.peek(bytes)
         if (bytes != null && value == null) value = withContext(Dispatchers.Default) { WorkflowBitmapCache.decode(bytes) }

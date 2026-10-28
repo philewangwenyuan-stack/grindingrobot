@@ -22,6 +22,7 @@ class ConnectWifiViewModel @Inject constructor(
     private val tcpManager: TcpManager,
     private val appState: AppState
 ) : ViewModel() {
+    val channelStatus = tcpManager.channelStatus
 
     private val _isTcpConnecting = MutableStateFlow(false)
     val isTcpConnecting: StateFlow<Boolean> = _isTcpConnecting.asStateFlow()

@@ -1,6 +1,6 @@
 package com.sinelynx.grindingrobot.feature.device.ui
 
-import android.graphics.BitmapFactory
+import com.sinelynx.grindingrobot.feature.map.ui.rememberWorkflowBitmap
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -365,11 +365,7 @@ private fun TaskPreviewPanel(
     onPauseTaskClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val mapBitmap = remember(uiState.mapImageBytes) {
-        uiState.mapImageBytes?.let { bytes ->
-            runCatching { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }.getOrNull()
-        }
-    }
+    val mapBitmap = rememberWorkflowBitmap(uiState.mapImageBytes)
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
@@ -509,11 +505,7 @@ private fun ZoomableTaskPreviewPanel(
     onRetryMap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val mapBitmap = remember(uiState.mapImageBytes) {
-        uiState.mapImageBytes?.let { bytes ->
-            runCatching { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }.getOrNull()
-        }
-    }
+    val mapBitmap = rememberWorkflowBitmap(uiState.mapImageBytes)
     var mapZoom by remember { mutableStateOf(1f) }
     var mapPan by remember { mutableStateOf(Offset.Zero) }
     val currentMapZoom by rememberUpdatedState(mapZoom)

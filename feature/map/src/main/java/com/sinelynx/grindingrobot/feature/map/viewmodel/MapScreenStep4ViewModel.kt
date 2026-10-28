@@ -135,7 +135,7 @@ internal class Step4LegacyPreviewLoader(
             val result = when {
                 !sent -> Step4LegacyPreviewUiState(error = "旧版路径规划请求发送失败")
                 response == null -> Step4LegacyPreviewUiState(error = "旧版路径规划超时，未收到地图数据")
-                else -> response.toLegacyPreview(decodeSize)
+                else -> kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { response.toLegacyPreview(decodeSize) }
             }
             _state.update { current ->
                 if (current.isVisible && current.requestId == requestId)
@@ -242,7 +242,7 @@ class MapScreenStep4ViewModel @Inject constructor(
         }
         val frame = snapshot.frame
         _uiState.update { it.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
-            bitmapDecodeSize = decodeImageSize(frame.imageBytes), mapGeo = frame.toMapGeo(),
+            bitmapDecodeSize = MapBuildSessionStream.snapshotFor(mapId)?.bitmapSize, mapGeo = frame.toMapGeo(),
             plannedPath = null, planningTaskId = "", planningPathVersion = 0,
             workRegions = emptyList(), previewWorkRegions = emptyList(), previewObstacleRegions = emptyList(),
             previewEraseRegions = emptyList(), isRegionsLoading = true, regionError = null,

@@ -29,6 +29,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.UUID
 import javax.inject.Inject
@@ -67,12 +69,14 @@ class MapViewModel @Inject constructor(
     private var mapActive = false
     private var currentMapId: String? = null
     private var lastFrame: MapImagePayload? = null
+    private var validatedFrame: MapImagePayload? = null
+    private var validatedSize: Pair<Int, Int>? = null
     private var activeRequestId: Long? = null
     private val mapEvents = Channel<MapTransferEvent>(Channel.BUFFERED)
 
     private val controller = ManualDriveController(
         scope = viewModelScope,
-        canControl = { screenActive && tcpManager.isConnected() &&
+        canControl = { screenActive && tcpManager.isControlReady() &&
             appState.runtimeTaskState.value.emergencyStopLatched != true &&
             appState.runtimeTaskState.value.workMode != SlLink.WorkMode.WORK_MODE_AUTO.number },
         send = { target -> tcpManager.sendManualDriveCommand(target.remoteX, target.remoteY,
@@ -82,10 +86,13 @@ class MapViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            combine(tcpManager.getConnectionStateFlow(), appState.runtimeTaskState) { connection, runtime ->
+            tcpManager.manualCancellation.collect { controller.stop() }
+        }
+        viewModelScope.launch {
+            combine(tcpManager.channelStatus, appState.runtimeTaskState) { connection, runtime ->
                 connection to runtime
             }.collect { (connection, runtime) ->
-                if (connection != ConnectionState.CONNECTED || runtime.emergencyStopLatched == true ||
+                if (!connection.controlReady || runtime.emergencyStopLatched == true ||
                     runtime.workMode == SlLink.WorkMode.WORK_MODE_AUTO.number) controller.stop()
                 controller.refreshAvailability()
             }
@@ -98,6 +105,17 @@ class MapViewModel @Inject constructor(
                 if (!mapActive || payload.requestId != activeRequestId) return@collect
                 val changed = lastFrame != payload
                 lastFrame = payload
+                if (changed) {
+                    validatedFrame = null
+                    validatedSize = null
+                    val size = withContext(Dispatchers.Default) {
+                        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                        BitmapFactory.decodeByteArray(payload.imageBytes, 0, payload.imageBytes.size, bounds)
+                        if (bounds.outWidth > 0 && bounds.outHeight > 0) bounds.outWidth to bounds.outHeight else null
+                    }
+                    if (!mapActive || payload.requestId != activeRequestId || lastFrame !== payload) return@collect
+                    if (size != null) { validatedFrame = payload; validatedSize = size }
+                }
                 if (changed) {
                     _uiState.update {
                         it.copy(
@@ -299,10 +317,8 @@ class MapViewModel @Inject constructor(
         controller.stop()
         if (!mapActive) return false
         val frame = lastFrame
-        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        if (frame != null) BitmapFactory.decodeByteArray(frame.imageBytes, 0, frame.imageBytes.size, bounds)
-        if (frame == null || bounds.outWidth <= 0 || bounds.outHeight <= 0 ||
-            !MapBuildSessionStream.freeze(currentMapId, frame)) {
+        if (frame == null || validatedFrame !== frame ||
+            !MapBuildSessionStream.freeze(currentMapId, frame, validatedSize)) {
             ToastUtils.showError("请等待完整有效的地图帧")
             return false
         }

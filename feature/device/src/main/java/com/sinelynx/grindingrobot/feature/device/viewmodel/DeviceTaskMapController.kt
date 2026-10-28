@@ -243,7 +243,8 @@ internal class DeviceTaskMapController(
             // MapChunk 无 request_id，且数字 map_id 不能直接与这里的字符串地图 ID 对应。
             // 新订阅可排除历史重放，取消可隔离旧协程；跨请求重叠回包仍需设备提供关联标识才能严格区分。
             val frame = request(frames, { sendMap(mapId) }, "地图请求发送失败", "地图加载超时，请重试")
-            val size = decodeSize(frame.imageBytes) ?: throw LoadFailure("地图图片无法解码，请重试")
+            val size = withContext(Dispatchers.Default) { decodeSize(frame.imageBytes) }
+                ?: throw LoadFailure("地图图片无法解码，请重试")
             if (!frame.hasDisplayGeometry() || size.first <= 0 || size.second <= 0)
                 throw LoadFailure("地图几何信息不可用，请重试")
             updateSnapshot { it.copy(frame = frame.copy(imageBytes = frame.imageBytes.copyOf()), bitmapSize = size) }

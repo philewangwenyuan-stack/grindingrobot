@@ -16,6 +16,14 @@ class MapBuildSessionStreamTest {
     private fun frame() = MapImagePayload(byteArrayOf(1, 2), 100, 50, 0.1f, 12.0, -3.0, 30f,
         alignmentYawDeg = 10f, rotationAlignmentDeltaDeg = 5f, previewScaleX = 0.5f, previewScaleY = 0.5f)
 
+    @Test fun decodedSizeSurvivesFrozenRotationAndRejectsInvalidDimensions() {
+        MapBuildSessionStream.begin()
+        assertFalse(MapBuildSessionStream.freeze("map", frame(), 0 to 25))
+        assertTrue(MapBuildSessionStream.freeze("map", frame(), 50 to 25))
+        MapBuildSessionStream.updateRotation("map", 90f)
+        assertEquals(50 to 25, MapBuildSessionStream.snapshotFor("map")!!.bitmapSize)
+    }
+
     @Test fun freezesCopyAndIgnoresLateLiveFrames() {
         MapBuildSessionStream.begin()
         val original = frame()

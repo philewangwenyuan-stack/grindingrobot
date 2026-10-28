@@ -11,7 +11,7 @@ import org.junit.Test
 import kotlin.math.abs
 
 class ManualDriveControllerTest {
-    @Test fun heldFullSteeringRenewsBothManualAxesWithoutSendingStop() = runBlocking {
+    @Test fun heldFullSteeringPublishesBothAxesAndRetainsTargetUntilStop() = runBlocking {
         for (steering in listOf(-1f, 1f)) {
             val sent = mutableListOf<ManualDriveTarget>()
             val control = ManualDriveController(this, { true }, { sent.add(it); true }, {})
@@ -19,25 +19,28 @@ class ManualDriveControllerTest {
             control.travel(TravelDirection.FORWARD)
             yield()
             control.steer(steering, control.state.inputEpoch)
-            sent.clear()
-            // Longer than the board's 500ms command timeout: a held endpoint
-            // must keep renewing pure rotation even though translation is zero.
+            val published = sent.last()
+            val count = sent.size
+            // Periodic wire renewal is covered by PairedTcpServiceTest; the UI
+            // publishes changes and must retain the full-rotation target.
             delay(550L)
-            assertTrue("Endpoint must keep renewing: steering=$steering", sent.size >= 4)
-            assertTrue(sent.all { it.remoteX == steering && it.remoteY == 0f && it.speedRatio == 1f })
+            assertEquals(count, sent.size)
+            assertEquals(steering, published.remoteX, 0f)
+            assertEquals(0f, published.remoteY, 0f)
+            assertEquals(1f, published.speedRatio, 0f)
             assertTrue(control.state.hasMotion)
             control.stop()
             assertEquals(0f, sent.last().speedRatio, 0f)
         }
     }
 
-    @Test fun steadyTravelIsRenewedAndExplicitStopCancelsRenewal() = runBlocking {
+    @Test fun steadyTravelPublishesOnceAndExplicitStopPublishesZero() = runBlocking {
         val sent = mutableListOf<ManualDriveTarget>()
         val control = ManualDriveController(this, { true }, { sent.add(it); true }, {})
         control.refreshAvailability()
         control.travel(TravelDirection.FORWARD)
         delay(150L)
-        assertTrue(sent.size >= 2)
+        assertEquals(1, sent.size)
         control.stop()
         val afterStop = sent.size
         assertEquals(0f, sent.last().speedRatio, 0f)

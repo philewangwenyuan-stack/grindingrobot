@@ -237,13 +237,7 @@ internal fun Step4LegacyPreviewMap(
     preview: Step4LegacyPreviewUiState,
     currentState: MapScreenStep4UiState
 ) {
-    val bitmap = remember(preview.imageBytes) {
-        preview.imageBytes?.let { bytes ->
-            runCatching {
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
+    val bitmap = rememberWorkflowBitmap(preview.imageBytes)
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when {
             preview.isLoading -> Column(horizontalAlignment = Alignment.CenterHorizontally) {

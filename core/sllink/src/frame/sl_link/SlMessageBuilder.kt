@@ -83,6 +83,10 @@ object SlMessageBuilder {
         return buildFrame(0x0401u, serializedData, dstId, 0x07u)
     }
 
+    fun buildChannelSessionRequestRaw(serializedData: ByteArray, dstId: UByte): ByteArray {
+        return buildFrame(0x0403u, serializedData, dstId, 0x07u)
+    }
+
     fun buildTaskConfigRaw(serializedData: ByteArray, dstId: UByte): ByteArray {
         return buildFrame(0x0500u, serializedData, dstId, 0x08u)
     }

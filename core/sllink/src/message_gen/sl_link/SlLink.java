@@ -83,6 +83,14 @@ public final class SlLink {
      */
     MSG_ID_CONTROL_COMMAND_RESPONSE(1026),
     /**
+     * <code>MSG_ID_CHANNEL_SESSION_REQUEST = 1027;</code>
+     */
+    MSG_ID_CHANNEL_SESSION_REQUEST(1027),
+    /**
+     * <code>MSG_ID_CHANNEL_SESSION_RESPONSE = 1028;</code>
+     */
+    MSG_ID_CHANNEL_SESSION_RESPONSE(1028),
+    /**
      * <code>MSG_ID_TASK_CONFIG = 1280;</code>
      */
     MSG_ID_TASK_CONFIG(1280),
@@ -378,6 +386,14 @@ public final class SlLink {
      */
     public static final int MSG_ID_CONTROL_COMMAND_RESPONSE_VALUE = 1026;
     /**
+     * <code>MSG_ID_CHANNEL_SESSION_REQUEST = 1027;</code>
+     */
+    public static final int MSG_ID_CHANNEL_SESSION_REQUEST_VALUE = 1027;
+    /**
+     * <code>MSG_ID_CHANNEL_SESSION_RESPONSE = 1028;</code>
+     */
+    public static final int MSG_ID_CHANNEL_SESSION_RESPONSE_VALUE = 1028;
+    /**
      * <code>MSG_ID_TASK_CONFIG = 1280;</code>
      */
     public static final int MSG_ID_TASK_CONFIG_VALUE = 1280;
@@ -650,6 +666,8 @@ public final class SlLink {
         case 774: return MSG_ID_MAP_REQUEST_RESULT;
         case 1025: return MSG_ID_CONTROL_COMMAND;
         case 1026: return MSG_ID_CONTROL_COMMAND_RESPONSE;
+        case 1027: return MSG_ID_CHANNEL_SESSION_REQUEST;
+        case 1028: return MSG_ID_CHANNEL_SESSION_RESPONSE;
         case 1280: return MSG_ID_TASK_CONFIG;
         case 1281: return MSG_ID_TASK_CONFIG_RESPONSE;
         case 1282: return MSG_ID_TASK_COMMAND;
@@ -3145,6 +3163,254 @@ public final class SlLink {
     }
 
     // @@protoc_insertion_point(enum_scope:sl_link.MapRequestStatus)
+  }
+
+  /**
+   * <pre>
+   * Data OPEN obtains an opaque tablet token. Control BIND and channel RECOVER
+   * require that token. Heartbeats never renew a manual-motion command lease.
+   * </pre>
+   *
+   * Protobuf enum {@code sl_link.ChannelRole}
+   */
+  public enum ChannelRole
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>CHANNEL_ROLE_DATA = 0;</code>
+     */
+    CHANNEL_ROLE_DATA(0),
+    /**
+     * <code>CHANNEL_ROLE_CONTROL = 1;</code>
+     */
+    CHANNEL_ROLE_CONTROL(1),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>CHANNEL_ROLE_DATA = 0;</code>
+     */
+    public static final int CHANNEL_ROLE_DATA_VALUE = 0;
+    /**
+     * <code>CHANNEL_ROLE_CONTROL = 1;</code>
+     */
+    public static final int CHANNEL_ROLE_CONTROL_VALUE = 1;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ChannelRole valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static ChannelRole forNumber(int value) {
+      switch (value) {
+        case 0: return CHANNEL_ROLE_DATA;
+        case 1: return CHANNEL_ROLE_CONTROL;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ChannelRole>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ChannelRole> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ChannelRole>() {
+            public ChannelRole findValueByNumber(int number) {
+              return ChannelRole.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return sl_link.SlLink.getDescriptor().getEnumTypes().get(19);
+    }
+
+    private static final ChannelRole[] VALUES = values();
+
+    public static ChannelRole valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ChannelRole(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:sl_link.ChannelRole)
+  }
+
+  /**
+   * Protobuf enum {@code sl_link.ChannelSessionAction}
+   */
+  public enum ChannelSessionAction
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>CHANNEL_SESSION_OPEN = 0;</code>
+     */
+    CHANNEL_SESSION_OPEN(0),
+    /**
+     * <code>CHANNEL_SESSION_BIND = 1;</code>
+     */
+    CHANNEL_SESSION_BIND(1),
+    /**
+     * <code>CHANNEL_SESSION_HEARTBEAT = 2;</code>
+     */
+    CHANNEL_SESSION_HEARTBEAT(2),
+    /**
+     * <code>CHANNEL_SESSION_RELEASE = 3;</code>
+     */
+    CHANNEL_SESSION_RELEASE(3),
+    /**
+     * <code>CHANNEL_SESSION_RECOVER = 4;</code>
+     */
+    CHANNEL_SESSION_RECOVER(4),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>CHANNEL_SESSION_OPEN = 0;</code>
+     */
+    public static final int CHANNEL_SESSION_OPEN_VALUE = 0;
+    /**
+     * <code>CHANNEL_SESSION_BIND = 1;</code>
+     */
+    public static final int CHANNEL_SESSION_BIND_VALUE = 1;
+    /**
+     * <code>CHANNEL_SESSION_HEARTBEAT = 2;</code>
+     */
+    public static final int CHANNEL_SESSION_HEARTBEAT_VALUE = 2;
+    /**
+     * <code>CHANNEL_SESSION_RELEASE = 3;</code>
+     */
+    public static final int CHANNEL_SESSION_RELEASE_VALUE = 3;
+    /**
+     * <code>CHANNEL_SESSION_RECOVER = 4;</code>
+     */
+    public static final int CHANNEL_SESSION_RECOVER_VALUE = 4;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ChannelSessionAction valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static ChannelSessionAction forNumber(int value) {
+      switch (value) {
+        case 0: return CHANNEL_SESSION_OPEN;
+        case 1: return CHANNEL_SESSION_BIND;
+        case 2: return CHANNEL_SESSION_HEARTBEAT;
+        case 3: return CHANNEL_SESSION_RELEASE;
+        case 4: return CHANNEL_SESSION_RECOVER;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ChannelSessionAction>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ChannelSessionAction> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ChannelSessionAction>() {
+            public ChannelSessionAction findValueByNumber(int number) {
+              return ChannelSessionAction.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return sl_link.SlLink.getDescriptor().getEnumTypes().get(20);
+    }
+
+    private static final ChannelSessionAction[] VALUES = values();
+
+    public static ChannelSessionAction valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ChannelSessionAction(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:sl_link.ChannelSessionAction)
   }
 
   public interface WifiConfigOrBuilder extends
@@ -111675,6 +111941,1968 @@ public final class SlLink {
 
   }
 
+  public interface ChannelSessionRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:sl_link.ChannelSessionRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.sl_link.ChannelSessionAction action = 1;</code>
+     * @return The enum numeric value on the wire for action.
+     */
+    int getActionValue();
+    /**
+     * <code>.sl_link.ChannelSessionAction action = 1;</code>
+     * @return The action.
+     */
+    sl_link.SlLink.ChannelSessionAction getAction();
+
+    /**
+     * <code>.sl_link.ChannelRole role = 2;</code>
+     * @return The enum numeric value on the wire for role.
+     */
+    int getRoleValue();
+    /**
+     * <code>.sl_link.ChannelRole role = 2;</code>
+     * @return The role.
+     */
+    sl_link.SlLink.ChannelRole getRole();
+
+    /**
+     * <code>string token = 3;</code>
+     * @return The token.
+     */
+    java.lang.String getToken();
+    /**
+     * <code>string token = 3;</code>
+     * @return The bytes for token.
+     */
+    com.google.protobuf.ByteString
+        getTokenBytes();
+  }
+  /**
+   * Protobuf type {@code sl_link.ChannelSessionRequest}
+   */
+  public static final class ChannelSessionRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:sl_link.ChannelSessionRequest)
+      ChannelSessionRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ChannelSessionRequest.newBuilder() to construct.
+    private ChannelSessionRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ChannelSessionRequest() {
+      action_ = 0;
+      role_ = 0;
+      token_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ChannelSessionRequest();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return sl_link.SlLink.internal_static_sl_link_ChannelSessionRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return sl_link.SlLink.internal_static_sl_link_ChannelSessionRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              sl_link.SlLink.ChannelSessionRequest.class, sl_link.SlLink.ChannelSessionRequest.Builder.class);
+    }
+
+    public static final int ACTION_FIELD_NUMBER = 1;
+    private int action_ = 0;
+    /**
+     * <code>.sl_link.ChannelSessionAction action = 1;</code>
+     * @return The enum numeric value on the wire for action.
+     */
+    @java.lang.Override public int getActionValue() {
+      return action_;
+    }
+    /**
+     * <code>.sl_link.ChannelSessionAction action = 1;</code>
+     * @return The action.
+     */
+    @java.lang.Override public sl_link.SlLink.ChannelSessionAction getAction() {
+      sl_link.SlLink.ChannelSessionAction result = sl_link.SlLink.ChannelSessionAction.forNumber(action_);
+      return result == null ? sl_link.SlLink.ChannelSessionAction.UNRECOGNIZED : result;
+    }
+
+    public static final int ROLE_FIELD_NUMBER = 2;
+    private int role_ = 0;
+    /**
+     * <code>.sl_link.ChannelRole role = 2;</code>
+     * @return The enum numeric value on the wire for role.
+     */
+    @java.lang.Override public int getRoleValue() {
+      return role_;
+    }
+    /**
+     * <code>.sl_link.ChannelRole role = 2;</code>
+     * @return The role.
+     */
+    @java.lang.Override public sl_link.SlLink.ChannelRole getRole() {
+      sl_link.SlLink.ChannelRole result = sl_link.SlLink.ChannelRole.forNumber(role_);
+      return result == null ? sl_link.SlLink.ChannelRole.UNRECOGNIZED : result;
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 3;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object token_ = "";
+    /**
+     * <code>string token = 3;</code>
+     * @return The token.
+     */
+    @java.lang.Override
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string token = 3;</code>
+     * @return The bytes for token.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (action_ != sl_link.SlLink.ChannelSessionAction.CHANNEL_SESSION_OPEN.getNumber()) {
+        output.writeEnum(1, action_);
+      }
+      if (role_ != sl_link.SlLink.ChannelRole.CHANNEL_ROLE_DATA.getNumber()) {
+        output.writeEnum(2, role_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, token_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (action_ != sl_link.SlLink.ChannelSessionAction.CHANNEL_SESSION_OPEN.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, action_);
+      }
+      if (role_ != sl_link.SlLink.ChannelRole.CHANNEL_ROLE_DATA.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, role_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, token_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof sl_link.SlLink.ChannelSessionRequest)) {
+        return super.equals(obj);
+      }
+      sl_link.SlLink.ChannelSessionRequest other = (sl_link.SlLink.ChannelSessionRequest) obj;
+
+      if (action_ != other.action_) return false;
+      if (role_ != other.role_) return false;
+      if (!getToken()
+          .equals(other.getToken())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ACTION_FIELD_NUMBER;
+      hash = (53 * hash) + action_;
+      hash = (37 * hash) + ROLE_FIELD_NUMBER;
+      hash = (53 * hash) + role_;
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static sl_link.SlLink.ChannelSessionRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static sl_link.SlLink.ChannelSessionRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static sl_link.SlLink.ChannelSessionRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(sl_link.SlLink.ChannelSessionRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code sl_link.ChannelSessionRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:sl_link.ChannelSessionRequest)
+        sl_link.SlLink.ChannelSessionRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return sl_link.SlLink.internal_static_sl_link_ChannelSessionRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return sl_link.SlLink.internal_static_sl_link_ChannelSessionRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                sl_link.SlLink.ChannelSessionRequest.class, sl_link.SlLink.ChannelSessionRequest.Builder.class);
+      }
+
+      // Construct using sl_link.SlLink.ChannelSessionRequest.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        action_ = 0;
+        role_ = 0;
+        token_ = "";
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return sl_link.SlLink.internal_static_sl_link_ChannelSessionRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionRequest getDefaultInstanceForType() {
+        return sl_link.SlLink.ChannelSessionRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionRequest build() {
+        sl_link.SlLink.ChannelSessionRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionRequest buildPartial() {
+        sl_link.SlLink.ChannelSessionRequest result = new sl_link.SlLink.ChannelSessionRequest(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(sl_link.SlLink.ChannelSessionRequest result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.action_ = action_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.role_ = role_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.token_ = token_;
+        }
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof sl_link.SlLink.ChannelSessionRequest) {
+          return mergeFrom((sl_link.SlLink.ChannelSessionRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(sl_link.SlLink.ChannelSessionRequest other) {
+        if (other == sl_link.SlLink.ChannelSessionRequest.getDefaultInstance()) return this;
+        if (other.action_ != 0) {
+          setActionValue(other.getActionValue());
+        }
+        if (other.role_ != 0) {
+          setRoleValue(other.getRoleValue());
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          bitField0_ |= 0x00000004;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                action_ = input.readEnum();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                role_ = input.readEnum();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 26: {
+                token_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int action_ = 0;
+      /**
+       * <code>.sl_link.ChannelSessionAction action = 1;</code>
+       * @return The enum numeric value on the wire for action.
+       */
+      @java.lang.Override public int getActionValue() {
+        return action_;
+      }
+      /**
+       * <code>.sl_link.ChannelSessionAction action = 1;</code>
+       * @param value The enum numeric value on the wire for action to set.
+       * @return This builder for chaining.
+       */
+      public Builder setActionValue(int value) {
+        action_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ChannelSessionAction action = 1;</code>
+       * @return The action.
+       */
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionAction getAction() {
+        sl_link.SlLink.ChannelSessionAction result = sl_link.SlLink.ChannelSessionAction.forNumber(action_);
+        return result == null ? sl_link.SlLink.ChannelSessionAction.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.sl_link.ChannelSessionAction action = 1;</code>
+       * @param value The action to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAction(sl_link.SlLink.ChannelSessionAction value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        action_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ChannelSessionAction action = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAction() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        action_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int role_ = 0;
+      /**
+       * <code>.sl_link.ChannelRole role = 2;</code>
+       * @return The enum numeric value on the wire for role.
+       */
+      @java.lang.Override public int getRoleValue() {
+        return role_;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 2;</code>
+       * @param value The enum numeric value on the wire for role to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRoleValue(int value) {
+        role_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 2;</code>
+       * @return The role.
+       */
+      @java.lang.Override
+      public sl_link.SlLink.ChannelRole getRole() {
+        sl_link.SlLink.ChannelRole result = sl_link.SlLink.ChannelRole.forNumber(role_);
+        return result == null ? sl_link.SlLink.ChannelRole.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 2;</code>
+       * @param value The role to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRole(sl_link.SlLink.ChannelRole value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        role_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRole() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        role_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object token_ = "";
+      /**
+       * <code>string token = 3;</code>
+       * @return The token.
+       */
+      public java.lang.String getToken() {
+        java.lang.Object ref = token_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string token = 3;</code>
+       * @return The bytes for token.
+       */
+      public com.google.protobuf.ByteString
+          getTokenBytes() {
+        java.lang.Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string token = 3;</code>
+       * @param value The token to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToken(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        token_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearToken() {
+        token_ = getDefaultInstance().getToken();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 3;</code>
+       * @param value The bytes for token to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        token_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:sl_link.ChannelSessionRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:sl_link.ChannelSessionRequest)
+    private static final sl_link.SlLink.ChannelSessionRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new sl_link.SlLink.ChannelSessionRequest();
+    }
+
+    public static sl_link.SlLink.ChannelSessionRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ChannelSessionRequest>
+        PARSER = new com.google.protobuf.AbstractParser<ChannelSessionRequest>() {
+      @java.lang.Override
+      public ChannelSessionRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<ChannelSessionRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChannelSessionRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public sl_link.SlLink.ChannelSessionRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ChannelSessionResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:sl_link.ChannelSessionResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.sl_link.ResultCode result = 1;</code>
+     * @return The enum numeric value on the wire for result.
+     */
+    int getResultValue();
+    /**
+     * <code>.sl_link.ResultCode result = 1;</code>
+     * @return The result.
+     */
+    sl_link.SlLink.ResultCode getResult();
+
+    /**
+     * <code>string message = 2;</code>
+     * @return The message.
+     */
+    java.lang.String getMessage();
+    /**
+     * <code>string message = 2;</code>
+     * @return The bytes for message.
+     */
+    com.google.protobuf.ByteString
+        getMessageBytes();
+
+    /**
+     * <code>.sl_link.ChannelRole role = 3;</code>
+     * @return The enum numeric value on the wire for role.
+     */
+    int getRoleValue();
+    /**
+     * <code>.sl_link.ChannelRole role = 3;</code>
+     * @return The role.
+     */
+    sl_link.SlLink.ChannelRole getRole();
+
+    /**
+     * <code>string token = 4;</code>
+     * @return The token.
+     */
+    java.lang.String getToken();
+    /**
+     * <code>string token = 4;</code>
+     * @return The bytes for token.
+     */
+    com.google.protobuf.ByteString
+        getTokenBytes();
+
+    /**
+     * <code>uint32 heartbeat_interval_ms = 5;</code>
+     * @return The heartbeatIntervalMs.
+     */
+    int getHeartbeatIntervalMs();
+
+    /**
+     * <code>uint32 session_timeout_ms = 6;</code>
+     * @return The sessionTimeoutMs.
+     */
+    int getSessionTimeoutMs();
+
+    /**
+     * <code>bool control_ready = 7;</code>
+     * @return The controlReady.
+     */
+    boolean getControlReady();
+
+    /**
+     * <code>bool emergency_stop_latched = 8;</code>
+     * @return The emergencyStopLatched.
+     */
+    boolean getEmergencyStopLatched();
+  }
+  /**
+   * Protobuf type {@code sl_link.ChannelSessionResponse}
+   */
+  public static final class ChannelSessionResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:sl_link.ChannelSessionResponse)
+      ChannelSessionResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ChannelSessionResponse.newBuilder() to construct.
+    private ChannelSessionResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ChannelSessionResponse() {
+      result_ = 0;
+      message_ = "";
+      role_ = 0;
+      token_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ChannelSessionResponse();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return sl_link.SlLink.internal_static_sl_link_ChannelSessionResponse_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return sl_link.SlLink.internal_static_sl_link_ChannelSessionResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              sl_link.SlLink.ChannelSessionResponse.class, sl_link.SlLink.ChannelSessionResponse.Builder.class);
+    }
+
+    public static final int RESULT_FIELD_NUMBER = 1;
+    private int result_ = 0;
+    /**
+     * <code>.sl_link.ResultCode result = 1;</code>
+     * @return The enum numeric value on the wire for result.
+     */
+    @java.lang.Override public int getResultValue() {
+      return result_;
+    }
+    /**
+     * <code>.sl_link.ResultCode result = 1;</code>
+     * @return The result.
+     */
+    @java.lang.Override public sl_link.SlLink.ResultCode getResult() {
+      sl_link.SlLink.ResultCode result = sl_link.SlLink.ResultCode.forNumber(result_);
+      return result == null ? sl_link.SlLink.ResultCode.UNRECOGNIZED : result;
+    }
+
+    public static final int MESSAGE_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object message_ = "";
+    /**
+     * <code>string message = 2;</code>
+     * @return The message.
+     */
+    @java.lang.Override
+    public java.lang.String getMessage() {
+      java.lang.Object ref = message_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        message_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string message = 2;</code>
+     * @return The bytes for message.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMessageBytes() {
+      java.lang.Object ref = message_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        message_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ROLE_FIELD_NUMBER = 3;
+    private int role_ = 0;
+    /**
+     * <code>.sl_link.ChannelRole role = 3;</code>
+     * @return The enum numeric value on the wire for role.
+     */
+    @java.lang.Override public int getRoleValue() {
+      return role_;
+    }
+    /**
+     * <code>.sl_link.ChannelRole role = 3;</code>
+     * @return The role.
+     */
+    @java.lang.Override public sl_link.SlLink.ChannelRole getRole() {
+      sl_link.SlLink.ChannelRole result = sl_link.SlLink.ChannelRole.forNumber(role_);
+      return result == null ? sl_link.SlLink.ChannelRole.UNRECOGNIZED : result;
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object token_ = "";
+    /**
+     * <code>string token = 4;</code>
+     * @return The token.
+     */
+    @java.lang.Override
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string token = 4;</code>
+     * @return The bytes for token.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int HEARTBEAT_INTERVAL_MS_FIELD_NUMBER = 5;
+    private int heartbeatIntervalMs_ = 0;
+    /**
+     * <code>uint32 heartbeat_interval_ms = 5;</code>
+     * @return The heartbeatIntervalMs.
+     */
+    @java.lang.Override
+    public int getHeartbeatIntervalMs() {
+      return heartbeatIntervalMs_;
+    }
+
+    public static final int SESSION_TIMEOUT_MS_FIELD_NUMBER = 6;
+    private int sessionTimeoutMs_ = 0;
+    /**
+     * <code>uint32 session_timeout_ms = 6;</code>
+     * @return The sessionTimeoutMs.
+     */
+    @java.lang.Override
+    public int getSessionTimeoutMs() {
+      return sessionTimeoutMs_;
+    }
+
+    public static final int CONTROL_READY_FIELD_NUMBER = 7;
+    private boolean controlReady_ = false;
+    /**
+     * <code>bool control_ready = 7;</code>
+     * @return The controlReady.
+     */
+    @java.lang.Override
+    public boolean getControlReady() {
+      return controlReady_;
+    }
+
+    public static final int EMERGENCY_STOP_LATCHED_FIELD_NUMBER = 8;
+    private boolean emergencyStopLatched_ = false;
+    /**
+     * <code>bool emergency_stop_latched = 8;</code>
+     * @return The emergencyStopLatched.
+     */
+    @java.lang.Override
+    public boolean getEmergencyStopLatched() {
+      return emergencyStopLatched_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (result_ != sl_link.SlLink.ResultCode.RESULT_SUCCESS.getNumber()) {
+        output.writeEnum(1, result_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(message_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, message_);
+      }
+      if (role_ != sl_link.SlLink.ChannelRole.CHANNEL_ROLE_DATA.getNumber()) {
+        output.writeEnum(3, role_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, token_);
+      }
+      if (heartbeatIntervalMs_ != 0) {
+        output.writeUInt32(5, heartbeatIntervalMs_);
+      }
+      if (sessionTimeoutMs_ != 0) {
+        output.writeUInt32(6, sessionTimeoutMs_);
+      }
+      if (controlReady_ != false) {
+        output.writeBool(7, controlReady_);
+      }
+      if (emergencyStopLatched_ != false) {
+        output.writeBool(8, emergencyStopLatched_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (result_ != sl_link.SlLink.ResultCode.RESULT_SUCCESS.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, result_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(message_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, message_);
+      }
+      if (role_ != sl_link.SlLink.ChannelRole.CHANNEL_ROLE_DATA.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, role_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, token_);
+      }
+      if (heartbeatIntervalMs_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, heartbeatIntervalMs_);
+      }
+      if (sessionTimeoutMs_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(6, sessionTimeoutMs_);
+      }
+      if (controlReady_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, controlReady_);
+      }
+      if (emergencyStopLatched_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(8, emergencyStopLatched_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof sl_link.SlLink.ChannelSessionResponse)) {
+        return super.equals(obj);
+      }
+      sl_link.SlLink.ChannelSessionResponse other = (sl_link.SlLink.ChannelSessionResponse) obj;
+
+      if (result_ != other.result_) return false;
+      if (!getMessage()
+          .equals(other.getMessage())) return false;
+      if (role_ != other.role_) return false;
+      if (!getToken()
+          .equals(other.getToken())) return false;
+      if (getHeartbeatIntervalMs()
+          != other.getHeartbeatIntervalMs()) return false;
+      if (getSessionTimeoutMs()
+          != other.getSessionTimeoutMs()) return false;
+      if (getControlReady()
+          != other.getControlReady()) return false;
+      if (getEmergencyStopLatched()
+          != other.getEmergencyStopLatched()) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + RESULT_FIELD_NUMBER;
+      hash = (53 * hash) + result_;
+      hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessage().hashCode();
+      hash = (37 * hash) + ROLE_FIELD_NUMBER;
+      hash = (53 * hash) + role_;
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      hash = (37 * hash) + HEARTBEAT_INTERVAL_MS_FIELD_NUMBER;
+      hash = (53 * hash) + getHeartbeatIntervalMs();
+      hash = (37 * hash) + SESSION_TIMEOUT_MS_FIELD_NUMBER;
+      hash = (53 * hash) + getSessionTimeoutMs();
+      hash = (37 * hash) + CONTROL_READY_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getControlReady());
+      hash = (37 * hash) + EMERGENCY_STOP_LATCHED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getEmergencyStopLatched());
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static sl_link.SlLink.ChannelSessionResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static sl_link.SlLink.ChannelSessionResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static sl_link.SlLink.ChannelSessionResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(sl_link.SlLink.ChannelSessionResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code sl_link.ChannelSessionResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:sl_link.ChannelSessionResponse)
+        sl_link.SlLink.ChannelSessionResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return sl_link.SlLink.internal_static_sl_link_ChannelSessionResponse_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return sl_link.SlLink.internal_static_sl_link_ChannelSessionResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                sl_link.SlLink.ChannelSessionResponse.class, sl_link.SlLink.ChannelSessionResponse.Builder.class);
+      }
+
+      // Construct using sl_link.SlLink.ChannelSessionResponse.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        result_ = 0;
+        message_ = "";
+        role_ = 0;
+        token_ = "";
+        heartbeatIntervalMs_ = 0;
+        sessionTimeoutMs_ = 0;
+        controlReady_ = false;
+        emergencyStopLatched_ = false;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return sl_link.SlLink.internal_static_sl_link_ChannelSessionResponse_descriptor;
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionResponse getDefaultInstanceForType() {
+        return sl_link.SlLink.ChannelSessionResponse.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionResponse build() {
+        sl_link.SlLink.ChannelSessionResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.ChannelSessionResponse buildPartial() {
+        sl_link.SlLink.ChannelSessionResponse result = new sl_link.SlLink.ChannelSessionResponse(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(sl_link.SlLink.ChannelSessionResponse result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.result_ = result_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.message_ = message_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.role_ = role_;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.token_ = token_;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.heartbeatIntervalMs_ = heartbeatIntervalMs_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.sessionTimeoutMs_ = sessionTimeoutMs_;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.controlReady_ = controlReady_;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.emergencyStopLatched_ = emergencyStopLatched_;
+        }
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof sl_link.SlLink.ChannelSessionResponse) {
+          return mergeFrom((sl_link.SlLink.ChannelSessionResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(sl_link.SlLink.ChannelSessionResponse other) {
+        if (other == sl_link.SlLink.ChannelSessionResponse.getDefaultInstance()) return this;
+        if (other.result_ != 0) {
+          setResultValue(other.getResultValue());
+        }
+        if (!other.getMessage().isEmpty()) {
+          message_ = other.message_;
+          bitField0_ |= 0x00000002;
+          onChanged();
+        }
+        if (other.role_ != 0) {
+          setRoleValue(other.getRoleValue());
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        if (other.getHeartbeatIntervalMs() != 0) {
+          setHeartbeatIntervalMs(other.getHeartbeatIntervalMs());
+        }
+        if (other.getSessionTimeoutMs() != 0) {
+          setSessionTimeoutMs(other.getSessionTimeoutMs());
+        }
+        if (other.getControlReady() != false) {
+          setControlReady(other.getControlReady());
+        }
+        if (other.getEmergencyStopLatched() != false) {
+          setEmergencyStopLatched(other.getEmergencyStopLatched());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                result_ = input.readEnum();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                message_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 24: {
+                role_ = input.readEnum();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 34: {
+                token_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              case 40: {
+                heartbeatIntervalMs_ = input.readUInt32();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 40
+              case 48: {
+                sessionTimeoutMs_ = input.readUInt32();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 48
+              case 56: {
+                controlReady_ = input.readBool();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 56
+              case 64: {
+                emergencyStopLatched_ = input.readBool();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 64
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int result_ = 0;
+      /**
+       * <code>.sl_link.ResultCode result = 1;</code>
+       * @return The enum numeric value on the wire for result.
+       */
+      @java.lang.Override public int getResultValue() {
+        return result_;
+      }
+      /**
+       * <code>.sl_link.ResultCode result = 1;</code>
+       * @param value The enum numeric value on the wire for result to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResultValue(int value) {
+        result_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ResultCode result = 1;</code>
+       * @return The result.
+       */
+      @java.lang.Override
+      public sl_link.SlLink.ResultCode getResult() {
+        sl_link.SlLink.ResultCode result = sl_link.SlLink.ResultCode.forNumber(result_);
+        return result == null ? sl_link.SlLink.ResultCode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.sl_link.ResultCode result = 1;</code>
+       * @param value The result to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResult(sl_link.SlLink.ResultCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        result_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ResultCode result = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResult() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        result_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object message_ = "";
+      /**
+       * <code>string message = 2;</code>
+       * @return The message.
+       */
+      public java.lang.String getMessage() {
+        java.lang.Object ref = message_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          message_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string message = 2;</code>
+       * @return The bytes for message.
+       */
+      public com.google.protobuf.ByteString
+          getMessageBytes() {
+        java.lang.Object ref = message_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          message_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string message = 2;</code>
+       * @param value The message to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessage(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        message_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string message = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessage() {
+        message_ = getDefaultInstance().getMessage();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string message = 2;</code>
+       * @param value The bytes for message to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        message_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+
+      private int role_ = 0;
+      /**
+       * <code>.sl_link.ChannelRole role = 3;</code>
+       * @return The enum numeric value on the wire for role.
+       */
+      @java.lang.Override public int getRoleValue() {
+        return role_;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 3;</code>
+       * @param value The enum numeric value on the wire for role to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRoleValue(int value) {
+        role_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 3;</code>
+       * @return The role.
+       */
+      @java.lang.Override
+      public sl_link.SlLink.ChannelRole getRole() {
+        sl_link.SlLink.ChannelRole result = sl_link.SlLink.ChannelRole.forNumber(role_);
+        return result == null ? sl_link.SlLink.ChannelRole.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 3;</code>
+       * @param value The role to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRole(sl_link.SlLink.ChannelRole value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
+        role_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.ChannelRole role = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRole() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        role_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object token_ = "";
+      /**
+       * <code>string token = 4;</code>
+       * @return The token.
+       */
+      public java.lang.String getToken() {
+        java.lang.Object ref = token_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string token = 4;</code>
+       * @return The bytes for token.
+       */
+      public com.google.protobuf.ByteString
+          getTokenBytes() {
+        java.lang.Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string token = 4;</code>
+       * @param value The token to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToken(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        token_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearToken() {
+        token_ = getDefaultInstance().getToken();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 4;</code>
+       * @param value The bytes for token to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        token_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private int heartbeatIntervalMs_ ;
+      /**
+       * <code>uint32 heartbeat_interval_ms = 5;</code>
+       * @return The heartbeatIntervalMs.
+       */
+      @java.lang.Override
+      public int getHeartbeatIntervalMs() {
+        return heartbeatIntervalMs_;
+      }
+      /**
+       * <code>uint32 heartbeat_interval_ms = 5;</code>
+       * @param value The heartbeatIntervalMs to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHeartbeatIntervalMs(int value) {
+
+        heartbeatIntervalMs_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 heartbeat_interval_ms = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHeartbeatIntervalMs() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        heartbeatIntervalMs_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int sessionTimeoutMs_ ;
+      /**
+       * <code>uint32 session_timeout_ms = 6;</code>
+       * @return The sessionTimeoutMs.
+       */
+      @java.lang.Override
+      public int getSessionTimeoutMs() {
+        return sessionTimeoutMs_;
+      }
+      /**
+       * <code>uint32 session_timeout_ms = 6;</code>
+       * @param value The sessionTimeoutMs to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSessionTimeoutMs(int value) {
+
+        sessionTimeoutMs_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 session_timeout_ms = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSessionTimeoutMs() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        sessionTimeoutMs_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean controlReady_ ;
+      /**
+       * <code>bool control_ready = 7;</code>
+       * @return The controlReady.
+       */
+      @java.lang.Override
+      public boolean getControlReady() {
+        return controlReady_;
+      }
+      /**
+       * <code>bool control_ready = 7;</code>
+       * @param value The controlReady to set.
+       * @return This builder for chaining.
+       */
+      public Builder setControlReady(boolean value) {
+
+        controlReady_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool control_ready = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearControlReady() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        controlReady_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean emergencyStopLatched_ ;
+      /**
+       * <code>bool emergency_stop_latched = 8;</code>
+       * @return The emergencyStopLatched.
+       */
+      @java.lang.Override
+      public boolean getEmergencyStopLatched() {
+        return emergencyStopLatched_;
+      }
+      /**
+       * <code>bool emergency_stop_latched = 8;</code>
+       * @param value The emergencyStopLatched to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmergencyStopLatched(boolean value) {
+
+        emergencyStopLatched_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool emergency_stop_latched = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEmergencyStopLatched() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        emergencyStopLatched_ = false;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:sl_link.ChannelSessionResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:sl_link.ChannelSessionResponse)
+    private static final sl_link.SlLink.ChannelSessionResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new sl_link.SlLink.ChannelSessionResponse();
+    }
+
+    public static sl_link.SlLink.ChannelSessionResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ChannelSessionResponse>
+        PARSER = new com.google.protobuf.AbstractParser<ChannelSessionResponse>() {
+      @java.lang.Override
+      public ChannelSessionResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<ChannelSessionResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChannelSessionResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public sl_link.SlLink.ChannelSessionResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface EmergencyStopControlOrBuilder extends
       // @@protoc_insertion_point(interface_extends:sl_link.EmergencyStopControl)
       com.google.protobuf.MessageOrBuilder {
@@ -116223,6 +118451,16 @@ public final class SlLink {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_DiscControl_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_sl_link_ChannelSessionRequest_descriptor;
+  private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_sl_link_ChannelSessionRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_sl_link_ChannelSessionResponse_descriptor;
+  private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_sl_link_ChannelSessionResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_EmergencyStopControl_descriptor;
   private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -116776,151 +119014,168 @@ public final class SlLink {
       "mand\"\"\n\017LightingControl\022\017\n\007enabled\030\001 \001(\010" +
       "\"&\n\023ChassisPowerControl\022\017\n\007enabled\030\001 \001(\010" +
       "\"1\n\013DiscControl\022\017\n\007enabled\030\001 \001(\010\022\021\n\tspee" +
-      "d_rpm\030\002 \001(\r\"\'\n\024EmergencyStopControl\022\017\n\007e" +
-      "nabled\030\001 \001(\010\"\260\001\n\022ManualDriveControl\022,\n\006m" +
-      "otion\030\001 \001(\0162\034.sl_link.ManualMotionComman" +
-      "d\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n\010remote_x\030\003 \001(\002" +
-      "\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax_speed_mps\030\005 \001(" +
-      "\002\022\034\n\024max_turn_speed_ratio\030\006 \001(\002\"\313\002\n\016Cont" +
-      "rolCommand\022-\n\tdisc_lift\030\001 \001(\0132\030.sl_link." +
-      "DiscLiftControlH\000\022,\n\010lighting\030\002 \001(\0132\030.sl" +
-      "_link.LightingControlH\000\0223\n\014manual_drive\030" +
-      "\003 \001(\0132\033.sl_link.ManualDriveControlH\000\0225\n\r" +
-      "chassis_power\030\004 \001(\0132\034.sl_link.ChassisPow" +
-      "erControlH\000\022,\n\014disc_control\030\005 \001(\0132\024.sl_l" +
-      "ink.DiscControlH\000\0227\n\016emergency_stop\030\006 \001(" +
-      "\0132\035.sl_link.EmergencyStopControlH\000B\t\n\007co" +
-      "mmand\"\200\001\n\026ControlCommandResponse\022#\n\006resu" +
-      "lt\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
-      "\030\002 \001(\t\0220\n\017applied_command\030\003 \001(\0132\027.sl_lin" +
-      "k.ControlCommand*\271\024\n\tMessageId\022\022\n\016MSG_ID" +
-      "_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020\201\004\022\036\n\031M" +
-      "SG_ID_WIFI_STATUS_REPORT\020\202\004\022!\n\034MSG_ID_SE" +
-      "TTINGS_READ_REQUEST\020\203\004\022\"\n\035MSG_ID_SETTING" +
-      "S_READ_RESPONSE\020\204\004\022\"\n\035MSG_ID_SETTINGS_WR" +
-      "ITE_REQUEST\020\205\004\022#\n\036MSG_ID_SETTINGS_WRITE_" +
-      "RESPONSE\020\206\004\022 \n\033MSG_ID_DEVICE_STATUS_REPO" +
-      "RT\020\201\006\022 \n\033MSG_ID_CAMERA_FRAME_REQUEST\020\202\006\022" +
-      "\036\n\031MSG_ID_CAMERA_FRAME_CHUNK\020\203\006\022\027\n\022MSG_I" +
-      "D_MAP_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_CHUNK\020\205\006\022" +
-      "\036\n\031MSG_ID_MAP_REQUEST_RESULT\020\206\006\022\033\n\026MSG_I" +
-      "D_CONTROL_COMMAND\020\201\010\022$\n\037MSG_ID_CONTROL_C" +
-      "OMMAND_RESPONSE\020\202\010\022\027\n\022MSG_ID_TASK_CONFIG" +
-      "\020\200\n\022 \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201\n\022\030\n" +
-      "\023MSG_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TASK_C" +
-      "OMMAND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_STATUS" +
-      "_REPORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN_REQ" +
-      "UEST\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RESPON" +
-      "SE\020\206\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020\207\n\022 " +
-      "\n\033MSG_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027MSG_" +
-      "ID_MAP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP_EDI" +
-      "T_RESPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STATUS_" +
-      "REPORT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INFO_RE" +
-      "QUEST\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO_RES" +
-      "PONSE\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST\020\216\n\022" +
-      "\036\n\031MSG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027MSG_I" +
-      "D_MAP_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_SYNC" +
-      "_RESPONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQUEST\020" +
-      "\222\n\022\035\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n\032MSG" +
-      "_ID_MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID_MAP" +
-      "_CATALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_DELET" +
-      "E_REQUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RESPON" +
-      "SE\020\227\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022\035\n\030M" +
-      "SG_ID_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID_MAP" +
-      "_METRICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_METRIC" +
-      "S_RESPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_REQU" +
-      "EST\020\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONSE\020\235\n" +
-      "\022(\n#MSG_ID_LIVE_MAP_CACHE_CLEAR_REQUEST\020" +
-      "\236\n\022)\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RESPON" +
-      "SE\020\237\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEAR_RE" +
-      "QUEST\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_CLEAR" +
-      "_RESPONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO_RAD" +
-      "AR_REQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_TO_RA" +
-      "DAR_RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNMENT_" +
-      "REQUEST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_RESPO" +
-      "NSE\020\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS_REQ" +
-      "UEST\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATUS_RE" +
-      "SPONSE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_REQUE" +
-      "ST\020\250\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPONSE\020" +
-      "\251\n\022(\n#MSG_ID_RADAR_RELOCALIZATION_REQUES" +
-      "T\020\252\n\022)\n$MSG_ID_RADAR_RELOCALIZATION_RESP" +
-      "ONSE\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATION_S" +
-      "TATUS_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_RELOCAL" +
-      "IZATION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID_MAP" +
-      "_REGION_POINT_REQUEST\020\256\n\022%\n MSG_ID_MAP_R" +
-      "EGION_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TASK_E" +
-      "XECUTION_HISTORY_REQUEST\020\260\n\022(\n#MSG_ID_TA" +
-      "SK_EXECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG_ID_" +
-      "TASK_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID_TAS" +
-      "K_TRAJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK_EXE" +
-      "CUTION_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_TASK_" +
-      "EXECUTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_ID_S" +
-      "YSTEM_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_ID_S" +
-      "YSTEM_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG_ID_" +
-      "TASK_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%MSG_" +
-      "ID_TASK_RUNTIME_SETTINGS_RESPONSE\020\271\n*X\n\010" +
-      "DeviceId\022\023\n\017DEVICE_RESERVED\020\000\022\016\n\nDEVICE_" +
-      "APP\020\001\022\020\n\014DEVICE_LOWER\020\020\022\025\n\020DEVICE_BROADC" +
-      "AST\020\377\001*v\n\013ComponentId\022\017\n\013COMP_SYSTEM\020\000\022\r" +
-      "\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\nCOMP" +
-      "_MEDIA\020\006\022\020\n\014COMP_CONTROL\020\007\022\022\n\016COMP_SCHED" +
-      "ULER\020\010*v\n\nResultCode\022\022\n\016RESULT_SUCCESS\020\000" +
-      "\022\030\n\024RESULT_INVALID_PARAM\020\001\022\026\n\022RESULT_UNS" +
-      "UPPORTED\020\002\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESULT_FA" +
-      "ILED\020\004*;\n\014SystemStatus\022\025\n\021SYS_STATUS_NOR" +
-      "MAL\020\000\022\024\n\020SYS_STATUS_ERROR\020\001*Q\n\nWifiResul" +
-      "t\022\020\n\014WIFI_PENDING\020\000\022\020\n\014WIFI_SUCCESS\020\001\022\r\n" +
-      "\tWIFI_FAIL\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010WorkMo" +
-      "de\022\025\n\021WORK_MODE_UNKNOWN\020\000\022\024\n\020WORK_MODE_M" +
-      "ANUAL\020\001\022\022\n\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_MODE" +
-      "_EDGE\020\003\022\022\n\016WORK_MODE_DOCK\020\004*z\n\rDiscLiftS" +
-      "tate\022\033\n\027DISC_LIFT_STATE_UNKNOWN\020\000\022\026\n\022DIS" +
-      "C_LIFT_STATE_UP\020\001\022\030\n\024DISC_LIFT_STATE_DOW" +
-      "N\020\002\022\032\n\026DISC_LIFT_STATE_MOVING\020\003*W\n\017DiscL" +
-      "iftCommand\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024\n\020DI" +
-      "SC_LIFT_CMD_UP\020\001\022\026\n\022DISC_LIFT_CMD_DOWN\020\002" +
-      "*\350\001\n\023ManualMotionCommand\022\026\n\022MANUAL_MOTIO" +
-      "N_STOP\020\000\022\031\n\025MANUAL_MOTION_FORWARD\020\001\022\032\n\026M" +
-      "ANUAL_MOTION_BACKWARD\020\002\022\036\n\032MANUAL_MOTION" +
-      "_FORWARD_LEFT\020\003\022\037\n\033MANUAL_MOTION_FORWARD" +
-      "_RIGHT\020\004\022\037\n\033MANUAL_MOTION_BACKWARD_LEFT\020" +
-      "\005\022 \n\034MANUAL_MOTION_BACKWARD_RIGHT\020\006*;\n\013C" +
-      "ameraCodec\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n\021CAM" +
-      "ERA_CODEC_H264\020\001*[\n\013MapEncoding\022\037\n\033MAP_E" +
-      "NCODING_OCCUPANCY_GRID\020\000\022\024\n\020MAP_ENCODING" +
-      "_PNG\020\001\022\025\n\021MAP_ENCODING_JSON\020\002*\202\001\n\nRegion" +
-      "Type\022\027\n\023REGION_TYPE_UNKNOWN\020\000\022\024\n\020REGION_" +
-      "TYPE_WORK\020\001\022\030\n\024REGION_TYPE_OBSTACLE\020\002\022\025\n" +
-      "\021REGION_TYPE_ERASE\020\003\022\024\n\020REGION_TYPE_CROP" +
-      "\020\004*\306\001\n\tTaskState\022\023\n\017TASK_STATE_IDLE\020\000\022\024\n" +
-      "\020TASK_STATE_READY\020\001\022\027\n\023TASK_STATE_PLANNI" +
-      "NG\020\002\022\026\n\022TASK_STATE_RUNNING\020\003\022\025\n\021TASK_STA" +
-      "TE_PAUSED\020\004\022\030\n\024TASK_STATE_COMPLETED\020\005\022\026\n" +
-      "\022TASK_STATE_STOPPED\020\006\022\024\n\020TASK_STATE_ERRO" +
-      "R\020\007*a\n\017TaskCommandType\022\022\n\016TASK_CMD_START" +
-      "\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_RESUM" +
-      "E\020\002\022\021\n\rTASK_CMD_STOP\020\003*\337\002\n\020MapEditOperat" +
-      "ion\022\027\n\023MAP_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_EDIT" +
-      "_OP_UPSERT_WORK_REGION\020\001\022&\n\"MAP_EDIT_OP_" +
-      "UPSERT_OBSTACLE_REGION\020\002\022\035\n\031MAP_EDIT_OP_" +
-      "DELETE_REGION\020\003\022\032\n\026MAP_EDIT_OP_PAINT_FRE" +
-      "E\020\004\022\036\n\032MAP_EDIT_OP_PAINT_OCCUPIED\020\005\022\035\n\031M" +
-      "AP_EDIT_OP_PAINT_UNKNOWN\020\006\022#\n\037MAP_EDIT_O" +
-      "P_CLEAR_OVERLAY_PATCH\020\007\022#\n\037MAP_EDIT_OP_U" +
-      "PSERT_ERASE_REGION\020\010\022\"\n\036MAP_EDIT_OP_UPSE" +
-      "RT_CROP_REGION\020\t*s\n\020MapSyncOperation\022\027\n\023" +
-      "MAP_SYNC_OP_UNKNOWN\020\000\022$\n MAP_SYNC_OP_DOW" +
-      "NLOAD_FROM_AURORA\020\001\022 \n\034MAP_SYNC_OP_UPLOA" +
-      "D_TO_AURORA\020\002*T\n\013MapModeType\022\024\n\020MAP_MODE" +
-      "_UNKNOWN\020\000\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025MAP_" +
-      "MODE_LOCALIZATION\020\002*\262\001\n\020MapRequestStatus" +
-      "\022\036\n\032MAP_REQUEST_STATUS_UNKNOWN\020\000\022\034\n\030MAP_" +
-      "REQUEST_STATUS_READY\020\001\022 \n\034MAP_REQUEST_ST" +
-      "ATUS_NOT_READY\020\002\022 \n\034MAP_REQUEST_STATUS_N" +
-      "OT_FOUND\020\003\022\034\n\030MAP_REQUEST_STATUS_ERROR\020\004" +
-      ":-\n\004unit\022\035.google.protobuf.FieldOptions\030" +
-      "\321\206\003 \001(\t:.\n\005scale\022\035.google.protobuf.Field" +
-      "Options\030\322\206\003 \001(\001b\006proto3"
+      "d_rpm\030\002 \001(\r\"y\n\025ChannelSessionRequest\022-\n\006" +
+      "action\030\001 \001(\0162\035.sl_link.ChannelSessionAct" +
+      "ion\022\"\n\004role\030\002 \001(\0162\024.sl_link.ChannelRole\022" +
+      "\r\n\005token\030\003 \001(\t\"\363\001\n\026ChannelSessionRespons" +
+      "e\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017" +
+      "\n\007message\030\002 \001(\t\022\"\n\004role\030\003 \001(\0162\024.sl_link." +
+      "ChannelRole\022\r\n\005token\030\004 \001(\t\022\035\n\025heartbeat_" +
+      "interval_ms\030\005 \001(\r\022\032\n\022session_timeout_ms\030" +
+      "\006 \001(\r\022\025\n\rcontrol_ready\030\007 \001(\010\022\036\n\026emergenc" +
+      "y_stop_latched\030\010 \001(\010\"\'\n\024EmergencyStopCon" +
+      "trol\022\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualDriveCon" +
+      "trol\022,\n\006motion\030\001 \001(\0162\034.sl_link.ManualMot" +
+      "ionCommand\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n\010remot" +
+      "e_x\030\003 \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax_speed" +
+      "_mps\030\005 \001(\002\022\034\n\024max_turn_speed_ratio\030\006 \001(\002" +
+      "\"\313\002\n\016ControlCommand\022-\n\tdisc_lift\030\001 \001(\0132\030" +
+      ".sl_link.DiscLiftControlH\000\022,\n\010lighting\030\002" +
+      " \001(\0132\030.sl_link.LightingControlH\000\0223\n\014manu" +
+      "al_drive\030\003 \001(\0132\033.sl_link.ManualDriveCont" +
+      "rolH\000\0225\n\rchassis_power\030\004 \001(\0132\034.sl_link.C" +
+      "hassisPowerControlH\000\022,\n\014disc_control\030\005 \001" +
+      "(\0132\024.sl_link.DiscControlH\000\0227\n\016emergency_" +
+      "stop\030\006 \001(\0132\035.sl_link.EmergencyStopContro" +
+      "lH\000B\t\n\007command\"\200\001\n\026ControlCommandRespons" +
+      "e\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017" +
+      "\n\007message\030\002 \001(\t\0220\n\017applied_command\030\003 \001(\013" +
+      "2\027.sl_link.ControlCommand*\204\025\n\tMessageId\022" +
+      "\022\n\016MSG_ID_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFI" +
+      "G\020\201\004\022\036\n\031MSG_ID_WIFI_STATUS_REPORT\020\202\004\022!\n\034" +
+      "MSG_ID_SETTINGS_READ_REQUEST\020\203\004\022\"\n\035MSG_I" +
+      "D_SETTINGS_READ_RESPONSE\020\204\004\022\"\n\035MSG_ID_SE" +
+      "TTINGS_WRITE_REQUEST\020\205\004\022#\n\036MSG_ID_SETTIN" +
+      "GS_WRITE_RESPONSE\020\206\004\022 \n\033MSG_ID_DEVICE_ST" +
+      "ATUS_REPORT\020\201\006\022 \n\033MSG_ID_CAMERA_FRAME_RE" +
+      "QUEST\020\202\006\022\036\n\031MSG_ID_CAMERA_FRAME_CHUNK\020\203\006" +
+      "\022\027\n\022MSG_ID_MAP_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_" +
+      "CHUNK\020\205\006\022\036\n\031MSG_ID_MAP_REQUEST_RESULT\020\206\006" +
+      "\022\033\n\026MSG_ID_CONTROL_COMMAND\020\201\010\022$\n\037MSG_ID_" +
+      "CONTROL_COMMAND_RESPONSE\020\202\010\022#\n\036MSG_ID_CH" +
+      "ANNEL_SESSION_REQUEST\020\203\010\022$\n\037MSG_ID_CHANN" +
+      "EL_SESSION_RESPONSE\020\204\010\022\027\n\022MSG_ID_TASK_CO" +
+      "NFIG\020\200\n\022 \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201" +
+      "\n\022\030\n\023MSG_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TA" +
+      "SK_COMMAND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_ST" +
+      "ATUS_REPORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN" +
+      "_REQUEST\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RE" +
+      "SPONSE\020\206\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020" +
+      "\207\n\022 \n\033MSG_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027" +
+      "MSG_ID_MAP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP" +
+      "_EDIT_RESPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STA" +
+      "TUS_REPORT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INF" +
+      "O_REQUEST\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO" +
+      "_RESPONSE\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST" +
+      "\020\216\n\022\036\n\031MSG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027M" +
+      "SG_ID_MAP_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_" +
+      "SYNC_RESPONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQU" +
+      "EST\020\222\n\022\035\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n" +
+      "\032MSG_ID_MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID" +
+      "_MAP_CATALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_D" +
+      "ELETE_REQUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RE" +
+      "SPONSE\020\227\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022" +
+      "\035\n\030MSG_ID_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID" +
+      "_MAP_METRICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_ME" +
+      "TRICS_RESPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_" +
+      "REQUEST\020\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONS" +
+      "E\020\235\n\022(\n#MSG_ID_LIVE_MAP_CACHE_CLEAR_REQU" +
+      "EST\020\236\n\022)\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RE" +
+      "SPONSE\020\237\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEA" +
+      "R_REQUEST\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_C" +
+      "LEAR_RESPONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO" +
+      "_RADAR_REQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_T" +
+      "O_RADAR_RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNM" +
+      "ENT_REQUEST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_R" +
+      "ESPONSE\020\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS" +
+      "_REQUEST\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATU" +
+      "S_RESPONSE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_R" +
+      "EQUEST\020\250\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPO" +
+      "NSE\020\251\n\022(\n#MSG_ID_RADAR_RELOCALIZATION_RE" +
+      "QUEST\020\252\n\022)\n$MSG_ID_RADAR_RELOCALIZATION_" +
+      "RESPONSE\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATI" +
+      "ON_STATUS_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_REL" +
+      "OCALIZATION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID" +
+      "_MAP_REGION_POINT_REQUEST\020\256\n\022%\n MSG_ID_M" +
+      "AP_REGION_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TA" +
+      "SK_EXECUTION_HISTORY_REQUEST\020\260\n\022(\n#MSG_I" +
+      "D_TASK_EXECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG" +
+      "_ID_TASK_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID" +
+      "_TASK_TRAJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK" +
+      "_EXECUTION_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_T" +
+      "ASK_EXECUTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_" +
+      "ID_SYSTEM_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_" +
+      "ID_SYSTEM_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG" +
+      "_ID_TASK_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%" +
+      "MSG_ID_TASK_RUNTIME_SETTINGS_RESPONSE\020\271\n" +
+      "*X\n\010DeviceId\022\023\n\017DEVICE_RESERVED\020\000\022\016\n\nDEV" +
+      "ICE_APP\020\001\022\020\n\014DEVICE_LOWER\020\020\022\025\n\020DEVICE_BR" +
+      "OADCAST\020\377\001*v\n\013ComponentId\022\017\n\013COMP_SYSTEM" +
+      "\020\000\022\r\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\n" +
+      "COMP_MEDIA\020\006\022\020\n\014COMP_CONTROL\020\007\022\022\n\016COMP_S" +
+      "CHEDULER\020\010*v\n\nResultCode\022\022\n\016RESULT_SUCCE" +
+      "SS\020\000\022\030\n\024RESULT_INVALID_PARAM\020\001\022\026\n\022RESULT" +
+      "_UNSUPPORTED\020\002\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESUL" +
+      "T_FAILED\020\004*;\n\014SystemStatus\022\025\n\021SYS_STATUS" +
+      "_NORMAL\020\000\022\024\n\020SYS_STATUS_ERROR\020\001*Q\n\nWifiR" +
+      "esult\022\020\n\014WIFI_PENDING\020\000\022\020\n\014WIFI_SUCCESS\020" +
+      "\001\022\r\n\tWIFI_FAIL\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010Wo" +
+      "rkMode\022\025\n\021WORK_MODE_UNKNOWN\020\000\022\024\n\020WORK_MO" +
+      "DE_MANUAL\020\001\022\022\n\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_" +
+      "MODE_EDGE\020\003\022\022\n\016WORK_MODE_DOCK\020\004*z\n\rDiscL" +
+      "iftState\022\033\n\027DISC_LIFT_STATE_UNKNOWN\020\000\022\026\n" +
+      "\022DISC_LIFT_STATE_UP\020\001\022\030\n\024DISC_LIFT_STATE" +
+      "_DOWN\020\002\022\032\n\026DISC_LIFT_STATE_MOVING\020\003*W\n\017D" +
+      "iscLiftCommand\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024" +
+      "\n\020DISC_LIFT_CMD_UP\020\001\022\026\n\022DISC_LIFT_CMD_DO" +
+      "WN\020\002*\350\001\n\023ManualMotionCommand\022\026\n\022MANUAL_M" +
+      "OTION_STOP\020\000\022\031\n\025MANUAL_MOTION_FORWARD\020\001\022" +
+      "\032\n\026MANUAL_MOTION_BACKWARD\020\002\022\036\n\032MANUAL_MO" +
+      "TION_FORWARD_LEFT\020\003\022\037\n\033MANUAL_MOTION_FOR" +
+      "WARD_RIGHT\020\004\022\037\n\033MANUAL_MOTION_BACKWARD_L" +
+      "EFT\020\005\022 \n\034MANUAL_MOTION_BACKWARD_RIGHT\020\006*" +
+      ";\n\013CameraCodec\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n" +
+      "\021CAMERA_CODEC_H264\020\001*[\n\013MapEncoding\022\037\n\033M" +
+      "AP_ENCODING_OCCUPANCY_GRID\020\000\022\024\n\020MAP_ENCO" +
+      "DING_PNG\020\001\022\025\n\021MAP_ENCODING_JSON\020\002*\202\001\n\nRe" +
+      "gionType\022\027\n\023REGION_TYPE_UNKNOWN\020\000\022\024\n\020REG" +
+      "ION_TYPE_WORK\020\001\022\030\n\024REGION_TYPE_OBSTACLE\020" +
+      "\002\022\025\n\021REGION_TYPE_ERASE\020\003\022\024\n\020REGION_TYPE_" +
+      "CROP\020\004*\306\001\n\tTaskState\022\023\n\017TASK_STATE_IDLE\020" +
+      "\000\022\024\n\020TASK_STATE_READY\020\001\022\027\n\023TASK_STATE_PL" +
+      "ANNING\020\002\022\026\n\022TASK_STATE_RUNNING\020\003\022\025\n\021TASK" +
+      "_STATE_PAUSED\020\004\022\030\n\024TASK_STATE_COMPLETED\020" +
+      "\005\022\026\n\022TASK_STATE_STOPPED\020\006\022\024\n\020TASK_STATE_" +
+      "ERROR\020\007*a\n\017TaskCommandType\022\022\n\016TASK_CMD_S" +
+      "TART\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_R" +
+      "ESUME\020\002\022\021\n\rTASK_CMD_STOP\020\003*\337\002\n\020MapEditOp" +
+      "eration\022\027\n\023MAP_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_" +
+      "EDIT_OP_UPSERT_WORK_REGION\020\001\022&\n\"MAP_EDIT" +
+      "_OP_UPSERT_OBSTACLE_REGION\020\002\022\035\n\031MAP_EDIT" +
+      "_OP_DELETE_REGION\020\003\022\032\n\026MAP_EDIT_OP_PAINT" +
+      "_FREE\020\004\022\036\n\032MAP_EDIT_OP_PAINT_OCCUPIED\020\005\022" +
+      "\035\n\031MAP_EDIT_OP_PAINT_UNKNOWN\020\006\022#\n\037MAP_ED" +
+      "IT_OP_CLEAR_OVERLAY_PATCH\020\007\022#\n\037MAP_EDIT_" +
+      "OP_UPSERT_ERASE_REGION\020\010\022\"\n\036MAP_EDIT_OP_" +
+      "UPSERT_CROP_REGION\020\t*s\n\020MapSyncOperation" +
+      "\022\027\n\023MAP_SYNC_OP_UNKNOWN\020\000\022$\n MAP_SYNC_OP" +
+      "_DOWNLOAD_FROM_AURORA\020\001\022 \n\034MAP_SYNC_OP_U" +
+      "PLOAD_TO_AURORA\020\002*T\n\013MapModeType\022\024\n\020MAP_" +
+      "MODE_UNKNOWN\020\000\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025" +
+      "MAP_MODE_LOCALIZATION\020\002*\262\001\n\020MapRequestSt" +
+      "atus\022\036\n\032MAP_REQUEST_STATUS_UNKNOWN\020\000\022\034\n\030" +
+      "MAP_REQUEST_STATUS_READY\020\001\022 \n\034MAP_REQUES" +
+      "T_STATUS_NOT_READY\020\002\022 \n\034MAP_REQUEST_STAT" +
+      "US_NOT_FOUND\020\003\022\034\n\030MAP_REQUEST_STATUS_ERR" +
+      "OR\020\004*>\n\013ChannelRole\022\025\n\021CHANNEL_ROLE_DATA" +
+      "\020\000\022\030\n\024CHANNEL_ROLE_CONTROL\020\001*\243\001\n\024Channel" +
+      "SessionAction\022\030\n\024CHANNEL_SESSION_OPEN\020\000\022" +
+      "\030\n\024CHANNEL_SESSION_BIND\020\001\022\035\n\031CHANNEL_SES" +
+      "SION_HEARTBEAT\020\002\022\033\n\027CHANNEL_SESSION_RELE" +
+      "ASE\020\003\022\033\n\027CHANNEL_SESSION_RECOVER\020\004:-\n\004un" +
+      "it\022\035.google.protobuf.FieldOptions\030\321\206\003 \001(" +
+      "\t:.\n\005scale\022\035.google.protobuf.FieldOption" +
+      "s\030\322\206\003 \001(\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -117461,26 +119716,38 @@ public final class SlLink {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_DiscControl_descriptor,
         new java.lang.String[] { "Enabled", "SpeedRpm", });
-    internal_static_sl_link_EmergencyStopControl_descriptor =
+    internal_static_sl_link_ChannelSessionRequest_descriptor =
       getDescriptor().getMessageTypes().get(89);
+    internal_static_sl_link_ChannelSessionRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_sl_link_ChannelSessionRequest_descriptor,
+        new java.lang.String[] { "Action", "Role", "Token", });
+    internal_static_sl_link_ChannelSessionResponse_descriptor =
+      getDescriptor().getMessageTypes().get(90);
+    internal_static_sl_link_ChannelSessionResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_sl_link_ChannelSessionResponse_descriptor,
+        new java.lang.String[] { "Result", "Message", "Role", "Token", "HeartbeatIntervalMs", "SessionTimeoutMs", "ControlReady", "EmergencyStopLatched", });
+    internal_static_sl_link_EmergencyStopControl_descriptor =
+      getDescriptor().getMessageTypes().get(91);
     internal_static_sl_link_EmergencyStopControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_EmergencyStopControl_descriptor,
         new java.lang.String[] { "Enabled", });
     internal_static_sl_link_ManualDriveControl_descriptor =
-      getDescriptor().getMessageTypes().get(90);
+      getDescriptor().getMessageTypes().get(92);
     internal_static_sl_link_ManualDriveControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ManualDriveControl_descriptor,
         new java.lang.String[] { "Motion", "SpeedRatio", "RemoteX", "RemoteY", "MaxSpeedMps", "MaxTurnSpeedRatio", });
     internal_static_sl_link_ControlCommand_descriptor =
-      getDescriptor().getMessageTypes().get(91);
+      getDescriptor().getMessageTypes().get(93);
     internal_static_sl_link_ControlCommand_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ControlCommand_descriptor,
         new java.lang.String[] { "DiscLift", "Lighting", "ManualDrive", "ChassisPower", "DiscControl", "EmergencyStop", "Command", });
     internal_static_sl_link_ControlCommandResponse_descriptor =
-      getDescriptor().getMessageTypes().get(92);
+      getDescriptor().getMessageTypes().get(94);
     internal_static_sl_link_ControlCommandResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ControlCommandResponse_descriptor,

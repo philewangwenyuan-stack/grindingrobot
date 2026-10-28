@@ -13,6 +13,19 @@ class CommandReplyTrackerTest {
 
     private val success = CommandReply(0, "ok")
 
+    @Test fun dataDisconnectKeepsControlTicketAndWrongChannelCannotConfirmIt() = runBlocking {
+        val tracker = CommandReplyTracker()
+        val data = tracker.register(sl_link.SlMessageBuilder.buildTaskCommandRaw(
+            sl_link.SlLink.TaskCommand.newBuilder().setCommand(sl_link.SlLink.TaskCommandType.TASK_CMD_START).build().toByteArray(), 0x10u), "task")
+        val control = tracker.register(sl_link.SlMessageBuilder.buildTaskCommandRaw(
+            sl_link.SlLink.TaskCommand.newBuilder().setCommand(sl_link.SlLink.TaskCommandType.TASK_CMD_STOP).build().toByteArray(), 0x10u), "task")
+        tracker.resetConnection(controlChannel = false)
+        assertTrue(data.reply.isCompleted)
+        assertFalse(control.reply.isCompleted)
+        assertNull(tracker.complete(control.seq, 0x10, "task", success, controlChannel = false))
+        assertSame(control, tracker.complete(control.seq, 0x10, "task", success, controlChannel = true))
+    }
+
     @Test fun stopAndPauseRepliesCanArriveInReverseOrder() = runBlocking {
         val tracker = CommandReplyTracker()
         val pause = tracker.register(frame(301), "task")

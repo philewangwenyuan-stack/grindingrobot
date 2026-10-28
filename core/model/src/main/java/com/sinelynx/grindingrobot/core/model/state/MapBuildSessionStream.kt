@@ -10,7 +10,8 @@ data class MapBuildViewport(val zoom: Float = 1f, val centerX: Float = 0.5f, val
 data class FrozenMapSnapshot(
     val sessionId: Long,
     val requestedMapId: String,
-    val frame: MapImagePayload
+    val frame: MapImagePayload,
+    val bitmapSize: Pair<Int, Int>? = null,
 )
 
 /**
@@ -42,13 +43,14 @@ object MapBuildSessionStream {
     }
 
     /** 页面先确认图片可解码；这里校验投影所需几何，并复制字节以隔离后续帧的数据修改。 */
-    fun freeze(mapId: String?, frame: MapImagePayload): Boolean {
+    fun freeze(mapId: String?, frame: MapImagePayload, bitmapSize: Pair<Int, Int>? = null): Boolean {
         if (frame.imageBytes.isEmpty() || frame.mapWidth <= 0 || frame.mapHeight <= 0 ||
             !frame.resolution.isFinite() || frame.resolution <= 0f ||
             !frame.originX.isFinite() || !frame.originY.isFinite() || !frame.headingDeg.isFinite() ||
             !frame.alignmentYawDeg.isFinite() || !frame.rotationAlignmentDeltaDeg.isFinite()
         ) return false
-        _snapshot.value = FrozenMapSnapshot(sessionId, mapId.orEmpty(), frame.copy(imageBytes = frame.imageBytes.copyOf()))
+        if (bitmapSize != null && (bitmapSize.first <= 0 || bitmapSize.second <= 0)) return false
+        _snapshot.value = FrozenMapSnapshot(sessionId, mapId.orEmpty(), frame.copy(imageBytes = frame.imageBytes.copyOf()), bitmapSize)
         return true
     }
 

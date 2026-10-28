@@ -3,6 +3,7 @@ package com.sinelynx.grindingrobot.feature.map.viewmodel
 import com.sinelynx.grindingrobot.core.model.state.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -33,6 +34,7 @@ class StartGrindingSessionControllerTest {
         )
         try {
             controller.open("map")
+            runBlocking { withTimeout(1000) { controller.state.first { it.canContinue } } }
             assertTrue(controller.state.value.canContinue)
             controller.requestPlan("task", "  车间研磨  ", mapOf("region" to 2), emptyList())
             controller.requestPlan("task", "重试名称", mapOf("region" to 2), emptyList())
@@ -59,6 +61,7 @@ class StartGrindingSessionControllerTest {
             sendConfig={_,_,_,_,_-> sends++; true}, sendPath={_,_,_->false}, decodeSize={10 to 10})
         try {
             controller.open("map")
+            runBlocking { withTimeout(1000) { controller.state.first { it.canContinue } } }
             controller.requestPlan("task","A",mapOf("region" to 1),emptyList())
             controller.requestPlan("task","A",mapOf("region" to 1),emptyList())
             assertEquals(1,sends)

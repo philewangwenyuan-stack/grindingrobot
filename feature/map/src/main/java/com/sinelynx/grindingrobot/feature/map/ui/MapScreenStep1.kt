@@ -160,13 +160,7 @@ private fun MapPanel(
     onRadarMapSync: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val mapImageBitmap = remember(mapImageBytes) {
-        mapImageBytes?.let { bytes ->
-            runCatching {
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
+    val mapImageBitmap = rememberWorkflowBitmap(mapImageBytes)
     // LIVE_MAP frames replace the bitmap frequently; viewport state belongs to the screen.
     val workflow = rememberWorkflowViewport(mapId)
     var viewportSize by remember { mutableStateOf(IntSize.Zero) }

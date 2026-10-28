@@ -111,6 +111,7 @@ fun ConnectWifiRoute(
     val currentTcpEndpoint by viewModel.currentTcpEndpoint.collectAsState()
     val isTcpConnecting by viewModel.isTcpConnecting.collectAsState()
     val isTcpConnected by viewModel.isTcpConnected.collectAsState()
+    val channels by viewModel.channelStatus.collectAsState()
     ConnectWifiScreen(
         onBackHomeClick = onBackHomeClick,
         onWifiConnected = onWifiConnected,
@@ -118,7 +119,8 @@ fun ConnectWifiRoute(
         isTcpConnecting = isTcpConnecting,
         isTcpConnected = isTcpConnected,
         onTcpEndpointSelected = viewModel::switchTcpEndpoint,
-        modifier = modifier
+        modifier = modifier,
+        channelStatus = channels
     )
 }
 
@@ -130,7 +132,8 @@ fun ConnectWifiScreen(
     isTcpConnecting: Boolean,
     isTcpConnected: Boolean,
     onTcpEndpointSelected: (String) -> Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    channelStatus: com.sinelynx.grindingrobot.core.tcp.PairedTcpService.Status = com.sinelynx.grindingrobot.core.tcp.PairedTcpService.Status(),
 ) {
     val context = LocalContext.current
     val currentTime = rememberCurrentTimeText()
@@ -323,6 +326,7 @@ fun ConnectWifiScreen(
                 currentTcpEndpoint = currentTcpEndpoint,
                 isTcpConnecting = isTcpConnecting,
                 isTcpConnected = isTcpConnected,
+                channelStatus = channelStatus,
                 connectMode = connectMode,
                 onBackHomeClick = onBackHomeClick,
                 onRefresh = { startSearch() },
@@ -360,6 +364,7 @@ private fun WifiSearchContent(
     currentTcpEndpoint: String,
     isTcpConnecting: Boolean,
     isTcpConnected: Boolean,
+    channelStatus: com.sinelynx.grindingrobot.core.tcp.PairedTcpService.Status,
     connectMode: ConnectMode,
     onBackHomeClick: () -> Unit,
     onRefresh: () -> Unit,
@@ -498,6 +503,12 @@ private fun WifiSearchContent(
                         modifier = Modifier.width(573.dp)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = if (channelStatus.occupied) "设备已被其他平板占用"
+                            else "数据：${if (channelStatus.dataReady) "已连接" else "未连接"}    控制：${if (channelStatus.controlReady) "已就绪" else "未就绪"}",
+                        fontSize = 18.sp,
+                        color = if (channelStatus.occupied) Color(0xFFD82B2A) else Color(0xFF666666),
+                    )
                 }
             }
         }

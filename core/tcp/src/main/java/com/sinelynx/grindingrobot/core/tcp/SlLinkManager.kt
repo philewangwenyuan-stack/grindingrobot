@@ -437,6 +437,15 @@ class SlLinkManager @Inject constructor(
         }
         return frames
     }
+
+    /** Paired transport owns one parser per socket and rejects old peer callbacks. */
+    fun handleParsedFrame(frame: SlFrame, arrivalMonotonicS: Double, controlChannel: Boolean) {
+        when (frame.msgId.toInt()) {
+            MSG_ID_CONTROL_COMMAND_RESPONSE -> if (controlChannel) handleControlCommandResponse(frame)
+            MSG_ID_TASK_COMMAND_RESPONSE -> handleTaskCommandResponse(frame, controlChannel)
+            else -> if (!controlChannel) processFrame(frame, arrivalMonotonicS)
+        }
+    }
     
     /**
      * 处理单个帧
@@ -1658,7 +1667,7 @@ class SlLinkManager @Inject constructor(
         }
     }
 
-    private fun handleTaskCommandResponse(frame: SlFrame) {
+    private fun handleTaskCommandResponse(frame: SlFrame, controlChannel: Boolean? = null) {
         try {
             val payload = frame.payload
             if (payload.isEmpty()) {
@@ -1668,7 +1677,9 @@ class SlLinkManager @Inject constructor(
             val response = SlLink.TaskCommandResponse.parseFrom(payload)
             val ticket = taskCommandReplies.complete(
                 ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = response.taskId,
-                reply = CommandReply(response.resultValue, response.message)
+                reply = CommandReply(response.resultValue, response.message),
+                controlChannel = controlChannel,
+                requireExactAck = controlChannel != null
             )
             LogUtils.i("TaskControl", "task reply seq=${frame.seq} ack=${frame.ackSeq} request=${ticket?.seq} taskId=${response.taskId} result=${response.result}")
             LogUtils.d(

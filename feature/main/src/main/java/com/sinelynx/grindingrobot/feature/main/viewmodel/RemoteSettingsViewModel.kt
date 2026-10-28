@@ -43,7 +43,7 @@ class RemoteSettingsViewModel @Inject constructor(
     private var lastWorkMode: Int? = null
     private val controller = ManualDriveController(
         scope = viewModelScope,
-        canControl = { screenActive && tcpManager.isConnected() &&
+        canControl = { screenActive && tcpManager.isControlReady() &&
             appState.runtimeTaskState.value.emergencyStopLatched != true },
         send = ::sendTarget,
         onStateChanged = { value -> _uiState.update { it.copy(drive = value) } },
@@ -56,13 +56,16 @@ class RemoteSettingsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            combine(tcpManager.getConnectionStateFlow(), appState.runtimeTaskState) { connection, runtime ->
+            tcpManager.manualCancellation.collect { stopControl() }
+        }
+        viewModelScope.launch {
+            combine(tcpManager.channelStatus, appState.runtimeTaskState) { connection, runtime ->
                 connection to runtime
             }.collect { (connection, runtime) ->
                 val enteringAuto = runtime.workMode == SlLink.WorkMode.WORK_MODE_AUTO.number &&
                     lastWorkMode != runtime.workMode
                 lastWorkMode = runtime.workMode
-                if (enteringAuto || connection != ConnectionState.CONNECTED || runtime.emergencyStopLatched == true) {
+                if (enteringAuto || !connection.controlReady || runtime.emergencyStopLatched == true) {
                     stopControl()
                     manualOverrideGranted = false
                     manualReadyTaskId = null
@@ -153,7 +156,7 @@ class RemoteSettingsViewModel @Inject constructor(
         pendingTravel = null
         pendingSteering = 0f
         _uiState.update { it.copy(showAutoModeJoystickDialog = false) }
-        if (!screenActive || !tcpManager.isConnected() || appState.runtimeTaskState.value.emergencyStopLatched == true) return
+        if (!screenActive || !tcpManager.isControlReady() || appState.runtimeTaskState.value.emergencyStopLatched == true) return
         manualOverrideGranted = true
         direction?.let(controller::travel)
         if (steering != 0f) controller.steer(steering, controller.state.inputEpoch)
@@ -169,8 +172,7 @@ class RemoteSettingsViewModel @Inject constructor(
 
     private suspend fun stopActiveTaskBeforeManualControl(): Boolean {
         val id = TaskSchedulerStream.taskStatusReport.value?.taskId?.trim().orEmpty()
-        if (id.isBlank()) return appState.runtimeTaskState.value.workMode != SlLink.WorkMode.WORK_MODE_AUTO.number
-        if (manualReadyTaskId == id) return true
+        if (id.isNotBlank() && manualReadyTaskId == id) return true
         val result = tcpManager.executeTaskCommand(
             taskType = SlLink.TaskCommandType.TASK_CMD_STOP, taskId = id, timeoutMs = 5_000L)
         if (result !is DeviceCommandResult.Confirmed) return false

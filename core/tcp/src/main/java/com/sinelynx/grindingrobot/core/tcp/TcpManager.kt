@@ -196,7 +196,7 @@ internal fun buildDeleteRegionCommand(
  * @author Dreamj
  */
 class TcpManager @Inject constructor(
-    private val tcpService: TcpService,
+    private val tcpService: PairedTcpService,
     private val slLinkManager: SlLinkManager,
     private val appState: AppState
 ) {
@@ -224,12 +224,18 @@ class TcpManager @Inject constructor(
 
         // 设置回调
         tcpService.setCallback(object : TcpService.TcpCallback {
+            override fun onFrameReceived(frame: sl_link.SlFrame, arrivalMonotonicS: Double, controlChannel: Boolean) {
+                slLinkManager.handleParsedFrame(frame, arrivalMonotonicS, controlChannel)
+            }
+            override fun onControlConnectionChanged(ready: Boolean) {
+                if (!ready) resetCommandReplies(controlChannel = true)
+            }
             override fun onConnected() {
                 slLinkManager.deviceEvents.onConnected()
                 LogUtils.d("TCP连接已建立")
                 slLinkManager.clearMapTransfer()
                 slLinkManager.clearTaskPathTransfer()
-                resetCommandReplies()
+                resetCommandReplies(controlChannel = false)
                 // 连接成功，取消重连任务
                 cancelReconnect()
                 // Read actual settings on every connection, including automatic reconnects.
@@ -253,7 +259,7 @@ class TcpManager @Inject constructor(
                 LogUtils.d("TCP连接已断开: $reason")
                 slLinkManager.clearMapTransfer()
                 slLinkManager.clearTaskPathTransfer()
-                resetCommandReplies()
+                resetCommandReplies(controlChannel = false)
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
                 // 断开后启动重连任务
@@ -268,7 +274,7 @@ class TcpManager @Inject constructor(
                 LogUtils.d("TCP连接失败: ${error.message}")
                 slLinkManager.clearMapTransfer()
                 slLinkManager.clearTaskPathTransfer()
-                resetCommandReplies()
+                resetCommandReplies(controlChannel = false)
                 // 清除设备状态，更新系统状态为连接错误
                 appState.clearDeviceStatus()
                 // 失败后启动重连任务
@@ -368,7 +374,7 @@ class TcpManager @Inject constructor(
      * @return 发送是否成功
      */
     fun sendData(data: ByteArray, onWritten: (() -> Unit)? = null): Boolean {
-        return if (tcpService.isConnected()) {
+        return if (tcpService.isConnected() || tcpService.isControlReady()) {
             val success = tcpService.sendData(data, onWritten)
             if (success) {
                 val hex = data.joinToString(separator = " ") { byte -> "%02X".format(byte) }
@@ -435,6 +441,12 @@ class TcpManager @Inject constructor(
     fun isConnected(): Boolean {
         return tcpService.isConnected()
     }
+
+    fun isControlReady(): Boolean = tcpService.isControlReady()
+    val channelStatus get() = tcpService.status
+    val manualCancellation get() = tcpService.manualCancellation
+    fun onForeground() = tcpService.onForeground()
+    fun onBackground() = tcpService.onBackground()
 
     /**
      * 手动重连
@@ -1071,11 +1083,13 @@ class TcpManager @Inject constructor(
             SlLink.TaskCommand.newBuilder().setCommand(taskType).setTaskId(taskId).build().toByteArray(), dstId
         )
 
-    private fun resetCommandReplies() {
-        slLinkManager.taskCommandReplies.resetConnection()
-        slLinkManager.emergencyStopReplies.resetConnection()
-        slLinkManager.emergencyReleaseReplies.resetConnection()
-        slLinkManager.taskRuntimeReplies.resetConnection()
+    private fun resetCommandReplies(controlChannel: Boolean? = null) {
+        slLinkManager.taskCommandReplies.resetConnection(controlChannel)
+        if (controlChannel != false) {
+            slLinkManager.emergencyStopReplies.resetConnection()
+            slLinkManager.emergencyReleaseReplies.resetConnection()
+        }
+        if (controlChannel != true) slLinkManager.taskRuntimeReplies.resetConnection()
     }
 
     suspend fun executeTaskCommand(
@@ -1292,33 +1306,7 @@ class TcpManager @Inject constructor(
      * @author Dreamj
      */
     private fun scheduleReconnect() {
-        // 先取消之前的重连任务
-        cancelReconnect()
-
-        // 检查是否有连接参数
-        val host = lastHost
-        val port = lastPort
-        if (host == null || port == null) {
-            LogUtils.w("没有保存的连接参数，无法重连")
-            return
-        }
-
-        LogUtils.d("创建重连任务，将在${reconnectDelayMs / 1000}秒后重连到 $host:$port")
-
-        reconnectJob = scope.launch {
-            try {
-                LogUtils.d("重连任务开始等待${reconnectDelayMs / 1000}秒...")
-                delay(reconnectDelayMs)
-                LogUtils.d("开始重连到 $host:$port")
-                tcpService.connect(host, port)
-            } catch (e: Exception) {
-                if (e !is kotlinx.coroutines.CancellationException) {
-                    LogUtils.e("TCP重连异常: ${e.message}")
-                }
-            }
-        }
-
-        LogUtils.d("重连任务已创建: ${reconnectJob != null}")
+        tcpService.recoverNow()
     }
 
     /**

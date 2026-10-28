@@ -596,13 +596,7 @@ private fun MapPreviewDialog(
     isLoading: Boolean,
     onDismiss: () -> Unit
 ) {
-    val previewBitmap = remember(mapPreview?.imageBytes) {
-        mapPreview?.imageBytes?.let { bytes ->
-            runCatching {
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
-            }.getOrNull()
-        }
-    }
+    val previewBitmap = rememberWorkflowBitmap(mapPreview?.imageBytes)
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(

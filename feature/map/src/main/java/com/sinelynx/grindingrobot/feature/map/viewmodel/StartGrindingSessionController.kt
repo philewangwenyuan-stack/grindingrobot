@@ -11,6 +11,8 @@ import com.sinelynx.grindingrobot.core.model.state.TaskMapDisplaySnapshot
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -154,7 +156,7 @@ internal class StartGrindingSessionController(
                 val imported = request(imports, { sendImport(mapId) }, "地图导入请求发送失败", "地图导入超时，请重试")
                 if (!imported.isSuccess) throw LoadFailure(imported.message.ifBlank { "地图导入失败，请重试" })
                 val frame = request(frames, { sendMap(mapId) }, "地图请求发送失败", "地图加载超时，请重试")
-                val size = runCatching { decodeSize(frame.imageBytes) }.getOrNull()
+                val size = withContext(Dispatchers.Default) { runCatching { decodeSize(frame.imageBytes) }.getOrNull() }
                     ?.takeIf { it.first > 0 && it.second > 0 }
                     ?: throw LoadFailure("地图图片解码失败，请重试")
                 if (frame.mapWidth <= 0 || frame.mapHeight <= 0 || !frame.resolution.isFinite() || frame.resolution <= 0f ||

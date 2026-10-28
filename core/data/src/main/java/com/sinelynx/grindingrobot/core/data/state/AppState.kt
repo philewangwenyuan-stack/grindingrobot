@@ -458,6 +458,6 @@ class AppState @Inject constructor(
 
     companion object {
         const val MAP_PORT = 8002
-        const val DEFAULT_TCP_HOST = "192.168.11.2"
+        const val DEFAULT_TCP_HOST = "192.168.1.3"
     }
 }

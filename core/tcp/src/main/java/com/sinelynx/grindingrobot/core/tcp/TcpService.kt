@@ -74,6 +74,8 @@ class TcpService {
      * TCP回调接口
      */
     interface TcpCallback {
+        fun onFrameReceived(frame: sl_link.SlFrame, arrivalMonotonicS: Double, controlChannel: Boolean) {}
+        fun onControlConnectionChanged(ready: Boolean) {}
         /**
          * 连接成功回调
          */

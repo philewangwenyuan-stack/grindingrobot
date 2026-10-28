@@ -337,7 +337,7 @@ class MapScreenStep3ViewModel @Inject constructor(
                 robotFootprint = it.robotFootprint
             ) else it
             state.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
-                bitmapDecodeSize = decodeImageSize(frame.imageBytes), mapGeo = frame.toMapGeo(),
+                bitmapDecodeSize = MapBuildSessionStream.snapshotFor(mapId)?.bitmapSize, mapGeo = frame.toMapGeo(),
                 isMapLoading = true, mapLoadError = null,
                 previewEraseRegions = MapWorkflowErasePreview.forSession(snapshot.sessionId))
         }

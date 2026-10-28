@@ -75,6 +75,7 @@ android {
 
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.core.tcp)
     implementation(projects.navigation)
     implementation(projects.core.designsystem)
     implementation(projects.core.network)

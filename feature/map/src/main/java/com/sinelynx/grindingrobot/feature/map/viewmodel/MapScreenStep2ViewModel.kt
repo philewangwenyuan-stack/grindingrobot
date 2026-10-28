@@ -192,7 +192,7 @@ class MapScreenStep2ViewModel @Inject constructor(
                 robotFootprint = it.robotFootprint
             ) else it
             state.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
-                bitmapDecodeSize = decodeImageSize(frame.imageBytes), mapGeo = frame.toMapGeo(),
+                bitmapDecodeSize = MapBuildSessionStream.snapshotFor(mapId)?.bitmapSize, mapGeo = frame.toMapGeo(),
                 alignmentYaw = if (newSession) frame.alignmentYawDeg + frame.rotationAlignmentDeltaDeg else state.alignmentYaw,
                 isMapLoading = true, mapLoadError = null).refreshDerived()
         }
