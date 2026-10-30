@@ -40,6 +40,8 @@ class PairedTcpServiceTest {
         val movementTimes = CopyOnWriteArrayList<Long>()
         @Volatile var closed = false
         @Volatile var acknowledgeManual = true
+        @Volatile var manualAckDelayMs = 0L
+        @Volatile var skipNextManualAck = false
         @Volatile var occupied = false
         @Volatile var stallData = false
         @Volatile var token = "fixture-tablet-token"
@@ -76,8 +78,21 @@ class PairedTcpServiceTest {
                                 if (command.hasManualDrive() && command.manualDrive.speedRatio > 0) movementTimes.add(System.nanoTime())
                             }
                             if (!control && stallData) Thread.sleep(1000)
-                            if (frame.msgId.toInt() == 0x0401 && acknowledgeManual) reply(socket, frame, 0x0402,
-                                SlLink.ControlCommandResponse.newBuilder().setResult(SlLink.ResultCode.RESULT_SUCCESS).build().toByteArray())
+                            if (frame.msgId.toInt() == 0x0401 && acknowledgeManual) {
+                                if (skipNextManualAck) {
+                                    skipNextManualAck = false
+                                    continue
+                                }
+                                val ack = {
+                                    reply(socket, frame, 0x0402, SlLink.ControlCommandResponse.newBuilder()
+                                        .setResult(SlLink.ResultCode.RESULT_SUCCESS).build().toByteArray())
+                                }
+                                val delayMs = manualAckDelayMs
+                                if (delayMs == 0L) ack() else executor.execute {
+                                    Thread.sleep(delayMs)
+                                    runCatching { ack() }
+                                }
+                            }
                             if (frame.msgId.toInt() == 0x0502) reply(socket, frame, 0x0503,
                                 SlLink.TaskCommandResponse.newBuilder().setResult(SlLink.ResultCode.RESULT_SUCCESS).build().toByteArray())
                         }
@@ -91,7 +106,7 @@ class PairedTcpServiceTest {
             bytes.putShort(sequence.incrementAndGet().toShort()).putShort(request.seq.toShort())
             bytes.put(0x10).put(1).put(7).putShort(id.toShort()).putShort(payload.size.toShort()).put(payload)
             bytes.putShort(Crc16.calculate(bytes.array().copyOfRange(0, 15 + payload.size)).toShort()).put(0xFE.toByte())
-            socket.getOutputStream().write(bytes.array())
+            synchronized(socket) { socket.getOutputStream().write(bytes.array()) }
         }
         fun movements() = received.filter { it.first && it.second.msgId.toInt() == 0x0401 }
             .map { SlLink.ControlCommand.parseFrom(it.second.payload) }.filter { it.hasManualDrive() }
@@ -119,6 +134,34 @@ class PairedTcpServiceTest {
         service.connect("127.0.0.1", board.data.localPort)
         until { service.isConnected() && service.isControlReady() }
         return service
+    }
+
+    @Test fun newerAcknowledgedSpeedRetiresACoalescedOlderSpeed() {
+        Board().use { board ->
+            val service = paired(board, Runtime())
+            try {
+                board.skipNextManualAck = true
+                assertTrue(service.sendManualData(command(1f), false))
+                until(1600) { board.movementTimes.size >= 10 }
+                assertEquals(0L, service.manualCancellation.value)
+                assertTrue(service.isControlReady())
+            } finally { service.release() }
+        }
+    }
+
+    @Test fun delayedAcknowledgementsDoNotThrottleTheManualRenewal() {
+        Board().use { board ->
+            board.manualAckDelayMs = 350
+            val service = paired(board, Runtime())
+            try {
+                assertTrue(service.sendManualData(command(1f), false))
+                until(timeout = 1600) { board.movementTimes.size >= 8 }
+                val intervals = board.movementTimes.zipWithNext { a, b -> (b - a) / 1_000_000 }
+                assertTrue("ACK latency must not stretch wire renewal: $intervals",
+                    intervals.all { it < 280 })
+                assertTrue(service.isControlReady())
+            } finally { service.release() }
+        }
     }
 
     @Test fun backgroundSenderRenewsWithoutFurtherUiCallsAndStopsOnBackground() {
@@ -226,8 +269,10 @@ class PairedTcpServiceTest {
                 service.sendManualData(command(1f), false)
                 until { service.manualCancellation.value > 0 }
                 until { service.isControlReady() }
+                val sentBeforeRecovery = board.movements().count { it > 0 }
+                assertTrue("Outstanding renewals must stay bounded", sentBeforeRecovery in 1..8)
                 Thread.sleep(200)
-                assertEquals(1, board.movements().count { it > 0 })
+                assertEquals(sentBeforeRecovery, board.movements().count { it > 0 })
                 assertFalse(service.sendManualData(command(1f), false))
             } finally { service.release() }
         }

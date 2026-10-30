@@ -26,19 +26,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.combine
 import com.sinelynx.grindingrobot.core.model.state.MapCatalogStream
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.withTimeoutOrNull
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
 import com.sinelynx.grindingrobot.core.model.state.DeviceWorkTimeStatisticsPayload
-import com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate
 import java.util.Locale
 import sl_link.SlLink
 import com.sinelynx.grindingrobot.feature.map.ui.grindingDiscLocalCenter
@@ -577,35 +570,15 @@ class DeviceStatusViewModel @Inject constructor(
     private fun refreshStatistics() {
         if (!statisticsVisible || statisticsRequestJob?.isActive == true || !tcpManager.isConnected()) return
         statisticsRequestJob = viewModelScope.launch {
-            if (!TaskHistoryRequestGate.acquire(this@DeviceStatusViewModel)) return@launch
-            try {
-                TaskSchedulerStream.resetTaskExecutionHistory()
-                val response = withTimeoutOrNull(10_000L) {
-                    coroutineScope {
-                        // Install the receiver before sending, including for immediate cached replies.
-                        val reply = async(start = CoroutineStart.UNDISPATCHED) {
-                            TaskSchedulerStream.taskExecutionHistory.filterNotNull().first {
-                                it.mapId.isBlank() && it.taskId.isBlank() &&
-                                    it.startTime == 0L && it.endTime == 0L
-                            }
-                        }
-                        if (!tcpManager.requestTaskExecutionHistory()) {
-                            reply.cancel()
-                            null
-                        } else reply.await()
-                    }
-                }
-                if (response?.isSuccess == true) {
-                    statisticsRecords = response.records
-                    statisticsWorkTime = response.workTimeStatistics
-                    updateStatisticsDisplay()
-                    _uiState.update { it.copy(statisticsError = null) }
-                } else {
-                    _uiState.update { it.copy(statisticsError = "统计更新失败") }
-                    LogUtils.w("DeviceStatistics", response?.message ?: "历史统计请求失败或超时")
-                }
-            } finally {
-                TaskHistoryRequestGate.release(this@DeviceStatusViewModel)
+            val response = tcpManager.loadTaskExecutionHistory()
+            if (response.isSuccess) {
+                statisticsRecords = response.records
+                statisticsWorkTime = response.workTimeStatistics
+                updateStatisticsDisplay()
+                _uiState.update { it.copy(statisticsError = null) }
+            } else {
+                _uiState.update { it.copy(statisticsError = "统计更新失败") }
+                LogUtils.w("DeviceStatistics", response.message)
             }
         }
     }

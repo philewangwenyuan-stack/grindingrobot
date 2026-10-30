@@ -142,10 +142,17 @@ class SlLinkManager @Inject constructor(
         }
     }
 
-    fun clearMapTransfer() = synchronized(mapTransferLock) {
-        activeMapRequestId = null
-        mapRequestStartedNanos = 0L
-        mapChunkAssembly = null
+    fun clearMapTransfer(reason: String = "地图数据连接已重置，请重试") {
+        val cancelledId = synchronized(mapTransferLock) {
+            val requestId = activeMapRequestId
+            activeMapRequestId = null
+            mapRequestStartedNanos = 0L
+            mapChunkAssembly = null
+            requestId
+        } ?: return
+        MapImageStream.publish(MapRequestResultPayload(
+            requestId = cancelledId, snapshotId = 0L, mapId = "",
+            outcome = MapRequestOutcome.ERROR, retryAfterMs = 0, message = reason))
     }
     private val taskPathChunkAssembler = TaskPathChunkAssembler()
     private val taskPathTransferLock = Any()
@@ -169,6 +176,8 @@ class SlLinkManager @Inject constructor(
         taskPathDecoder.reset()
     }
     private val taskExecutionHistoryChunkAssembler = TaskExecutionHistoryChunkAssembler()
+    private val taskExecutionHistoryLock = Any()
+    private var taskExecutionHistoryRequestSeq = -1
     private val taskTrajectoryChunkAssembler = TaskTrajectoryChunkAssembler()
     private var onRadarMapSyncResponse: (() -> Unit)? = null
     internal val deviceEvents = DeviceEventTracker { level, title ->
@@ -261,9 +270,11 @@ class SlLinkManager @Inject constructor(
     fun requestTaskExecutionHistory(
         serializedData: ByteArray,
         dstId: UByte = 0x10u
-    ): ByteArray {
+    ): ByteArray = synchronized(taskExecutionHistoryLock) {
+        val frame = SlMessageBuilder.buildTaskExecutionHistoryRequestRaw(serializedData, dstId)
         taskExecutionHistoryChunkAssembler.clear()
-        return SlMessageBuilder.buildTaskExecutionHistoryRequestRaw(serializedData, dstId)
+        taskExecutionHistoryRequestSeq = ChannelRouting.seq(frame)
+        frame
     }
 
     fun requestTaskTrajectory(
@@ -506,7 +517,8 @@ class SlLinkManager @Inject constructor(
                     lifecycleState = response.lifecycleState,
                     activeMapId = response.mapId,
                     activeMapRevision = response.mapRevision,
-                    residualNodes = response.residualNodesList
+                    residualNodes = response.residualNodesList,
+                    requestSeq = frame.ackSeq.toInt()
                 )
             )
         } catch (e: Exception) {
@@ -1255,6 +1267,14 @@ class SlLinkManager @Inject constructor(
     }
 
     private fun handleTaskExecutionHistoryChunk(frame: SlFrame) {
+        synchronized(taskExecutionHistoryLock) {
+            // A cancelled screen may still have replies in flight when the next query starts.
+            if (frame.ackSeq.toInt() != taskExecutionHistoryRequestSeq) return
+            applyTaskExecutionHistoryChunk(frame)
+        }
+    }
+
+    private fun applyTaskExecutionHistoryChunk(frame: SlFrame) {
         try {
             val response = SlLink.TaskExecutionHistoryChunk.parseFrom(frame.payload)
             if (response.result != SlLink.ResultCode.RESULT_SUCCESS) {
@@ -1481,7 +1501,8 @@ class SlLinkManager @Inject constructor(
                 MapImportToRadarPayload(
                     resultValue = response.resultValue,
                     isSuccess = response.result == SlLink.ResultCode.RESULT_SUCCESS,
-                    message = response.message
+                    message = response.message,
+                    mapId = response.mapId,
                 )
             )
         } catch (e: Exception) {

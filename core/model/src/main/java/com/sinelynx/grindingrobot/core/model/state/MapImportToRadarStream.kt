@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 data class MapImportToRadarPayload(
     val resultValue: Int,
     val isSuccess: Boolean,
-    val message: String
+    val message: String,
+    val mapId: String = "",
 )
 
 object MapImportToRadarStream {

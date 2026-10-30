@@ -1,6 +1,5 @@
 package com.sinelynx.grindingrobot.feature.main.viewmodel
 
-import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
 import java.time.Instant
 import java.time.LocalDate
@@ -22,20 +21,6 @@ internal data class JobStatisticsQuery(
 ) {
     val startSeconds = startDate.atStartOfDay(zone).toEpochSecond()
     val endSeconds = endDate.plusDays(1).atStartOfDay(zone).toEpochSecond() - 1
-
-    fun accepts(payload: TaskExecutionHistoryPayload): Boolean =
-        payload.mapId.isBlank() && payload.taskId.isBlank() &&
-            ((payload.startTime == startSeconds && payload.endTime == endSeconds) ||
-                // Parser failures have no echoed query fields. Only the request owner consumes them.
-                (!payload.isSuccess && payload.startTime == 0L && payload.endTime == 0L))
-}
-
-/** The transport has a single history chunk assembler, so callers must serialize requests. */
-internal object TaskHistoryRequestGate {
-    fun acquire(candidate: Any): Boolean =
-        com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate.acquire(candidate)
-    fun release(candidate: Any) =
-        com.sinelynx.grindingrobot.core.model.state.TaskHistoryRequestGate.release(candidate)
 }
 
 internal fun calculateJobStatistics(

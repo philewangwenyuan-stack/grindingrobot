@@ -56,6 +56,7 @@ Compose 页面 / ViewModel
   遥控目标与松手零速见 `feature:common/control/ManualDriveController.kt`、`viewmodel/RemoteSettingsViewModel.kt`，回归为 `ManualDriveControllerTest.kt`；传输层独立定时发送及停车回归见 `core:tcp` 的 `PairedTcpServiceTest.kt`，松手零速不能等任务STOP回执。
 - `feature:map`：地图目录、编辑步骤、区域/禁区、路径规划、开始研磨。
 - `feature:device`：设备状态、任务地图及设备侧业务。
+  设备累计统计、任务记录和作业统计统一调用 `TcpManager.loadTaskExecutionHistory()`；`TaskHistoryQuery.kt` 串行等待、处理断线和超时，退出页面取消查询以释放共享分片接收权。回归见 `TaskHistoryQueryTest.kt`。
 - `feature:common`：跨功能公共 UI、弹窗、状态栏和资源。
 - `feature:remote`：相对独立的远程控制预留模块，入口和完整度需要结合设备联调确认。
 
@@ -66,6 +67,8 @@ Compose 页面 / ViewModel
 - `core:tcp`：TCP 连接、请求发送、响应解析、任务数据分片组装。
   双通道入口是 `PairedTcpService.kt`，通过其 `Callback` 向 `TcpManager` 交付完整帧；`ChannelRouting.kt` 分流，`ChannelRuntime.kt` 提供时钟/主线程健康/Wi-Fi事件。数据8002、控制8003，先获取连接组令牌再绑定控制端。
   亮屏恢复、单平板占用、独立100ms遥控发送、ACK/主线程健康超时见 `PairedTcpServiceTest.kt`；改连接逻辑必须验证旧令牌、旧socket收尾和旧速度不能复活，数据重连不得清理控制确认。
+  遥控续发与ACK等待分离，保留500ms确认保护，更新成功回执可结束旧速度等待；任务底图请求/失败/取消由 `MapSnapshotLoader.kt` 统一管理，回归 `MapSnapshotLoaderTest.kt`；开始研磨等待旧请求释放后再切图，并按导入响应 `map_id` 关联。
+  任务重定位启动等待由 TCP `MapModeAwaiter.kt` 按帧 ACK 关联，接收失败并处理断线；地图共享解码由 map UI `SerializedMapDecoder.kt` 串行执行，取消排队旧帧并复用同一帧，`MapWorkflowBitmap.kt` 在后台准备绘制缓存。回归 `MapModeAwaiterTest.kt`、`SerializedMapDecoderTest.kt`。
 - `core:sllink`：SLLink 帧、CRC、消息构建和生成的消息代码。
 - `core:network`：HTTP/Retrofit、OTA 服务及网络数据源。
 - `core:database`：Room 数据库和本地数据源。

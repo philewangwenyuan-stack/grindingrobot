@@ -79,12 +79,11 @@ data class StartGrindingSessionUiState(
 internal class StartGrindingSessionController(
     private val scope: CoroutineScope,
     private val imports: Flow<MapImportToRadarPayload>,
-    private val frames: Flow<MapImagePayload>,
+    private val loadMap: suspend (String) -> MapImagePayload,
     private val regions: Flow<MapRegionPointPayload>,
     private val configs: Flow<TaskConfigResponsePayload>,
     private val paths: Flow<TaskPathPayload>,
     private val sendImport: (String) -> Boolean,
-    private val sendMap: (String) -> Boolean,
     private val sendRegions: (String) -> Boolean,
     private val sendConfig: (taskId: String, taskName: String, mapId: String, repeats: Map<String, Int>, obstacles: List<TaskObstacleRegionConfig>) -> Boolean,
     private val sendPath: (mapId: String, taskId: String, requestId: String) -> Boolean,
@@ -148,14 +147,18 @@ internal class StartGrindingSessionController(
     fun retryMapOrRegions() {
         val mapId = state.value.mapId ?: return
         if (state.value.frame != null) { refreshRegions(); return }
-        mapJob?.cancel()
+        val previousMapJob = mapJob
+        previousMapJob?.cancel()
         val round = session
         _state.update { it.copy(isMapLoading = true, mapError = null) }
         mapJob = scope.launch {
             try {
-                val imported = request(imports, { sendImport(mapId) }, "地图导入请求发送失败", "地图导入超时，请重试")
+                previousMapJob?.join()
+                val imported = request(imports, { sendImport(mapId) }, "地图导入请求发送失败", "地图导入超时，请重试") {
+                    it.mapId == mapId || (!it.isSuccess && it.mapId.isBlank())
+                }
                 if (!imported.isSuccess) throw LoadFailure(imported.message.ifBlank { "地图导入失败，请重试" })
-                val frame = request(frames, { sendMap(mapId) }, "地图请求发送失败", "地图加载超时，请重试")
+                val frame = loadMap(mapId)
                 val size = withContext(Dispatchers.Default) { runCatching { decodeSize(frame.imageBytes) }.getOrNull() }
                     ?.takeIf { it.first > 0 && it.second > 0 }
                     ?: throw LoadFailure("地图图片解码失败，请重试")

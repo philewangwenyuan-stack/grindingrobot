@@ -3,6 +3,12 @@ package com.sinelynx.grindingrobot.core.tcp
 import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.core.model.state.TaskObstacleRegionConfig
 import com.sinelynx.grindingrobot.core.model.state.TaskRegionRepeatConfig
+import com.sinelynx.grindingrobot.core.model.state.MapImagePayload
+import com.sinelynx.grindingrobot.core.model.state.MapImageStream
+import com.sinelynx.grindingrobot.core.model.state.MapModeResponsePayload
+import com.sinelynx.grindingrobot.core.model.state.MapModeStream
+import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryPayload
+import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.util.log.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -201,6 +207,12 @@ class TcpManager @Inject constructor(
 ) {
     // 协程作用域
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val mapSnapshots = MapSnapshotLoader(
+        frames = MapImageStream.frames,
+        results = MapImageStream.results,
+        send = { mapId, requestId -> requestMapSnapshot(mapId, requestId = requestId) },
+        cancel = ::cancelMapSnapshotRequest,
+    )
 
     // 记录最后一次连接参数
     private var lastHost: String? = null
@@ -357,6 +369,9 @@ class TcpManager @Inject constructor(
         slLinkManager.cancelMapRequest(requestId)
     }
 
+    suspend fun loadMapSnapshot(mapId: String, timeoutMs: Long): MapImagePayload =
+        mapSnapshots.load(mapId, timeoutMs)
+
     /**
      * 请求设备切换地图模式（0x0512）。
      * 建图入口应等待对应的 0x0513 成功响应后，再请求 LIVE_MAP 快照。
@@ -365,7 +380,8 @@ class TcpManager @Inject constructor(
         mode: SlLink.MapModeType,
         enabled: Boolean,
         mapKind: Int = 0,
-        dstId: UByte = 0x10u
+        dstId: UByte = 0x10u,
+        onPrepared: (Int) -> Unit = {}
     ): Boolean {
         val request = SlLink.MapModeRequest.newBuilder()
             .setMode(mode)
@@ -373,8 +389,19 @@ class TcpManager @Inject constructor(
             .setMapKind(mapKind)
             .build()
         val frameData = slLinkManager.requestMapMode(request.toByteArray(), dstId)
+        onPrepared(ChannelRouting.seq(frameData))
         return sendData(frameData)
     }
+
+    suspend fun requestMapModeAndAwait(
+        mode: SlLink.MapModeType,
+        enabled: Boolean,
+        mapKind: Int = 0,
+        timeoutMs: Long,
+    ): MapModeResponsePayload = awaitMapMode(
+        MapModeStream.responses,
+        getConnectionStateFlow(), timeoutMs,
+    ) { prepared -> requestMapMode(mode, enabled, mapKind, onPrepared = prepared) }
 
     /**
      * 停止当前建图模式（0x0512 enabled=false）。
@@ -605,6 +632,22 @@ class TcpManager @Inject constructor(
         val frameData = slLinkManager.requestTaskResult(build.build().toByteArray(), dstId)
         return sendData(frameData)
     }
+
+    /** Cancellable serialized query shared by record, statistics and device screens. */
+    suspend fun loadTaskExecutionHistory(
+        mapId: String? = null,
+        taskId: String? = null,
+        startTime: Long = 0L,
+        endTime: Long = 0L
+    ): TaskExecutionHistoryPayload = awaitTaskHistory(
+        replies = TaskSchedulerStream.taskExecutionHistory,
+        connection = getConnectionStateFlow(),
+        accepts = { payload ->
+            matchesTaskHistoryQuery(payload, mapId.orEmpty(), taskId.orEmpty(), startTime, endTime)
+        },
+        reset = { TaskSchedulerStream.resetTaskExecutionHistory() },
+        send = { requestTaskExecutionHistory(mapId, taskId, startTime, endTime) }
+    )
 
     /** 查询任务执行历史；时间单位为 Unix epoch 秒，0 表示不限制。 */
     fun requestTaskExecutionHistory(

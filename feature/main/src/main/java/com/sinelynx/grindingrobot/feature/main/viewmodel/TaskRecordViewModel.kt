@@ -102,46 +102,31 @@ class TaskRecordViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(TaskRecordUiState())
     val uiState: StateFlow<TaskRecordUiState> = _uiState.asStateFlow()
-    private var loadTimeoutJob: Job? = null
+    private var loadJob: Job? = null
+    private var loadGeneration = 0L
     private var deleteTimeoutJob: Job? = null
 
     init {
-        observeTaskExecutionHistory()
         observeTaskExecutionDelete()
     }
 
     fun loadRecords() {
         if (_uiState.value.isLoading) return
-        if (!TaskHistoryRequestGate.acquire(this)) {
-            ToastUtils.showError("任务历史正在查询，请稍后重试")
-            return
-        }
+        val generation = ++loadGeneration
         _uiState.update { it.copy(isLoading = true) }
-        TaskSchedulerStream.resetTaskExecutionHistory()
-        if (!tcpManager.requestTaskExecutionHistory()) {
-            loadTimeoutJob?.cancel()
-            _uiState.update { it.copy(isLoading = false) }
-            TaskHistoryRequestGate.release(this)
-            ToastUtils.showError("任务记录请求发送失败")
-            return
-        }
-        loadTimeoutJob?.cancel()
-        loadTimeoutJob = viewModelScope.launch {
-            delay(TASK_HISTORY_TIMEOUT_MS)
-            if (_uiState.value.isLoading) {
-                _uiState.update { it.copy(isLoading = false) }
-                TaskHistoryRequestGate.release(this)
-                ToastUtils.showError("任务记录请求超时")
+        loadJob = viewModelScope.launch {
+            try {
+                applyTaskExecutionHistory(tcpManager.loadTaskExecutionHistory())
+            } finally {
+                if (generation == loadGeneration) _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
 
-    private fun observeTaskExecutionHistory() {
-        viewModelScope.launch {
-            TaskSchedulerStream.taskExecutionHistory
-                .filterNotNull()
-                .collectLatest(::applyTaskExecutionHistory)
-        }
+    fun cancelLoadRecords() {
+        loadGeneration++
+        loadJob?.cancel()
+        _uiState.update { it.copy(isLoading = false) }
     }
 
     fun openReplay(record: TaskRecordItem) {
@@ -218,8 +203,6 @@ class TaskRecordViewModel @Inject constructor(
         if (!_uiState.value.isLoading) return
         if (payload.mapId.isNotBlank() || payload.taskId.isNotBlank() ||
             payload.startTime != 0L || payload.endTime != 0L) return
-        TaskHistoryRequestGate.release(this)
-        loadTimeoutJob?.cancel()
         if (!payload.isSuccess) {
             _uiState.update { it.copy(isLoading = false) }
             ToastUtils.showError(payload.message.ifBlank { "任务记录加载失败" })
@@ -242,12 +225,11 @@ class TaskRecordViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        TaskHistoryRequestGate.release(this)
+        cancelLoadRecords()
         super.onCleared()
     }
 
     private companion object {
-        const val TASK_HISTORY_TIMEOUT_MS = 180_000L
         const val TASK_DELETE_TIMEOUT_MS = 180_000L
         const val RESULT_BUSY_VALUE = 3
     }

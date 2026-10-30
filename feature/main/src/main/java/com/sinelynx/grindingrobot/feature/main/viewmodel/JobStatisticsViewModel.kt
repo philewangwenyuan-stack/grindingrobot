@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import androidx.lifecycle.viewModelScope
 import com.sinelynx.grindingrobot.core.common.base.viewmodel.BaseViewModel
 import com.sinelynx.grindingrobot.core.data.state.AppState
-import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.MapCatalogStream
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
@@ -101,7 +100,7 @@ class JobStatisticsViewModel @Inject constructor(
     val uiState: StateFlow<JobStatisticsUiState> = _uiState.asStateFlow()
     private var mapCatalogTimeoutJob: Job? = null
 
-    private var historyTimeoutJob: Job? = null
+    private var historyQueryJob: Job? = null
     private var pendingQuery: JobStatisticsQuery? = null
 
     init {
@@ -113,31 +112,6 @@ class JobStatisticsViewModel @Inject constructor(
             )
         }
         observeMapCatalog()
-        viewModelScope.launch {
-            TaskSchedulerStream.taskExecutionHistory.collect { payload ->
-                val query = pendingQuery ?: return@collect
-                payload ?: return@collect
-                if (!query.accepts(payload)) return@collect
-                if (!payload.isSuccess) {
-                    finishHistoryQuery(payload.message.ifBlank { "统计查询失败" })
-                    return@collect
-                }
-                val result = calculateJobStatistics(query, payload.records)
-                finishHistoryQuery()
-                _uiState.update {
-                    it.copy(
-                        hasQueried = true,
-                        totalTasks = result.totalTaskCount,
-                        totalArea = result.totalArea,
-                        totalDurationMinutes = (result.totalDurationHours * 60).toLong(),
-                        averageEfficiency = if (result.totalDurationHours > 0)
-                            result.totalArea / result.totalDurationHours else 0f,
-                        showResultDialog = true,
-                        statisticsResult = result
-                    )
-                }
-            }
-        }
     }
 
     private fun observeMapCatalog() {
@@ -252,10 +226,6 @@ class JobStatisticsViewModel @Inject constructor(
         }
 
         if (state.isLoading) return
-        if (!TaskHistoryRequestGate.acquire(this)) {
-            ToastUtils.showError("任务历史正在查询，请稍后重试")
-            return
-        }
         val query = JobStatisticsQuery(
             datePickerDate(state.startDate),
             datePickerDate(state.endDate),
@@ -264,29 +234,45 @@ class JobStatisticsViewModel @Inject constructor(
         )
         pendingQuery = query
         _uiState.update { it.copy(isLoading = true, showResultDialog = false, statisticsResult = null) }
-        TaskSchedulerStream.resetTaskExecutionHistory()
-        if (!tcpManager.requestTaskExecutionHistory(startTime = query.startSeconds, endTime = query.endSeconds)) {
-            finishHistoryQuery("统计请求发送失败")
-            return
-        }
-        historyTimeoutJob = viewModelScope.launch {
-            delay(10_000L)
-            if (pendingQuery != null) finishHistoryQuery("统计查询超时，请重试")
+        historyQueryJob = viewModelScope.launch {
+            try {
+                val payload = tcpManager.loadTaskExecutionHistory(
+                    startTime = query.startSeconds, endTime = query.endSeconds
+                )
+                if (!payload.isSuccess) {
+                    ToastUtils.showError(payload.message.ifBlank { "统计查询失败" })
+                    return@launch
+                }
+                val result = calculateJobStatistics(query, payload.records)
+                _uiState.update {
+                    it.copy(
+                        hasQueried = true,
+                        totalTasks = result.totalTaskCount,
+                        totalArea = result.totalArea,
+                        totalDurationMinutes = (result.totalDurationHours * 60).toLong(),
+                        averageEfficiency = if (result.totalDurationHours > 0)
+                            result.totalArea / result.totalDurationHours else 0f,
+                        showResultDialog = true,
+                        statisticsResult = result
+                    )
+                }
+            } finally {
+                if (pendingQuery === query) {
+                    pendingQuery = null
+                    _uiState.update { it.copy(isLoading = false) }
+                }
+            }
         }
     }
 
-    private fun finishHistoryQuery(error: String? = null) {
-        historyTimeoutJob?.cancel()
+    fun cancelHistoryQuery() {
+        historyQueryJob?.cancel()
         pendingQuery = null
-        TaskHistoryRequestGate.release(this)
         _uiState.update { it.copy(isLoading = false) }
-        error?.let { ToastUtils.showError(it) }
     }
-
-    fun cancelHistoryQuery() = finishHistoryQuery()
 
     override fun onCleared() {
-        TaskHistoryRequestGate.release(this)
+        cancelHistoryQuery()
         super.onCleared()
     }
 

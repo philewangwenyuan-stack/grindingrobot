@@ -1,6 +1,5 @@
 package com.sinelynx.grindingrobot.feature.main.viewmodel
 
-import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryPayload
 import com.sinelynx.grindingrobot.core.model.state.TaskExecutionHistoryRecordPayload
 import java.time.LocalDate
 import java.time.ZoneId
@@ -102,31 +101,6 @@ class JobStatisticsCalculatorTest {
         assertEquals(0, result.totalTaskCount)
         assertEquals(1, result.tasks.size)
         assertEquals(listOf(0f, 0f, 0f), result.tasks.first().durationChartData.map { it.value })
-    }
-
-    @Test fun responseMustMatchQueryButUnscopedParserFailureIsAccepted() {
-        val response = TaskExecutionHistoryPayload(true, "", startTime = query.startSeconds, endTime = query.endSeconds)
-        assertTrue(query.accepts(response))
-        assertFalse(query.accepts(response.copy(startTime = 0)))
-        assertFalse(query.accepts(response.copy(mapId = "a")))
-        assertFalse(query.accepts(response.copy(taskId = "task")))
-        assertTrue(query.accepts(TaskExecutionHistoryPayload(false, "解析失败")))
-    }
-
-    @Test fun onlyOwnerCanReleaseSharedRequestAndDuplicateClickCannotAcquire() {
-        val owner = Any()
-        val other = Any()
-        try {
-            assertTrue(TaskHistoryRequestGate.acquire(owner))
-            assertFalse(TaskHistoryRequestGate.acquire(owner))
-            TaskHistoryRequestGate.release(other)
-            assertFalse(TaskHistoryRequestGate.acquire(other))
-            TaskHistoryRequestGate.release(owner)
-            assertTrue(TaskHistoryRequestGate.acquire(other))
-        } finally {
-            TaskHistoryRequestGate.release(owner)
-            TaskHistoryRequestGate.release(other)
-        }
     }
 
     @Test fun csvContainsSameSecondPrecisionTotalsAndEscapesNames() {

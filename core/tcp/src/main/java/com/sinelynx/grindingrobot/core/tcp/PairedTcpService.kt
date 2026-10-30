@@ -79,10 +79,10 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                     if (!foreground || current - mainPulseAt >= 300) {
                         cancelManual("界面已暂停或无响应")
                     }
-                    val pending = peer.manualAck
-                    if (pending != null && current - pending.second >= 500) {
+                    val oldestPending = peer.manualAcks.values.minOfOrNull { it.sentAt }
+                    if (oldestPending != null && current - oldestPending >= 500) {
                         drop(peer, "遥控确认超时")
-                    } else if (pending == null && current - lastManualSent >= 100) {
+                    } else if (current - lastManualSent >= 100) {
                         synchronized(targetLock) {
                             target?.let { command ->
                                 val bytes = SlMessageBuilder.buildControlCommandRaw(command.toByteArray(), 0x10u)
@@ -101,6 +101,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     private data class Outbound(val bytes: ByteArray, val written: (() -> Unit)? = null,
                                 val manualEpoch: Long? = null, val stop: Boolean = false,
                                 val manualRevision: Long? = null, val emergency: Boolean = false)
+    private data class ManualAck(val sentAt: Long, val epoch: Long)
     private inner class Peer(val control: Boolean) {
         val socket = Socket()
         val parser = SlFrameParser()
@@ -114,7 +115,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         @Volatile var writingAt = 0L
         @Volatile var lastSessionAck = now()
         @Volatile var lastHeartbeat = now()
-        @Volatile var manualAck: Pair<Int, Long>? = null
+        val manualAcks = ConcurrentHashMap<Int, ManualAck>()
         fun current() = !closed && if (control) controlPeer === this else dataPeer === this
         fun enqueue(item: Outbound): Boolean {
             if (!current()) return false
@@ -131,6 +132,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
             runCatching { socket.close() }
             ordinary.clear(); urgent.clear()
             emergencies.clear(); pendingManual.set(null)
+            manualAcks.clear()
             replies.values.forEach { it.cancel() }
             replies.clear()
         }
@@ -162,16 +164,24 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                                     drop(this@Peer, reply.message)
                                 }
                             } else if (ready) {
-                                if (control && frame.msgId.toInt() == 0x0402 && manualAck?.first == frame.ackSeq.toInt()) {
+                                val pending = if (control && frame.msgId.toInt() == 0x0402)
+                                    manualAcks.remove(frame.ackSeq.toInt()) else null
+                                if (pending != null) {
                                     val current = now()
-                                    val sentAt = manualAck?.second ?: current
                                     if (current - lastAckTrace >= 1000) {
                                         lastAckTrace = current
-                                        runtime.trace("manual_ack seq=${frame.ackSeq} rtt_ms=${current - sentAt}")
+                                        runtime.trace("manual_ack seq=${frame.ackSeq} rtt_ms=${current - pending.sentAt}")
                                     }
-                                    manualAck = null
-                                    if (SlLink.ControlCommandResponse.parseFrom(frame.payload).result != SlLink.ResultCode.RESULT_SUCCESS) {
-                                        cancelManual("遥控被设备拒绝")
+                                    val response = SlLink.ControlCommandResponse.parseFrom(frame.payload)
+                                    if (response.result == SlLink.ResultCode.RESULT_SUCCESS) {
+                                        // The server may coalesce queued speeds. A newer
+                                        // successful speed also retires older superseded ones.
+                                        for ((seq, ack) in manualAcks.entries) {
+                                            if (ack.epoch == pending.epoch && ack.sentAt <= pending.sentAt)
+                                                manualAcks.remove(seq, ack)
+                                        }
+                                    } else {
+                                        cancelManual("遥控被设备拒绝：${response.message}", pending.epoch)
                                     }
                                 }
                                 callback?.onFrameReceived(frame, arrival, control)
@@ -187,9 +197,16 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                         if (item == null) { delay(10); continue }
                         if (item.manualEpoch != null && item.manualEpoch != epoch.get()) continue
                         if (item.manualRevision != null && item.manualRevision != revision.get()) continue
-                        if (item.manualEpoch != null && !item.stop && manualAck != null) continue
                         writingAt = now()
-                        if (item.manualEpoch != null && !item.stop) manualAck = ChannelRouting.seq(item.bytes) to writingAt
+                        if (item.manualEpoch != null && !item.stop) {
+                            // Renew the latest speed on schedule; ACK latency must not
+                            // become the robot's speed-renewal interval.
+                            if (manualAcks.size >= 8) {
+                                drop(this@Peer, "遥控确认积压")
+                                return@launch
+                            }
+                            manualAcks[ChannelRouting.seq(item.bytes)] = ManualAck(writingAt, item.manualEpoch)
+                        }
                         output.write(item.bytes)
                         output.flush()
                         writingAt = 0
@@ -372,11 +389,12 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         revision.incrementAndGet()
         true
     }
-    private fun cancelManual(reason: String) = synchronized(targetLock) {
+    private fun cancelManual(reason: String, expectedEpoch: Long? = null) = synchronized(targetLock) {
+        if (expectedEpoch != null && expectedEpoch != epoch.get()) return@synchronized
         if (target == null) return@synchronized
         target = null
         requireNeutral = true
-        runtime.trace("manual_cancel reason=$reason")
+        runtime.trace("manual_cancel reason=$reason main_pulse_age_ms=${now() - mainPulseAt}")
         epoch.incrementAndGet()
         _manualCancellation.value += 1
         controlPeer?.takeIf { it.ready }?.let { peer ->

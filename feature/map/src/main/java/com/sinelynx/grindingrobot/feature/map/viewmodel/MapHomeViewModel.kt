@@ -13,7 +13,6 @@ import com.sinelynx.grindingrobot.core.model.state.MapPreviewStream
 import com.sinelynx.grindingrobot.core.model.state.MapPreviewRegionPayload
 import android.graphics.BitmapFactory
 import android.os.SystemClock
-import com.sinelynx.grindingrobot.core.model.state.MapImageStream
 import com.sinelynx.grindingrobot.core.model.state.MapImportToRadarStream
 import com.sinelynx.grindingrobot.core.model.state.MapRegionPointStream
 import com.sinelynx.grindingrobot.core.model.state.PathPlanStream
@@ -295,12 +294,11 @@ class MapHomeViewModel @Inject constructor(
     private val grindingSession = StartGrindingSessionController(
         scope = viewModelScope,
         imports = MapImportToRadarStream.responses,
-        frames = MapImageStream.frames,
+        loadMap = { tcpManager.loadMapSnapshot(it, MAP_TCP_REQUEST_TIMEOUT_MS) },
         regions = MapRegionPointStream.responses,
         configs = TaskSchedulerStream.taskConfigResponse.filterNotNull(),
         paths = TaskPathStream.results,
-        sendImport = { requestRadarMapImport(it) },
-        sendMap = { tcpManager.requestMapSnapshot(it) },
+        sendImport = { tcpManager.requestMapImportToRadar(it) },
         sendRegions = { tcpManager.requestMapRegionPoints(it) },
         sendConfig = { taskId, taskName, mapId, repeats, obstacles ->
             tcpManager.requestTaskConfig(
@@ -664,23 +662,15 @@ class MapHomeViewModel @Inject constructor(
         }
         requestRelocalizationSettings()
         relocalizationStartJob = viewModelScope.launch {
-            MapModeStream.reset()
-            val sent = tcpManager.requestMapMode(
-                mode = SlLink.MapModeType.MAP_MODE_LOCALIZATION,
-                enabled = true,
-                mapKind = 0
-            )
-            if (!sent) {
-                failRelocalization("定位模式请求发送失败", stopLocalization = false)
-                return@launch
-            }
-            val modeResponse = withTimeoutOrNull(MAP_MODE_REQUEST_TIMEOUT_MS) {
-                MapModeStream.payload.filterNotNull().first {
-                    it.modeValue == SlLink.MapModeType.MAP_MODE_LOCALIZATION.number && it.enabled
-                }
-            }
-            if (modeResponse == null) {
-                failRelocalization("启动定位模式超时", stopLocalization = false)
+            val modeResponse = try {
+                tcpManager.requestMapModeAndAwait(
+                    mode = SlLink.MapModeType.MAP_MODE_LOCALIZATION,
+                    enabled = true,
+                    mapKind = 0,
+                    timeoutMs = MAP_MODE_REQUEST_TIMEOUT_MS
+                )
+            } catch (error: java.io.IOException) {
+                failRelocalization(error.message ?: "启动定位模式失败", stopLocalization = false)
                 return@launch
             }
             if (!modeResponse.isSuccess ||
