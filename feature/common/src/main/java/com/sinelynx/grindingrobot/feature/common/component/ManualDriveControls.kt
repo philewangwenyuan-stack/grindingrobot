@@ -267,7 +267,7 @@ fun ManualDriveTravelPad(
                 TravelButton(TravelDirection.BACKWARD, state, onTravel, Modifier.weight(1f), compact)
             }
         }
-        Text("点击保持，反向先停", color = DriveMuted, fontSize = if (compact) 10.sp else 13.sp)
+        Text("再点停止，反向先停", color = DriveMuted, fontSize = if (compact) 10.sp else 13.sp)
     }
 }
 
@@ -333,7 +333,7 @@ private fun TravelButton(
     val feedback = manualFeedback()
     Surface(onClick = {
         onTravel(direction)
-        feedback(if (state.direction != TravelDirection.STOPPED && state.direction != direction)
+        feedback(if (state.direction != TravelDirection.STOPPED)
             ManualFeedback.Stop else ManualFeedback.Tick)
     }, enabled = state.enabled,
         modifier = modifier.fillMaxWidth().testTag(if (direction == TravelDirection.FORWARD) "travel_forward" else "travel_backward"),

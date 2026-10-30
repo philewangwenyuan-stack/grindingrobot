@@ -90,6 +90,47 @@ class ManualDriveControllerTest {
         control.stop()
     }
 
+    @Test fun sameButtonStopsBothAxesImmediatelyAndCanStartAgain() = runBlocking {
+        for (direction in listOf(TravelDirection.FORWARD, TravelDirection.BACKWARD)) {
+            val sent = mutableListOf<ManualDriveTarget>()
+            val control = ManualDriveController(this, { true }, { sent.add(it); true }, {})
+            control.refreshAvailability()
+            control.travel(direction)
+            yield()
+            val epoch = control.state.inputEpoch
+            control.steer(0.7f, epoch)
+            control.travel(direction)
+            assertEquals(TravelDirection.STOPPED, control.state.direction)
+            assertEquals(0f, control.state.steering, 0f)
+            assertEquals(0f, sent.last().remoteX, 0f)
+            assertEquals(0f, sent.last().remoteY, 0f)
+            assertEquals(0f, sent.last().speedRatio, 0f)
+            control.steer(1f, epoch)
+            assertFalse(control.state.hasMotion)
+            control.travel(direction)
+            yield()
+            assertEquals(direction, control.state.direction)
+            assertTrue(sent.last().speedRatio > 0f)
+            control.stop()
+        }
+    }
+
+    @Test fun sameButtonDuringPreparationStopsAndLateAckCannotRestart() = runBlocking {
+        val ack = CompletableDeferred<Boolean>()
+        val sent = mutableListOf<ManualDriveTarget>()
+        val control = ManualDriveController(this, { true }, { sent.add(it); true }, {},
+            prepare = { withContext(NonCancellable) { ack.await() } })
+        control.refreshAvailability()
+        control.travel(TravelDirection.FORWARD)
+        yield()
+        control.travel(TravelDirection.FORWARD)
+        assertFalse(control.state.hasMotion)
+        assertEquals(0f, sent.single().speedRatio, 0f)
+        ack.complete(true)
+        yield()
+        assertTrue(sent.all { it.speedRatio == 0f })
+    }
+
     @Test fun oppositeButtonStopsBothAxesAndRequiresAnotherClick() = runBlocking {
         val control = ManualDriveController(this, { true }, { true }, {})
         control.refreshAvailability()

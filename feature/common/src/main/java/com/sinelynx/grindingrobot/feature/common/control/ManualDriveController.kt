@@ -77,7 +77,9 @@ class ManualDriveController(
     fun travel(direction: TravelDirection) {
         if (direction == TravelDirection.STOPPED) { stop(); return }
         if (!state.enabled || !canControl()) return
-        if (state.direction != TravelDirection.STOPPED && state.direction != direction) {
+        // Either travel button releases an active latch. Starting the opposite
+        // direction still requires a second click after this explicit zero.
+        if (state.direction != TravelDirection.STOPPED) {
             stop()
             return
         }
