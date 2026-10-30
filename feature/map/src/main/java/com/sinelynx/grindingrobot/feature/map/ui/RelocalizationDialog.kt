@@ -480,7 +480,7 @@ private fun RelocalizationWorkspacePanel(
 
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = "微调步长：0.05 m / 5°",
+            text = "微调步长：0.05 m / 5°，按住连续调整",
             color = Color(0xFF9AA2AB),
             fontSize = 12.sp
         )
@@ -526,7 +526,7 @@ private fun RotateAdjustButton(clockwise: Boolean, onClick: () -> Unit) {
             .background(Color(0xFFEAF5FB))
             .border(1.dp, Color(0xFFB9E1F4), RoundedCornerShape(12.dp))
             .semantics { contentDescription = if (clockwise) "顺时针旋转 5 度" else "逆时针旋转 5 度" }
-            .clickable(onClick = onClick),
+            .repeatAdjustmentOnHold(onClick),
         contentAlignment = Alignment.Center
     ) {
         Canvas(Modifier.size(28.dp)) {
@@ -561,7 +561,7 @@ private fun AdjustButton(
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFFEAF5FB))
             .border(1.dp, Color(0xFFB9E1F4), RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick),
+            .repeatAdjustmentOnHold(onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(

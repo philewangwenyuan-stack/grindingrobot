@@ -22,6 +22,8 @@ class PairedTcpServiceTest {
         private val timer = Executors.newSingleThreadScheduledExecutor { Thread(it).apply { isDaemon = true } }
         @Volatile var mainAlive = true
         @Volatile var pulse: (() -> Unit)? = null
+        val traces = CopyOnWriteArrayList<String>()
+        override fun trace(message: String) { traces.add(message) }
         init { timer.scheduleAtFixedRate({ if (mainAlive) pulse?.invoke() }, 0, 50, java.util.concurrent.TimeUnit.MILLISECONDS) }
         override fun now() = System.nanoTime() / 1_000_000
         override fun startMainPulse(pulse: () -> Unit) { this.pulse = pulse }
@@ -192,6 +194,8 @@ class PairedTcpServiceTest {
                 until { board.movements().any { it > 0 } }
                 runtime.mainAlive = false
                 until { board.movements().lastOrNull() == 0f }
+                assertTrue(runtime.traces.any { it.startsWith("manual_cancel reason=界面已暂停或无响应") &&
+                    "main_pulse_age_ms=" in it && "pending_manual_acks=" in it })
                 runtime.mainAlive = true
                 Thread.sleep(120)
                 assertFalse(service.sendManualData(command(1f), false))
@@ -263,11 +267,17 @@ class PairedTcpServiceTest {
 
     @Test fun lostManualAckCancelsTargetInsteadOfReplayingAfterReconnect() {
         Board().use { board ->
-            val service = paired(board, Runtime())
+            val runtime = Runtime()
+            val service = paired(board, runtime)
             try {
                 board.acknowledgeManual = false
                 service.sendManualData(command(1f), false)
                 until { service.manualCancellation.value > 0 }
+                until { runtime.traces.any { it.startsWith("channel_close reason=遥控确认超时") } }
+                val close = runtime.traces.first { it.startsWith("channel_close reason=遥控确认超时") }
+                assertTrue("role=control" in close)
+                assertTrue("oldest_manual_ack_age_ms=" in close)
+                assertFalse("fixture-tablet-token" in close)
                 until { service.isControlReady() }
                 val sentBeforeRecovery = board.movements().count { it > 0 }
                 assertTrue("Outstanding renewals must stay bounded", sentBeforeRecovery in 1..8)

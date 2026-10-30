@@ -53,6 +53,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     private val probePending = AtomicBoolean()
     private val recoveryWake = Channel<Unit>(Channel.CONFLATED)
     private val epoch = AtomicLong()
+    private val connectionSequence = AtomicLong()
     private val revision = AtomicLong()
     private var target: SlLink.ControlCommand? = null
     private var requireNeutral = false
@@ -66,9 +67,10 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                 delay(25)
                 val current = now()
                 for (peer in listOfNotNull(dataPeer, controlPeer)) {
-                    if ((peer.writingAt > 0 && current - peer.writingAt >= 500) ||
-                        (peer.ready && current - peer.lastSessionAck >= 3000)) {
-                        drop(peer, "通道超时")
+                    if (peer.writingAt > 0 && current - peer.writingAt >= 500) {
+                        drop(peer, "通道写入超时")
+                    } else if (peer.ready && current - peer.lastSessionAck >= 3000) {
+                        drop(peer, "会话心跳确认超时")
                     } else if (peer.ready && current - peer.lastHeartbeat >= 1000) {
                         peer.lastHeartbeat = current
                         session(peer, SlLink.ChannelSessionAction.CHANNEL_SESSION_HEARTBEAT)
@@ -98,6 +100,20 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     }
 
     private fun now() = runtime.now()
+
+    /** Local monotonic ages, never a cross-device one-way latency estimate. No tokens/payloads. */
+    private fun diagnostic(peer: Peer?): String {
+        val current = now()
+        fun age(at: Long) = if (at > 0) current - at else -1L
+        val oldest = peer?.manualAcks?.values?.minOfOrNull { it.sentAt } ?: 0L
+        return "connection=${peer?.id} role=${if (peer?.control == true) "control" else "data"} " +
+            "endpoint=$host:${if (peer?.control == true) controlPort else dataPort} " +
+            "main_pulse_age_ms=${age(mainPulseAt)} rx_age_ms=${age(peer?.lastRxAt ?: 0)} " +
+            "rx_seq=${peer?.lastRxSeq} rx_msg=${peer?.lastRxMsg} rx_bytes=${peer?.rxBytes} " +
+            "write_age_ms=${age(peer?.writingAt ?: 0)} last_write_ms=${peer?.lastWriteMs} " +
+            "session_ack_age_ms=${age(peer?.lastSessionAck ?: 0)} " +
+            "oldest_manual_ack_age_ms=${age(oldest)} pending_manual_acks=${peer?.manualAcks?.size}"
+    }
     private data class Outbound(val bytes: ByteArray, val written: (() -> Unit)? = null,
                                 val manualEpoch: Long? = null, val stop: Boolean = false,
                                 val manualRevision: Long? = null, val emergency: Boolean = false)
@@ -113,6 +129,13 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         @Volatile var ready = false
         @Volatile var closed = false
         @Volatile var writingAt = 0L
+        val id = connectionSequence.incrementAndGet()
+        @Volatile var lastRxAt = 0L
+        @Volatile var lastRxSeq = -1
+        @Volatile var lastRxMsg = -1
+        @Volatile var rxBytes = 0L
+        @Volatile var lastWriteMs = -1L
+        private var lastSlowCallbackAt = 0L
         @Volatile var lastSessionAck = now()
         @Volatile var lastHeartbeat = now()
         val manualAcks = ConcurrentHashMap<Int, ManualAck>()
@@ -144,15 +167,20 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
             val input = socket.getInputStream()
             val output = socket.getOutputStream()
             scope.launch {
+                var closeReason = "对端关闭连接"
                 try {
                     val buffer = ByteArray(8192)
                     while (current()) {
                         val count = input.read(buffer)
                         if (count < 0) break
+                        lastRxAt = now()
+                        rxBytes += count
                         val arrival = now() / 1e3
                         for (frame in parser.parse(buffer.copyOf(count))) {
                             if (!current()) break
                             if (frame.srcId != 0x10u.toUByte() || frame.dstId != 0x01u.toUByte()) continue
+                            lastRxSeq = frame.seq.toInt()
+                            lastRxMsg = frame.msgId.toInt()
                             if (frame.msgId.toInt() == 0x0404) {
                                 val reply = SlLink.ChannelSessionResponse.parseFrom(frame.payload)
                                 val expectedRole = if (control) SlLink.ChannelRole.CHANNEL_ROLE_CONTROL else SlLink.ChannelRole.CHANNEL_ROLE_DATA
@@ -170,7 +198,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                                     val current = now()
                                     if (current - lastAckTrace >= 1000) {
                                         lastAckTrace = current
-                                        runtime.trace("manual_ack seq=${frame.ackSeq} rtt_ms=${current - pending.sentAt}")
+                                        runtime.trace("manual_ack connection=$id seq=${frame.ackSeq} rtt_ms=${current - pending.sentAt}")
                                     }
                                     val response = SlLink.ControlCommandResponse.parseFrom(frame.payload)
                                     if (response.result == SlLink.ResultCode.RESULT_SUCCESS) {
@@ -184,11 +212,19 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                                         cancelManual("遥控被设备拒绝：${response.message}", pending.epoch)
                                     }
                                 }
+                                val callbackStarted = now()
                                 callback?.onFrameReceived(frame, arrival, control)
+                                val callbackMs = now() - callbackStarted
+                                if (callbackMs >= 100 && now() - lastSlowCallbackAt >= 1000) {
+                                    lastSlowCallbackAt = now()
+                                    runtime.trace("slow_frame_callback ms=$callbackMs ${diagnostic(this@Peer)}")
+                                }
                             }
                         }
                     }
-                } catch (_: Exception) { } finally { drop(this@Peer, "连接已断开") }
+                } catch (error: Exception) {
+                    closeReason = "接收异常:${error.javaClass.simpleName}"
+                } finally { drop(this@Peer, closeReason) }
             }
             scope.launch {
                 try {
@@ -209,10 +245,13 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                         }
                         output.write(item.bytes)
                         output.flush()
+                        lastWriteMs = now() - writingAt
                         writingAt = 0
                         item.written?.invoke()
                     }
-                } catch (_: Exception) { } finally { drop(this@Peer, "发送失败") }
+                } catch (error: Exception) {
+                    drop(this@Peer, "发送异常:${error.javaClass.simpleName}")
+                } finally { drop(this@Peer, "发送循环结束") }
             }
         }
     }
@@ -230,6 +269,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     private fun drop(peer: Peer, reason: String) {
         synchronized(this) {
             if (!peer.current()) { peer.close(); return }
+            val details = diagnostic(peer)
             peer.close()
             if (peer.control) {
                 controlPeer = null
@@ -239,6 +279,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                 callback?.onDisconnected(reason)
             }
             publish(reason)
+            runtime.trace("channel_close reason=$reason $details")
         }
         recoverNow()
     }
@@ -261,17 +302,23 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                 else if (token.isEmpty()) SlLink.ChannelSessionAction.CHANNEL_SESSION_OPEN else SlLink.ChannelSessionAction.CHANNEL_SESSION_RECOVER
             val response = withTimeout(1000) { session(peer, action).await() }
             if (!peer.current()) return false
+            runtime.trace("channel_handshake result=${response.result} action=$action ${diagnostic(peer)}")
             if (response.result != SlLink.ResultCode.RESULT_SUCCESS) {
                 // A server restart invalidates our token. Try fresh admission once;
                 // an actual foreign owner will reject OPEN and stop further retries.
                 if (token.isNotEmpty()) {
+                    val retired = listOfNotNull(dataPeer, controlPeer).map { diagnostic(it) }
                     token = ""
                     dataPeer?.close(); controlPeer?.close()
                     dataPeer = null; controlPeer = null
                     cancelManual("原连接组已失效")
+                    retired.forEach { runtime.trace("channel_close reason=原连接组已失效 $it") }
                     callback?.onDisconnected("原连接组已失效")
                     publish("重新建立连接组", occupied = false)
-                } else publish(response.message, occupied = response.result == SlLink.ResultCode.RESULT_BUSY)
+                } else {
+                    runtime.trace("channel_close reason=握手拒绝 ${diagnostic(peer)}")
+                    publish(response.message, occupied = response.result == SlLink.ResultCode.RESULT_BUSY)
+                }
                 peer.close()
                 if (control) controlPeer = null else dataPeer = null
                 return false
@@ -281,10 +328,12 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
             publish("已连接", occupied = false)
             if (!control) callback?.onConnected()
             return true
-        } catch (_: Exception) {
+        } catch (error: Exception) {
             if (peer.current()) {
+                val details = diagnostic(peer)
                 peer.close()
                 if (control) controlPeer = null else dataPeer = null
+                runtime.trace("channel_close reason=建连异常:${error.javaClass.simpleName} $details")
             }
             publish("正在重连")
             return false
@@ -309,10 +358,12 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                                 withTimeout(300) { session(peer, SlLink.ChannelSessionAction.CHANNEL_SESSION_HEARTBEAT).await() }
                             }.getOrNull()?.result == SlLink.ResultCode.RESULT_SUCCESS
                             if (!okay) {
+                                val details = diagnostic(peer)
                                 peer.close()
                                 if (peer.control) { controlPeer = null; cancelManual("控制通道需恢复") }
                                 else { dataPeer = null; callback?.onDisconnected("数据通道需恢复") }
                                 publish("正在恢复")
+                                runtime.trace("channel_close reason=恢复探测失败 $details")
                             }
                         }
                       }
@@ -394,7 +445,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         if (target == null) return@synchronized
         target = null
         requireNeutral = true
-        runtime.trace("manual_cancel reason=$reason main_pulse_age_ms=${now() - mainPulseAt}")
+        runtime.trace("manual_cancel reason=$reason ${diagnostic(controlPeer)}")
         epoch.incrementAndGet()
         _manualCancellation.value += 1
         controlPeer?.takeIf { it.ready }?.let { peer ->
@@ -420,11 +471,13 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         enabled = false
         recovery?.cancel()
         cancelManual("主动断开")
+        val retired = listOfNotNull(dataPeer, controlPeer).map { diagnostic(it) }
         dataPeer?.close(); controlPeer?.close()
         dataPeer = null; controlPeer = null
         token = ""
         publish("未连接", occupied = false)
         callback?.onDisconnected("主动断开")
+        retired.forEach { runtime.trace("channel_close reason=主动断开 $it") }
     }
     fun release() {
         disconnect()

@@ -89,6 +89,7 @@ fun DriveParameterSlider(
     onValueChangeFinished: () -> Unit = {},
     endpointLabels: Pair<String, String> = "${range.start}" to "${range.endInclusive}",
     compact: Boolean = false,
+    enabled: Boolean = true,
 ) {
     val feedback = manualFeedback()
     val finish = { onValueChangeFinished(); feedback(ManualFeedback.Tick) }
@@ -106,10 +107,10 @@ fun DriveParameterSlider(
             }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (!compact) SliderStepButton(false, value > range.start) {
+            if (!compact) SliderStepButton(false, enabled && value > range.start) {
                 onValueChange((value - step).coerceIn(range)); finish()
             }
-            Slider(value = value.coerceIn(range), onValueChange = onValueChange,
+            Slider(value = value.coerceIn(range), onValueChange = onValueChange, enabled = enabled,
                 valueRange = range, onValueChangeFinished = finish,
                 modifier = Modifier.weight(1f).padding(horizontal = if (compact) 0.dp else 6.dp).testTag("slider_$label"),
                 thumb = {
@@ -118,7 +119,7 @@ fun DriveParameterSlider(
                 },
                 colors = SliderDefaults.colors(thumbColor = DriveBlue, activeTrackColor = DriveBlue,
                     inactiveTrackColor = Color(0xFFD6E2EB)))
-            if (!compact) SliderStepButton(true, value < range.endInclusive) {
+            if (!compact) SliderStepButton(true, enabled && value < range.endInclusive) {
                 onValueChange((value + step).coerceIn(range)); finish()
             }
         }
@@ -129,10 +130,10 @@ fun DriveParameterSlider(
         }
         if (compact) Row(Modifier.fillMaxWidth().padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween) {
-            SliderStepButton(false, value > range.start) {
+            SliderStepButton(false, enabled && value > range.start) {
                 onValueChange((value - step).coerceIn(range)); finish()
             }
-            SliderStepButton(true, value < range.endInclusive) {
+            SliderStepButton(true, enabled && value < range.endInclusive) {
                 onValueChange((value + step).coerceIn(range)); finish()
             }
         }
