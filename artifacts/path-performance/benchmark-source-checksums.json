@@ -1,9 +1,0 @@
-{
-  "scripts/path-performance/generate_fixtures.py": "af834da30613edac7cb88ab9626af6ef541be3b7e9a6bb544258ca2b0bc3f590",
-  "scripts/path-performance/summarize.py": "6a50b1266c5634e0408b4e41bfc31303bf0e6a6796226886e8f96c2a9ba1f676",
-  "scripts/path-performance/benchmark.init.gradle": "d372694d669cac446a528552fbce01c09df998dd40d5ec08a75c5e121addfc4c",
-  "feature/map/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceFixtures.kt": "7991e95eb4a25000211e408fb168912e934421ec60b362e8ab60d3a949185fc1",
-  "feature/map/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceBenchmarkTest.kt": "336ea905d3cf9bb741b679dc6b3c812d69609a832c1afd4b702062059429806f",
-  "feature/map/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/PathRenderPerformanceBenchmarkTest.kt": "fbc0c0749ffa5f80373d48a707bfa6524cda6c28e5e34d696d5e5ab805389d7f",
-  "core/tcp/src/test/java/com/sinelynx/grindingrobot/core/tcp/TaskPathReceivePerformanceBenchmarkTest.kt": "2c113a65683d170d6e307fe04280e082770882f13e7ac56f48a26b4d97f7de0f"
-}
