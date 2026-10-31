@@ -11,6 +11,10 @@ data class DevicePosePayload(
 )
 
 object DeviceStatusStream {
+    private val _systemStatus = MutableStateFlow<SystemStatusPayload?>(null)
+    val systemStatus: StateFlow<SystemStatusPayload?> = _systemStatus.asStateFlow()
+
+    fun publishSystemStatus(value: SystemStatusPayload) { _systemStatus.value = value }
     private val _pose = MutableStateFlow<DevicePosePayload?>(null)
     val pose: StateFlow<DevicePosePayload?> = _pose.asStateFlow()
 
@@ -19,6 +23,7 @@ object DeviceStatusStream {
     }
 
     fun reset() {
+        _systemStatus.value = null
         _pose.value = null
     }
 }

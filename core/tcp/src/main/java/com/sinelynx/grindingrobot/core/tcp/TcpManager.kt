@@ -342,6 +342,7 @@ class TcpManager @Inject constructor(
 
     fun isControlReady(): Boolean = tcpService.isControlReady()
     val channelStatus get() = tcpService.status
+    fun channelLatencySnapshot() = tcpService.latencySnapshot()
     val manualCancellation get() = tcpService.manualCancellation
     fun onForeground() = tcpService.onForeground()
     fun onBackground() = tcpService.onBackground()

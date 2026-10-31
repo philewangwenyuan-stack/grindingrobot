@@ -38,6 +38,13 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     val connectionState = _connectionState.asStateFlow()
     private val _status = MutableStateFlow(Status())
     val status = _status.asStateFlow()
+    data class LatencySnapshot(val dataRttMs: Long?, val controlRttMs: Long?)
+    fun latencySnapshot(): LatencySnapshot {
+        fun read(peer: Peer?): Long? = peer?.takeIf {
+            it.current() && it.ready && now() - it.sessionRttAt in 0L..3000L
+        }?.sessionRttMs
+        return LatencySnapshot(read(dataPeer), read(controlPeer))
+    }
     private val _manualCancellation = MutableStateFlow(0L)
     val manualCancellation = _manualCancellation.asStateFlow()
     @Volatile private var dataPeer: Peer? = null
@@ -116,7 +123,8 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
     }
     private data class Outbound(val bytes: ByteArray, val written: (() -> Unit)? = null,
                                 val manualEpoch: Long? = null, val stop: Boolean = false,
-                                val manualRevision: Long? = null, val emergency: Boolean = false)
+                                val manualRevision: Long? = null, val emergency: Boolean = false,
+                                val sessionSeq: Int? = null)
     private data class ManualAck(val sentAt: Long, val epoch: Long)
     private inner class Peer(val control: Boolean) {
         val socket = Socket()
@@ -126,6 +134,9 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         val emergencies = LinkedBlockingDeque<Outbound>(8)
         val pendingManual = AtomicReference<Outbound?>()
         val replies = ConcurrentHashMap<Int, CompletableDeferred<SlLink.ChannelSessionResponse>>()
+        val sessionWrites = ConcurrentHashMap<Int, Long>()
+        @Volatile var sessionRttMs: Long? = null
+        @Volatile var sessionRttAt = 0L
         @Volatile var ready = false
         @Volatile var closed = false
         @Volatile var writingAt = 0L
@@ -158,6 +169,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
             manualAcks.clear()
             replies.values.forEach { it.cancel() }
             replies.clear()
+            sessionWrites.clear()
         }
         fun start() {
             socket.tcpNoDelay = true
@@ -187,6 +199,11 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                                 if (reply.role != expectedRole) continue
                                 val waiting = replies.remove(frame.ackSeq.toInt()) ?: continue
                                 lastSessionAck = now()
+                                val sentAt = sessionWrites.remove(frame.ackSeq.toInt())
+                                if (sentAt != null && reply.result == SlLink.ResultCode.RESULT_SUCCESS) {
+                                    sessionRttMs = (lastSessionAck - sentAt).coerceAtLeast(0)
+                                    sessionRttAt = lastSessionAck
+                                }
                                 waiting.complete(reply)
                                 if (reply.result != SlLink.ResultCode.RESULT_SUCCESS && ready) {
                                     drop(this@Peer, reply.message)
@@ -234,6 +251,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                         if (item.manualEpoch != null && item.manualEpoch != epoch.get()) continue
                         if (item.manualRevision != null && item.manualRevision != revision.get()) continue
                         writingAt = now()
+                        item.sessionSeq?.let { sessionWrites[it] = writingAt }
                         if (item.manualEpoch != null && !item.stop) {
                             // Renew the latest speed on schedule; ACK latency must not
                             // become the robot's speed-renewal interval.
@@ -290,7 +308,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
         val bytes = SlMessageBuilder.buildChannelSessionRequestRaw(request.toByteArray(), 0x10u)
         val reply = CompletableDeferred<SlLink.ChannelSessionResponse>()
         peer.replies[ChannelRouting.seq(bytes)] = reply
-        if (!peer.enqueue(Outbound(bytes, stop = true))) reply.cancel()
+        if (!peer.enqueue(Outbound(bytes, stop = true, sessionSeq = ChannelRouting.seq(bytes)))) reply.cancel()
         return reply
     }
     private suspend fun establish(control: Boolean): Boolean {

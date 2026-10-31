@@ -88,6 +88,7 @@ import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
  * 设置菜单项枚举
  */
 private enum class SettingsMenuItem(val label: String) {
+    SystemStatus("系统状态"),
     SystemUpgrade("系统升级"),
     ClearCache("清除缓存"),
     RobotConfig("机器设置"),
@@ -191,6 +192,7 @@ private fun RobotSettingsContent(
 
         // 右侧内容面板
         when (selectedMenuItem) {
+            SettingsMenuItem.SystemStatus -> SystemStatusScreen(Modifier.weight(1f).fillMaxHeight())
             SettingsMenuItem.RobotConfig -> {
                 RobotConfigContent(
                     uiState = uiState,
@@ -279,8 +281,22 @@ private fun SettingsMenuPanel(
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.76f))
             .border(2.dp, Color.White.copy(alpha = 0.94f), RoundedCornerShape(24.dp))
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp, vertical = 26.dp)
     ) {
+        // 可点击一级入口，与软件设置、硬件设置并列。
+        Text(
+            text = "系统状态",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = if (selectedItem == SettingsMenuItem.SystemStatus) Color(0xFF00A0E9) else Color(0xFF7885AE),
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
+                .background(if (selectedItem == SettingsMenuItem.SystemStatus) Color(0xFFE0F3FE) else Color.Transparent)
+                .clickable { onItemSelected(SettingsMenuItem.SystemStatus) }.padding(vertical = 14.dp)
+        )
+        Spacer(Modifier.height(12.dp))
+        DashedDivider(Modifier.fillMaxWidth().padding(vertical = 4.dp))
+        Spacer(Modifier.height(16.dp))
         // 软件设置分组
         Text(
             text = "软件设置",

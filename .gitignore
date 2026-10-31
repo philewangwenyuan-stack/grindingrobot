@@ -42,3 +42,7 @@ local.properties
 /.gradle-project-cache/
 /.gradle-user-home/
 /.gradle-project-cache/
+
+# Local agent plans, diagnostics, previews and delivery packages
+/.planning/
+/artifacts/

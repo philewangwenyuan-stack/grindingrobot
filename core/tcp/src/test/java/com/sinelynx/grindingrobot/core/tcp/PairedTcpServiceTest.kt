@@ -43,6 +43,7 @@ class PairedTcpServiceTest {
         @Volatile var closed = false
         @Volatile var acknowledgeManual = true
         @Volatile var manualAckDelayMs = 0L
+        @Volatile var sessionAckDelayMs = 0L
         @Volatile var skipNextManualAck = false
         @Volatile var occupied = false
         @Volatile var stallData = false
@@ -72,6 +73,7 @@ class PairedTcpServiceTest {
                             val response = SlLink.ChannelSessionResponse.newBuilder().setRole(request.role)
                                 .setResult(result).setToken(token).setControlReady(control)
                                 .setMessage(if (occupied) "Device is occupied" else "Ready").build()
+                            if (sessionAckDelayMs > 0) Thread.sleep(sessionAckDelayMs)
                             reply(socket, frame, 0x0404, response.toByteArray())
                         } else {
                             received.add(control to frame)
@@ -136,6 +138,21 @@ class PairedTcpServiceTest {
         service.connect("127.0.0.1", board.data.localPort)
         until { service.isConnected() && service.isControlReady() }
         return service
+    }
+
+    @Test fun heartbeatRttReflectsPeerDelayAndClearsOnDisconnect() {
+        Board().use { board ->
+            val service = paired(board, Runtime())
+            try {
+                until { service.latencySnapshot().controlRttMs != null && service.latencySnapshot().dataRttMs != null }
+                board.sessionAckDelayMs = 120
+                until { (service.latencySnapshot().controlRttMs ?: 0) >= 100 }
+                assertTrue(service.latencySnapshot().controlRttMs!! < 1000)
+                service.disconnect()
+                assertNull(service.latencySnapshot().controlRttMs)
+                assertNull(service.latencySnapshot().dataRttMs)
+            } finally { service.release() }
+        }
     }
 
     @Test fun newerAcknowledgedSpeedRetiresACoalescedOlderSpeed() {

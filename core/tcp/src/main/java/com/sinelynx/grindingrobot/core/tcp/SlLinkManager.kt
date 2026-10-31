@@ -1880,6 +1880,7 @@ class SlLinkManager @Inject constructor(
                 return
             }
             val report = SlLink.DeviceStatusReport.parseFrom(payload)
+            DeviceStatusStream.publishSystemStatus(decodeSystemStatus(report, arrivalMonotonicS))
             deviceEvents.onStatus(
                 collisionImminent = report.collisionImminent,
                 chassisConnected = if (report.hasChassisConnected()) report.chassisConnected else null,
