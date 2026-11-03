@@ -139,7 +139,7 @@ private fun DrawingInspector(s:DrawingImportUiState,vm:DrawingImportViewModel,on
                     Text("范围 %.2f × %.2f m".format(drawing.extentMm.width/1000,drawing.extentMm.height/1000),fontSize=12.sp,color=DrawingInk)
                     Text("显示图层",color=DrawingInk,fontSize=14.sp,fontWeight=FontWeight.Bold)
                     drawing.layers.forEach { layer->Row(verticalAlignment=Alignment.CenterVertically){Checkbox(layer.name in s.visible,{vm.layer(layer.name,it)});Text(layer.name,color=DrawingInk,fontSize=13.sp)} }
-                    drawing.warnings.forEach {Text(it,fontSize=12.sp,color=Color(0xFF9B4D00))}
+                    drawing.warnings.forEach {Text(it,fontSize=12.sp,color=if(it.startsWith("已忽略标注"))Color(0xFF647080)else Color(0xFF9B4D00))}
                 }
                 if(s.existingCount>0)TextButton(onClick=onRemove){Text("移除图纸障碍层",color=Color(0xFFD82B2A))}
             }
@@ -211,8 +211,12 @@ private fun DrawingCanvas(s:DrawingImportUiState,vm:DrawingImportViewModel) {
     var pan by remember(s.sessionId){mutableStateOf(Offset.Zero)}
     var boxStart by remember {mutableStateOf<Offset?>(null)};var boxEnd by remember {mutableStateOf<Offset?>(null)}
     val density=LocalDensity.current
-    val angle=frame?.let {it.alignmentYawDeg+it.rotationAlignmentDeltaDeg}?:0f
-    val scale=if(bitmap!=null&&panelSize.width>0)min(panelSize.width.toFloat()/bitmap.width,panelSize.height.toFloat()/bitmap.height)*.94f*zoom else 1f
+    val preview=remember(s.step,s.drawing){if(s.step==0)s.drawing?.let {DrawingPreviewProjection(it.extentMm)}else null}
+    val contentWidth=preview?.width?.toFloat()?:bitmap?.width?.toFloat()?:1f
+    val contentHeight=preview?.height?.toFloat()?:bitmap?.height?.toFloat()?:1f
+    val angle=if(s.step==0)0f else frame?.let {it.alignmentYawDeg+it.rotationAlignmentDeltaDeg}?:0f
+    val scale=if(panelSize.width>0)min(panelSize.width/contentWidth,panelSize.height/contentHeight)*.94f*zoom else 1f
+    LaunchedEffect(s.step,s.sha){zoom=1f;pan=Offset.Zero}
     fun rotate(p:Offset,degrees:Float):Offset {val a=Math.toRadians(degrees.toDouble());return Offset((cos(a)*p.x-sin(a)*p.y).toFloat(),(sin(a)*p.x+cos(a)*p.y).toFloat())}
     fun base(p:PointD):Offset? = if(bitmap!=null&&geo!=null)worldPointToBitmapOffset(MapPreviewPointItem(p.x.toFloat(),p.y.toFloat()),geo,
         geo.mapWidth to geo.mapHeight,bitmap.width to bitmap.height)else null
@@ -225,12 +229,13 @@ private fun DrawingCanvas(s:DrawingImportUiState,vm:DrawingImportViewModel) {
     val radiusMm=if(frame!=null)with(density){16.dp.toPx()}/scale*frame.resolution*1000/s.transform.scale else 1.0
     val currentWorld by rememberUpdatedState<(Offset)->PointD?>({world(it)})
     val currentRadius by rememberUpdatedState(radiusMm)
-    val paths by produceState<List<DrawingPath>>(emptyList(),s.drawing,s.transform,bitmap,geo) {
+    val paths by produceState<List<DrawingPath>>(emptyList(),s.drawing,s.transform,bitmap,geo,preview) {
         value=withContext(Dispatchers.Default) {
             val image=bitmap;val map=geo
             if(image==null||map==null)emptyList() else s.drawing?.entities.orEmpty().map { e->
                 val path=Path();e.pointsMm.forEachIndexed { n,p->val w=s.transform.forward(p)
-                    val b=worldPointToBitmapOffset(MapPreviewPointItem(w.x.toFloat(),w.y.toFloat()),map,map.mapWidth to map.mapHeight,image.width to image.height)
+                    val b=preview?.project(p)?.let {Offset(it.x.toFloat(),it.y.toFloat())}?:
+                        worldPointToBitmapOffset(MapPreviewPointItem(w.x.toFloat(),w.y.toFloat()),map,map.mapWidth to map.mapHeight,image.width to image.height)
                     if(b!=null){if(n==0)path.moveTo(b.x,b.y)else path.lineTo(b.x,b.y)} }
                 if(e.closed)path.close();DrawingPath(e,path,path.getBounds())
             }
@@ -285,13 +290,15 @@ private fun DrawingCanvas(s:DrawingImportUiState,vm:DrawingImportViewModel) {
             drawRect(Color(0xFFE5EBF2))
             val image=bitmap
             if(image!=null) {
-                withTransform({translate(panelSize.width/2f+pan.x,panelSize.height/2f+pan.y);scale(scale,scale,pivot=Offset.Zero);rotate(angle,pivot=Offset.Zero);translate(-image.width/2f,-image.height/2f)}) {
+                withTransform({translate(panelSize.width/2f+pan.x,panelSize.height/2f+pan.y);scale(scale,scale,pivot=Offset.Zero);rotate(angle,pivot=Offset.Zero);translate(-contentWidth/2f,-contentHeight/2f)}) {
                     if(s.step>0)drawImage(image)
-                    else drawRect(Color.White,size=androidx.compose.ui.geometry.Size(image.width.toFloat(),image.height.toFloat()))
-                    val viewport=Rect(0f,0f,image.width.toFloat(),image.height.toFloat())
+                    else drawRect(Color.White,size=androidx.compose.ui.geometry.Size(contentWidth,contentHeight))
+                    val corners=listOf(Offset.Zero,Offset(panelSize.width.toFloat(),0f),Offset(0f,panelSize.height.toFloat()),Offset(panelSize.width.toFloat(),panelSize.height.toFloat()))
+                        .map {rotate((it-Offset(panelSize.width/2f,panelSize.height/2f)-pan)/scale,-angle)+Offset(contentWidth/2f,contentHeight/2f)}
+                    val viewport=Rect(corners.minOf {it.x},corners.minOf {it.y},corners.maxOf {it.x},corners.maxOf {it.y})
                     paths.forEach { item->
                         val c=s.selected[item.entity.id];val show=if(s.step==3)c!=null else item.entity.layer in s.visible||c!=null
-                        if(show&&item.bounds.overlaps(viewport)) {
+                        if(show&&item.bounds.inflate(2f/scale).overlaps(viewport)) {
                             val color=if(c?.ignored==true)Color.Gray else if(c!=null||item.entity.layer.contains("基础")||item.entity.layer.contains("FOUND",true))DrawingOrange else Color(0xFF2466FF)
                             if(c!=null&&c.ignored.not())drawPath(item.path,color.copy(alpha=.28f))
                             if(s.step==3)margins[item.entity.id]?.let { margin->drawPath(margin,DrawingOrange,style=Stroke(1f/scale,pathEffect=PathEffect.dashPathEffect(floatArrayOf(5f/scale,4f/scale)))) }
@@ -302,7 +309,7 @@ private fun DrawingCanvas(s:DrawingImportUiState,vm:DrawingImportViewModel) {
                     }
                 }
             }
-            s.controls.forEachIndexed { n,p->val pt=screen(p.mapM);drawCircle(Color(0xFF24BE1C),7.dp.toPx(),pt);drawContext.canvas.nativeCanvas.drawText("${n+1}",pt.x-3.dp.toPx(),pt.y+3.dp.toPx(),android.graphics.Paint().apply {color=android.graphics.Color.WHITE;textSize=10.dp.toPx();isAntiAlias=true}) }
+            if(s.step>0)s.controls.forEachIndexed { n,p->val pt=screen(p.mapM);drawCircle(Color(0xFF24BE1C),7.dp.toPx(),pt);drawContext.canvas.nativeCanvas.drawText("${n+1}",pt.x-3.dp.toPx(),pt.y+3.dp.toPx(),android.graphics.Paint().apply {color=android.graphics.Color.WHITE;textSize=10.dp.toPx();isAntiAlias=true}) }
             s.pendingDrawing?.let {drawCircle(DrawingBlue,6.dp.toPx(),screen(s.transform.forward(it)),style=Stroke(2.dp.toPx()))}
             s.pendingMap?.let {val p=screen(it);drawLine(Color.Red,p-Offset(12f,0f),p+Offset(12f,0f),2f);drawLine(Color.Red,p-Offset(0f,12f),p+Offset(0f,12f),2f)}
             if(s.outline.isNotEmpty()){val path=Path();s.outline.forEachIndexed { n,p->val pt=screen(s.transform.forward(p));if(n==0)path.moveTo(pt.x,pt.y)else path.lineTo(pt.x,pt.y) };drawPath(path,DrawingOrange,style=Stroke(2.dp.toPx()))}

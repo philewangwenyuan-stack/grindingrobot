@@ -19,6 +19,14 @@ data class RectD(val left: Double, val bottom: Double, val right: Double, val to
         else RectD(points.minOf { it.x }, points.minOf { it.y }, points.maxOf { it.x }, points.maxOf { it.y })
     }
 }
+
+/** Import preview uses CAD extents, independent of the radar map and registration. */
+data class DrawingPreviewProjection(val bounds:RectD) {
+    val width=max(1.0,bounds.width)
+    val height=max(1.0,bounds.height)
+    fun project(p:PointD)=PointD(p.x-bounds.left,bounds.top-p.y)
+    fun fitScale(viewWidth:Double,viewHeight:Double)=min(viewWidth/width,viewHeight/height)*.94
+}
 data class ControlPair(val drawingMm: PointD, val mapM: PointD, val label: String = "")
 data class DrawingTransform(
     val thetaDeg: Double = 0.0, val txM: Double = 0.0, val tyM: Double = 0.0,

@@ -162,23 +162,9 @@ object DxfParser {
                         if(closed)points.removeAt(points.lastIndex);error=5.0
                     }
                     "HATCH"->{
-                        // Polyline boundaries only. Edge/spline paths are reported, never guessed.
-                        val g=r.groups;var pos=0;var loop=0
-                        while(pos<g.size) {
-                            if(g[pos].first!=92){pos++;continue}
-                            val flags=g[pos++].second.toIntOrNull()?:0
-                            if(flags and 2==0){skip("HATCH边型边界");break}
-                            val vertices=mutableListOf<PointD>();var hasBulge=false;var isClosed=true
-                            while(pos<g.size&&g[pos].first!=92) {
-                                val(c,v)=g[pos++]
-                                if(c==73)isClosed=v!="0"
-                                if(c==42&&abs(v.toDoubleOrNull()?:0.0)>1e-10)hasBulge=true
-                                if(c==10&&pos<g.size&&g[pos].first==20){vertices.add(PointD(v.toDouble(),g[pos++].second.toDouble()))}
-                            }
-                            if(hasBulge){skip("HATCH凸度边界");continue}
-                            if(vertices.size>=3&&isClosed) {
-                                val p=vertices.map { m.point(it)*units.mm };addEntity(DxfEntity("$id/h${loop++}",layer,blockName,true,p,p))
-                            }
+                        hatchLoops(r,m.maxScale*units.mm,::skip).forEachIndexed { loop,boundary ->
+                            addEntity(DxfEntity("$id/h$loop",layer,blockName,true,boundary.points.map {m.point(it)*units.mm},
+                                boundary.corners.map {m.point(it)*units.mm},boundary.errorMm))
                         };continue
                     }
                     "VERTEX","SEQEND","ENDBLK"->continue
@@ -192,9 +178,79 @@ object DxfParser {
         expand(model,Matrix(),null,null,"",0)
         if(units==DxfUnits.UNKNOWN)warnings.add("图纸单位未知，请确认单位后继续")
         if(encoding!="UTF-8")warnings.add("使用${encoding}读取，请核对中文图层名")
-        skipped.forEach { (name,n)->warnings.add("未导入 $name：$n") }
+        skipped.forEach { (name,n)->warnings.add(if(name in setOf("TEXT","MTEXT","ATTRIB","ATTDEF","DIMENSION"))
+            "已忽略标注 $name：$n（不参与地基边界）" else "未导入 $name：$n") }
         if(entities.isEmpty())throw DxfParseException("未找到支持的二维图元；请导出二维模型空间DXF")
         return DxfDrawing(units,layers.values.toList(),entities,warnings,model.size,encoding)
+    }
+    private data class HatchLoop(val points:List<PointD>,val corners:List<PointD>,val errorMm:Double)
+    private fun hatchLoops(record:Record,scaleMm:Double,skip:(String)->Unit):List<HatchLoop> {
+        val result=mutableListOf<HatchLoop>();val g=record.groups
+        val starts=g.indices.filter {g[it].first==92}
+        for((loop,start) in starts.withIndex()) {
+            val end=starts.getOrNull(loop+1)?:g.size
+            val fields=g.subList(start+1,end);val flags=g[start].second.toIntOrNull()?:0
+            val points=mutableListOf<PointD>();val corners=mutableListOf<PointD>();var curved=false
+            if(flags and 2!=0) {
+                val header=Record("poly",fields)
+                if(header.integer(73)!=1){skip("HATCH未闭合边界");continue}
+                val count=header.integer(93);val vertices=mutableListOf<Pair<PointD,Double>>()
+                var i=fields.indexOfFirst {it.first==93}+1
+                while(i<fields.size&&vertices.size<count) {
+                    if(fields[i].first!=10){i++;continue}
+                    val x=fields[i++].second.toDouble();require(i<fields.size&&fields[i].first==20){"HATCH顶点缺少Y坐标"}
+                    val y=fields[i++].second.toDouble();var bulge=0.0
+                    if(i<fields.size&&fields[i].first==42)bulge=fields[i++].second.toDouble()
+                    vertices.add(PointD(x,y) to bulge)
+                }
+                if(vertices.size!=count||count<3){skip("HATCH无效顶点");continue}
+                corners.addAll(vertices.map {it.first})
+                for(i in vertices.indices) {
+                    val (a,bulge)=vertices[i];val b=vertices[(i+1)%vertices.size].first;points.add(a)
+                    if(abs(bulge)>1e-10) {
+                        val delta=b-a;val center=(a+b)*.5+PointD(-delta.y,delta.x)*((1-bulge*bulge)/(4*bulge))
+                        val radius=a.distance(center);val sweep=4*atan(bulge);val angle=atan2(a.y-center.y,a.x-center.x)
+                        val n=arcCount(radius*scaleMm,abs(sweep))
+                        for(k in 1 until n)points.add(center+PointD(cos(angle+sweep*k/n),sin(angle+sweep*k/n))*radius)
+                        curved=true
+                    }
+                }
+            } else {
+                val edgeStarts=fields.indices.filter {fields[it].first==72}
+                val count=Record("edges",fields).integer(93)
+                if(edgeStarts.size!=count||count<1){skip("HATCH无效边数");continue}
+                var valid=true
+                for((n,offset) in edgeStarts.withIndex()) {
+                    val edge=Record("edge",fields.subList(offset+1,edgeStarts.getOrNull(n+1)?:fields.size))
+                    val segment=when(fields[offset].second.toIntOrNull()) {
+                        1->listOf(PointD(edge.number(10),edge.number(20)),PointD(edge.number(11),edge.number(21))).also {corners.addAll(it)}
+                        2->{
+                            curved=true
+                            val ccw=edge.integer(73,1)!=0;val sign=if(ccw)1.0 else -1.0
+                            val a=Math.toRadians(edge.number(50))*sign;val b=Math.toRadians(edge.number(51))*sign
+                            var sweep=(b-a)%(2*PI)
+                            if(ccw&&sweep<=0)sweep+=2*PI
+                            if(!ccw&&sweep>=0)sweep-=2*PI
+                            val radius=edge.number(40);val center=PointD(edge.number(10),edge.number(20))
+                            val steps=arcCount(radius*scaleMm,abs(sweep))
+                            (0..steps).map {k->val angle=a+sweep*k/steps;center+PointD(cos(angle),sin(angle))*radius}
+                        }
+                        else->{skip("HATCH不支持的边型${fields[offset].second}");valid=false;emptyList()}
+                    }
+                    if(!valid)break
+                    val tolerance=.01/scaleMm
+                    if(points.isEmpty())points.addAll(segment)
+                    else if(points.last().distance(segment.first())<=tolerance)points.addAll(segment.drop(1))
+                    else if(points.last().distance(segment.last())<=tolerance)points.addAll(segment.asReversed().drop(1))
+                    else {valid=false;break}
+                }
+                if(!valid||points.size<4||points.last().distance(points.first())>.01/scaleMm){skip("HATCH不连续或未闭合边界");continue}
+                points.removeAt(points.lastIndex)
+            }
+            if(points.size>=3&&points.all {it.finite()})result.add(HatchLoop(points,corners,if(curved)5.0 else 0.0))
+            else skip("HATCH无效边界")
+        }
+        return result
     }
     private fun arcCount(radiusMm:Double,sweep:Double):Int {
         if(radiusMm<=0||!radiusMm.isFinite())throw DxfParseException("无效圆弧半径")
