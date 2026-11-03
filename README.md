@@ -11,7 +11,7 @@
 命令确认按通道隔离，数据重连不撤销仍健康的控制端。
 
 `ManualDriveController` 只发布目标变化/零速，100ms 周期发送由后台 transport 持有，最多一条未确认速度。
-主线程健康标记超过300ms、后台/黑屏/退出遥控时撤销目标；写入或遥控ACK超过500ms关闭控制端。
+主线程健康标记超过300ms、后台/黑屏/退出遥控时撤销目标；控制写入或遥控ACK超过1秒关闭控制端（数据口写入仍500ms）。
 重连不恢复速度，必须重新操作；平板失联不暂停已运行的自动任务，仍由板端执行安全保护。
 
 亮屏与 Wi-Fi 恢复立即探测，300ms 无响应重建对应通道，跳过固定5秒等待；失败退避0.5/1/2/3秒。
@@ -21,6 +21,19 @@ Wi-Fi 已恢复、设备空闲时，亮屏后1～3秒恢复控制就绪是待实
 
 地图尺寸在后台解码并随冻结快照缓存；共享 `rememberWorkflowBitmap` 在后台解码显示图片。
 本机 TCP 回归为 `:core:tcp:testDevDebugUnitTest` 中的 `PairedTcpServiceTest`，不连接真实设备。
+
+## 手动接管与磨盘状态
+
+普通手动遥控不发送 `TASK_CMD_STOP`，因此不会通过“准备遥控”关闭已经手动打开的磨盘。
+主遥控页和建图地图页使用任务状态区分：IDLE/READY/COMPLETED/STOPPED/ERROR允许普通手控，
+PLANNING/RUNNING/PAUSED需要真实任务接管，未知状态等待有效上报；急停和控制连接门禁保持。
+主遥控页仅在用户确认接管且任务ID非空时发送停止任务；确认回复成功后仍保持零速，需再次操作。
+自己的确认框导致宿主窗口失焦时只清零旧输入、保留确认框；退出页面/断连/急停仍撤销接管。
+地图页不提供隐式接管，实际自动任务执行时保持禁止手控。
+
+入口：`core/model/.../state/ManualTaskGate.kt`、`feature/common/.../control/ManualTakeoverCoordinator.kt`、
+`ManualDriveLifecycle`、`RemoteSettingsViewModel`和`MapViewModel`。
+JVM回归：`:feature:common:testDevDebugUnitTest`；独立UI窗口回归：`ManualTakeoverDialogTest`（不连接设备）。
 
 ## 项目概述
 
@@ -195,16 +208,33 @@ OTA 还依赖以下约定：
 摇杆持续指令周期为100ms。`ManualControlSession` 将待发送移动目标与任务停止等待分开：
 松手立即发送零速并清空待处理目标，任务STOP回执晚到也不能恢复旧移动。
 自动任务接管仍需确认；仅打开自动模式提示但未接管时不发送遥控运动。
-板端也需同步最新指令队列、执行代号和0.5秒失联兜底配置，参见Grinder根README 7.3。
+板端也需同步最新指令队列、执行代号和1秒手控失联兜底配置，自动导航轮速仍500ms，参见Grinder根README 7.3。
 平板代码修改后需重新构建并安装APK；CPU/USB灯效不能代替实车停车反馈验收。
 
 
 ## 现场控制与状态修正（2026-10-25）
 
-TCP输出统一串行写；手动发送只保留最新待发速度，停车优先，移动在写入前检查500ms有效期和连接会话。
+TCP输出统一串行写；手动发送只保留最新待发速度，停车优先；板端遥控有效期为1秒，输出前检查执行代号、有效期和连接会话。
 不等待上一条手动ACK、不重试旧移动。页面退出/后台/断连继续调用既有遥控停止逻辑。
 同输入在途规划合并；输入改变取消旧等待，响应使用已有request_id隔离，不展示虚构百分比。
 状态栏/消息中心电量明确为平板电量，首次有效Android广播前显示未知；不代表底盘电池。
 里程计置信度与导航就绪分开，过期状态不显示为正常。RPP通过既有任务消息提供侧障/前障距离、扫描过期和TF失败原因。
 本轮不增加Protobuf字段、不安装APK。模块验证使用DevDebug flavor：
 `gradlew :core:tcp:testDevDebugUnitTest :feature:common:testDevDebugUnitTest :feature:device:testDevDebugUnitTest :feature:map:testDevDebugUnitTest`。
+
+### 历史浏览与区域工艺参数（2026-11-02）
+
+历史轨迹页只查询记录、实际轨迹、底图和尺寸，不再通过 PathPointPlan 重新规划。没有归档规划路径时明确显示仅有实际轨迹；板端执行活动、RUNNING或PAUSED期间拒绝外部规划，避免改 task_id、切图或把状态改成READY。
+
+每个作业区域独立拥有一套工艺，身份为 `(map_id, region_id)`。工艺类型、磨料、混凝土强度、压力、行走速度和磨盘RPM，保存在地图overlay的 `regions.work_regions[].process_settings`；不再保存/采用地图共用工艺。
+工艺编辑页只修改当前工作区草稿；保存工作区时，以确定的region_id提交 SettingsWriteRequest.process/process_map_id/process_region_id，并等待精确ACK及区域回显。保存失败不会标记工作区完成。新地图保存时复制所有区域及各自工艺；复制失败不能报告全部保存成功。区域改名/修改几何保留自己的工艺，删除区域同时删除其工艺。
+MapRegionPointResponse.work_regions[].region.process 返回各区域工艺，APP按map_id与region_id恢复各自草稿，不从邻区或地图共用值补齐。
+
+任务启动先校验参与区域工艺并复制为执行快照，从当前实际路径进度对应的区域恢复速度与RPM；缺失工艺的区域明确阻止启动，需在APP重新确认并保存。旧地图/旧区域不会自动继承先前错误的地图共用工艺或手动遥控速度。
+运行中按当前路径投影点的region/lap选择工艺，不按前视目标点提前切区。同一区域重复轮次沿用该区域工艺；连接段不切换工艺，继续原有转场磨盘策略。
+切区先关闭轮速转发并清零，再应用区域速度与磨盘RPM，成功后恢复；失败暂停，STOP/急停可撤销在途切换。恢复任务前也先核对当前位置区域工艺。切区不重新读地图文件。
+TaskRuntimeSettings的显式临时任务参数保持更高优先级；切区更新其恢复基准，结束临时设置后回到当前区域工艺。普通遥控设置不修改区域工艺；运行/暂停期间全局底盘设置及工艺编辑仍拒绝。
+压力等元数据仅保存/显示，现有底盘执行链实际下发行走速度和磨盘RPM；速度仍受导航安全上限约束。
+
+需配套更新APP与板端。旧区域须逐个确认保存工艺。本次仅源码和离线验证，未部署、未安装、未进行实机作业验收。
+回归：scheduler `test_history_process.py`、`test_execution_settings.py`、`test_task_runtime_parameters.py`、急停/续跑回归；APP `core:tcp/MapProcessSettingsTest`、`feature:map/MapProcessSettingsTest`。

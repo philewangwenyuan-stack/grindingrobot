@@ -74,7 +74,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                 delay(25)
                 val current = now()
                 for (peer in listOfNotNull(dataPeer, controlPeer)) {
-                    if (peer.writingAt > 0 && current - peer.writingAt >= 500) {
+                    if (peer.writingAt > 0 && current - peer.writingAt >= (if (peer.control) 1000 else 500)) {
                         drop(peer, "通道写入超时")
                     } else if (peer.ready && current - peer.lastSessionAck >= 3000) {
                         drop(peer, "会话心跳确认超时")
@@ -89,7 +89,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                         cancelManual("界面已暂停或无响应")
                     }
                     val oldestPending = peer.manualAcks.values.minOfOrNull { it.sentAt }
-                    if (oldestPending != null && current - oldestPending >= 500) {
+                    if (oldestPending != null && current - oldestPending >= 1000) {
                         drop(peer, "遥控确认超时")
                     } else if (current - lastManualSent >= 100) {
                         synchronized(targetLock) {
@@ -255,7 +255,7 @@ class PairedTcpService internal constructor(private val runtime: ChannelRuntime,
                         if (item.manualEpoch != null && !item.stop) {
                             // Renew the latest speed on schedule; ACK latency must not
                             // become the robot's speed-renewal interval.
-                            if (manualAcks.size >= 8) {
+                            if (manualAcks.size >= 12) {
                                 drop(this@Peer, "遥控确认积压")
                                 return@launch
                             }

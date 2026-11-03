@@ -48,11 +48,18 @@ private val DriveMuted = Color(0xFF6D737D)
 
 /** Stop both on lifecycle exit and transient window focus loss; restore availability, never motion. */
 @Composable
-fun ManualDriveLifecycle(onResume: () -> Unit, onStop: () -> Unit) {
+fun ManualDriveLifecycle(
+    onResume: () -> Unit,
+    onStop: () -> Unit,
+    onWindowFocusLost: () -> Unit = onStop,
+    onWindowFocusGained: () -> Unit = onResume,
+) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val view = LocalView.current
     val resume by rememberUpdatedState(onResume)
     val stop by rememberUpdatedState(onStop)
+    val blur by rememberUpdatedState(onWindowFocusLost)
+    val focusGained by rememberUpdatedState(onWindowFocusGained)
     DisposableEffect(lifecycle, view) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
@@ -62,8 +69,8 @@ fun ManualDriveLifecycle(onResume: () -> Unit, onStop: () -> Unit) {
             }
         }
         val focus = ViewTreeObserver.OnWindowFocusChangeListener { focused ->
-            if (!focused) stop()
-            else if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) resume()
+            if (!focused) blur()
+            else if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) focusGained()
         }
         lifecycle.addObserver(observer)
         view.viewTreeObserver.addOnWindowFocusChangeListener(focus)

@@ -117,6 +117,7 @@ class SlLinkManager @Inject constructor(
     internal val emergencyStopReplies = CommandReplyTracker()
     internal val emergencyReleaseReplies = CommandReplyTracker()
     internal val taskRuntimeReplies = CommandReplyTracker()
+    internal val mapProcessReplies = CommandReplyTracker()
     private val monitor = SlLinkMonitor()
     private val mapTransferLock = Any()
     private var activeMapRequestId: Long? = null
@@ -1820,6 +1821,10 @@ class SlLinkManager @Inject constructor(
                 return
             }
             val response = SlLink.SettingsWriteResponse.parseFrom(payload)
+            mapProcessReplies.complete(
+                ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = "",
+                reply = mapProcessReply(response), allowUnsequenced = false, requireExactAck = true
+            )
             LogUtils.d(
                 "写入参数响应: " +
                     "result=${response.result}, " +
@@ -2116,7 +2121,11 @@ internal fun parseMapRegionPoints(response: SlLink.MapRegionPointResponse): MapR
         points = pointsList.map { point ->
             require(point.x.isFinite() && point.y.isFinite()) { "区域顶点无效" }
             MapPreviewPointPayload(point.x, point.y)
-        }, enabled = enabled
+        }, enabled = enabled,
+        processSettings = if (hasProcess()) com.sinelynx.grindingrobot.core.model.state.WorkRegionProcessSettingsPayload(
+            process.runSpeed, process.discSpeedRpm, process.processType, process.grindingParameter,
+            process.concreteStrength, process.pressure
+        ) else null
     )
     fun SlLink.Pose2D.pose(): MapRegionPosePayload {
         require(x.isFinite() && y.isFinite() && headingDeg.isFinite()) { "区域起终点无效" }

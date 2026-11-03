@@ -7,29 +7,23 @@ import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.core.model.state.MapImagePayload
 import com.sinelynx.grindingrobot.core.model.state.MapImageStream
 import com.sinelynx.grindingrobot.core.model.state.TaskPathPayload
-import com.sinelynx.grindingrobot.core.model.state.TaskPathStream
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
 import com.sinelynx.grindingrobot.core.model.state.TaskTrajectoryPagePayload
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import com.sinelynx.grindingrobot.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import java.util.UUID
 import javax.inject.Inject
 
-internal const val TASK_REPLAY_PATH_TIMEOUT_MS = 180_000L
 
 data class TaskReplayUiState(
     val executionId: String = "",
@@ -49,7 +43,7 @@ data class TaskReplayUiState(
     val isMapLoading: Boolean = false,
     val mapError: String? = null,
     val isPathLoading: Boolean = false,
-    val pathError: String? = null,
+    val pathError: String? = "该记录未提供归档规划路径，仅显示实际轨迹",
     val isRobotSettingsLoading: Boolean = false,
     val robotSettingsError: String? = null
 )
@@ -78,16 +72,6 @@ internal fun validatedNextTrajectoryIndex(page: TaskTrajectoryPagePayload): Int?
     return page.nextIndex.takeIf { it > page.startIndex }
 }
 
-internal fun replayPlannedPathError(sent: Boolean, path: TaskPathPayload?): String? = when {
-    !sent -> "规划路径请求发送失败"
-    path == null -> "规划路径加载超时"
-    !path.hasRenderablePoints -> path.message.ifBlank { "规划路径未返回数据" }
-    else -> null
-}
-
-internal fun TaskPathPayload.matchesReplayPathRequest(requestId: String): Boolean =
-    this.requestId == requestId
-
 @HiltViewModel
 class TaskReplayViewModel @Inject constructor(
     private val tcpManager: TcpManager,
@@ -100,11 +84,9 @@ class TaskReplayViewModel @Inject constructor(
     private var pageTimeoutJob: Job? = null
     private var mapTimeoutJob: Job? = null
     private var settingsTimeoutJob: Job? = null
-    private var pathRequestJob: Job? = null
     private var pendingStartIndex = 0
     private var loadedKey: Pair<String, String>? = null
     private var requestedMapId: String? = null
-    private var requestedPathKey: Pair<String, String>? = null
     private var mapRequestActive = false
 
     init {
@@ -150,9 +132,7 @@ class TaskReplayViewModel @Inject constructor(
         pageTimeoutJob?.cancel()
         mapTimeoutJob?.cancel()
         settingsTimeoutJob?.cancel()
-        pathRequestJob?.cancel()
         requestedMapId = null
-        requestedPathKey = null
         mapRequestActive = false
         val settings = replayAppState.robotSettings.value
         val robotWidth = settings?.robotWidth?.takeIf { it.isFinite() && it > 0.0 }
@@ -165,7 +145,7 @@ class TaskReplayViewModel @Inject constructor(
             robotFootprint = settings?.footprint.orEmpty(),
             isLoading = true,
             isMapLoading = true,
-            isPathLoading = true,
+            isPathLoading = false,
             isRobotSettingsLoading = robotWidth == null || robotLength == null
         )
         requestRobotSettingsIfNeeded(robotWidth == null || robotLength == null)
@@ -227,23 +207,12 @@ class TaskReplayViewModel @Inject constructor(
             )
         }
         requestMapIfNeeded(resolvedMapId)
-        requestPlannedPathIfNeeded(resolvedTaskId, resolvedMapId)
 
         val nextIndex = validatedNextTrajectoryIndex(page)
         if (!page.hasMore) {
             if (resolvedMapId.isBlank()) {
                 _uiState.update {
                     it.copy(isMapLoading = false, mapError = "任务轨迹未返回地图标识")
-                }
-            }
-            if (requestedPathKey == null) {
-                val message = when {
-                    resolvedTaskId.isBlank() -> "任务轨迹未返回任务标识，无法加载规划路径"
-                    resolvedMapId.isBlank() -> "任务轨迹未返回地图标识，无法加载规划路径"
-                    else -> null
-                }
-                if (message != null) {
-                    _uiState.update { it.copy(isPathLoading = false, pathError = message) }
                 }
             }
             return
@@ -253,44 +222,6 @@ class TaskReplayViewModel @Inject constructor(
             return
         }
         requestPage(nextIndex)
-    }
-
-    private fun requestPlannedPathIfNeeded(taskId: String, mapId: String) {
-        if (taskId.isBlank() || mapId.isBlank()) return
-        val key = taskId to mapId
-        if (requestedPathKey == key) return
-        pathRequestJob?.cancel()
-        requestedPathKey = key
-        _uiState.update {
-            it.copy(plannedPath = null, isPathLoading = true, pathError = null)
-        }
-        pathRequestJob = viewModelScope.launch {
-            val requestId = UUID.randomUUID().toString()
-            val reply = async(start = CoroutineStart.UNDISPATCHED) {
-                withTimeoutOrNull(TASK_REPLAY_PATH_TIMEOUT_MS) {
-                    TaskPathStream.results.first { it.matchesReplayPathRequest(requestId) }
-                }
-            }
-            val sent = tcpManager.requestPathPointPlan(
-                taskId = taskId,
-                mapId = mapId,
-                requestId = requestId,
-                forceReplan = false
-            )
-            val path = if (sent) reply.await() else {
-                reply.cancel()
-                null
-            }
-            if (requestedPathKey != key) return@launch
-            val error = replayPlannedPathError(sent, path)
-            _uiState.update {
-                it.copy(
-                    plannedPath = path?.takeIf { payload -> payload.hasRenderablePoints },
-                    isPathLoading = false,
-                    pathError = error
-                )
-            }
-        }
     }
 
     private fun requestMapIfNeeded(mapId: String) {
@@ -374,13 +305,12 @@ class TaskReplayViewModel @Inject constructor(
     private fun failTrajectory(message: String) {
         pageTimeoutJob?.cancel()
         val mapWasRequested = requestedMapId != null
-        val pathWasRequested = requestedPathKey != null
         _uiState.update {
             it.copy(
                 isLoading = false,
                 errorMessage = message,
                 isMapLoading = if (mapWasRequested) it.isMapLoading else false,
-                isPathLoading = if (pathWasRequested) it.isPathLoading else false
+                isPathLoading = false
             )
         }
         ToastUtils.showError(message)
@@ -390,7 +320,6 @@ class TaskReplayViewModel @Inject constructor(
         pageTimeoutJob?.cancel()
         mapTimeoutJob?.cancel()
         settingsTimeoutJob?.cancel()
-        pathRequestJob?.cancel()
         mapRequestActive = false
         TaskSchedulerStream.resetTaskTrajectoryPage()
         super.onCleared()

@@ -991,7 +991,10 @@ class TcpManager @Inject constructor(
             slLinkManager.emergencyStopReplies.resetConnection()
             slLinkManager.emergencyReleaseReplies.resetConnection()
         }
-        if (controlChannel != true) slLinkManager.taskRuntimeReplies.resetConnection()
+        if (controlChannel != true) {
+            slLinkManager.taskRuntimeReplies.resetConnection()
+            slLinkManager.mapProcessReplies.resetConnection()
+        }
     }
 
     suspend fun executeTaskCommand(
@@ -1136,6 +1139,15 @@ class TcpManager @Inject constructor(
         }
         val frameData = slLinkManager.requestSettingRead(builder.build().toByteArray(), dstId)
         return sendData(frameData)
+    }
+
+    /** Confirm a map recipe without actuating the chassis; old firmware cannot silently accept it. */
+    suspend fun executeMapProcessWrite(process: SlLink.MapProcessSettings, mapId: String?, regionId: String): DeviceCommandResult {
+        val request = buildMapProcessWriteRequest(process, mapId, regionId)
+        return executeConfirmedCommand(
+            slLinkManager.requestSettingWrite(request.toByteArray(), 0x10u),
+            slLinkManager.mapProcessReplies, "", "SAVE_MAP_PROCESS", 10_000L
+        )
     }
 
     /** Disc edits must not overwrite the persisted task speed with proto3's absent-field zero. */

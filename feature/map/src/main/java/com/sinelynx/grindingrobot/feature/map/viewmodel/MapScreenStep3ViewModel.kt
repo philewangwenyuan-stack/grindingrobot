@@ -353,7 +353,9 @@ class MapScreenStep3ViewModel @Inject constructor(
             val workspaces = payload.workRegions.filter { it.region.enabled }.mapIndexed { index, info ->
                 val region = info.region
                 val previous = existing[region.regionId]
-                val draft = (previous?.draft ?: createDefaultWorkspaceDraft()).copy(
+                val baseDraft = previous?.draft ?: createDefaultWorkspaceDraft()
+                val processDraft = region.processSettings?.let { baseDraft.withSavedProcess(it) } ?: baseDraft
+                val draft = processDraft.copy(
                     areaCode = region.regionName.removePrefix("wr_").ifBlank { (index + 1).toString().padStart(3, '0') },
                     boundaryConfigured = region.points.size >= 3, boundaryDrawMode = BoundaryDrawMode.POLYGON,
                     boundaryRectCornersM = emptyList(),
@@ -533,6 +535,11 @@ class MapScreenStep3ViewModel @Inject constructor(
         if (savedObstacleIds == null) {
             _uiState.update { it.copy(isWorkspaceSaving = false) }
             ToastUtils.showError("工作区保存失败，请重试")
+            return null
+        }
+        if (!persistMapProcess(draft, regionId)) {
+            _uiState.update { it.copy(isWorkspaceSaving = false) }
+            ToastUtils.showError("工艺参数保存未确认，请重试")
             return null
         }
         val savedItem = WorkspaceItem(
@@ -1085,17 +1092,19 @@ class MapScreenStep3ViewModel @Inject constructor(
         val pressureText = String.format("%.0f", draft.processPressure)
         LogUtils.d(
             "MapScreenStep3ViewModel",
-            "Process settings saved: type=${draft.processType}, " +
+            "Saving map process settings: type=${draft.processType}, " +
                 "parameter=${draft.grindingParameter.label}, strength=${draft.concreteStrength}, " +
                 "speed=${speedText}m/s, pressure=${pressureText}kg, " +
                 "discSpeed=${draft.discSpeedRpm}rpm"
         )
-        val settings = buildProcessChassisSettings(draft)
-        val sent = tcpManager.requestSettingWrite(chassisSettings = settings)
-        if (!sent) {
-            LogUtils.w("requestSettingWrite chassisSettings 发送失败")
-        }
+        // Keep the recipe in this workspace draft. It is persisted with the
+        // workspace's concrete region ID when saveWorkspace() is confirmed.
+        ToastUtils.show("工艺已更新，保存作业区域后生效")
     }
+
+    private suspend fun persistMapProcess(draft: WorkspaceDraft, regionId: String): Boolean =
+        tcpManager.executeMapProcessWrite(buildMapProcessSettings(draft), currentMapId, regionId) is
+            com.sinelynx.grindingrobot.core.tcp.DeviceCommandResult.Confirmed
 
     fun updateAreaCode(areaCode: String) {
         val normalized = areaCode.filter(Char::isDigit).take(3)
@@ -1318,10 +1327,29 @@ class MapScreenStep3ViewModel @Inject constructor(
 
 }
 
-internal fun buildProcessChassisSettings(draft: WorkspaceDraft): SlLink.ChassisSettings =
-    SlLink.ChassisSettings.newBuilder()
+internal fun buildMapProcessSettings(draft: WorkspaceDraft): SlLink.MapProcessSettings =
+    SlLink.MapProcessSettings.newBuilder()
         .setRunSpeed(draft.processSpeed.toFloat())
         .setDiscSpeedRpm(draft.discSpeedRpm)
+        .setProcessType(draft.processType.name)
+        .setGrindingParameter(draft.grindingParameter.name)
+        .setConcreteStrength(draft.concreteStrength.name)
+        .setPressure(draft.processPressure.toFloat())
         .build()
 
+internal fun WorkspaceDraft.withSavedProcess(process: SlLink.MapProcessSettings): WorkspaceDraft = copy(
+    processSpeed = process.runSpeed.toDouble(),
+    discSpeedRpm = process.discSpeedRpm,
+    processPressure = process.pressure.toDouble(),
+    processType = ProcessType.entries.firstOrNull { it.name == process.processType } ?: processType,
+    grindingParameter = GrindingParameter.entries.firstOrNull { it.name == process.grindingParameter } ?: grindingParameter,
+    concreteStrength = ConcreteStrength.entries.firstOrNull { it.name == process.concreteStrength } ?: concreteStrength
+)
 
+internal fun WorkspaceDraft.withSavedProcess(process: com.sinelynx.grindingrobot.core.model.state.WorkRegionProcessSettingsPayload): WorkspaceDraft = copy(
+    processSpeed = process.runSpeed.toDouble(), discSpeedRpm = process.discSpeedRpm,
+    processPressure = process.pressure.toDouble(),
+    processType = ProcessType.entries.firstOrNull { it.name == process.processType } ?: processType,
+    grindingParameter = GrindingParameter.entries.firstOrNull { it.name == process.grindingParameter } ?: grindingParameter,
+    concreteStrength = ConcreteStrength.entries.firstOrNull { it.name == process.concreteStrength } ?: concreteStrength
+)

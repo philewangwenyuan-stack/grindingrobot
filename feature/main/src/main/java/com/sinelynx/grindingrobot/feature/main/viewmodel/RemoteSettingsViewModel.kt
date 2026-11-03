@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
-import com.sinelynx.grindingrobot.core.tcp.ConnectionState
+import com.sinelynx.grindingrobot.core.model.state.manualTaskGate
 import com.sinelynx.grindingrobot.core.tcp.DeviceCommandResult
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
@@ -12,6 +12,8 @@ import com.sinelynx.grindingrobot.feature.common.control.ManualDriveController
 import com.sinelynx.grindingrobot.feature.common.control.ManualDriveState
 import com.sinelynx.grindingrobot.feature.common.control.ManualDriveTarget
 import com.sinelynx.grindingrobot.feature.common.control.TravelDirection
+import com.sinelynx.grindingrobot.feature.common.control.ManualTakeoverCoordinator
+import kotlinx.coroutines.CancellationException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +28,7 @@ data class RemoteSettingsUiState(
     val drive: ManualDriveState = ManualDriveState(),
     val turnCount: Int = 800,
     val showAutoModeJoystickDialog: Boolean = false,
+    val manualTakeoverPending: Boolean = false,
 )
 
 @HiltViewModel
@@ -36,22 +39,27 @@ class RemoteSettingsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(RemoteSettingsUiState())
     val uiState = _uiState.asStateFlow()
     private var screenActive = false
-    private var pendingTravel: TravelDirection? = null
-    private var pendingSteering = 0f
-    private var manualOverrideGranted = false
-    private var manualReadyTaskId: String? = null
-    private var lastWorkMode: Int? = null
-    private val controller = ManualDriveController(
+    private var windowFocused = false
+    private val controller: ManualDriveController = ManualDriveController(
         scope = viewModelScope,
-        canControl = { screenActive && tcpManager.isControlReady() &&
-            appState.runtimeTaskState.value.emergencyStopLatched != true },
+        canControl = { screenActive && windowFocused && tcpManager.isControlReady() &&
+            appState.runtimeTaskState.value.emergencyStopLatched != true &&
+            TaskSchedulerStream.taskStatusReport.value.manualTaskGate().known },
         send = ::sendTarget,
         onStateChanged = { value -> _uiState.update { it.copy(drive = value) } },
-        prepare = ::stopActiveTaskBeforeManualControl,
+        prepare = { takeover.canPrepareManual() },
         onPreparationFailed = {
-            manualOverrideGranted = false
             ToastUtils.showError("切换手动模式失败")
         },
+    )
+    private val takeover: ManualTakeoverCoordinator = ManualTakeoverCoordinator(
+        snapshot = { TaskSchedulerStream.taskStatusReport.value.manualTaskGate() },
+        stopTask = { id -> tcpManager.executeTaskCommand(
+            taskType = SlLink.TaskCommandType.TASK_CMD_STOP, taskId = id,
+            timeoutMs = 5_000L) is DeviceCommandResult.Confirmed },
+        stopMotion = { controller.stop() },
+        changed = { value -> _uiState.update { it.copy(
+            showAutoModeJoystickDialog = value.visible, manualTakeoverPending = value.pending) } },
     )
 
     init {
@@ -59,30 +67,15 @@ class RemoteSettingsViewModel @Inject constructor(
             tcpManager.manualCancellation.collect { stopControl() }
         }
         viewModelScope.launch {
-            combine(tcpManager.channelStatus, appState.runtimeTaskState) { connection, runtime ->
-                connection to runtime
-            }.collect { (connection, runtime) ->
-                val enteringAuto = runtime.workMode == SlLink.WorkMode.WORK_MODE_AUTO.number &&
-                    lastWorkMode != runtime.workMode
-                lastWorkMode = runtime.workMode
-                if (enteringAuto || !connection.controlReady || runtime.emergencyStopLatched == true) {
+            combine(tcpManager.channelStatus, appState.runtimeTaskState,
+                TaskSchedulerStream.taskStatusReport) { connection, runtime, report ->
+                Triple(connection, runtime, report)
+            }.collect { (connection, runtime, _) ->
+                takeover.observeTask()
+                if (!connection.controlReady || runtime.emergencyStopLatched == true) {
                     stopControl()
-                    manualOverrideGranted = false
-                    manualReadyTaskId = null
                 }
                 controller.refreshAvailability()
-            }
-        }
-        viewModelScope.launch {
-            TaskSchedulerStream.taskStatusReport.collect { report ->
-                val id = report?.taskId?.trim().orEmpty()
-                if (id.isNotBlank() && manualReadyTaskId != null && manualReadyTaskId != id) {
-                    stopControl()
-                    manualOverrideGranted = false
-                }
-                if (id.isBlank() || (manualReadyTaskId != null && manualReadyTaskId != id)) {
-                    manualReadyTaskId = null
-                }
             }
         }
         viewModelScope.launch {
@@ -96,13 +89,25 @@ class RemoteSettingsViewModel @Inject constructor(
     fun onScreenEnter() {
         if (!screenActive) tcpManager.requestSettingRead(true, null)
         screenActive = true
+        windowFocused = true
         controller.refreshAvailability()
     }
 
     fun onScreenExit() {
         screenActive = false
+        windowFocused = false
         stopControl()
-        manualOverrideGranted = false
+        controller.refreshAvailability()
+    }
+
+    fun onWindowFocusLost() {
+        windowFocused = false
+        if (takeover.state.visible) takeover.windowBlurred() else stopControl()
+        controller.refreshAvailability()
+    }
+
+    fun onWindowFocusGained() {
+        windowFocused = true
         controller.refreshAvailability()
     }
 
@@ -111,28 +116,25 @@ class RemoteSettingsViewModel @Inject constructor(
     fun onTravelClick(direction: TravelDirection) {
         if (!controller.state.enabled) return
         if (needsAutoConfirmation()) {
-            pendingTravel = direction
-            _uiState.update { it.copy(showAutoModeJoystickDialog = true) }
+            if (!takeover.request()) ToastUtils.showError("等待有效任务状态后重试")
         } else controller.travel(direction)
     }
 
     fun onSteeringChanged(value: Float, epoch: Int) {
         if (epoch != controller.state.inputEpoch || !controller.state.enabled) return
         if (needsAutoConfirmation()) {
-            pendingSteering = value.coerceIn(-1f, 1f)
-            if (value != 0f) _uiState.update { it.copy(showAutoModeJoystickDialog = true) }
+            if (value != 0f && !takeover.request()) ToastUtils.showError("等待有效任务状态后重试")
         } else controller.steer(value, epoch)
     }
 
     fun onSteeringCancelled(epoch: Int) {
-        if (epoch == controller.state.inputEpoch) stopControl()
+        if (epoch == controller.state.inputEpoch) {
+            if (takeover.state.visible) takeover.windowBlurred() else stopControl()
+        }
     }
 
     fun stopControl() {
-        pendingTravel = null
-        pendingSteering = 0f
-        _uiState.update { it.copy(showAutoModeJoystickDialog = false) }
-        controller.stop()
+        takeover.cancel()
     }
 
     fun updateRunSpeed(value: Float) = controller.setSpeed(value)
@@ -151,34 +153,26 @@ class RemoteSettingsViewModel @Inject constructor(
     }
 
     fun confirmAutoModeJoystickDialog() {
-        val direction = pendingTravel
-        val steering = pendingSteering
-        pendingTravel = null
-        pendingSteering = 0f
-        _uiState.update { it.copy(showAutoModeJoystickDialog = false) }
-        if (!screenActive || !tcpManager.isControlReady() || appState.runtimeTaskState.value.emergencyStopLatched == true) return
-        manualOverrideGranted = true
-        direction?.let(controller::travel)
-        if (steering != 0f) controller.steer(steering, controller.state.inputEpoch)
+        if (!screenActive || !tcpManager.isControlReady() || appState.runtimeTaskState.value.emergencyStopLatched == true) {
+            stopControl(); return
+        }
+        viewModelScope.launch {
+            val result = try { takeover.confirm() }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { takeover.cancel(); false }
+            if (result == true) ToastUtils.showSuccess("已切换手动，请重新操作遥控")
+            else if (result == false) ToastUtils.showError("停止自动任务失败，请重试")
+            controller.refreshAvailability()
+        }
     }
 
     fun cancelAutoModeJoystickDialog() = stopControl()
 
     private fun needsAutoConfirmation() =
-        appState.runtimeTaskState.value.workMode == SlLink.WorkMode.WORK_MODE_AUTO.number && !manualOverrideGranted
+        takeover.needsConfirmation()
 
     private fun sendTarget(target: ManualDriveTarget): Boolean = tcpManager.sendManualDriveCommand(
         target.remoteX, target.remoteY, target.speedRatio, target.maxSpeedMps, target.maxTurnSpeedRatio)
-
-    private suspend fun stopActiveTaskBeforeManualControl(): Boolean {
-        val id = TaskSchedulerStream.taskStatusReport.value?.taskId?.trim().orEmpty()
-        if (id.isNotBlank() && manualReadyTaskId == id) return true
-        val result = tcpManager.executeTaskCommand(
-            taskType = SlLink.TaskCommandType.TASK_CMD_STOP, taskId = id, timeoutMs = 5_000L)
-        if (result !is DeviceCommandResult.Confirmed) return false
-        manualReadyTaskId = id
-        return true
-    }
 
     override fun onCleared() {
         onScreenExit()

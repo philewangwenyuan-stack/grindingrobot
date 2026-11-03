@@ -5430,6 +5430,33 @@ public final class SlLink {
      */
     com.google.protobuf.ByteString
         getGlobalDirectionBytes();
+
+    /**
+     * <pre>
+     * Recipe belongs to this work region, not to the whole map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 10;</code>
+     * @return Whether the process field is set.
+     */
+    boolean hasProcess();
+    /**
+     * <pre>
+     * Recipe belongs to this work region, not to the whole map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 10;</code>
+     * @return The process.
+     */
+    sl_link.SlLink.MapProcessSettings getProcess();
+    /**
+     * <pre>
+     * Recipe belongs to this work region, not to the whole map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 10;</code>
+     */
+    sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder();
   }
   /**
    * Protobuf type {@code sl_link.PolygonRegion}
@@ -5471,6 +5498,7 @@ public final class SlLink {
               sl_link.SlLink.PolygonRegion.class, sl_link.SlLink.PolygonRegion.Builder.class);
     }
 
+    private int bitField0_;
     public static final int NAME_FIELD_NUMBER = 1;
     @SuppressWarnings("serial")
     private volatile java.lang.Object name_ = "";
@@ -5701,6 +5729,44 @@ public final class SlLink {
       }
     }
 
+    public static final int PROCESS_FIELD_NUMBER = 10;
+    private sl_link.SlLink.MapProcessSettings process_;
+    /**
+     * <pre>
+     * Recipe belongs to this work region, not to the whole map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 10;</code>
+     * @return Whether the process field is set.
+     */
+    @java.lang.Override
+    public boolean hasProcess() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * Recipe belongs to this work region, not to the whole map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 10;</code>
+     * @return The process.
+     */
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettings getProcess() {
+      return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+    }
+    /**
+     * <pre>
+     * Recipe belongs to this work region, not to the whole map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 10;</code>
+     */
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder() {
+      return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -5741,6 +5807,9 @@ public final class SlLink {
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(globalDirection_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 9, globalDirection_);
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeMessage(10, getProcess());
       }
       getUnknownFields().writeTo(output);
     }
@@ -5784,6 +5853,10 @@ public final class SlLink {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(globalDirection_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, globalDirection_);
       }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(10, getProcess());
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -5816,6 +5889,11 @@ public final class SlLink {
       if (regionType_ != other.regionType_) return false;
       if (!getGlobalDirection()
           .equals(other.getGlobalDirection())) return false;
+      if (hasProcess() != other.hasProcess()) return false;
+      if (hasProcess()) {
+        if (!getProcess()
+            .equals(other.getProcess())) return false;
+      }
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -5849,6 +5927,10 @@ public final class SlLink {
       hash = (53 * hash) + regionType_;
       hash = (37 * hash) + GLOBAL_DIRECTION_FIELD_NUMBER;
       hash = (53 * hash) + getGlobalDirection().hashCode();
+      if (hasProcess()) {
+        hash = (37 * hash) + PROCESS_FIELD_NUMBER;
+        hash = (53 * hash) + getProcess().hashCode();
+      }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -5968,13 +6050,20 @@ public final class SlLink {
 
       // Construct using sl_link.SlLink.PolygonRegion.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getPointsFieldBuilder();
+          getProcessFieldBuilder();
+        }
       }
       @java.lang.Override
       public Builder clear() {
@@ -5995,6 +6084,11 @@ public final class SlLink {
         closed_ = false;
         regionType_ = 0;
         globalDirection_ = "";
+        process_ = null;
+        if (processBuilder_ != null) {
+          processBuilder_.dispose();
+          processBuilder_ = null;
+        }
         return this;
       }
 
@@ -6065,6 +6159,14 @@ public final class SlLink {
         if (((from_bitField0_ & 0x00000100) != 0)) {
           result.globalDirection_ = globalDirection_;
         }
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000200) != 0)) {
+          result.process_ = processBuilder_ == null
+              ? process_
+              : processBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -6167,6 +6269,9 @@ public final class SlLink {
           bitField0_ |= 0x00000100;
           onChanged();
         }
+        if (other.hasProcess()) {
+          mergeProcess(other.getProcess());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -6246,6 +6351,13 @@ public final class SlLink {
                 bitField0_ |= 0x00000100;
                 break;
               } // case 74
+              case 82: {
+                input.readMessage(
+                    getProcessFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000200;
+                break;
+              } // case 82
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -6923,6 +7035,163 @@ public final class SlLink {
         bitField0_ |= 0x00000100;
         onChanged();
         return this;
+      }
+
+      private sl_link.SlLink.MapProcessSettings process_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder> processBuilder_;
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       * @return Whether the process field is set.
+       */
+      public boolean hasProcess() {
+        return ((bitField0_ & 0x00000200) != 0);
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       * @return The process.
+       */
+      public sl_link.SlLink.MapProcessSettings getProcess() {
+        if (processBuilder_ == null) {
+          return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+        } else {
+          return processBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      public Builder setProcess(sl_link.SlLink.MapProcessSettings value) {
+        if (processBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          process_ = value;
+        } else {
+          processBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      public Builder setProcess(
+          sl_link.SlLink.MapProcessSettings.Builder builderForValue) {
+        if (processBuilder_ == null) {
+          process_ = builderForValue.build();
+        } else {
+          processBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      public Builder mergeProcess(sl_link.SlLink.MapProcessSettings value) {
+        if (processBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) != 0) &&
+            process_ != null &&
+            process_ != sl_link.SlLink.MapProcessSettings.getDefaultInstance()) {
+            getProcessBuilder().mergeFrom(value);
+          } else {
+            process_ = value;
+          }
+        } else {
+          processBuilder_.mergeFrom(value);
+        }
+        if (process_ != null) {
+          bitField0_ |= 0x00000200;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      public Builder clearProcess() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        process_ = null;
+        if (processBuilder_ != null) {
+          processBuilder_.dispose();
+          processBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      public sl_link.SlLink.MapProcessSettings.Builder getProcessBuilder() {
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return getProcessFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      public sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder() {
+        if (processBuilder_ != null) {
+          return processBuilder_.getMessageOrBuilder();
+        } else {
+          return process_ == null ?
+              sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+        }
+      }
+      /**
+       * <pre>
+       * Recipe belongs to this work region, not to the whole map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 10;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder>
+          getProcessFieldBuilder() {
+        if (processBuilder_ == null) {
+          processBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder>(
+                  getProcess(),
+                  getParentForChildren(),
+                  isClean());
+          process_ = null;
+        }
+        return processBuilder_;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -7835,6 +8104,1082 @@ public final class SlLink {
 
     @java.lang.Override
     public sl_link.SlLink.ChassisSettings getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface MapProcessSettingsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:sl_link.MapProcessSettings)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>float run_speed = 1;</code>
+     * @return The runSpeed.
+     */
+    float getRunSpeed();
+
+    /**
+     * <code>uint32 disc_speed_rpm = 2;</code>
+     * @return The discSpeedRpm.
+     */
+    int getDiscSpeedRpm();
+
+    /**
+     * <code>string process_type = 3;</code>
+     * @return The processType.
+     */
+    java.lang.String getProcessType();
+    /**
+     * <code>string process_type = 3;</code>
+     * @return The bytes for processType.
+     */
+    com.google.protobuf.ByteString
+        getProcessTypeBytes();
+
+    /**
+     * <code>string grinding_parameter = 4;</code>
+     * @return The grindingParameter.
+     */
+    java.lang.String getGrindingParameter();
+    /**
+     * <code>string grinding_parameter = 4;</code>
+     * @return The bytes for grindingParameter.
+     */
+    com.google.protobuf.ByteString
+        getGrindingParameterBytes();
+
+    /**
+     * <code>string concrete_strength = 5;</code>
+     * @return The concreteStrength.
+     */
+    java.lang.String getConcreteStrength();
+    /**
+     * <code>string concrete_strength = 5;</code>
+     * @return The bytes for concreteStrength.
+     */
+    com.google.protobuf.ByteString
+        getConcreteStrengthBytes();
+
+    /**
+     * <code>float pressure = 6;</code>
+     * @return The pressure.
+     */
+    float getPressure();
+  }
+  /**
+   * <pre>
+   * Work-region recipe identified by (map_id, region_id). Manual writes never update it.
+   * </pre>
+   *
+   * Protobuf type {@code sl_link.MapProcessSettings}
+   */
+  public static final class MapProcessSettings extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:sl_link.MapProcessSettings)
+      MapProcessSettingsOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use MapProcessSettings.newBuilder() to construct.
+    private MapProcessSettings(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private MapProcessSettings() {
+      processType_ = "";
+      grindingParameter_ = "";
+      concreteStrength_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new MapProcessSettings();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return sl_link.SlLink.internal_static_sl_link_MapProcessSettings_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return sl_link.SlLink.internal_static_sl_link_MapProcessSettings_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              sl_link.SlLink.MapProcessSettings.class, sl_link.SlLink.MapProcessSettings.Builder.class);
+    }
+
+    public static final int RUN_SPEED_FIELD_NUMBER = 1;
+    private float runSpeed_ = 0F;
+    /**
+     * <code>float run_speed = 1;</code>
+     * @return The runSpeed.
+     */
+    @java.lang.Override
+    public float getRunSpeed() {
+      return runSpeed_;
+    }
+
+    public static final int DISC_SPEED_RPM_FIELD_NUMBER = 2;
+    private int discSpeedRpm_ = 0;
+    /**
+     * <code>uint32 disc_speed_rpm = 2;</code>
+     * @return The discSpeedRpm.
+     */
+    @java.lang.Override
+    public int getDiscSpeedRpm() {
+      return discSpeedRpm_;
+    }
+
+    public static final int PROCESS_TYPE_FIELD_NUMBER = 3;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object processType_ = "";
+    /**
+     * <code>string process_type = 3;</code>
+     * @return The processType.
+     */
+    @java.lang.Override
+    public java.lang.String getProcessType() {
+      java.lang.Object ref = processType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        processType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string process_type = 3;</code>
+     * @return The bytes for processType.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getProcessTypeBytes() {
+      java.lang.Object ref = processType_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        processType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int GRINDING_PARAMETER_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object grindingParameter_ = "";
+    /**
+     * <code>string grinding_parameter = 4;</code>
+     * @return The grindingParameter.
+     */
+    @java.lang.Override
+    public java.lang.String getGrindingParameter() {
+      java.lang.Object ref = grindingParameter_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        grindingParameter_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string grinding_parameter = 4;</code>
+     * @return The bytes for grindingParameter.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getGrindingParameterBytes() {
+      java.lang.Object ref = grindingParameter_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        grindingParameter_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CONCRETE_STRENGTH_FIELD_NUMBER = 5;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object concreteStrength_ = "";
+    /**
+     * <code>string concrete_strength = 5;</code>
+     * @return The concreteStrength.
+     */
+    @java.lang.Override
+    public java.lang.String getConcreteStrength() {
+      java.lang.Object ref = concreteStrength_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        concreteStrength_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string concrete_strength = 5;</code>
+     * @return The bytes for concreteStrength.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getConcreteStrengthBytes() {
+      java.lang.Object ref = concreteStrength_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        concreteStrength_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PRESSURE_FIELD_NUMBER = 6;
+    private float pressure_ = 0F;
+    /**
+     * <code>float pressure = 6;</code>
+     * @return The pressure.
+     */
+    @java.lang.Override
+    public float getPressure() {
+      return pressure_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (java.lang.Float.floatToRawIntBits(runSpeed_) != 0) {
+        output.writeFloat(1, runSpeed_);
+      }
+      if (discSpeedRpm_ != 0) {
+        output.writeUInt32(2, discSpeedRpm_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, processType_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(grindingParameter_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, grindingParameter_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(concreteStrength_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, concreteStrength_);
+      }
+      if (java.lang.Float.floatToRawIntBits(pressure_) != 0) {
+        output.writeFloat(6, pressure_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (java.lang.Float.floatToRawIntBits(runSpeed_) != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(1, runSpeed_);
+      }
+      if (discSpeedRpm_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(2, discSpeedRpm_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, processType_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(grindingParameter_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, grindingParameter_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(concreteStrength_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, concreteStrength_);
+      }
+      if (java.lang.Float.floatToRawIntBits(pressure_) != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(6, pressure_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof sl_link.SlLink.MapProcessSettings)) {
+        return super.equals(obj);
+      }
+      sl_link.SlLink.MapProcessSettings other = (sl_link.SlLink.MapProcessSettings) obj;
+
+      if (java.lang.Float.floatToIntBits(getRunSpeed())
+          != java.lang.Float.floatToIntBits(
+              other.getRunSpeed())) return false;
+      if (getDiscSpeedRpm()
+          != other.getDiscSpeedRpm()) return false;
+      if (!getProcessType()
+          .equals(other.getProcessType())) return false;
+      if (!getGrindingParameter()
+          .equals(other.getGrindingParameter())) return false;
+      if (!getConcreteStrength()
+          .equals(other.getConcreteStrength())) return false;
+      if (java.lang.Float.floatToIntBits(getPressure())
+          != java.lang.Float.floatToIntBits(
+              other.getPressure())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + RUN_SPEED_FIELD_NUMBER;
+      hash = (53 * hash) + java.lang.Float.floatToIntBits(
+          getRunSpeed());
+      hash = (37 * hash) + DISC_SPEED_RPM_FIELD_NUMBER;
+      hash = (53 * hash) + getDiscSpeedRpm();
+      hash = (37 * hash) + PROCESS_TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getProcessType().hashCode();
+      hash = (37 * hash) + GRINDING_PARAMETER_FIELD_NUMBER;
+      hash = (53 * hash) + getGrindingParameter().hashCode();
+      hash = (37 * hash) + CONCRETE_STRENGTH_FIELD_NUMBER;
+      hash = (53 * hash) + getConcreteStrength().hashCode();
+      hash = (37 * hash) + PRESSURE_FIELD_NUMBER;
+      hash = (53 * hash) + java.lang.Float.floatToIntBits(
+          getPressure());
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static sl_link.SlLink.MapProcessSettings parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static sl_link.SlLink.MapProcessSettings parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static sl_link.SlLink.MapProcessSettings parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(sl_link.SlLink.MapProcessSettings prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * Work-region recipe identified by (map_id, region_id). Manual writes never update it.
+     * </pre>
+     *
+     * Protobuf type {@code sl_link.MapProcessSettings}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:sl_link.MapProcessSettings)
+        sl_link.SlLink.MapProcessSettingsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return sl_link.SlLink.internal_static_sl_link_MapProcessSettings_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return sl_link.SlLink.internal_static_sl_link_MapProcessSettings_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                sl_link.SlLink.MapProcessSettings.class, sl_link.SlLink.MapProcessSettings.Builder.class);
+      }
+
+      // Construct using sl_link.SlLink.MapProcessSettings.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        runSpeed_ = 0F;
+        discSpeedRpm_ = 0;
+        processType_ = "";
+        grindingParameter_ = "";
+        concreteStrength_ = "";
+        pressure_ = 0F;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return sl_link.SlLink.internal_static_sl_link_MapProcessSettings_descriptor;
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.MapProcessSettings getDefaultInstanceForType() {
+        return sl_link.SlLink.MapProcessSettings.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.MapProcessSettings build() {
+        sl_link.SlLink.MapProcessSettings result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public sl_link.SlLink.MapProcessSettings buildPartial() {
+        sl_link.SlLink.MapProcessSettings result = new sl_link.SlLink.MapProcessSettings(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(sl_link.SlLink.MapProcessSettings result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.runSpeed_ = runSpeed_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.discSpeedRpm_ = discSpeedRpm_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.processType_ = processType_;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.grindingParameter_ = grindingParameter_;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.concreteStrength_ = concreteStrength_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.pressure_ = pressure_;
+        }
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof sl_link.SlLink.MapProcessSettings) {
+          return mergeFrom((sl_link.SlLink.MapProcessSettings)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(sl_link.SlLink.MapProcessSettings other) {
+        if (other == sl_link.SlLink.MapProcessSettings.getDefaultInstance()) return this;
+        if (other.getRunSpeed() != 0F) {
+          setRunSpeed(other.getRunSpeed());
+        }
+        if (other.getDiscSpeedRpm() != 0) {
+          setDiscSpeedRpm(other.getDiscSpeedRpm());
+        }
+        if (!other.getProcessType().isEmpty()) {
+          processType_ = other.processType_;
+          bitField0_ |= 0x00000004;
+          onChanged();
+        }
+        if (!other.getGrindingParameter().isEmpty()) {
+          grindingParameter_ = other.grindingParameter_;
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        if (!other.getConcreteStrength().isEmpty()) {
+          concreteStrength_ = other.concreteStrength_;
+          bitField0_ |= 0x00000010;
+          onChanged();
+        }
+        if (other.getPressure() != 0F) {
+          setPressure(other.getPressure());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 13: {
+                runSpeed_ = input.readFloat();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 13
+              case 16: {
+                discSpeedRpm_ = input.readUInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 26: {
+                processType_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              case 34: {
+                grindingParameter_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              case 42: {
+                concreteStrength_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
+              case 53: {
+                pressure_ = input.readFloat();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 53
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private float runSpeed_ ;
+      /**
+       * <code>float run_speed = 1;</code>
+       * @return The runSpeed.
+       */
+      @java.lang.Override
+      public float getRunSpeed() {
+        return runSpeed_;
+      }
+      /**
+       * <code>float run_speed = 1;</code>
+       * @param value The runSpeed to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRunSpeed(float value) {
+
+        runSpeed_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>float run_speed = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRunSpeed() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        runSpeed_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      private int discSpeedRpm_ ;
+      /**
+       * <code>uint32 disc_speed_rpm = 2;</code>
+       * @return The discSpeedRpm.
+       */
+      @java.lang.Override
+      public int getDiscSpeedRpm() {
+        return discSpeedRpm_;
+      }
+      /**
+       * <code>uint32 disc_speed_rpm = 2;</code>
+       * @param value The discSpeedRpm to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDiscSpeedRpm(int value) {
+
+        discSpeedRpm_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 disc_speed_rpm = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDiscSpeedRpm() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        discSpeedRpm_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object processType_ = "";
+      /**
+       * <code>string process_type = 3;</code>
+       * @return The processType.
+       */
+      public java.lang.String getProcessType() {
+        java.lang.Object ref = processType_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          processType_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string process_type = 3;</code>
+       * @return The bytes for processType.
+       */
+      public com.google.protobuf.ByteString
+          getProcessTypeBytes() {
+        java.lang.Object ref = processType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          processType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string process_type = 3;</code>
+       * @param value The processType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessType(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        processType_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_type = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearProcessType() {
+        processType_ = getDefaultInstance().getProcessType();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_type = 3;</code>
+       * @param value The bytes for processType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        processType_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object grindingParameter_ = "";
+      /**
+       * <code>string grinding_parameter = 4;</code>
+       * @return The grindingParameter.
+       */
+      public java.lang.String getGrindingParameter() {
+        java.lang.Object ref = grindingParameter_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          grindingParameter_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string grinding_parameter = 4;</code>
+       * @return The bytes for grindingParameter.
+       */
+      public com.google.protobuf.ByteString
+          getGrindingParameterBytes() {
+        java.lang.Object ref = grindingParameter_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          grindingParameter_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string grinding_parameter = 4;</code>
+       * @param value The grindingParameter to set.
+       * @return This builder for chaining.
+       */
+      public Builder setGrindingParameter(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        grindingParameter_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string grinding_parameter = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearGrindingParameter() {
+        grindingParameter_ = getDefaultInstance().getGrindingParameter();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string grinding_parameter = 4;</code>
+       * @param value The bytes for grindingParameter to set.
+       * @return This builder for chaining.
+       */
+      public Builder setGrindingParameterBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        grindingParameter_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object concreteStrength_ = "";
+      /**
+       * <code>string concrete_strength = 5;</code>
+       * @return The concreteStrength.
+       */
+      public java.lang.String getConcreteStrength() {
+        java.lang.Object ref = concreteStrength_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          concreteStrength_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string concrete_strength = 5;</code>
+       * @return The bytes for concreteStrength.
+       */
+      public com.google.protobuf.ByteString
+          getConcreteStrengthBytes() {
+        java.lang.Object ref = concreteStrength_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          concreteStrength_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string concrete_strength = 5;</code>
+       * @param value The concreteStrength to set.
+       * @return This builder for chaining.
+       */
+      public Builder setConcreteStrength(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        concreteStrength_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string concrete_strength = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearConcreteStrength() {
+        concreteStrength_ = getDefaultInstance().getConcreteStrength();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string concrete_strength = 5;</code>
+       * @param value The bytes for concreteStrength to set.
+       * @return This builder for chaining.
+       */
+      public Builder setConcreteStrengthBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        concreteStrength_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+
+      private float pressure_ ;
+      /**
+       * <code>float pressure = 6;</code>
+       * @return The pressure.
+       */
+      @java.lang.Override
+      public float getPressure() {
+        return pressure_;
+      }
+      /**
+       * <code>float pressure = 6;</code>
+       * @param value The pressure to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPressure(float value) {
+
+        pressure_ = value;
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>float pressure = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPressure() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        pressure_ = 0F;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:sl_link.MapProcessSettings)
+    }
+
+    // @@protoc_insertion_point(class_scope:sl_link.MapProcessSettings)
+    private static final sl_link.SlLink.MapProcessSettings DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new sl_link.SlLink.MapProcessSettings();
+    }
+
+    public static sl_link.SlLink.MapProcessSettings getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<MapProcessSettings>
+        PARSER = new com.google.protobuf.AbstractParser<MapProcessSettings>() {
+      @java.lang.Override
+      public MapProcessSettings parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<MapProcessSettings> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<MapProcessSettings> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettings getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -17291,6 +18636,57 @@ public final class SlLink {
      * @return The rppFieldMask.
      */
     long getRppFieldMask();
+
+    /**
+     * <pre>
+     * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 7;</code>
+     * @return Whether the process field is set.
+     */
+    boolean hasProcess();
+    /**
+     * <pre>
+     * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 7;</code>
+     * @return The process.
+     */
+    sl_link.SlLink.MapProcessSettings getProcess();
+    /**
+     * <pre>
+     * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 7;</code>
+     */
+    sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder();
+
+    /**
+     * <code>string process_map_id = 8;</code>
+     * @return The processMapId.
+     */
+    java.lang.String getProcessMapId();
+    /**
+     * <code>string process_map_id = 8;</code>
+     * @return The bytes for processMapId.
+     */
+    com.google.protobuf.ByteString
+        getProcessMapIdBytes();
+
+    /**
+     * <code>string process_region_id = 9;</code>
+     * @return The processRegionId.
+     */
+    java.lang.String getProcessRegionId();
+    /**
+     * <code>string process_region_id = 9;</code>
+     * @return The bytes for processRegionId.
+     */
+    com.google.protobuf.ByteString
+        getProcessRegionIdBytes();
   }
   /**
    * Protobuf type {@code sl_link.SettingsWriteRequest}
@@ -17305,6 +18701,8 @@ public final class SlLink {
       super(builder);
     }
     private SettingsWriteRequest() {
+      processMapId_ = "";
+      processRegionId_ = "";
     }
 
     @java.lang.Override
@@ -17449,6 +18847,122 @@ public final class SlLink {
       return rppFieldMask_;
     }
 
+    public static final int PROCESS_FIELD_NUMBER = 7;
+    private sl_link.SlLink.MapProcessSettings process_;
+    /**
+     * <pre>
+     * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 7;</code>
+     * @return Whether the process field is set.
+     */
+    @java.lang.Override
+    public boolean hasProcess() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <pre>
+     * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 7;</code>
+     * @return The process.
+     */
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettings getProcess() {
+      return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+    }
+    /**
+     * <pre>
+     * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+     * </pre>
+     *
+     * <code>.sl_link.MapProcessSettings process = 7;</code>
+     */
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder() {
+      return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+    }
+
+    public static final int PROCESS_MAP_ID_FIELD_NUMBER = 8;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object processMapId_ = "";
+    /**
+     * <code>string process_map_id = 8;</code>
+     * @return The processMapId.
+     */
+    @java.lang.Override
+    public java.lang.String getProcessMapId() {
+      java.lang.Object ref = processMapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        processMapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string process_map_id = 8;</code>
+     * @return The bytes for processMapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getProcessMapIdBytes() {
+      java.lang.Object ref = processMapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        processMapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PROCESS_REGION_ID_FIELD_NUMBER = 9;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object processRegionId_ = "";
+    /**
+     * <code>string process_region_id = 9;</code>
+     * @return The processRegionId.
+     */
+    @java.lang.Override
+    public java.lang.String getProcessRegionId() {
+      java.lang.Object ref = processRegionId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        processRegionId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string process_region_id = 9;</code>
+     * @return The bytes for processRegionId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getProcessRegionIdBytes() {
+      java.lang.Object ref = processRegionId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        processRegionId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -17480,6 +18994,15 @@ public final class SlLink {
       }
       if (rppFieldMask_ != 0L) {
         output.writeUInt64(6, rppFieldMask_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        output.writeMessage(7, getProcess());
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processMapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, processMapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processRegionId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, processRegionId_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -17513,6 +19036,16 @@ public final class SlLink {
       if (rppFieldMask_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(6, rppFieldMask_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, getProcess());
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processMapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, processMapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processRegionId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, processRegionId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -17550,6 +19083,15 @@ public final class SlLink {
           != other.getSaveRppDefault()) return false;
       if (getRppFieldMask()
           != other.getRppFieldMask()) return false;
+      if (hasProcess() != other.hasProcess()) return false;
+      if (hasProcess()) {
+        if (!getProcess()
+            .equals(other.getProcess())) return false;
+      }
+      if (!getProcessMapId()
+          .equals(other.getProcessMapId())) return false;
+      if (!getProcessRegionId()
+          .equals(other.getProcessRegionId())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -17582,6 +19124,14 @@ public final class SlLink {
       hash = (37 * hash) + RPP_FIELD_MASK_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getRppFieldMask());
+      if (hasProcess()) {
+        hash = (37 * hash) + PROCESS_FIELD_NUMBER;
+        hash = (53 * hash) + getProcess().hashCode();
+      }
+      hash = (37 * hash) + PROCESS_MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getProcessMapId().hashCode();
+      hash = (37 * hash) + PROCESS_REGION_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getProcessRegionId().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -17715,6 +19265,7 @@ public final class SlLink {
           getChassisFieldBuilder();
           getMapFieldBuilder();
           getRppFieldBuilder();
+          getProcessFieldBuilder();
         }
       }
       @java.lang.Override
@@ -17739,6 +19290,13 @@ public final class SlLink {
         applyRppTemporarily_ = false;
         saveRppDefault_ = false;
         rppFieldMask_ = 0L;
+        process_ = null;
+        if (processBuilder_ != null) {
+          processBuilder_.dispose();
+          processBuilder_ = null;
+        }
+        processMapId_ = "";
+        processRegionId_ = "";
         return this;
       }
 
@@ -17799,6 +19357,18 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000020) != 0)) {
           result.rppFieldMask_ = rppFieldMask_;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.process_ = processBuilder_ == null
+              ? process_
+              : processBuilder_.build();
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.processMapId_ = processMapId_;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          result.processRegionId_ = processRegionId_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -17865,6 +19435,19 @@ public final class SlLink {
         if (other.getRppFieldMask() != 0L) {
           setRppFieldMask(other.getRppFieldMask());
         }
+        if (other.hasProcess()) {
+          mergeProcess(other.getProcess());
+        }
+        if (!other.getProcessMapId().isEmpty()) {
+          processMapId_ = other.processMapId_;
+          bitField0_ |= 0x00000080;
+          onChanged();
+        }
+        if (!other.getProcessRegionId().isEmpty()) {
+          processRegionId_ = other.processRegionId_;
+          bitField0_ |= 0x00000100;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -17927,6 +19510,23 @@ public final class SlLink {
                 bitField0_ |= 0x00000020;
                 break;
               } // case 48
+              case 58: {
+                input.readMessage(
+                    getProcessFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 58
+              case 66: {
+                processMapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 66
+              case 74: {
+                processRegionId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 74
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -18432,6 +20032,307 @@ public final class SlLink {
         onChanged();
         return this;
       }
+
+      private sl_link.SlLink.MapProcessSettings process_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder> processBuilder_;
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       * @return Whether the process field is set.
+       */
+      public boolean hasProcess() {
+        return ((bitField0_ & 0x00000040) != 0);
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       * @return The process.
+       */
+      public sl_link.SlLink.MapProcessSettings getProcess() {
+        if (processBuilder_ == null) {
+          return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+        } else {
+          return processBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      public Builder setProcess(sl_link.SlLink.MapProcessSettings value) {
+        if (processBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          process_ = value;
+        } else {
+          processBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      public Builder setProcess(
+          sl_link.SlLink.MapProcessSettings.Builder builderForValue) {
+        if (processBuilder_ == null) {
+          process_ = builderForValue.build();
+        } else {
+          processBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      public Builder mergeProcess(sl_link.SlLink.MapProcessSettings value) {
+        if (processBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) != 0) &&
+            process_ != null &&
+            process_ != sl_link.SlLink.MapProcessSettings.getDefaultInstance()) {
+            getProcessBuilder().mergeFrom(value);
+          } else {
+            process_ = value;
+          }
+        } else {
+          processBuilder_.mergeFrom(value);
+        }
+        if (process_ != null) {
+          bitField0_ |= 0x00000040;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      public Builder clearProcess() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        process_ = null;
+        if (processBuilder_ != null) {
+          processBuilder_.dispose();
+          processBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      public sl_link.SlLink.MapProcessSettings.Builder getProcessBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getProcessFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      public sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder() {
+        if (processBuilder_ != null) {
+          return processBuilder_.getMessageOrBuilder();
+        } else {
+          return process_ == null ?
+              sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+        }
+      }
+      /**
+       * <pre>
+       * Explicit process edit; does not actuate the chassis. Empty map ID means current map.
+       * </pre>
+       *
+       * <code>.sl_link.MapProcessSettings process = 7;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder>
+          getProcessFieldBuilder() {
+        if (processBuilder_ == null) {
+          processBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder>(
+                  getProcess(),
+                  getParentForChildren(),
+                  isClean());
+          process_ = null;
+        }
+        return processBuilder_;
+      }
+
+      private java.lang.Object processMapId_ = "";
+      /**
+       * <code>string process_map_id = 8;</code>
+       * @return The processMapId.
+       */
+      public java.lang.String getProcessMapId() {
+        java.lang.Object ref = processMapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          processMapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string process_map_id = 8;</code>
+       * @return The bytes for processMapId.
+       */
+      public com.google.protobuf.ByteString
+          getProcessMapIdBytes() {
+        java.lang.Object ref = processMapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          processMapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string process_map_id = 8;</code>
+       * @param value The processMapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        processMapId_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_map_id = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearProcessMapId() {
+        processMapId_ = getDefaultInstance().getProcessMapId();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_map_id = 8;</code>
+       * @param value The bytes for processMapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        processMapId_ = value;
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object processRegionId_ = "";
+      /**
+       * <code>string process_region_id = 9;</code>
+       * @return The processRegionId.
+       */
+      public java.lang.String getProcessRegionId() {
+        java.lang.Object ref = processRegionId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          processRegionId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string process_region_id = 9;</code>
+       * @return The bytes for processRegionId.
+       */
+      public com.google.protobuf.ByteString
+          getProcessRegionIdBytes() {
+        java.lang.Object ref = processRegionId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          processRegionId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string process_region_id = 9;</code>
+       * @param value The processRegionId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessRegionId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        processRegionId_ = value;
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_region_id = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearProcessRegionId() {
+        processRegionId_ = getDefaultInstance().getProcessRegionId();
+        bitField0_ = (bitField0_ & ~0x00000100);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_region_id = 9;</code>
+       * @param value The bytes for processRegionId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessRegionIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        processRegionId_ = value;
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -18585,6 +20486,45 @@ public final class SlLink {
      * @return The geometryRequiresRestart.
      */
     boolean getGeometryRequiresRestart();
+
+    /**
+     * <code>.sl_link.MapProcessSettings process = 9;</code>
+     * @return Whether the process field is set.
+     */
+    boolean hasProcess();
+    /**
+     * <code>.sl_link.MapProcessSettings process = 9;</code>
+     * @return The process.
+     */
+    sl_link.SlLink.MapProcessSettings getProcess();
+    /**
+     * <code>.sl_link.MapProcessSettings process = 9;</code>
+     */
+    sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder();
+
+    /**
+     * <code>string process_map_id = 10;</code>
+     * @return The processMapId.
+     */
+    java.lang.String getProcessMapId();
+    /**
+     * <code>string process_map_id = 10;</code>
+     * @return The bytes for processMapId.
+     */
+    com.google.protobuf.ByteString
+        getProcessMapIdBytes();
+
+    /**
+     * <code>string process_region_id = 11;</code>
+     * @return The processRegionId.
+     */
+    java.lang.String getProcessRegionId();
+    /**
+     * <code>string process_region_id = 11;</code>
+     * @return The bytes for processRegionId.
+     */
+    com.google.protobuf.ByteString
+        getProcessRegionIdBytes();
   }
   /**
    * Protobuf type {@code sl_link.SettingsWriteResponse}
@@ -18601,6 +20541,8 @@ public final class SlLink {
     private SettingsWriteResponse() {
       result_ = 0;
       message_ = "";
+      processMapId_ = "";
+      processRegionId_ = "";
     }
 
     @java.lang.Override
@@ -18792,6 +20734,110 @@ public final class SlLink {
       return geometryRequiresRestart_;
     }
 
+    public static final int PROCESS_FIELD_NUMBER = 9;
+    private sl_link.SlLink.MapProcessSettings process_;
+    /**
+     * <code>.sl_link.MapProcessSettings process = 9;</code>
+     * @return Whether the process field is set.
+     */
+    @java.lang.Override
+    public boolean hasProcess() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>.sl_link.MapProcessSettings process = 9;</code>
+     * @return The process.
+     */
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettings getProcess() {
+      return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+    }
+    /**
+     * <code>.sl_link.MapProcessSettings process = 9;</code>
+     */
+    @java.lang.Override
+    public sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder() {
+      return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+    }
+
+    public static final int PROCESS_MAP_ID_FIELD_NUMBER = 10;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object processMapId_ = "";
+    /**
+     * <code>string process_map_id = 10;</code>
+     * @return The processMapId.
+     */
+    @java.lang.Override
+    public java.lang.String getProcessMapId() {
+      java.lang.Object ref = processMapId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        processMapId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string process_map_id = 10;</code>
+     * @return The bytes for processMapId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getProcessMapIdBytes() {
+      java.lang.Object ref = processMapId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        processMapId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PROCESS_REGION_ID_FIELD_NUMBER = 11;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object processRegionId_ = "";
+    /**
+     * <code>string process_region_id = 11;</code>
+     * @return The processRegionId.
+     */
+    @java.lang.Override
+    public java.lang.String getProcessRegionId() {
+      java.lang.Object ref = processRegionId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        processRegionId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string process_region_id = 11;</code>
+     * @return The bytes for processRegionId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getProcessRegionIdBytes() {
+      java.lang.Object ref = processRegionId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        processRegionId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -18829,6 +20875,15 @@ public final class SlLink {
       }
       if (geometryRequiresRestart_ != false) {
         output.writeBool(8, geometryRequiresRestart_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        output.writeMessage(9, getProcess());
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processMapId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 10, processMapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processRegionId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, processRegionId_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -18870,6 +20925,16 @@ public final class SlLink {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(8, geometryRequiresRestart_);
       }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, getProcess());
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processMapId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, processMapId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(processRegionId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, processRegionId_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -18909,6 +20974,15 @@ public final class SlLink {
           != other.getRppSaved()) return false;
       if (getGeometryRequiresRestart()
           != other.getGeometryRequiresRestart()) return false;
+      if (hasProcess() != other.hasProcess()) return false;
+      if (hasProcess()) {
+        if (!getProcess()
+            .equals(other.getProcess())) return false;
+      }
+      if (!getProcessMapId()
+          .equals(other.getProcessMapId())) return false;
+      if (!getProcessRegionId()
+          .equals(other.getProcessRegionId())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -18945,6 +21019,14 @@ public final class SlLink {
       hash = (37 * hash) + GEOMETRY_REQUIRES_RESTART_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getGeometryRequiresRestart());
+      if (hasProcess()) {
+        hash = (37 * hash) + PROCESS_FIELD_NUMBER;
+        hash = (53 * hash) + getProcess().hashCode();
+      }
+      hash = (37 * hash) + PROCESS_MAP_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getProcessMapId().hashCode();
+      hash = (37 * hash) + PROCESS_REGION_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getProcessRegionId().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -19078,6 +21160,7 @@ public final class SlLink {
           getChassisFieldBuilder();
           getMapFieldBuilder();
           getRppFieldBuilder();
+          getProcessFieldBuilder();
         }
       }
       @java.lang.Override
@@ -19104,6 +21187,13 @@ public final class SlLink {
         rppApplied_ = false;
         rppSaved_ = false;
         geometryRequiresRestart_ = false;
+        process_ = null;
+        if (processBuilder_ != null) {
+          processBuilder_.dispose();
+          processBuilder_ = null;
+        }
+        processMapId_ = "";
+        processRegionId_ = "";
         return this;
       }
 
@@ -19170,6 +21260,18 @@ public final class SlLink {
         }
         if (((from_bitField0_ & 0x00000080) != 0)) {
           result.geometryRequiresRestart_ = geometryRequiresRestart_;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          result.process_ = processBuilder_ == null
+              ? process_
+              : processBuilder_.build();
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000200) != 0)) {
+          result.processMapId_ = processMapId_;
+        }
+        if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.processRegionId_ = processRegionId_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -19244,6 +21346,19 @@ public final class SlLink {
         if (other.getGeometryRequiresRestart() != false) {
           setGeometryRequiresRestart(other.getGeometryRequiresRestart());
         }
+        if (other.hasProcess()) {
+          mergeProcess(other.getProcess());
+        }
+        if (!other.getProcessMapId().isEmpty()) {
+          processMapId_ = other.processMapId_;
+          bitField0_ |= 0x00000200;
+          onChanged();
+        }
+        if (!other.getProcessRegionId().isEmpty()) {
+          processRegionId_ = other.processRegionId_;
+          bitField0_ |= 0x00000400;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -19316,6 +21431,23 @@ public final class SlLink {
                 bitField0_ |= 0x00000080;
                 break;
               } // case 64
+              case 74: {
+                input.readMessage(
+                    getProcessFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 74
+              case 82: {
+                processMapId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000200;
+                break;
+              } // case 82
+              case 90: {
+                processRegionId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000400;
+                break;
+              } // case 90
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -19913,6 +22045,271 @@ public final class SlLink {
       public Builder clearGeometryRequiresRestart() {
         bitField0_ = (bitField0_ & ~0x00000080);
         geometryRequiresRestart_ = false;
+        onChanged();
+        return this;
+      }
+
+      private sl_link.SlLink.MapProcessSettings process_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder> processBuilder_;
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       * @return Whether the process field is set.
+       */
+      public boolean hasProcess() {
+        return ((bitField0_ & 0x00000100) != 0);
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       * @return The process.
+       */
+      public sl_link.SlLink.MapProcessSettings getProcess() {
+        if (processBuilder_ == null) {
+          return process_ == null ? sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+        } else {
+          return processBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      public Builder setProcess(sl_link.SlLink.MapProcessSettings value) {
+        if (processBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          process_ = value;
+        } else {
+          processBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      public Builder setProcess(
+          sl_link.SlLink.MapProcessSettings.Builder builderForValue) {
+        if (processBuilder_ == null) {
+          process_ = builderForValue.build();
+        } else {
+          processBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      public Builder mergeProcess(sl_link.SlLink.MapProcessSettings value) {
+        if (processBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) != 0) &&
+            process_ != null &&
+            process_ != sl_link.SlLink.MapProcessSettings.getDefaultInstance()) {
+            getProcessBuilder().mergeFrom(value);
+          } else {
+            process_ = value;
+          }
+        } else {
+          processBuilder_.mergeFrom(value);
+        }
+        if (process_ != null) {
+          bitField0_ |= 0x00000100;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      public Builder clearProcess() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        process_ = null;
+        if (processBuilder_ != null) {
+          processBuilder_.dispose();
+          processBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      public sl_link.SlLink.MapProcessSettings.Builder getProcessBuilder() {
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return getProcessFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      public sl_link.SlLink.MapProcessSettingsOrBuilder getProcessOrBuilder() {
+        if (processBuilder_ != null) {
+          return processBuilder_.getMessageOrBuilder();
+        } else {
+          return process_ == null ?
+              sl_link.SlLink.MapProcessSettings.getDefaultInstance() : process_;
+        }
+      }
+      /**
+       * <code>.sl_link.MapProcessSettings process = 9;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder>
+          getProcessFieldBuilder() {
+        if (processBuilder_ == null) {
+          processBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              sl_link.SlLink.MapProcessSettings, sl_link.SlLink.MapProcessSettings.Builder, sl_link.SlLink.MapProcessSettingsOrBuilder>(
+                  getProcess(),
+                  getParentForChildren(),
+                  isClean());
+          process_ = null;
+        }
+        return processBuilder_;
+      }
+
+      private java.lang.Object processMapId_ = "";
+      /**
+       * <code>string process_map_id = 10;</code>
+       * @return The processMapId.
+       */
+      public java.lang.String getProcessMapId() {
+        java.lang.Object ref = processMapId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          processMapId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string process_map_id = 10;</code>
+       * @return The bytes for processMapId.
+       */
+      public com.google.protobuf.ByteString
+          getProcessMapIdBytes() {
+        java.lang.Object ref = processMapId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          processMapId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string process_map_id = 10;</code>
+       * @param value The processMapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessMapId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        processMapId_ = value;
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_map_id = 10;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearProcessMapId() {
+        processMapId_ = getDefaultInstance().getProcessMapId();
+        bitField0_ = (bitField0_ & ~0x00000200);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_map_id = 10;</code>
+       * @param value The bytes for processMapId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessMapIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        processMapId_ = value;
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object processRegionId_ = "";
+      /**
+       * <code>string process_region_id = 11;</code>
+       * @return The processRegionId.
+       */
+      public java.lang.String getProcessRegionId() {
+        java.lang.Object ref = processRegionId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          processRegionId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string process_region_id = 11;</code>
+       * @return The bytes for processRegionId.
+       */
+      public com.google.protobuf.ByteString
+          getProcessRegionIdBytes() {
+        java.lang.Object ref = processRegionId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          processRegionId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string process_region_id = 11;</code>
+       * @param value The processRegionId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessRegionId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        processRegionId_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_region_id = 11;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearProcessRegionId() {
+        processRegionId_ = getDefaultInstance().getProcessRegionId();
+        bitField0_ = (bitField0_ & ~0x00000400);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string process_region_id = 11;</code>
+       * @param value The bytes for processRegionId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setProcessRegionIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        processRegionId_ = value;
+        bitField0_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -120075,6 +122472,11 @@ public final class SlLink {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_sl_link_ChassisSettings_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_sl_link_MapProcessSettings_descriptor;
+  private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_sl_link_MapProcessSettings_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_sl_link_MapSettings_descriptor;
   private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -120543,707 +122945,717 @@ public final class SlLink {
       "\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"H\n\020WifiStatusRe" +
       "port\022#\n\006result\030\001 \001(\0162\023.sl_link.WifiResul" +
       "t\022\017\n\007message\030\002 \001(\t\"$\n\014PolygonPoint\022\t\n\001x\030" +
-      "\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\342\001\n\rPolygonRegion\022\014\n\004na" +
+      "\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\220\002\n\rPolygonRegion\022\014\n\004na" +
       "me\030\001 \001(\t\022%\n\006points\030\002 \003(\0132\025.sl_link.Polyg" +
       "onPoint\022\021\n\tregion_id\030\003 \001(\t\022\020\n\010priority\030\004" +
       " \001(\r\022\017\n\007enabled\030\005 \001(\010\022\022\n\ncolor_argb\030\006 \001(" +
       "\r\022\016\n\006closed\030\007 \001(\010\022(\n\013region_type\030\010 \001(\0162\023" +
       ".sl_link.RegionType\022\030\n\020global_direction\030" +
-      "\t \001(\t\"\252\001\n\017ChassisSettings\022%\n\trun_speed\030\001" +
-      " \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022\026\n\016disc_speed_r" +
-      "pm\030\002 \001(\r\022\024\n\014disc_enabled\030\003 \001(\010\022$\n\twork_m" +
-      "ode\030\004 \001(\0162\021.sl_link.WorkMode\022\034\n\024max_turn" +
-      "_speed_ratio\030\005 \001(\002\"\243\t\n\013MapSettings\022\'\n\rve" +
-      "hicle_width\030\001 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022(\n\016v" +
-      "ehicle_length\030\002 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022.\n" +
-      "\024default_path_spacing\030\003 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000" +
-      "\000\000\000\360?\022%\n\013turn_radius\030\004 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000" +
-      "\000\000\360?\022+\n\roverlap_ratio\030\005 \001(\002B\024\212\265\030\005ratio\221\265" +
-      "\030\000\000\000\000\000\000\360?\022*\n\020inflation_radius\030\006 \001(\002B\020\212\265\030" +
-      "\001m\221\265\030\000\000\000\000\000\000\360?\0220\n\020obstacle_regions\030\007 \003(\0132" +
-      "\026.sl_link.PolygonRegion\022,\n\014work_regions\030" +
-      "\010 \003(\0132\026.sl_link.PolygonRegion\022(\n\tfootpri" +
-      "nt\030\t \003(\0132\025.sl_link.PolygonPoint\022&\n\014base_" +
-      "laser_x\030\n \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022&\n\014base_" +
-      "laser_y\030\013 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022&\n\014base_" +
-      "laser_z\030\014 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022/\n\023base_" +
-      "laser_roll_deg\030\r \001(\002B\022\212\265\030\003deg\221\265\030\000\000\000\000\000\000\360?" +
-      "\0220\n\024base_laser_pitch_deg\030\016 \001(\002B\022\212\265\030\003deg\221" +
-      "\265\030\000\000\000\000\000\000\360?\022.\n\022base_laser_yaw_deg\030\017 \001(\002B\022" +
-      "\212\265\030\003deg\221\265\030\000\000\000\000\000\000\360?\022.\n\017endpoint_margin\030\020 " +
-      "\001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?H\000\210\001\001\0223\n\024output_poi" +
-      "nt_spacing\030\021 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?H\001\210\001\001\022" +
-      "9\n\032aligned_obstacle_inflation\030\022 \001(\002B\020\212\265\030" +
-      "\001m\221\265\030\000\000\000\000\000\000\360?H\002\210\001\001\022:\n\033aligned_obstacle_m" +
-      "ax_extent\030\023 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?H\003\210\001\001\022:" +
-      "\n\031obstacle_corner_angle_deg\030\024 \001(\002B\022\212\265\030\003d" +
-      "eg\221\265\030\000\000\000\000\000\000\360?H\004\210\001\001\022:\n\033obstacle_avoidance" +
-      "_distance\030\025 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?H\005\210\001\001B\022" +
-      "\n\020_endpoint_marginB\027\n\025_output_point_spac" +
-      "ingB\035\n\033_aligned_obstacle_inflationB\036\n\034_a" +
-      "ligned_obstacle_max_extentB\034\n\032_obstacle_" +
-      "corner_angle_degB\036\n\034_obstacle_avoidance_" +
-      "distance\"\360\023\n\013RppSettings\022.\n\022desired_line" +
-      "ar_vel\030\001 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022*\n\016max_" +
-      "linear_vel\030\002 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022-\n\017" +
-      "max_angular_vel\030\003 \001(\002B\024\212\265\030\005rad/s\221\265\030\000\000\000\000\000" +
-      "\000\360?\022-\n\020max_linear_accel\030\004 \001(\002B\023\212\265\030\004m/s2\221" +
-      "\265\030\000\000\000\000\000\000\360?\0220\n\021max_angular_accel\030\005 \001(\002B\025\212" +
-      "\265\030\006rad/s2\221\265\030\000\000\000\000\000\000\360?\022(\n\016lookahead_dist\030\006" +
-      " \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022,\n\022min_lookahead_" +
-      "dist\030\007 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022,\n\022max_look" +
-      "ahead_dist\030\010 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\0222\n\030cu" +
-      "rvature_lookahead_dist\030\t \001(\002B\020\212\265\030\001m\221\265\030\000\000" +
-      "\000\000\000\000\360?\022=\n#regulated_linear_scaling_min_r" +
-      "adius\030\n \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022>\n\"regulat" +
-      "ed_linear_scaling_min_speed\030\013 \001(\002B\022\212\265\030\003m" +
-      "/s\221\265\030\000\000\000\000\000\000\360?\022\037\n\027use_collision_detection" +
-      "\030\014 \001(\010\0223\n+use_footprint_expansion_collis" +
-      "ion_detection\030\r \001(\010\0225\n\033collision_front_c" +
-      "learance_m\030\016 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\0224\n\032co" +
-      "llision_side_clearance_m\030\017 \001(\002B\020\212\265\030\001m\221\265\030" +
-      "\000\000\000\000\000\000\360?\022D\n*max_allowed_time_to_collisio" +
-      "n_up_to_carrot\030\020 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\037" +
-      "\n\027collision_confirm_scans\030\021 \001(\r\022%\n\035colli" +
-      "sion_clear_confirm_scans\030\022 \001(\r\022\035\n\025use_ro" +
-      "tate_to_heading\030\023 \001(\010\022;\n\035rotate_to_headi" +
-      "ng_angular_vel\030\024 \001(\002B\024\212\265\030\005rad/s\221\265\030\000\000\000\000\000\000" +
-      "\360?\0227\n\033rotate_to_heading_min_angle\030\025 \001(\002B" +
-      "\022\212\265\030\003rad\221\265\030\000\000\000\000\000\000\360?\022\'\n\rgoal_dist_tol\030\026 \001" +
-      "(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022%\n\tangle_tol\030\027 \001(\002B" +
-      "\022\212\265\030\003rad\221\265\030\000\000\000\000\000\000\360?\022\027\n\017allow_reversing\030\030" +
-      " \001(\010\022%\n\035use_fixed_curvature_lookahead\030\031 " +
-      "\001(\010\022-\n%use_regulated_linear_velocity_sca" +
-      "ling\030\032 \001(\010\022.\n&use_fixed_distance_collisi" +
-      "on_detection\030\033 \001(\010\0223\n\031collision_stop_dis" +
-      "tance_m\030\034 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\0229\n\035colli" +
-      "sion_scan_half_angle_rad\030\035 \001(\002B\022\212\265\030\003rad\221" +
-      "\265\030\000\000\000\000\000\000\360?\0222\n\030collision_scan_timeout_s\030\036" +
-      " \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022+\n#prediction_col" +
-      "lision_confirm_cycles\030\037 \001(\r\0222\n*use_cost_" +
-      "regulated_linear_velocity_scaling\030  \001(\010\022" +
-      "+\n\021cost_scaling_dist\030! \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000" +
-      "\000\000\360?\022/\n\021cost_scaling_gain\030\" \001(\002B\024\212\265\030\005rat" +
-      "io\221\265\030\000\000\000\000\000\000\360?\022(\n\016lookahead_time\030# \001(\002B\020\212" +
-      "\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022*\n\"use_velocity_scaled_l" +
-      "ookahead_dist\030$ \001(\010\022%\n\035use_approach_velo" +
-      "city_scaling\030% \001(\010\0228\n\036approach_velocity_" +
-      "scaling_dist\030& \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\0228\n\034" +
-      "min_approach_linear_velocity\030\' \001(\002B\022\212\265\030\003" +
-      "m/s\221\265\030\000\000\000\000\000\000\360?\022\"\n\032collision_min_valid_po" +
-      "ints\030( \001(\r\022,\n$use_command_velocity_for_a" +
-      "ccel_limit\030) \001(\010\0224\n,use_command_angular_" +
-      "velocity_for_accel_limit\030* \001(\010\0229\n\037comman" +
-      "d_velocity_memory_timeout\030+ \001(\002B\020\212\265\030\001s\221\265" +
-      "\030\000\000\000\000\000\000\360?\0224\n\032max_robot_pose_search_dist\030" +
-      ", \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022-\n\021trans_stopped" +
-      "_vel\030- \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022/\n\021theta_" +
-      "stopped_vel\030. \001(\002B\024\212\265\030\005rad/s\221\265\030\000\000\000\000\000\000\360?\022" +
-      "(\n collision_side_only_when_turning\030/ \001(" +
-      "\010\022D\n&collision_side_turning_min_angular_" +
-      "vel\0300 \001(\002B\024\212\265\030\005rad/s\221\265\030\000\000\000\000\000\000\360?\022*\n\"use_c" +
-      "orner_aware_rotate_to_heading\0301 \001(\010\0228\n\034r" +
-      "otate_to_heading_exit_angle\0302 \001(\002B\022\212\265\030\003r" +
-      "ad\221\265\030\000\000\000\000\000\000\360?\022\'\n\037rotate_to_heading_stabl" +
-      "e_cycles\0303 \001(\r\022;\n!rotate_to_heading_corn" +
-      "er_distance\0304 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\"O\n\023S" +
-      "ettingsReadRequest\022\024\n\014read_chassis\030\001 \001(\010" +
-      "\022\020\n\010read_map\030\002 \001(\010\022\020\n\010read_rpp\030\003 \001(\010\"\275\001\n" +
-      "\024SettingsReadResponse\022#\n\006result\030\001 \001(\0162\023." +
-      "sl_link.ResultCode\022)\n\007chassis\030\002 \001(\0132\030.sl" +
-      "_link.ChassisSettings\022!\n\003map\030\003 \001(\0132\024.sl_" +
-      "link.MapSettings\022\017\n\007message\030\004 \001(\t\022!\n\003rpp" +
-      "\030\005 \001(\0132\024.sl_link.RppSettings\"\330\001\n\024Setting" +
-      "sWriteRequest\022)\n\007chassis\030\001 \001(\0132\030.sl_link" +
-      ".ChassisSettings\022!\n\003map\030\002 \001(\0132\024.sl_link." +
-      "MapSettings\022!\n\003rpp\030\003 \001(\0132\024.sl_link.RppSe" +
-      "ttings\022\035\n\025apply_rpp_temporarily\030\004 \001(\010\022\030\n" +
-      "\020save_rpp_default\030\005 \001(\010\022\026\n\016rpp_field_mas" +
-      "k\030\006 \001(\004\"\211\002\n\025SettingsWriteResponse\022#\n\006res" +
-      "ult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messag" +
-      "e\030\002 \001(\t\022)\n\007chassis\030\003 \001(\0132\030.sl_link.Chass" +
-      "isSettings\022!\n\003map\030\004 \001(\0132\024.sl_link.MapSet" +
-      "tings\022!\n\003rpp\030\005 \001(\0132\024.sl_link.RppSettings" +
-      "\022\023\n\013rpp_applied\030\006 \001(\010\022\021\n\trpp_saved\030\007 \001(\010" +
-      "\022!\n\031geometry_requires_restart\030\010 \001(\010\"3\n\006P" +
-      "ose2D\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\023\n\013heading_d" +
-      "eg\030\003 \001(\002\"\260\001\n\026LocalizationCovariance\022\r\n\005v" +
-      "alid\030\001 \001(\010\022\022\n\nx_variance\030\002 \001(\002\022\022\n\ny_vari" +
-      "ance\030\003 \001(\002\022\024\n\014yaw_variance\030\004 \001(\002\022\025\n\rxy_c" +
-      "ovariance\030\005 \001(\002\022\030\n\020x_yaw_covariance\030\006 \001(" +
-      "\002\022\030\n\020y_yaw_covariance\030\007 \001(\002\"\247\t\n\022DeviceSt" +
-      "atusReport\022\020\n\010utc_time\030\001 \001(\r\022,\n\rsystem_s" +
-      "tatus\030\002 \001(\0162\025.sl_link.SystemStatus\022(\n\013wi" +
-      "fi_status\030\003 \001(\0162\023.sl_link.WifiResult\022$\n\t" +
-      "work_mode\030\004 \001(\0162\021.sl_link.WorkMode\022,\n\020le" +
-      "ft_wheel_speed\030\005 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?" +
-      "\022-\n\021right_wheel_speed\030\006 \001(\002B\022\212\265\030\003m/s\221\265\030\000" +
-      "\000\000\000\000\000\360?\022\026\n\016disc_speed_rpm\030\007 \001(\r\022\024\n\014disc_" +
-      "enabled\030\010 \001(\010\022/\n\017disc_lift_state\030\t \001(\0162\026" +
-      ".sl_link.DiscLiftState\022\025\n\rlight_enabled\030" +
-      "\n \001(\010\022!\n\010position\030\013 \001(\0132\017.sl_link.Pose2D" +
-      "\022\027\n\017chassis_enabled\030\014 \001(\010\022\031\n\021alignment_y" +
-      "aw_deg\030\r \001(\002\022@\n\027localization_covariance\030" +
-      "\016 \001(\0132\037.sl_link.LocalizationCovariance\022&" +
-      "\n\036localization_quality_available\030\017 \001(\010\022\034" +
-      "\n\024localization_quality\030\020 \001(\r\022\032\n\022collisio" +
-      "n_imminent\030\021 \001(\010\022%\n\035radar_system_status_" +
-      "available\030\022 \001(\010\022\033\n\023radar_system_status\030\023" +
-      " \001(\t\022)\n\rvehicle_speed\030\024 \001(\002B\022\212\265\030\003m/s\221\265\030\000" +
-      "\000\000\000\000\000\360?\022\036\n\021chassis_connected\030\025 \001(\010H\000\210\001\001\022" +
-      "#\n\026emergency_stop_latched\030\026 \001(\010H\001\210\001\001\022\037\n\022" +
-      "localization_ready\030\027 \001(\010H\002\210\001\001\022\'\n\032localiz" +
-      "ation_pause_latched\030\030 \001(\010H\003\210\001\001\022\"\n\032locali" +
-      "zation_status_reason\030\031 \001(\t\022\"\n\025left_motor" +
-      "_fault_code\030\032 \001(\005H\004\210\001\001\022#\n\026right_motor_fa" +
-      "ult_code\030\033 \001(\005H\005\210\001\001\022,\n\rsystem_health\030\034 \001" +
-      "(\0132\025.sl_link.SystemHealthB\024\n\022_chassis_co" +
-      "nnectedB\031\n\027_emergency_stop_latchedB\025\n\023_l" +
-      "ocalization_readyB\035\n\033_localization_pause" +
-      "_latchedB\030\n\026_left_motor_fault_codeB\031\n\027_r" +
-      "ight_motor_fault_code\"\306\004\n\014SystemHealth\022\036" +
-      "\n\021cpu_temperature_c\030\001 \001(\002H\000\210\001\001\022\036\n\021cpu_us" +
-      "age_percent\030\002 \001(\002H\001\210\001\001\022!\n\024memory_usage_p" +
-      "ercent\030\003 \001(\002H\002\210\001\001\022\037\n\022memory_total_bytes\030" +
-      "\004 \001(\004H\003\210\001\001\022#\n\026memory_available_bytes\030\005 \001" +
-      "(\004H\004\210\001\001\022\037\n\022disk_usage_percent\030\006 \001(\002H\005\210\001\001" +
-      "\022\034\n\017disk_free_bytes\030\007 \001(\004H\006\210\001\001\022\033\n\016uptime" +
-      "_seconds\030\010 \001(\004H\007\210\001\001\022$\n\027cellular_signal_p" +
-      "ercent\030\t \001(\rH\010\210\001\001\022\026\n\016cellular_state\030\n \001(" +
-      "\t\022\"\n\032cellular_access_technology\030\013 \001(\tB\024\n" +
-      "\022_cpu_temperature_cB\024\n\022_cpu_usage_percen" +
-      "tB\027\n\025_memory_usage_percentB\025\n\023_memory_to" +
-      "tal_bytesB\031\n\027_memory_available_bytesB\025\n\023" +
-      "_disk_usage_percentB\022\n\020_disk_free_bytesB" +
-      "\021\n\017_uptime_secondsB\032\n\030_cellular_signal_p" +
-      "ercent\">\n\022CameraFrameRequest\022\020\n\010snapshot" +
-      "\030\001 \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\"\263\001\n\020Camer" +
-      "aFrameChunk\022\020\n\010frame_id\030\001 \001(\r\022\020\n\010utc_tim" +
-      "e\030\002 \001(\r\022\r\n\005width\030\003 \001(\r\022\016\n\006height\030\004 \001(\r\022#" +
-      "\n\005codec\030\005 \001(\0162\024.sl_link.CameraCodec\022\023\n\013c" +
-      "hunk_index\030\006 \001(\r\022\024\n\014total_chunks\030\007 \001(\r\022\014" +
-      "\n\004data\030\010 \001(\014\"Z\n\nMapRequest\022\020\n\010snapshot\030\001" +
-      " \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\022\016\n\006map_id\030\003" +
-      " \001(\t\022\022\n\nrequest_id\030\004 \001(\004\"\342\001\n\020MapRequestR" +
-      "esult\022\022\n\nrequest_id\030\001 \001(\004\022)\n\006status\030\002 \001(" +
-      "\0162\031.sl_link.MapRequestStatus\022\016\n\006map_id\030\003" +
-      " \001(\t\022\023\n\013snapshot_id\030\004 \001(\004\022\024\n\014total_chunk" +
-      "s\030\005 \001(\r\022\024\n\014payload_size\030\006 \001(\r\022\025\n\rpayload" +
-      "_crc32\030\007 \001(\r\022\026\n\016retry_after_ms\030\010 \001(\r\022\017\n\007" +
-      "message\030\t \001(\t\"\200\004\n\010MapChunk\022\016\n\006map_id\030\001 \001" +
-      "(\r\022\020\n\010utc_time\030\002 \001(\r\022&\n\010encoding\030\003 \001(\0162\024" +
-      ".sl_link.MapEncoding\022\r\n\005width\030\004 \001(\r\022\016\n\006h" +
-      "eight\030\005 \001(\r\022\022\n\nresolution\030\006 \001(\002\022\023\n\013chunk" +
-      "_index\030\007 \001(\r\022\024\n\014total_chunks\030\010 \001(\r\022\014\n\004da" +
-      "ta\030\t \001(\014\022\037\n\006origin\030\n \001(\0132\017.sl_link.Pose2" +
-      "D\022\020\n\010frame_id\030\013 \001(\t\022\027\n\017preview_scale_x\030\014" +
-      " \001(\002\022\027\n\017preview_scale_y\030\r \001(\002\022@\n\027localiz" +
-      "ation_covariance\030\016 \001(\0132\037.sl_link.Localiz" +
-      "ationCovariance\022\031\n\021alignment_yaw_deg\030\017 \001" +
-      "(\002\022\030\n\020app_rotation_deg\030\020 \001(\002\022$\n\034rotation" +
-      "_alignment_delta_deg\030\021 \001(\002\022\023\n\013map_versio" +
-      "n\030\022 \001(\r\022\022\n\nrequest_id\030\023 \001(\004\022\023\n\013snapshot_" +
-      "id\030\024 \001(\004\"6\n\013PathPoint2D\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030" +
-      "\002 \001(\002\022\021\n\tpath_type\030\003 \001(\t\"5\n\020RegionRepeat" +
-      "Item\022\021\n\tregion_id\030\001 \001(\t\022\016\n\006repeat\030\002 \001(\r\"" +
-      "\222\003\n\nTaskConfig\022\017\n\007task_id\030\001 \001(\t\022,\n\014work_" +
-      "regions\030\002 \003(\0132\026.sl_link.PolygonRegion\0220\n" +
-      "\020obstacle_regions\030\003 \003(\0132\026.sl_link.Polygo" +
-      "nRegion\022.\n\024default_path_spacing\030\004 \001(\002B\020\212" +
-      "\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022%\n\013turn_radius\030\005 \001(\002B\020\212\265" +
-      "\030\001m\221\265\030\000\000\000\000\000\000\360?\022+\n\roverlap_ratio\030\006 \001(\002B\024\212" +
-      "\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\022*\n\020inflation_radius\030" +
-      "\007 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022\016\n\006map_id\030\010 \001(\t\022" +
-      " \n\030selected_work_region_ids\030\t \003(\t\0221\n\016reg" +
-      "ion_repeats\030\n \003(\0132\031.sl_link.RegionRepeat" +
-      "Item\"[\n\022TaskConfigResponse\022#\n\006result\030\001 \001" +
-      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
-      "\022\017\n\007task_id\030\003 \001(\t\"I\n\013TaskCommand\022\017\n\007task" +
-      "_id\030\001 \001(\t\022)\n\007command\030\002 \001(\0162\030.sl_link.Tas" +
-      "kCommandType\"\\\n\023TaskCommandResponse\022#\n\006r" +
-      "esult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mess" +
-      "age\030\002 \001(\t\022\017\n\007task_id\030\003 \001(\t\"\227\001\n\032TaskRunti" +
-      "meSettingsRequest\022\017\n\007task_id\030\001 \001(\t\022*\n\tru" +
-      "n_speed\030\002 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?H\000\210\001\001\022\033" +
-      "\n\016disc_speed_rpm\030\003 \001(\rH\001\210\001\001B\014\n\n_run_spee" +
-      "dB\021\n\017_disc_speed_rpm\"\250\002\n\033TaskRuntimeSett" +
-      "ingsResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.R" +
-      "esultCode\022\017\n\007message\030\002 \001(\t\022\017\n\007task_id\030\003 " +
-      "\001(\t\022*\n\trun_speed\030\004 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000" +
-      "\360?H\000\210\001\001\022\033\n\016disc_speed_rpm\030\005 \001(\rH\001\210\001\001\022)\n\r" +
-      "max_run_speed\030\006 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022" +
-      "\032\n\022max_disc_speed_rpm\030\007 \001(\r\022\021\n\ttemporary" +
-      "\030\010 \001(\010B\014\n\n_run_speedB\021\n\017_disc_speed_rpm\"" +
-      "\273\004\n\020TaskStatusReport\022\017\n\007task_id\030\001 \001(\t\022!\n" +
-      "\005state\030\002 \001(\0162\022.sl_link.TaskState\022\020\n\010prog" +
-      "ress\030\003 \001(\002\022\023\n\013map_version\030\004 \001(\r\022\017\n\007messa" +
-      "ge\030\005 \001(\t\022!\n\010position\030\006 \001(\0132\017.sl_link.Pos" +
-      "e2D\022\030\n\020replan_requested\030\007 \001(\010\022\030\n\020path_po" +
-      "int_count\030\010 \001(\r\022\024\n\014path_version\030\t \001(\r\022-\n" +
-      "\022total_work_area_m2\030\n \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000" +
-      "\000\000\360?\0221\n\026remaining_work_area_m2\030\013 \001(\002B\021\212\265" +
-      "\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020remaining_time_s\030\014 \001(" +
-      "\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\031\n\021current_region_id" +
-      "\030\r \001(\t\022#\n\033current_region_repeat_index\030\016 " +
-      "\001(\r\022#\n\033current_region_repeat_total\030\017 \001(\r" +
-      "\022\031\n\021alignment_yaw_deg\030\020 \001(\002\022@\n\027localizat" +
-      "ion_covariance\030\021 \001(\0132\037.sl_link.Localizat" +
-      "ionCovariance\"\333\001\n\024PathPointPlanRequest\022\017" +
-      "\n\007task_id\030\001 \001(\t\022\026\n\016max_chunk_size\030\002 \001(\r\022" +
-      "\022\n\nrequest_id\030\003 \001(\t\022\024\n\014force_replan\030\004 \001(" +
-      "\010\022#\n\nstart_pose\030\005 \001(\0132\017.sl_link.Pose2D\022!" +
-      "\n\010end_pose\030\006 \001(\0132\017.sl_link.Pose2D\022\030\n\020glo" +
-      "bal_direction\030\007 \001(\t\022\016\n\006map_id\030\010 \001(\t\"\225\003\n\025" +
-      "PathPointPlanResponse\022\017\n\007task_id\030\001 \001(\t\022\023" +
-      "\n\013chunk_index\030\002 \001(\r\022\024\n\014total_chunks\030\003 \001(" +
-      "\r\022\024\n\014path_version\030\004 \001(\r\022\014\n\004data\030\005 \001(\014\022\022\n" +
-      "\nrequest_id\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022#\n\006res" +
-      "ult\030\010 \001(\0162\023.sl_link.ResultCode\022\017\n\007messag" +
-      "e\030\t \001(\t\022\017\n\007planned\030\n \001(\010\022\023\n\013map_version\030" +
-      "\013 \001(\r\022\030\n\020path_point_count\030\014 \001(\r\022\025\n\rpath_" +
-      "length_m\030\r \001(\002\022-\n\022total_work_area_m2\030\016 \001" +
-      "(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_" +
-      "s\030\017 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\020\n\010frame_id\030\020 " +
-      "\001(\t\"d\n\021MapPreviewRequest\022\020\n\010max_edge\030\001 \001" +
-      "(\r\022\024\n\014image_format\030\002 \001(\t\022\027\n\017include_over" +
-      "lay\030\003 \001(\010\022\016\n\006map_id\030\004 \001(\t\"\344\003\n\022MapPreview" +
-      "Response\022#\n\006result\030\001 \001(\0162\023.sl_link.Resul" +
-      "tCode\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version\030\003 " +
-      "\001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030\005 \001(\r\022\022\n\nre" +
-      "solution\030\006 \001(\002\022\037\n\006origin\030\007 \001(\0132\017.sl_link" +
-      ".Pose2D\022\020\n\010frame_id\030\010 \001(\t\022\022\n\nimage_data\030" +
-      "\t \001(\014\022\024\n\014overlay_json\030\n \001(\t\022\027\n\017preview_s" +
-      "cale_x\030\013 \001(\002\022\027\n\017preview_scale_y\030\014 \001(\002\022@\n" +
-      "\027localization_covariance\030\r \001(\0132\037.sl_link" +
-      ".LocalizationCovariance\022\031\n\021alignment_yaw" +
-      "_deg\030\016 \001(\002\022\030\n\020app_rotation_deg\030\017 \001(\002\022$\n\034" +
-      "rotation_alignment_delta_deg\030\020 \001(\002\022\016\n\006ma" +
-      "p_id\030\021 \001(\t\022\024\n\014map_revision\030\022 \001(\t\"\'\n\025MapR" +
-      "egionPointRequest\022\016\n\006map_id\030\001 \001(\t\"\277\001\n\023Wo" +
-      "rkRegionPointInfo\022&\n\006region\030\001 \001(\0132\026.sl_l" +
-      "ink.PolygonRegion\022\034\n\024start_pose_availabl" +
-      "e\030\002 \001(\010\022#\n\nstart_pose\030\003 \001(\0132\017.sl_link.Po" +
-      "se2D\022\032\n\022end_pose_available\030\004 \001(\010\022!\n\010end_" +
-      "pose\030\005 \001(\0132\017.sl_link.Pose2D\"\324\002\n\026MapRegio" +
-      "nPointResponse\022#\n\006result\030\001 \001(\0162\023.sl_link" +
-      ".ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003" +
-      " \001(\t\022\023\n\013map_version\030\004 \001(\r\0222\n\014work_region" +
-      "s\030\005 \003(\0132\034.sl_link.WorkRegionPointInfo\0220\n" +
-      "\020obstacle_regions\030\006 \003(\0132\026.sl_link.Polygo" +
-      "nRegion\022-\n\rerase_regions\030\007 \003(\0132\026.sl_link" +
-      ".PolygonRegion\022\035\n\025crop_region_available\030" +
-      "\010 \001(\010\022+\n\013crop_region\030\t \001(\0132\026.sl_link.Pol" +
-      "ygonRegion\"\261\003\n\016MapEditCommand\022\017\n\007edit_id" +
-      "\030\001 \001(\t\022,\n\toperation\030\002 \001(\0162\031.sl_link.MapE" +
-      "ditOperation\022\023\n\013region_name\030\003 \001(\t\022&\n\006reg" +
-      "ion\030\004 \001(\0132\026.sl_link.PolygonRegion\022&\n\007pol" +
-      "ygon\030\005 \003(\0132\025.sl_link.PolygonPoint\022\024\n\014bru" +
-      "sh_radius\030\006 \001(\002\022\023\n\013paint_value\030\007 \001(\005\022\030\n\020" +
-      "target_region_id\030\010 \001(\t\022/\n\022target_region_" +
-      "type\030\t \001(\0162\023.sl_link.RegionType\022\034\n\024expec" +
-      "ted_map_version\030\n \001(\r\022\017\n\007dry_run\030\013 \001(\010\022#" +
-      "\n\nstart_pose\030\014 \001(\0132\017.sl_link.Pose2D\022!\n\010e" +
-      "nd_pose\030\r \001(\0132\017.sl_link.Pose2D\022\016\n\006map_id" +
-      "\030\016 \001(\t\"\\\n\017MapEditResponse\022#\n\006result\030\001 \001(" +
-      "\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022" +
-      "\023\n\013map_version\030\003 \001(\r\"W\n\023MapEditStatusRep" +
-      "ort\022\023\n\013map_version\030\001 \001(\r\022\032\n\022applied_to_p" +
-      "lanner\030\002 \001(\010\022\017\n\007message\030\003 \001(\t\"/\n\026VideoSt" +
-      "reamInfoRequest\022\025\n\rinclude_debug\030\001 \001(\010\"\263" +
-      "\001\n\027VideoStreamInfoResponse\022#\n\006result\030\001 \001" +
-      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
-      "\022\022\n\nstream_url\030\003 \001(\t\022\r\n\005codec\030\004 \001(\t\022\r\n\005w" +
-      "idth\030\005 \001(\r\022\016\n\006height\030\006 \001(\r\022\016\n\006online\030\007 \001" +
-      "(\010\022\020\n\010utc_time\030\010 \001(\r\"\362\001\n\017PathPlanRequest" +
-      "\022\022\n\nrequest_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\024\n" +
-      "\014force_replan\030\003 \001(\010\022\032\n\022return_path_chunk" +
-      "s\030\004 \001(\010\022\026\n\016max_chunk_size\030\005 \001(\r\022#\n\nstart" +
-      "_pose\030\006 \001(\0132\017.sl_link.Pose2D\022!\n\010end_pose" +
-      "\030\007 \001(\0132\017.sl_link.Pose2D\022\030\n\020global_direct" +
-      "ion\030\010 \001(\t\022\016\n\006map_id\030\t \001(\t\"\257\005\n\020PathPlanRe" +
-      "sponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultC" +
-      "ode\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(\t" +
-      "\022\017\n\007task_id\030\004 \001(\t\022\023\n\013map_version\030\005 \001(\r\022\024" +
-      "\n\014path_version\030\006 \001(\r\022\030\n\020path_point_count" +
-      "\030\007 \001(\r\022\025\n\rpath_length_m\030\010 \001(\002\022\017\n\007planned" +
-      "\030\t \001(\010\022\024\n\014path_chunked\030\n \001(\010\022\025\n\rpreview_" +
-      "image\030\013 \001(\014\022\026\n\016preview_format\030\014 \001(\t\022\r\n\005w" +
-      "idth\030\r \001(\r\022\016\n\006height\030\016 \001(\r\022\022\n\nresolution" +
-      "\030\017 \001(\002\022\037\n\006origin\030\020 \001(\0132\017.sl_link.Pose2D\022" +
-      "\020\n\010frame_id\030\021 \001(\t\022\027\n\017preview_scale_x\030\022 \001" +
-      "(\002\022\027\n\017preview_scale_y\030\023 \001(\002\022-\n\022total_wor" +
-      "k_area_m2\030\024 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020es" +
-      "timated_time_s\030\025 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022@" +
-      "\n\027localization_covariance\030\026 \001(\0132\037.sl_lin" +
-      "k.LocalizationCovariance\022\031\n\021alignment_ya" +
-      "w_deg\030\027 \001(\002\022\030\n\020app_rotation_deg\030\030 \001(\002\022$\n" +
-      "\034rotation_alignment_delta_deg\030\031 \001(\002\"m\n\016M" +
-      "apSyncRequest\022,\n\toperation\030\001 \001(\0162\031.sl_li" +
-      "nk.MapSyncOperation\022\016\n\006map_id\030\002 \001(\t\022\035\n\025u" +
-      "pdate_navigation_map\030\003 \001(\010\"\226\002\n\017MapSyncRe" +
-      "sponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultC" +
-      "ode\022\017\n\007message\030\002 \001(\t\022,\n\toperation\030\003 \001(\0162" +
-      "\031.sl_link.MapSyncOperation\022\016\n\006map_id\030\004 \001" +
-      "(\t\022\020\n\010map_name\030\010 \001(\t\022\024\n\014map_revision\030\t \001" +
-      "(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016map_image_p" +
-      "ath\030\006 \001(\t\022\037\n\027navigation_map_reloaded\030\007 \001" +
-      "(\010\022\027\n\017lifecycle_state\030\n \001(\t\")\n\027MapImport" +
-      "ToRadarRequest\022\016\n\006map_id\030\001 \001(\t\"\263\001\n\030MapIm" +
-      "portToRadarResponse\022#\n\006result\030\001 \001(\0162\023.sl" +
-      "_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map" +
-      "_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\020\n\010imported\030" +
-      "\005 \001(\010\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle" +
-      "_state\030\007 \001(\t\"W\n\016MapModeRequest\022\"\n\004mode\030\001" +
-      " \001(\0162\024.sl_link.MapModeType\022\017\n\007enabled\030\002 " +
-      "\001(\010\022\020\n\010map_kind\030\003 \001(\005\"\345\001\n\017MapModeRespons" +
-      "e\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017" +
-      "\n\007message\030\002 \001(\t\022\"\n\004mode\030\003 \001(\0162\024.sl_link." +
-      "MapModeType\022\017\n\007enabled\030\004 \001(\010\022\020\n\010map_kind" +
-      "\030\005 \001(\005\022\027\n\017lifecycle_state\030\006 \001(\t\022\016\n\006map_i" +
-      "d\030\007 \001(\t\022\024\n\014map_revision\030\010 \001(\t\022\026\n\016residua" +
-      "l_nodes\030\t \003(\t\";\n\023MapAlignmentRequest\022\016\n\006" +
-      "map_id\030\001 \001(\t\022\024\n\014rotation_deg\030\002 \001(\002\"\311\001\n\024M" +
-      "apAlignmentResponse\022#\n\006result\030\001 \001(\0162\023.sl" +
-      "_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map" +
-      "_id\030\003 \001(\t\022\024\n\014rotation_deg\030\004 \001(\002\022\024\n\014rotat" +
-      "ion_rad\030\005 \001(\002\022\031\n\021alignment_yaw_deg\030\006 \001(\002" +
-      "\022$\n\034rotation_alignment_delta_deg\030\007 \001(\002\"\023" +
-      "\n\021MapCatalogRequest\"\303\002\n\016MapCatalogItem\022\016" +
-      "\n\006map_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\022\n\nsize_byt" +
-      "es\030\003 \001(\004\022\020\n\010saved_at\030\004 \001(\004\022-\n\022total_work" +
-      "_area_m2\030\005 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020est" +
-      "imated_time_s\030\006 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030\n" +
-      "\020thumbnail_format\030\007 \001(\t\022\027\n\017thumbnail_wid" +
-      "th\030\010 \001(\r\022\030\n\020thumbnail_height\030\t \001(\r\022\033\n\023th" +
-      "umbnail_image_b64\030\n \001(\t\022\022\n\ncreated_at\030\013 " +
-      "\001(\t\022\024\n\014map_revision\030\014 \001(\t\"\207\001\n\022MapCatalog" +
-      "Response\022#\n\006result\030\001 \001(\0162\023.sl_link.Resul" +
-      "tCode\022\017\n\007message\030\002 \001(\t\022\023\n\013total_count\030\003 " +
-      "\001(\r\022&\n\005items\030\004 \003(\0132\027.sl_link.MapCatalogI" +
-      "tem\"\"\n\020MapDeleteRequest\022\016\n\006map_id\030\001 \001(\t\"" +
-      "\312\001\n\021MapDeleteResponse\022#\n\006result\030\001 \001(\0162\023." +
-      "sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006m" +
-      "ap_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\017\n\007deleted" +
-      "\030\005 \001(\010\022\025\n\rlocal_deleted\030\006 \001(\010\022\026\n\016remote_" +
-      "deleted\030\007 \001(\010\022\035\n\025remote_delete_pending\030\010" +
-      " \001(\010\"b\n\016MapSaveRequest\022\020\n\010map_name\030\001 \001(\t" +
-      "\022\016\n\006map_id\030\002 \001(\t\022\030\n\020has_rotation_deg\030\003 \001" +
-      "(\010\022\024\n\014rotation_deg\030\004 \001(\002\"\246\003\n\017MapSaveResp" +
-      "onse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCod" +
-      "e\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010ma" +
-      "p_name\030\004 \001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016m" +
-      "ap_image_path\030\006 \001(\t\022\037\n\027navigation_map_re" +
-      "loaded\030\007 \001(\010\022-\n\022total_work_area_m2\030\010 \001(\002" +
-      "B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030" +
-      "\t \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\022\n\ncreated_at\030\n " +
-      "\001(\t\022\024\n\014map_revision\030\013 \001(\t\022\027\n\017lifecycle_s" +
-      "tate\030\014 \001(\t\022\027\n\017mapping_stopped\030\r \001(\010\022\034\n\024l",
-      "ocalization_started\030\016 \001(\010\022\026\n\016residual_no" +
-      "des\030\017 \003(\t\"#\n\021MapMetricsRequest\022\016\n\006map_id" +
-      "\030\001 \001(\t\"\233\001\n\021RegionMetricsItem\022\021\n\tregion_i" +
-      "d\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\016\n\006repeat\030\003" +
-      " \001(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?" +
-      "\022*\n\020estimated_time_h\030\005 \001(\002B\020\212\265\030\001h\221\265\030\000\000\000\000" +
-      "\000\000\360?\"\240\001\n\022MapMetricsResponse\022#\n\006result\030\001 " +
+      "\t \001(\t\022,\n\007process\030\n \001(\0132\033.sl_link.MapProc" +
+      "essSettings\"\252\001\n\017ChassisSettings\022%\n\trun_s" +
+      "peed\030\001 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022\026\n\016disc_s" +
+      "peed_rpm\030\002 \001(\r\022\024\n\014disc_enabled\030\003 \001(\010\022$\n\t" +
+      "work_mode\030\004 \001(\0162\021.sl_link.WorkMode\022\034\n\024ma" +
+      "x_turn_speed_ratio\030\005 \001(\002\"\236\001\n\022MapProcessS" +
+      "ettings\022\021\n\trun_speed\030\001 \001(\002\022\026\n\016disc_speed" +
+      "_rpm\030\002 \001(\r\022\024\n\014process_type\030\003 \001(\t\022\032\n\022grin" +
+      "ding_parameter\030\004 \001(\t\022\031\n\021concrete_strengt" +
+      "h\030\005 \001(\t\022\020\n\010pressure\030\006 \001(\002\"\243\t\n\013MapSetting" +
+      "s\022\'\n\rvehicle_width\030\001 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000" +
+      "\360?\022(\n\016vehicle_length\030\002 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000" +
+      "\000\000\360?\022.\n\024default_path_spacing\030\003 \001(\002B\020\212\265\030\001" +
+      "m\221\265\030\000\000\000\000\000\000\360?\022%\n\013turn_radius\030\004 \001(\002B\020\212\265\030\001m" +
+      "\221\265\030\000\000\000\000\000\000\360?\022+\n\roverlap_ratio\030\005 \001(\002B\024\212\265\030\005" +
+      "ratio\221\265\030\000\000\000\000\000\000\360?\022*\n\020inflation_radius\030\006 \001" +
+      "(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\0220\n\020obstacle_regions" +
+      "\030\007 \003(\0132\026.sl_link.PolygonRegion\022,\n\014work_r" +
+      "egions\030\010 \003(\0132\026.sl_link.PolygonRegion\022(\n\t" +
+      "footprint\030\t \003(\0132\025.sl_link.PolygonPoint\022&" +
+      "\n\014base_laser_x\030\n \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022&" +
+      "\n\014base_laser_y\030\013 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022&" +
+      "\n\014base_laser_z\030\014 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022/" +
+      "\n\023base_laser_roll_deg\030\r \001(\002B\022\212\265\030\003deg\221\265\030\000" +
+      "\000\000\000\000\000\360?\0220\n\024base_laser_pitch_deg\030\016 \001(\002B\022\212" +
+      "\265\030\003deg\221\265\030\000\000\000\000\000\000\360?\022.\n\022base_laser_yaw_deg\030" +
+      "\017 \001(\002B\022\212\265\030\003deg\221\265\030\000\000\000\000\000\000\360?\022.\n\017endpoint_ma" +
+      "rgin\030\020 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?H\000\210\001\001\0223\n\024out" +
+      "put_point_spacing\030\021 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360" +
+      "?H\001\210\001\001\0229\n\032aligned_obstacle_inflation\030\022 \001" +
+      "(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?H\002\210\001\001\022:\n\033aligned_obs" +
+      "tacle_max_extent\030\023 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?" +
+      "H\003\210\001\001\022:\n\031obstacle_corner_angle_deg\030\024 \001(\002" +
+      "B\022\212\265\030\003deg\221\265\030\000\000\000\000\000\000\360?H\004\210\001\001\022:\n\033obstacle_av" +
+      "oidance_distance\030\025 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?" +
+      "H\005\210\001\001B\022\n\020_endpoint_marginB\027\n\025_output_poi" +
+      "nt_spacingB\035\n\033_aligned_obstacle_inflatio" +
+      "nB\036\n\034_aligned_obstacle_max_extentB\034\n\032_ob" +
+      "stacle_corner_angle_degB\036\n\034_obstacle_avo" +
+      "idance_distance\"\360\023\n\013RppSettings\022.\n\022desir" +
+      "ed_linear_vel\030\001 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022" +
+      "*\n\016max_linear_vel\030\002 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000" +
+      "\000\360?\022-\n\017max_angular_vel\030\003 \001(\002B\024\212\265\030\005rad/s\221" +
+      "\265\030\000\000\000\000\000\000\360?\022-\n\020max_linear_accel\030\004 \001(\002B\023\212\265" +
+      "\030\004m/s2\221\265\030\000\000\000\000\000\000\360?\0220\n\021max_angular_accel\030\005" +
+      " \001(\002B\025\212\265\030\006rad/s2\221\265\030\000\000\000\000\000\000\360?\022(\n\016lookahead" +
+      "_dist\030\006 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022,\n\022min_loo" +
+      "kahead_dist\030\007 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022,\n\022m" +
+      "ax_lookahead_dist\030\010 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360" +
+      "?\0222\n\030curvature_lookahead_dist\030\t \001(\002B\020\212\265\030" +
+      "\001m\221\265\030\000\000\000\000\000\000\360?\022=\n#regulated_linear_scalin" +
+      "g_min_radius\030\n \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022>\n\"" +
+      "regulated_linear_scaling_min_speed\030\013 \001(\002" +
+      "B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022\037\n\027use_collision_de" +
+      "tection\030\014 \001(\010\0223\n+use_footprint_expansion" +
+      "_collision_detection\030\r \001(\010\0225\n\033collision_" +
+      "front_clearance_m\030\016 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360" +
+      "?\0224\n\032collision_side_clearance_m\030\017 \001(\002B\020\212" +
+      "\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022D\n*max_allowed_time_to_c" +
+      "ollision_up_to_carrot\030\020 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000" +
+      "\000\000\000\360?\022\037\n\027collision_confirm_scans\030\021 \001(\r\022%" +
+      "\n\035collision_clear_confirm_scans\030\022 \001(\r\022\035\n" +
+      "\025use_rotate_to_heading\030\023 \001(\010\022;\n\035rotate_t" +
+      "o_heading_angular_vel\030\024 \001(\002B\024\212\265\030\005rad/s\221\265" +
+      "\030\000\000\000\000\000\000\360?\0227\n\033rotate_to_heading_min_angle" +
+      "\030\025 \001(\002B\022\212\265\030\003rad\221\265\030\000\000\000\000\000\000\360?\022\'\n\rgoal_dist_" +
+      "tol\030\026 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022%\n\tangle_tol" +
+      "\030\027 \001(\002B\022\212\265\030\003rad\221\265\030\000\000\000\000\000\000\360?\022\027\n\017allow_reve" +
+      "rsing\030\030 \001(\010\022%\n\035use_fixed_curvature_looka" +
+      "head\030\031 \001(\010\022-\n%use_regulated_linear_veloc" +
+      "ity_scaling\030\032 \001(\010\022.\n&use_fixed_distance_" +
+      "collision_detection\030\033 \001(\010\0223\n\031collision_s" +
+      "top_distance_m\030\034 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\0229" +
+      "\n\035collision_scan_half_angle_rad\030\035 \001(\002B\022\212" +
+      "\265\030\003rad\221\265\030\000\000\000\000\000\000\360?\0222\n\030collision_scan_time" +
+      "out_s\030\036 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022+\n#predict" +
+      "ion_collision_confirm_cycles\030\037 \001(\r\0222\n*us" +
+      "e_cost_regulated_linear_velocity_scaling" +
+      "\030  \001(\010\022+\n\021cost_scaling_dist\030! \001(\002B\020\212\265\030\001m" +
+      "\221\265\030\000\000\000\000\000\000\360?\022/\n\021cost_scaling_gain\030\" \001(\002B\024" +
+      "\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\022(\n\016lookahead_time\030#" +
+      " \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022*\n\"use_velocity_s" +
+      "caled_lookahead_dist\030$ \001(\010\022%\n\035use_approa" +
+      "ch_velocity_scaling\030% \001(\010\0228\n\036approach_ve" +
+      "locity_scaling_dist\030& \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000" +
+      "\000\360?\0228\n\034min_approach_linear_velocity\030\' \001(" +
+      "\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022\"\n\032collision_min_v" +
+      "alid_points\030( \001(\r\022,\n$use_command_velocit" +
+      "y_for_accel_limit\030) \001(\010\0224\n,use_command_a" +
+      "ngular_velocity_for_accel_limit\030* \001(\010\0229\n" +
+      "\037command_velocity_memory_timeout\030+ \001(\002B\020" +
+      "\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\0224\n\032max_robot_pose_searc" +
+      "h_dist\030, \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022-\n\021trans_" +
+      "stopped_vel\030- \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?\022/\n" +
+      "\021theta_stopped_vel\030. \001(\002B\024\212\265\030\005rad/s\221\265\030\000\000" +
+      "\000\000\000\000\360?\022(\n collision_side_only_when_turni" +
+      "ng\030/ \001(\010\022D\n&collision_side_turning_min_a" +
+      "ngular_vel\0300 \001(\002B\024\212\265\030\005rad/s\221\265\030\000\000\000\000\000\000\360?\022*" +
+      "\n\"use_corner_aware_rotate_to_heading\0301 \001" +
+      "(\010\0228\n\034rotate_to_heading_exit_angle\0302 \001(\002" +
+      "B\022\212\265\030\003rad\221\265\030\000\000\000\000\000\000\360?\022\'\n\037rotate_to_headin" +
+      "g_stable_cycles\0303 \001(\r\022;\n!rotate_to_headi" +
+      "ng_corner_distance\0304 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000" +
+      "\360?\"O\n\023SettingsReadRequest\022\024\n\014read_chassi" +
+      "s\030\001 \001(\010\022\020\n\010read_map\030\002 \001(\010\022\020\n\010read_rpp\030\003 " +
+      "\001(\010\"\275\001\n\024SettingsReadResponse\022#\n\006result\030\001" +
+      " \001(\0162\023.sl_link.ResultCode\022)\n\007chassis\030\002 \001" +
+      "(\0132\030.sl_link.ChassisSettings\022!\n\003map\030\003 \001(" +
+      "\0132\024.sl_link.MapSettings\022\017\n\007message\030\004 \001(\t" +
+      "\022!\n\003rpp\030\005 \001(\0132\024.sl_link.RppSettings\"\271\002\n\024" +
+      "SettingsWriteRequest\022)\n\007chassis\030\001 \001(\0132\030." +
+      "sl_link.ChassisSettings\022!\n\003map\030\002 \001(\0132\024.s" +
+      "l_link.MapSettings\022!\n\003rpp\030\003 \001(\0132\024.sl_lin" +
+      "k.RppSettings\022\035\n\025apply_rpp_temporarily\030\004" +
+      " \001(\010\022\030\n\020save_rpp_default\030\005 \001(\010\022\026\n\016rpp_fi" +
+      "eld_mask\030\006 \001(\004\022,\n\007process\030\007 \001(\0132\033.sl_lin" +
+      "k.MapProcessSettings\022\026\n\016process_map_id\030\010" +
+      " \001(\t\022\031\n\021process_region_id\030\t \001(\t\"\352\002\n\025Sett" +
+      "ingsWriteResponse\022#\n\006result\030\001 \001(\0162\023.sl_l" +
+      "ink.ResultCode\022\017\n\007message\030\002 \001(\t\022)\n\007chass" +
+      "is\030\003 \001(\0132\030.sl_link.ChassisSettings\022!\n\003ma" +
+      "p\030\004 \001(\0132\024.sl_link.MapSettings\022!\n\003rpp\030\005 \001" +
+      "(\0132\024.sl_link.RppSettings\022\023\n\013rpp_applied\030" +
+      "\006 \001(\010\022\021\n\trpp_saved\030\007 \001(\010\022!\n\031geometry_req" +
+      "uires_restart\030\010 \001(\010\022,\n\007process\030\t \001(\0132\033.s" +
+      "l_link.MapProcessSettings\022\026\n\016process_map" +
+      "_id\030\n \001(\t\022\031\n\021process_region_id\030\013 \001(\t\"3\n\006" +
+      "Pose2D\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\023\n\013heading_" +
+      "deg\030\003 \001(\002\"\260\001\n\026LocalizationCovariance\022\r\n\005" +
+      "valid\030\001 \001(\010\022\022\n\nx_variance\030\002 \001(\002\022\022\n\ny_var" +
+      "iance\030\003 \001(\002\022\024\n\014yaw_variance\030\004 \001(\002\022\025\n\rxy_" +
+      "covariance\030\005 \001(\002\022\030\n\020x_yaw_covariance\030\006 \001" +
+      "(\002\022\030\n\020y_yaw_covariance\030\007 \001(\002\"\247\t\n\022DeviceS" +
+      "tatusReport\022\020\n\010utc_time\030\001 \001(\r\022,\n\rsystem_" +
+      "status\030\002 \001(\0162\025.sl_link.SystemStatus\022(\n\013w" +
+      "ifi_status\030\003 \001(\0162\023.sl_link.WifiResult\022$\n" +
+      "\twork_mode\030\004 \001(\0162\021.sl_link.WorkMode\022,\n\020l" +
+      "eft_wheel_speed\030\005 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360" +
+      "?\022-\n\021right_wheel_speed\030\006 \001(\002B\022\212\265\030\003m/s\221\265\030" +
+      "\000\000\000\000\000\000\360?\022\026\n\016disc_speed_rpm\030\007 \001(\r\022\024\n\014disc" +
+      "_enabled\030\010 \001(\010\022/\n\017disc_lift_state\030\t \001(\0162" +
+      "\026.sl_link.DiscLiftState\022\025\n\rlight_enabled" +
+      "\030\n \001(\010\022!\n\010position\030\013 \001(\0132\017.sl_link.Pose2" +
+      "D\022\027\n\017chassis_enabled\030\014 \001(\010\022\031\n\021alignment_" +
+      "yaw_deg\030\r \001(\002\022@\n\027localization_covariance" +
+      "\030\016 \001(\0132\037.sl_link.LocalizationCovariance\022" +
+      "&\n\036localization_quality_available\030\017 \001(\010\022" +
+      "\034\n\024localization_quality\030\020 \001(\r\022\032\n\022collisi" +
+      "on_imminent\030\021 \001(\010\022%\n\035radar_system_status" +
+      "_available\030\022 \001(\010\022\033\n\023radar_system_status\030" +
+      "\023 \001(\t\022)\n\rvehicle_speed\030\024 \001(\002B\022\212\265\030\003m/s\221\265\030" +
+      "\000\000\000\000\000\000\360?\022\036\n\021chassis_connected\030\025 \001(\010H\000\210\001\001" +
+      "\022#\n\026emergency_stop_latched\030\026 \001(\010H\001\210\001\001\022\037\n" +
+      "\022localization_ready\030\027 \001(\010H\002\210\001\001\022\'\n\032locali" +
+      "zation_pause_latched\030\030 \001(\010H\003\210\001\001\022\"\n\032local" +
+      "ization_status_reason\030\031 \001(\t\022\"\n\025left_moto" +
+      "r_fault_code\030\032 \001(\005H\004\210\001\001\022#\n\026right_motor_f" +
+      "ault_code\030\033 \001(\005H\005\210\001\001\022,\n\rsystem_health\030\034 " +
+      "\001(\0132\025.sl_link.SystemHealthB\024\n\022_chassis_c" +
+      "onnectedB\031\n\027_emergency_stop_latchedB\025\n\023_" +
+      "localization_readyB\035\n\033_localization_paus" +
+      "e_latchedB\030\n\026_left_motor_fault_codeB\031\n\027_" +
+      "right_motor_fault_code\"\306\004\n\014SystemHealth\022" +
+      "\036\n\021cpu_temperature_c\030\001 \001(\002H\000\210\001\001\022\036\n\021cpu_u" +
+      "sage_percent\030\002 \001(\002H\001\210\001\001\022!\n\024memory_usage_" +
+      "percent\030\003 \001(\002H\002\210\001\001\022\037\n\022memory_total_bytes" +
+      "\030\004 \001(\004H\003\210\001\001\022#\n\026memory_available_bytes\030\005 " +
+      "\001(\004H\004\210\001\001\022\037\n\022disk_usage_percent\030\006 \001(\002H\005\210\001" +
+      "\001\022\034\n\017disk_free_bytes\030\007 \001(\004H\006\210\001\001\022\033\n\016uptim" +
+      "e_seconds\030\010 \001(\004H\007\210\001\001\022$\n\027cellular_signal_" +
+      "percent\030\t \001(\rH\010\210\001\001\022\026\n\016cellular_state\030\n \001" +
+      "(\t\022\"\n\032cellular_access_technology\030\013 \001(\tB\024" +
+      "\n\022_cpu_temperature_cB\024\n\022_cpu_usage_perce" +
+      "ntB\027\n\025_memory_usage_percentB\025\n\023_memory_t" +
+      "otal_bytesB\031\n\027_memory_available_bytesB\025\n" +
+      "\023_disk_usage_percentB\022\n\020_disk_free_bytes" +
+      "B\021\n\017_uptime_secondsB\032\n\030_cellular_signal_" +
+      "percent\">\n\022CameraFrameRequest\022\020\n\010snapsho" +
+      "t\030\001 \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\"\263\001\n\020Came" +
+      "raFrameChunk\022\020\n\010frame_id\030\001 \001(\r\022\020\n\010utc_ti" +
+      "me\030\002 \001(\r\022\r\n\005width\030\003 \001(\r\022\016\n\006height\030\004 \001(\r\022" +
+      "#\n\005codec\030\005 \001(\0162\024.sl_link.CameraCodec\022\023\n\013" +
+      "chunk_index\030\006 \001(\r\022\024\n\014total_chunks\030\007 \001(\r\022" +
+      "\014\n\004data\030\010 \001(\014\"Z\n\nMapRequest\022\020\n\010snapshot\030" +
+      "\001 \001(\010\022\026\n\016max_chunk_size\030\002 \001(\r\022\016\n\006map_id\030" +
+      "\003 \001(\t\022\022\n\nrequest_id\030\004 \001(\004\"\342\001\n\020MapRequest" +
+      "Result\022\022\n\nrequest_id\030\001 \001(\004\022)\n\006status\030\002 \001" +
+      "(\0162\031.sl_link.MapRequestStatus\022\016\n\006map_id\030" +
+      "\003 \001(\t\022\023\n\013snapshot_id\030\004 \001(\004\022\024\n\014total_chun" +
+      "ks\030\005 \001(\r\022\024\n\014payload_size\030\006 \001(\r\022\025\n\rpayloa" +
+      "d_crc32\030\007 \001(\r\022\026\n\016retry_after_ms\030\010 \001(\r\022\017\n" +
+      "\007message\030\t \001(\t\"\200\004\n\010MapChunk\022\016\n\006map_id\030\001 " +
+      "\001(\r\022\020\n\010utc_time\030\002 \001(\r\022&\n\010encoding\030\003 \001(\0162" +
+      "\024.sl_link.MapEncoding\022\r\n\005width\030\004 \001(\r\022\016\n\006" +
+      "height\030\005 \001(\r\022\022\n\nresolution\030\006 \001(\002\022\023\n\013chun" +
+      "k_index\030\007 \001(\r\022\024\n\014total_chunks\030\010 \001(\r\022\014\n\004d" +
+      "ata\030\t \001(\014\022\037\n\006origin\030\n \001(\0132\017.sl_link.Pose" +
+      "2D\022\020\n\010frame_id\030\013 \001(\t\022\027\n\017preview_scale_x\030" +
+      "\014 \001(\002\022\027\n\017preview_scale_y\030\r \001(\002\022@\n\027locali" +
+      "zation_covariance\030\016 \001(\0132\037.sl_link.Locali" +
+      "zationCovariance\022\031\n\021alignment_yaw_deg\030\017 " +
+      "\001(\002\022\030\n\020app_rotation_deg\030\020 \001(\002\022$\n\034rotatio" +
+      "n_alignment_delta_deg\030\021 \001(\002\022\023\n\013map_versi" +
+      "on\030\022 \001(\r\022\022\n\nrequest_id\030\023 \001(\004\022\023\n\013snapshot" +
+      "_id\030\024 \001(\004\"6\n\013PathPoint2D\022\t\n\001x\030\001 \001(\002\022\t\n\001y" +
+      "\030\002 \001(\002\022\021\n\tpath_type\030\003 \001(\t\"5\n\020RegionRepea" +
+      "tItem\022\021\n\tregion_id\030\001 \001(\t\022\016\n\006repeat\030\002 \001(\r" +
+      "\"\222\003\n\nTaskConfig\022\017\n\007task_id\030\001 \001(\t\022,\n\014work" +
+      "_regions\030\002 \003(\0132\026.sl_link.PolygonRegion\0220" +
+      "\n\020obstacle_regions\030\003 \003(\0132\026.sl_link.Polyg" +
+      "onRegion\022.\n\024default_path_spacing\030\004 \001(\002B\020" +
+      "\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022%\n\013turn_radius\030\005 \001(\002B\020\212" +
+      "\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022+\n\roverlap_ratio\030\006 \001(\002B\024" +
+      "\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\022*\n\020inflation_radius" +
+      "\030\007 \001(\002B\020\212\265\030\001m\221\265\030\000\000\000\000\000\000\360?\022\016\n\006map_id\030\010 \001(\t" +
+      "\022 \n\030selected_work_region_ids\030\t \003(\t\0221\n\016re" +
+      "gion_repeats\030\n \003(\0132\031.sl_link.RegionRepea" +
+      "tItem\"[\n\022TaskConfigResponse\022#\n\006result\030\001 " +
       "\001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(" +
-      "\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\0222\n\016r" +
-      "egion_metrics\030\005 \003(\0132\032.sl_link.RegionMetr" +
-      "icsItem\"S\n\021TaskResultRequest\022\016\n\006map_id\030\001" +
-      " \001(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_execution_r" +
-      "ecords\030\003 \001(\r\"\234\001\n\024TaskResultRegionItem\022\021\n" +
-      "\tregion_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\025\n" +
-      "\rtarget_repeat\030\003 \001(\r\022\027\n\017executed_repeat\030" +
-      "\004 \001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021unfinished_r" +
-      "eason\030\006 \001(\t\"\341\002\n\023TaskExecutionRecord\022\024\n\014e" +
-      "xecution_id\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\017\n\007tas" +
-      "k_id\030\003 \001(\t\022\'\n\013final_state\030\004 \001(\0162\022.sl_lin" +
-      "k.TaskState\022\023\n\013stop_reason\030\005 \001(\t\022\022\n\nstar" +
-      "ted_at\030\006 \001(\004\022\023\n\013finished_at\030\007 \001(\004\022*\n\017pla" +
-      "nned_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n" +
-      "\020executed_area_m2\030\t \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000" +
-      "\360?\022&\n\010progress\030\n \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000" +
-      "\360?\022\024\n\014path_version\030\013 \001(\r\022\025\n\rall_complete" +
-      "d\030\014 \001(\010\"\244\006\n\022TaskResultResponse\022#\n\006result" +
-      "\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002" +
-      " \001(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\'\n" +
-      "\013final_state\030\005 \001(\0162\022.sl_link.TaskState\022\025" +
-      "\n\rall_completed\030\006 \001(\010\022\023\n\013stop_reason\030\007 \001" +
-      "(\t\022\024\n\014path_version\030\010 \001(\r\022\024\n\014image_format" +
-      "\030\t \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n\013image_widt" +
-      "h\030\013 \001(\r\022\024\n\014image_height\030\014 \001(\r\022\023\n\013finishe" +
-      "d_at\030\r \001(\004\022 \n\030selected_work_region_ids\030\016" +
-      " \003(\t\0225\n\016region_results\030\017 \003(\0132\035.sl_link.T" +
-      "askResultRegionItem\022@\n\027localization_cova" +
-      "riance\030\020 \001(\0132\037.sl_link.LocalizationCovar" +
-      "iance\022\031\n\021alignment_yaw_deg\030\021 \001(\002\022\030\n\020app_" +
-      "rotation_deg\030\022 \001(\002\022$\n\034rotation_alignment" +
-      "_delta_deg\030\023 \001(\002\022\024\n\014execution_id\030\024 \001(\t\022\022" +
-      "\n\nstarted_at\030\025 \001(\004\022*\n\017planned_area_m2\030\026 " +
-      "\001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020executed_area_" +
-      "m2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220\n\022execution" +
-      "_progress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\0227\n" +
-      "\021execution_records\030\031 \003(\0132\034.sl_link.TaskE" +
-      "xecutionRecord\"|\n\033TaskExecutionHistoryRe" +
-      "quest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\022" +
-      "\n\nstart_time\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\026\n\016" +
-      "max_chunk_size\030\005 \001(\r\"\314\001\n\031TaskExecutionHi" +
-      "storyChunk\022#\n\006result\030\001 \001(\0162\023.sl_link.Res" +
-      "ultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013chunk_index\030" +
-      "\003 \001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032\n\022total_rec" +
-      "ord_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014\022\022\n\nstart_t" +
-      "ime\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2\n\032TaskExecu" +
-      "tionDeleteRequest\022\024\n\014execution_id\030\001 \001(\t\"" +
-      "\274\001\n\033TaskExecutionDeleteResponse\022#\n\006resul" +
-      "t\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030" +
-      "\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017\n\007task_id\030\004" +
-      " \001(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007deleted\030\006 \001(\010\022\037\n" +
-      "\027execution_files_deleted\030\007 \001(\010\"\272\001\n\025TaskT" +
-      "rajectoryRequest\022\024\n\014execution_id\030\001 \001(\t\022\017" +
-      "\n\007task_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010e" +
-      "nd_time\030\004 \001(\004\022\023\n\013start_index\030\005 \001(\r\022\022\n\nma" +
-      "x_points\030\006 \001(\r\022\023\n\013sample_step\030\007 \001(\r\022\026\n\016m" +
-      "ax_chunk_size\030\010 \001(\r\"\221\002\n\023TaskTrajectoryPo" +
-      "int\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_ms\030\002 \001(\r\022\014\n" +
-      "\004x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014heading_mde" +
-      "g\030\005 \001(\021\022\031\n\021linear_speed_mmps\030\006 \001(\021\022\034\n\024an" +
-      "gular_speed_mradps\030\007 \001(\021\022\026\n\016disc_speed_r" +
-      "pm\030\010 \001(\r\022\027\n\017speed_available\030\t \001(\010\022\024\n\014dis" +
-      "c_enabled\030\n \001(\010\022&\n\ntask_state\030\013 \001(\0162\022.sl" +
-      "_link.TaskState\"\243\007\n\023TaskTrajectoryChunk\022" +
-      "#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007" +
-      "message\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\023\n\013c" +
-      "hunk_index\030\004 \001(\r\022\024\n\014total_chunks\030\005 \001(\r\022\031" +
-      "\n\021total_point_count\030\006 \001(\r\022\034\n\024returned_po" +
-      "int_count\030\007 \001(\r\022\023\n\013start_index\030\010 \001(\r\022\022\n\n" +
-      "next_index\030\t \001(\r\022\020\n\010has_more\030\n \001(\010\022\025\n\rst" +
-      "arted_at_ms\030\013 \001(\004\022,\n\006points\030\014 \003(\0132\034.sl_l" +
-      "ink.TaskTrajectoryPoint\022\017\n\007task_id\030\r \001(\t" +
-      "\022\016\n\006map_id\030\016 \001(\t\022\022\n\nstart_time\030\017 \001(\004\022\020\n\010" +
-      "end_time\030\020 \001(\004\022\023\n\013sample_step\030\021 \001(\r\022\025\n\rm" +
-      "ap_available\030\022 \001(\010\022\023\n\013map_message\030\023 \001(\t\022" +
-      "\023\n\013map_version\030\024 \001(\r\022\030\n\020map_source_width" +
-      "\030\025 \001(\r\022\031\n\021map_source_height\030\026 \001(\r\022\026\n\016map" +
-      "_resolution\030\027 \001(\002\022#\n\nmap_origin\030\030 \001(\0132\017." +
-      "sl_link.Pose2D\022\024\n\014map_frame_id\030\031 \001(\t\022\030\n\020" +
-      "map_image_format\030\032 \001(\t\022\027\n\017map_image_widt" +
-      "h\030\033 \001(\r\022\030\n\020map_image_height\030\034 \001(\r\022\033\n\023map" +
-      "_preview_scale_x\030\035 \001(\002\022\033\n\023map_preview_sc" +
-      "ale_y\030\036 \001(\002\022\026\n\016map_image_data\030\037 \001(\014\022\035\n\025m" +
-      "ap_image_chunk_index\030  \001(\r\022\036\n\026map_image_" +
-      "total_chunks\030! \001(\r\022\031\n\021alignment_yaw_deg\030" +
-      "\" \001(\002\022\030\n\020app_rotation_deg\030# \001(\002\022$\n\034rotat" +
-      "ion_alignment_delta_deg\030$ \001(\002\"\032\n\030LiveMap" +
-      "CacheClearRequest\"Q\n\031LiveMapCacheClearRe" +
-      "sponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultC" +
-      "ode\022\017\n\007message\030\002 \001(\t\"h\n\027SystemCacheClear" +
-      "Request\022\032\n\022clear_memory_cache\030\001 \001(\010\022\035\n\025c" +
-      "lear_temporary_files\030\002 \001(\010\022\022\n\nclear_logs" +
-      "\030\003 \001(\010\"\376\001\n\030SystemCacheClearResponse\022#\n\006r" +
-      "esult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mess" +
-      "age\030\002 \001(\t\022\034\n\024memory_cache_cleared\030\003 \001(\010\022" +
-      "\037\n\027temporary_files_cleared\030\004 \001(\r\022 \n\030temp" +
-      "orary_bytes_released\030\005 \001(\004\022\031\n\021log_files_" +
-      "cleared\030\006 \001(\r\022\032\n\022log_bytes_released\030\007 \001(" +
-      "\004\022\024\n\014failed_items\030\010 \001(\r\"\033\n\031RadarMapCache" +
-      "ClearRequest\"R\n\032RadarMapCacheClearRespon" +
+      "\t\022\017\n\007task_id\030\003 \001(\t\"I\n\013TaskCommand\022\017\n\007tas" +
+      "k_id\030\001 \001(\t\022)\n\007command\030\002 \001(\0162\030.sl_link.Ta" +
+      "skCommandType\"\\\n\023TaskCommandResponse\022#\n\006" +
+      "result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mes" +
+      "sage\030\002 \001(\t\022\017\n\007task_id\030\003 \001(\t\"\227\001\n\032TaskRunt" +
+      "imeSettingsRequest\022\017\n\007task_id\030\001 \001(\t\022*\n\tr" +
+      "un_speed\030\002 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?H\000\210\001\001\022" +
+      "\033\n\016disc_speed_rpm\030\003 \001(\rH\001\210\001\001B\014\n\n_run_spe" +
+      "edB\021\n\017_disc_speed_rpm\"\250\002\n\033TaskRuntimeSet" +
+      "tingsResponse\022#\n\006result\030\001 \001(\0162\023.sl_link." +
+      "ResultCode\022\017\n\007message\030\002 \001(\t\022\017\n\007task_id\030\003" +
+      " \001(\t\022*\n\trun_speed\030\004 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000" +
+      "\000\360?H\000\210\001\001\022\033\n\016disc_speed_rpm\030\005 \001(\rH\001\210\001\001\022)\n" +
+      "\rmax_run_speed\030\006 \001(\002B\022\212\265\030\003m/s\221\265\030\000\000\000\000\000\000\360?" +
+      "\022\032\n\022max_disc_speed_rpm\030\007 \001(\r\022\021\n\ttemporar" +
+      "y\030\010 \001(\010B\014\n\n_run_speedB\021\n\017_disc_speed_rpm" +
+      "\"\273\004\n\020TaskStatusReport\022\017\n\007task_id\030\001 \001(\t\022!" +
+      "\n\005state\030\002 \001(\0162\022.sl_link.TaskState\022\020\n\010pro" +
+      "gress\030\003 \001(\002\022\023\n\013map_version\030\004 \001(\r\022\017\n\007mess" +
+      "age\030\005 \001(\t\022!\n\010position\030\006 \001(\0132\017.sl_link.Po" +
+      "se2D\022\030\n\020replan_requested\030\007 \001(\010\022\030\n\020path_p" +
+      "oint_count\030\010 \001(\r\022\024\n\014path_version\030\t \001(\r\022-" +
+      "\n\022total_work_area_m2\030\n \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000" +
+      "\000\000\000\360?\0221\n\026remaining_work_area_m2\030\013 \001(\002B\021\212" +
+      "\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020remaining_time_s\030\014 \001" +
+      "(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\031\n\021current_region_i" +
+      "d\030\r \001(\t\022#\n\033current_region_repeat_index\030\016" +
+      " \001(\r\022#\n\033current_region_repeat_total\030\017 \001(" +
+      "\r\022\031\n\021alignment_yaw_deg\030\020 \001(\002\022@\n\027localiza" +
+      "tion_covariance\030\021 \001(\0132\037.sl_link.Localiza" +
+      "tionCovariance\"\333\001\n\024PathPointPlanRequest\022" +
+      "\017\n\007task_id\030\001 \001(\t\022\026\n\016max_chunk_size\030\002 \001(\r" +
+      "\022\022\n\nrequest_id\030\003 \001(\t\022\024\n\014force_replan\030\004 \001" +
+      "(\010\022#\n\nstart_pose\030\005 \001(\0132\017.sl_link.Pose2D\022" +
+      "!\n\010end_pose\030\006 \001(\0132\017.sl_link.Pose2D\022\030\n\020gl" +
+      "obal_direction\030\007 \001(\t\022\016\n\006map_id\030\010 \001(\t\"\225\003\n" +
+      "\025PathPointPlanResponse\022\017\n\007task_id\030\001 \001(\t\022" +
+      "\023\n\013chunk_index\030\002 \001(\r\022\024\n\014total_chunks\030\003 \001" +
+      "(\r\022\024\n\014path_version\030\004 \001(\r\022\014\n\004data\030\005 \001(\014\022\022" +
+      "\n\nrequest_id\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022#\n\006re" +
+      "sult\030\010 \001(\0162\023.sl_link.ResultCode\022\017\n\007messa" +
+      "ge\030\t \001(\t\022\017\n\007planned\030\n \001(\010\022\023\n\013map_version" +
+      "\030\013 \001(\r\022\030\n\020path_point_count\030\014 \001(\r\022\025\n\rpath" +
+      "_length_m\030\r \001(\002\022-\n\022total_work_area_m2\030\016 " +
+      "\001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time" +
+      "_s\030\017 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\020\n\010frame_id\030\020" +
+      " \001(\t\"d\n\021MapPreviewRequest\022\020\n\010max_edge\030\001 " +
+      "\001(\r\022\024\n\014image_format\030\002 \001(\t\022\027\n\017include_ove" +
+      "rlay\030\003 \001(\010\022\016\n\006map_id\030\004 \001(\t\"\344\003\n\022MapPrevie" +
+      "wResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
+      "ltCode\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version\030\003" +
+      " \001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030\005 \001(\r\022\022\n\nr" +
+      "esolution\030\006 \001(\002\022\037\n\006origin\030\007 \001(\0132\017.sl_lin" +
+      "k.Pose2D\022\020\n\010frame_id\030\010 \001(\t\022\022\n\nimage_data" +
+      "\030\t \001(\014\022\024\n\014overlay_json\030\n \001(\t\022\027\n\017preview_" +
+      "scale_x\030\013 \001(\002\022\027\n\017preview_scale_y\030\014 \001(\002\022@" +
+      "\n\027localization_covariance\030\r \001(\0132\037.sl_lin" +
+      "k.LocalizationCovariance\022\031\n\021alignment_ya" +
+      "w_deg\030\016 \001(\002\022\030\n\020app_rotation_deg\030\017 \001(\002\022$\n" +
+      "\034rotation_alignment_delta_deg\030\020 \001(\002\022\016\n\006m" +
+      "ap_id\030\021 \001(\t\022\024\n\014map_revision\030\022 \001(\t\"\'\n\025Map" +
+      "RegionPointRequest\022\016\n\006map_id\030\001 \001(\t\"\277\001\n\023W" +
+      "orkRegionPointInfo\022&\n\006region\030\001 \001(\0132\026.sl_" +
+      "link.PolygonRegion\022\034\n\024start_pose_availab" +
+      "le\030\002 \001(\010\022#\n\nstart_pose\030\003 \001(\0132\017.sl_link.P" +
+      "ose2D\022\032\n\022end_pose_available\030\004 \001(\010\022!\n\010end" +
+      "_pose\030\005 \001(\0132\017.sl_link.Pose2D\"\324\002\n\026MapRegi" +
+      "onPointResponse\022#\n\006result\030\001 \001(\0162\023.sl_lin" +
+      "k.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030" +
+      "\003 \001(\t\022\023\n\013map_version\030\004 \001(\r\0222\n\014work_regio" +
+      "ns\030\005 \003(\0132\034.sl_link.WorkRegionPointInfo\0220" +
+      "\n\020obstacle_regions\030\006 \003(\0132\026.sl_link.Polyg" +
+      "onRegion\022-\n\rerase_regions\030\007 \003(\0132\026.sl_lin" +
+      "k.PolygonRegion\022\035\n\025crop_region_available" +
+      "\030\010 \001(\010\022+\n\013crop_region\030\t \001(\0132\026.sl_link.Po" +
+      "lygonRegion\"\261\003\n\016MapEditCommand\022\017\n\007edit_i" +
+      "d\030\001 \001(\t\022,\n\toperation\030\002 \001(\0162\031.sl_link.Map" +
+      "EditOperation\022\023\n\013region_name\030\003 \001(\t\022&\n\006re" +
+      "gion\030\004 \001(\0132\026.sl_link.PolygonRegion\022&\n\007po" +
+      "lygon\030\005 \003(\0132\025.sl_link.PolygonPoint\022\024\n\014br" +
+      "ush_radius\030\006 \001(\002\022\023\n\013paint_value\030\007 \001(\005\022\030\n" +
+      "\020target_region_id\030\010 \001(\t\022/\n\022target_region" +
+      "_type\030\t \001(\0162\023.sl_link.RegionType\022\034\n\024expe" +
+      "cted_map_version\030\n \001(\r\022\017\n\007dry_run\030\013 \001(\010\022" +
+      "#\n\nstart_pose\030\014 \001(\0132\017.sl_link.Pose2D\022!\n\010" +
+      "end_pose\030\r \001(\0132\017.sl_link.Pose2D\022\016\n\006map_i" +
+      "d\030\016 \001(\t\"\\\n\017MapEditResponse\022#\n\006result\030\001 \001" +
+      "(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t" +
+      "\022\023\n\013map_version\030\003 \001(\r\"W\n\023MapEditStatusRe" +
+      "port\022\023\n\013map_version\030\001 \001(\r\022\032\n\022applied_to_" +
+      "planner\030\002 \001(\010\022\017\n\007message\030\003 \001(\t\"/\n\026VideoS" +
+      "treamInfoRequest\022\025\n\rinclude_debug\030\001 \001(\010\"" +
+      "\263\001\n\027VideoStreamInfoResponse\022#\n\006result\030\001 " +
+      "\001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(" +
+      "\t\022\022\n\nstream_url\030\003 \001(\t\022\r\n\005codec\030\004 \001(\t\022\r\n\005" +
+      "width\030\005 \001(\r\022\016\n\006height\030\006 \001(\r\022\016\n\006online\030\007 " +
+      "\001(\010\022\020\n\010utc_time\030\010 \001(\r\"\362\001\n\017PathPlanReques" +
+      "t\022\022\n\nrequest_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\024" +
+      "\n\014force_replan\030\003 \001(\010\022\032\n\022return_path_chun" +
+      "ks\030\004 \001(\010\022\026\n\016max_chunk_size\030\005 \001(\r\022#\n\nstar" +
+      "t_pose\030\006 \001(\0132\017.sl_link.Pose2D\022!\n\010end_pos" +
+      "e\030\007 \001(\0132\017.sl_link.Pose2D\022\030\n\020global_direc" +
+      "tion\030\010 \001(\t\022\016\n\006map_id\030\t \001(\t\"\257\005\n\020PathPlanR" +
+      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
+      "Code\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(" +
+      "\t\022\017\n\007task_id\030\004 \001(\t\022\023\n\013map_version\030\005 \001(\r\022" +
+      "\024\n\014path_version\030\006 \001(\r\022\030\n\020path_point_coun" +
+      "t\030\007 \001(\r\022\025\n\rpath_length_m\030\010 \001(\002\022\017\n\007planne" +
+      "d\030\t \001(\010\022\024\n\014path_chunked\030\n \001(\010\022\025\n\rpreview" +
+      "_image\030\013 \001(\014\022\026\n\016preview_format\030\014 \001(\t\022\r\n\005" +
+      "width\030\r \001(\r\022\016\n\006height\030\016 \001(\r\022\022\n\nresolutio" +
+      "n\030\017 \001(\002\022\037\n\006origin\030\020 \001(\0132\017.sl_link.Pose2D" +
+      "\022\020\n\010frame_id\030\021 \001(\t\022\027\n\017preview_scale_x\030\022 " +
+      "\001(\002\022\027\n\017preview_scale_y\030\023 \001(\002\022-\n\022total_wo" +
+      "rk_area_m2\030\024 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020e" +
+      "stimated_time_s\030\025 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022" +
+      "@\n\027localization_covariance\030\026 \001(\0132\037.sl_li" +
+      "nk.LocalizationCovariance\022\031\n\021alignment_y" +
+      "aw_deg\030\027 \001(\002\022\030\n\020app_rotation_deg\030\030 \001(\002\022$" +
+      "\n\034rotation_alignment_delta_deg\030\031 \001(\002\"m\n\016" +
+      "MapSyncRequest\022,\n\toperation\030\001 \001(\0162\031.sl_l" +
+      "ink.MapSyncOperation\022\016\n\006map_id\030\002 \001(\t\022\035\n\025" +
+      "update_navigation_map\030\003 \001(\010\"\226\002\n\017MapSyncR" +
+      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
+      "Code\022\017\n\007message\030\002 \001(\t\022,\n\toperation\030\003 \001(\016" +
+      "2\031.sl_link.MapSyncOperation\022\016\n\006map_id\030\004 " +
+      "\001(\t\022\020\n\010map_name\030\010 \001(\t\022\024\n\014map_revision\030\t " +
+      "\001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016map_image_" +
+      "path\030\006 \001(\t\022\037\n\027navigation_map_reloaded\030\007 " +
+      "\001(\010\022\027\n\017lifecycle_state\030\n \001(\t\")\n\027MapImpor" +
+      "tToRadarRequest\022\016\n\006map_id\030\001 \001(\t\"\263\001\n\030MapI" +
+      "mportToRadarResponse\022#\n\006result\030\001 \001(\0162\023.s" +
+      "l_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006ma" +
+      "p_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\020\n\010imported" +
+      "\030\005 \001(\010\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycl" +
+      "e_state\030\007 \001(\t\"W\n\016MapModeRequest\022\"\n\004mode\030" +
+      "\001 \001(\0162\024.sl_link.MapModeType\022\017\n\007enabled\030\002" +
+      " \001(\010\022\020\n\010map_kind\030\003 \001(\005\"\345\001\n\017MapModeRespon" +
       "se\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022" +
-      "\017\n\007message\030\002 \001(\t\"\032\n\030RadarSystemStatusReq" +
-      "uest\"\212\001\n\031RadarSystemStatusResponse\022#\n\006re" +
-      "sult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messa" +
-      "ge\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016\n\006status\030\004 " +
-      "\001(\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023RadarMapSyn" +
-      "cRequest\"Z\n\024RadarMapSyncResponse\022#\n\006resu" +
+      "\017\n\007message\030\002 \001(\t\022\"\n\004mode\030\003 \001(\0162\024.sl_link" +
+      ".MapModeType\022\017\n\007enabled\030\004 \001(\010\022\020\n\010map_kin" +
+      "d\030\005 \001(\005\022\027\n\017lifecycle_state\030\006 \001(\t\022\016\n\006map_" +
+      "id\030\007 \001(\t\022\024\n\014map_revision\030\010 \001(\t\022\026\n\016residu" +
+      "al_nodes\030\t \003(\t\";\n\023MapAlignmentRequest\022\016\n" +
+      "\006map_id\030\001 \001(\t\022\024\n\014rotation_deg\030\002 \001(\002\"\311\001\n\024" +
+      "MapAlignmentResponse\022#\n\006result\030\001 \001(\0162\023.s" +
+      "l_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006ma" +
+      "p_id\030\003 \001(\t\022\024\n\014rotation_deg\030\004 \001(\002\022\024\n\014rota" +
+      "tion_rad\030\005 \001(\002\022\031\n\021alignment_yaw_deg\030\006 \001(" +
+      "\002\022$\n\034rotation_alignment_delta_deg\030\007 \001(\002\"" +
+      "\023\n\021MapCatalogRequest\"\303\002\n\016MapCatalogItem\022" +
+      "\016\n\006map_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\022\n\nsize_by" +
+      "tes\030\003 \001(\004\022\020\n\010saved_at\030\004 \001(\004\022-\n\022total_wor" +
+      "k_area_m2\030\005 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020es" +
+      "timated_time_s\030\006 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030" +
+      "\n\020thumbnail_format\030\007 \001(\t\022\027\n\017thumbnail_wi" +
+      "dth\030\010 \001(\r\022\030\n\020thumbnail_height\030\t \001(\r\022\033\n\023t" +
+      "humbnail_image_b64\030\n \001(\t\022\022\n\ncreated_at\030\013" +
+      " \001(\t\022\024\n\014map_revision\030\014 \001(\t\"\207\001\n\022MapCatalo" +
+      "gResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
+      "ltCode\022\017\n\007message\030\002 \001(\t\022\023\n\013total_count\030\003" +
+      " \001(\r\022&\n\005items\030\004 \003(\0132\027.sl_link.MapCatalog" +
+      "Item\"\"\n\020MapDeleteRequest\022\016\n\006map_id\030\001 \001(\t" +
+      "\"\312\001\n\021MapDeleteResponse\022#\n\006result\030\001 \001(\0162\023" +
+      ".sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006" +
+      "map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\017\n\007delete" +
+      "d\030\005 \001(\010\022\025\n\rlocal_deleted\030\006 \001(\010\022\026\n\016remote" +
+      "_deleted\030\007 \001(\010\022\035\n\025remote_delete_pending\030" +
+      "\010 \001(\010\"b\n\016MapSaveRequest\022\020\n\010map_name\030\001 \001(" +
+      "\t\022\016\n\006map_id\030\002 \001(\t\022\030\n\020has_rotation_deg\030\003 ",
+      "\001(\010\022\024\n\014rotation_deg\030\004 \001(\002\"\246\003\n\017MapSaveRes" +
+      "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
+      "de\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010m" +
+      "ap_name\030\004 \001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016" +
+      "map_image_path\030\006 \001(\t\022\037\n\027navigation_map_r" +
+      "eloaded\030\007 \001(\010\022-\n\022total_work_area_m2\030\010 \001(" +
+      "\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s" +
+      "\030\t \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\022\n\ncreated_at\030\n" +
+      " \001(\t\022\024\n\014map_revision\030\013 \001(\t\022\027\n\017lifecycle_" +
+      "state\030\014 \001(\t\022\027\n\017mapping_stopped\030\r \001(\010\022\034\n\024" +
+      "localization_started\030\016 \001(\010\022\026\n\016residual_n" +
+      "odes\030\017 \003(\t\"#\n\021MapMetricsRequest\022\016\n\006map_i" +
+      "d\030\001 \001(\t\"\233\001\n\021RegionMetricsItem\022\021\n\tregion_" +
+      "id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\016\n\006repeat\030" +
+      "\003 \001(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360" +
+      "?\022*\n\020estimated_time_h\030\005 \001(\002B\020\212\265\030\001h\221\265\030\000\000\000" +
+      "\000\000\000\360?\"\240\001\n\022MapMetricsResponse\022#\n\006result\030\001" +
+      " \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001" +
+      "(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\0222\n\016" +
+      "region_metrics\030\005 \003(\0132\032.sl_link.RegionMet" +
+      "ricsItem\"S\n\021TaskResultRequest\022\016\n\006map_id\030" +
+      "\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_execution_" +
+      "records\030\003 \001(\r\"\234\001\n\024TaskResultRegionItem\022\021" +
+      "\n\tregion_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\025" +
+      "\n\rtarget_repeat\030\003 \001(\r\022\027\n\017executed_repeat" +
+      "\030\004 \001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021unfinished_" +
+      "reason\030\006 \001(\t\"\341\002\n\023TaskExecutionRecord\022\024\n\014" +
+      "execution_id\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\017\n\007ta" +
+      "sk_id\030\003 \001(\t\022\'\n\013final_state\030\004 \001(\0162\022.sl_li" +
+      "nk.TaskState\022\023\n\013stop_reason\030\005 \001(\t\022\022\n\nsta" +
+      "rted_at\030\006 \001(\004\022\023\n\013finished_at\030\007 \001(\004\022*\n\017pl" +
+      "anned_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+" +
+      "\n\020executed_area_m2\030\t \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000" +
+      "\000\360?\022&\n\010progress\030\n \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000" +
+      "\000\360?\022\024\n\014path_version\030\013 \001(\r\022\025\n\rall_complet" +
+      "ed\030\014 \001(\010\"\244\006\n\022TaskResultResponse\022#\n\006resul" +
+      "t\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030" +
+      "\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\'" +
+      "\n\013final_state\030\005 \001(\0162\022.sl_link.TaskState\022" +
+      "\025\n\rall_completed\030\006 \001(\010\022\023\n\013stop_reason\030\007 " +
+      "\001(\t\022\024\n\014path_version\030\010 \001(\r\022\024\n\014image_forma" +
+      "t\030\t \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n\013image_wid" +
+      "th\030\013 \001(\r\022\024\n\014image_height\030\014 \001(\r\022\023\n\013finish" +
+      "ed_at\030\r \001(\004\022 \n\030selected_work_region_ids\030" +
+      "\016 \003(\t\0225\n\016region_results\030\017 \003(\0132\035.sl_link." +
+      "TaskResultRegionItem\022@\n\027localization_cov" +
+      "ariance\030\020 \001(\0132\037.sl_link.LocalizationCova" +
+      "riance\022\031\n\021alignment_yaw_deg\030\021 \001(\002\022\030\n\020app" +
+      "_rotation_deg\030\022 \001(\002\022$\n\034rotation_alignmen" +
+      "t_delta_deg\030\023 \001(\002\022\024\n\014execution_id\030\024 \001(\t\022" +
+      "\022\n\nstarted_at\030\025 \001(\004\022*\n\017planned_area_m2\030\026" +
+      " \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020executed_area" +
+      "_m2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220\n\022executio" +
+      "n_progress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\0227" +
+      "\n\021execution_records\030\031 \003(\0132\034.sl_link.Task" +
+      "ExecutionRecord\"|\n\033TaskExecutionHistoryR" +
+      "equest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022" +
+      "\022\n\nstart_time\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\026\n" +
+      "\016max_chunk_size\030\005 \001(\r\"\314\001\n\031TaskExecutionH" +
+      "istoryChunk\022#\n\006result\030\001 \001(\0162\023.sl_link.Re" +
+      "sultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013chunk_index" +
+      "\030\003 \001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032\n\022total_re" +
+      "cord_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014\022\022\n\nstart_" +
+      "time\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2\n\032TaskExec" +
+      "utionDeleteRequest\022\024\n\014execution_id\030\001 \001(\t" +
+      "\"\274\001\n\033TaskExecutionDeleteResponse\022#\n\006resu" +
       "lt\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
-      "\030\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\313\001\n\032RadarRelocaliza" +
-      "tionRequest\022\036\n\026initial_pose_available\030\001 " +
-      "\001(\010\022%\n\014initial_pose\030\002 \001(\0132\017.sl_link.Pose" +
-      "2D\022@\n\027initial_pose_covariance\030\003 \001(\0132\037.sl" +
-      "_link.LocalizationCovariance\022\016\n\006map_id\030\004" +
-      " \001(\t\022\024\n\014map_revision\030\005 \001(\t\"\264\001\n\033RadarRelo" +
-      "calizationResponse\022#\n\006result\030\001 \001(\0162\023.sl_" +
-      "link.ResultCode\022\017\n\007message\030\002 \001(\t\022\020\n\010acce" +
-      "pted\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\016\n\006map_id\030\005 \001" +
-      "(\t\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle_st" +
-      "ate\030\007 \001(\t\"\"\n RadarRelocalizationStatusRe" +
-      "quest\"\353\003\n!RadarRelocalizationStatusRespo" +
-      "nse\022\022\n\nraw_status\030\005 \001(\t\022\024\n\014timestamp_ns\030" +
-      "\n \001(\004\022\027\n\017lifecycle_state\030\013 \001(\t\022\016\n\006detail" +
-      "\030\014 \001(\t\022\016\n\006map_id\030\r \001(\t\022\024\n\014map_revision\030\016" +
-      " \001(\t\022\023\n\013good_frames\030\017 \001(\r\022\027\n\017required_fr" +
-      "ames\030\020 \001(\r\022\"\n\032registration_quality_valid" +
-      "\030\021 \001(\010\022\034\n\024registration_fitness\030\022 \001(\002\022!\n\031" +
-      "registration_inlier_ratio\030\023 \001(\002\022\026\n\016resid" +
-      "ual_nodes\030\024 \003(\tJ\004\010\001\020\002J\004\010\002\020\003J\004\010\003\020\004J\004\010\004\020\005J" +
-      "\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020\nR\006resultR\007message" +
-      "R\tavailableR\006statusR\rsystem_statusR\016odom" +
-      "_availableR\025odom_linear_speed_mpsR\030odom_" +
-      "angular_speed_radps\"<\n\017DiscLiftControl\022)" +
-      "\n\007command\030\001 \001(\0162\030.sl_link.DiscLiftComman" +
-      "d\"\"\n\017LightingControl\022\017\n\007enabled\030\001 \001(\010\"&\n" +
-      "\023ChassisPowerControl\022\017\n\007enabled\030\001 \001(\010\"1\n" +
-      "\013DiscControl\022\017\n\007enabled\030\001 \001(\010\022\021\n\tspeed_r" +
-      "pm\030\002 \001(\r\"y\n\025ChannelSessionRequest\022-\n\006act" +
-      "ion\030\001 \001(\0162\035.sl_link.ChannelSessionAction" +
-      "\022\"\n\004role\030\002 \001(\0162\024.sl_link.ChannelRole\022\r\n\005" +
-      "token\030\003 \001(\t\"\363\001\n\026ChannelSessionResponse\022#" +
-      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
-      "essage\030\002 \001(\t\022\"\n\004role\030\003 \001(\0162\024.sl_link.Cha" +
-      "nnelRole\022\r\n\005token\030\004 \001(\t\022\035\n\025heartbeat_int" +
-      "erval_ms\030\005 \001(\r\022\032\n\022session_timeout_ms\030\006 \001" +
-      "(\r\022\025\n\rcontrol_ready\030\007 \001(\010\022\036\n\026emergency_s" +
-      "top_latched\030\010 \001(\010\"\'\n\024EmergencyStopContro" +
-      "l\022\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualDriveContro" +
-      "l\022,\n\006motion\030\001 \001(\0162\034.sl_link.ManualMotion" +
-      "Command\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n\010remote_x" +
-      "\030\003 \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax_speed_mp" +
-      "s\030\005 \001(\002\022\034\n\024max_turn_speed_ratio\030\006 \001(\002\"\313\002" +
-      "\n\016ControlCommand\022-\n\tdisc_lift\030\001 \001(\0132\030.sl" +
-      "_link.DiscLiftControlH\000\022,\n\010lighting\030\002 \001(" +
-      "\0132\030.sl_link.LightingControlH\000\0223\n\014manual_" +
-      "drive\030\003 \001(\0132\033.sl_link.ManualDriveControl" +
-      "H\000\0225\n\rchassis_power\030\004 \001(\0132\034.sl_link.Chas" +
-      "sisPowerControlH\000\022,\n\014disc_control\030\005 \001(\0132" +
-      "\024.sl_link.DiscControlH\000\0227\n\016emergency_sto" +
-      "p\030\006 \001(\0132\035.sl_link.EmergencyStopControlH\000" +
-      "B\t\n\007command\"\200\001\n\026ControlCommandResponse\022#" +
-      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
-      "essage\030\002 \001(\t\0220\n\017applied_command\030\003 \001(\0132\027." +
-      "sl_link.ControlCommand*\204\025\n\tMessageId\022\022\n\016" +
-      "MSG_ID_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020\201" +
-      "\004\022\036\n\031MSG_ID_WIFI_STATUS_REPORT\020\202\004\022!\n\034MSG" +
-      "_ID_SETTINGS_READ_REQUEST\020\203\004\022\"\n\035MSG_ID_S" +
-      "ETTINGS_READ_RESPONSE\020\204\004\022\"\n\035MSG_ID_SETTI" +
-      "NGS_WRITE_REQUEST\020\205\004\022#\n\036MSG_ID_SETTINGS_" +
-      "WRITE_RESPONSE\020\206\004\022 \n\033MSG_ID_DEVICE_STATU" +
-      "S_REPORT\020\201\006\022 \n\033MSG_ID_CAMERA_FRAME_REQUE" +
-      "ST\020\202\006\022\036\n\031MSG_ID_CAMERA_FRAME_CHUNK\020\203\006\022\027\n" +
-      "\022MSG_ID_MAP_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_CHU" +
-      "NK\020\205\006\022\036\n\031MSG_ID_MAP_REQUEST_RESULT\020\206\006\022\033\n" +
-      "\026MSG_ID_CONTROL_COMMAND\020\201\010\022$\n\037MSG_ID_CON" +
-      "TROL_COMMAND_RESPONSE\020\202\010\022#\n\036MSG_ID_CHANN" +
-      "EL_SESSION_REQUEST\020\203\010\022$\n\037MSG_ID_CHANNEL_" +
-      "SESSION_RESPONSE\020\204\010\022\027\n\022MSG_ID_TASK_CONFI" +
-      "G\020\200\n\022 \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201\n\022\030" +
-      "\n\023MSG_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TASK_" +
-      "COMMAND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_STATU" +
-      "S_REPORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN_RE" +
-      "QUEST\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RESPO" +
-      "NSE\020\206\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020\207\n\022" +
-      " \n\033MSG_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027MSG" +
-      "_ID_MAP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP_ED" +
-      "IT_RESPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STATUS" +
-      "_REPORT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INFO_R" +
-      "EQUEST\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO_RE" +
-      "SPONSE\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST\020\216\n" +
-      "\022\036\n\031MSG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027MSG_" +
-      "ID_MAP_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_SYN" +
-      "C_RESPONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQUEST" +
-      "\020\222\n\022\035\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n\032MS" +
-      "G_ID_MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID_MA" +
-      "P_CATALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_DELE" +
-      "TE_REQUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RESPO" +
-      "NSE\020\227\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022\035\n\030" +
-      "MSG_ID_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID_MA" +
-      "P_METRICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_METRI" +
-      "CS_RESPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_REQ" +
-      "UEST\020\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONSE\020\235" +
-      "\n\022(\n#MSG_ID_LIVE_MAP_CACHE_CLEAR_REQUEST" +
-      "\020\236\n\022)\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RESPO" +
-      "NSE\020\237\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEAR_R" +
-      "EQUEST\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_CLEA" +
-      "R_RESPONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO_RA" +
-      "DAR_REQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_TO_R" +
-      "ADAR_RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNMENT" +
-      "_REQUEST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_RESP" +
-      "ONSE\020\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS_RE" +
-      "QUEST\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATUS_R" +
-      "ESPONSE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_REQU" +
-      "EST\020\250\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPONSE" +
-      "\020\251\n\022(\n#MSG_ID_RADAR_RELOCALIZATION_REQUE" +
-      "ST\020\252\n\022)\n$MSG_ID_RADAR_RELOCALIZATION_RES" +
-      "PONSE\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATION_" +
-      "STATUS_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_RELOCA" +
-      "LIZATION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID_MA" +
-      "P_REGION_POINT_REQUEST\020\256\n\022%\n MSG_ID_MAP_" +
-      "REGION_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TASK_" +
-      "EXECUTION_HISTORY_REQUEST\020\260\n\022(\n#MSG_ID_T" +
-      "ASK_EXECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG_ID" +
-      "_TASK_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID_TA" +
-      "SK_TRAJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK_EX" +
-      "ECUTION_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_TASK" +
-      "_EXECUTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_ID_" +
-      "SYSTEM_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_ID_" +
-      "SYSTEM_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG_ID" +
-      "_TASK_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%MSG" +
-      "_ID_TASK_RUNTIME_SETTINGS_RESPONSE\020\271\n*X\n" +
-      "\010DeviceId\022\023\n\017DEVICE_RESERVED\020\000\022\016\n\nDEVICE" +
-      "_APP\020\001\022\020\n\014DEVICE_LOWER\020\020\022\025\n\020DEVICE_BROAD" +
-      "CAST\020\377\001*v\n\013ComponentId\022\017\n\013COMP_SYSTEM\020\000\022" +
-      "\r\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\nCOM" +
-      "P_MEDIA\020\006\022\020\n\014COMP_CONTROL\020\007\022\022\n\016COMP_SCHE" +
-      "DULER\020\010*v\n\nResultCode\022\022\n\016RESULT_SUCCESS\020" +
-      "\000\022\030\n\024RESULT_INVALID_PARAM\020\001\022\026\n\022RESULT_UN" +
-      "SUPPORTED\020\002\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESULT_F" +
-      "AILED\020\004*;\n\014SystemStatus\022\025\n\021SYS_STATUS_NO" +
-      "RMAL\020\000\022\024\n\020SYS_STATUS_ERROR\020\001*Q\n\nWifiResu" +
-      "lt\022\020\n\014WIFI_PENDING\020\000\022\020\n\014WIFI_SUCCESS\020\001\022\r" +
-      "\n\tWIFI_FAIL\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010WorkM" +
-      "ode\022\025\n\021WORK_MODE_UNKNOWN\020\000\022\024\n\020WORK_MODE_" +
-      "MANUAL\020\001\022\022\n\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_MOD" +
-      "E_EDGE\020\003\022\022\n\016WORK_MODE_DOCK\020\004*z\n\rDiscLift" +
-      "State\022\033\n\027DISC_LIFT_STATE_UNKNOWN\020\000\022\026\n\022DI" +
-      "SC_LIFT_STATE_UP\020\001\022\030\n\024DISC_LIFT_STATE_DO" +
-      "WN\020\002\022\032\n\026DISC_LIFT_STATE_MOVING\020\003*W\n\017Disc" +
-      "LiftCommand\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024\n\020D" +
-      "ISC_LIFT_CMD_UP\020\001\022\026\n\022DISC_LIFT_CMD_DOWN\020" +
-      "\002*\350\001\n\023ManualMotionCommand\022\026\n\022MANUAL_MOTI" +
-      "ON_STOP\020\000\022\031\n\025MANUAL_MOTION_FORWARD\020\001\022\032\n\026" +
-      "MANUAL_MOTION_BACKWARD\020\002\022\036\n\032MANUAL_MOTIO" +
-      "N_FORWARD_LEFT\020\003\022\037\n\033MANUAL_MOTION_FORWAR" +
-      "D_RIGHT\020\004\022\037\n\033MANUAL_MOTION_BACKWARD_LEFT" +
-      "\020\005\022 \n\034MANUAL_MOTION_BACKWARD_RIGHT\020\006*;\n\013" +
-      "CameraCodec\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n\021CA" +
-      "MERA_CODEC_H264\020\001*[\n\013MapEncoding\022\037\n\033MAP_" +
-      "ENCODING_OCCUPANCY_GRID\020\000\022\024\n\020MAP_ENCODIN" +
-      "G_PNG\020\001\022\025\n\021MAP_ENCODING_JSON\020\002*\202\001\n\nRegio" +
-      "nType\022\027\n\023REGION_TYPE_UNKNOWN\020\000\022\024\n\020REGION" +
-      "_TYPE_WORK\020\001\022\030\n\024REGION_TYPE_OBSTACLE\020\002\022\025" +
-      "\n\021REGION_TYPE_ERASE\020\003\022\024\n\020REGION_TYPE_CRO" +
-      "P\020\004*\306\001\n\tTaskState\022\023\n\017TASK_STATE_IDLE\020\000\022\024" +
-      "\n\020TASK_STATE_READY\020\001\022\027\n\023TASK_STATE_PLANN" +
-      "ING\020\002\022\026\n\022TASK_STATE_RUNNING\020\003\022\025\n\021TASK_ST" +
-      "ATE_PAUSED\020\004\022\030\n\024TASK_STATE_COMPLETED\020\005\022\026" +
-      "\n\022TASK_STATE_STOPPED\020\006\022\024\n\020TASK_STATE_ERR" +
-      "OR\020\007*a\n\017TaskCommandType\022\022\n\016TASK_CMD_STAR" +
-      "T\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_RESU" +
-      "ME\020\002\022\021\n\rTASK_CMD_STOP\020\003*\337\002\n\020MapEditOpera" +
-      "tion\022\027\n\023MAP_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_EDI" +
-      "T_OP_UPSERT_WORK_REGION\020\001\022&\n\"MAP_EDIT_OP" +
-      "_UPSERT_OBSTACLE_REGION\020\002\022\035\n\031MAP_EDIT_OP" +
-      "_DELETE_REGION\020\003\022\032\n\026MAP_EDIT_OP_PAINT_FR" +
-      "EE\020\004\022\036\n\032MAP_EDIT_OP_PAINT_OCCUPIED\020\005\022\035\n\031" +
-      "MAP_EDIT_OP_PAINT_UNKNOWN\020\006\022#\n\037MAP_EDIT_" +
-      "OP_CLEAR_OVERLAY_PATCH\020\007\022#\n\037MAP_EDIT_OP_" +
-      "UPSERT_ERASE_REGION\020\010\022\"\n\036MAP_EDIT_OP_UPS" +
-      "ERT_CROP_REGION\020\t*s\n\020MapSyncOperation\022\027\n" +
-      "\023MAP_SYNC_OP_UNKNOWN\020\000\022$\n MAP_SYNC_OP_DO" +
-      "WNLOAD_FROM_AURORA\020\001\022 \n\034MAP_SYNC_OP_UPLO" +
-      "AD_TO_AURORA\020\002*T\n\013MapModeType\022\024\n\020MAP_MOD" +
-      "E_UNKNOWN\020\000\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025MAP" +
-      "_MODE_LOCALIZATION\020\002*\262\001\n\020MapRequestStatu" +
-      "s\022\036\n\032MAP_REQUEST_STATUS_UNKNOWN\020\000\022\034\n\030MAP" +
-      "_REQUEST_STATUS_READY\020\001\022 \n\034MAP_REQUEST_S" +
-      "TATUS_NOT_READY\020\002\022 \n\034MAP_REQUEST_STATUS_" +
-      "NOT_FOUND\020\003\022\034\n\030MAP_REQUEST_STATUS_ERROR\020" +
-      "\004*>\n\013ChannelRole\022\025\n\021CHANNEL_ROLE_DATA\020\000\022" +
-      "\030\n\024CHANNEL_ROLE_CONTROL\020\001*\243\001\n\024ChannelSes" +
-      "sionAction\022\030\n\024CHANNEL_SESSION_OPEN\020\000\022\030\n\024" +
-      "CHANNEL_SESSION_BIND\020\001\022\035\n\031CHANNEL_SESSIO" +
-      "N_HEARTBEAT\020\002\022\033\n\027CHANNEL_SESSION_RELEASE" +
-      "\020\003\022\033\n\027CHANNEL_SESSION_RECOVER\020\004:-\n\004unit\022" +
-      "\035.google.protobuf.FieldOptions\030\321\206\003 \001(\t:." +
-      "\n\005scale\022\035.google.protobuf.FieldOptions\030\322" +
-      "\206\003 \001(\001b\006proto3"
+      "\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017\n\007task_id\030" +
+      "\004 \001(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007deleted\030\006 \001(\010\022\037" +
+      "\n\027execution_files_deleted\030\007 \001(\010\"\272\001\n\025Task" +
+      "TrajectoryRequest\022\024\n\014execution_id\030\001 \001(\t\022" +
+      "\017\n\007task_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010" +
+      "end_time\030\004 \001(\004\022\023\n\013start_index\030\005 \001(\r\022\022\n\nm" +
+      "ax_points\030\006 \001(\r\022\023\n\013sample_step\030\007 \001(\r\022\026\n\016" +
+      "max_chunk_size\030\010 \001(\r\"\221\002\n\023TaskTrajectoryP" +
+      "oint\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_ms\030\002 \001(\r\022\014" +
+      "\n\004x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014heading_md" +
+      "eg\030\005 \001(\021\022\031\n\021linear_speed_mmps\030\006 \001(\021\022\034\n\024a" +
+      "ngular_speed_mradps\030\007 \001(\021\022\026\n\016disc_speed_" +
+      "rpm\030\010 \001(\r\022\027\n\017speed_available\030\t \001(\010\022\024\n\014di" +
+      "sc_enabled\030\n \001(\010\022&\n\ntask_state\030\013 \001(\0162\022.s" +
+      "l_link.TaskState\"\243\007\n\023TaskTrajectoryChunk" +
+      "\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n" +
+      "\007message\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\023\n\013" +
+      "chunk_index\030\004 \001(\r\022\024\n\014total_chunks\030\005 \001(\r\022" +
+      "\031\n\021total_point_count\030\006 \001(\r\022\034\n\024returned_p" +
+      "oint_count\030\007 \001(\r\022\023\n\013start_index\030\010 \001(\r\022\022\n" +
+      "\nnext_index\030\t \001(\r\022\020\n\010has_more\030\n \001(\010\022\025\n\rs" +
+      "tarted_at_ms\030\013 \001(\004\022,\n\006points\030\014 \003(\0132\034.sl_" +
+      "link.TaskTrajectoryPoint\022\017\n\007task_id\030\r \001(" +
+      "\t\022\016\n\006map_id\030\016 \001(\t\022\022\n\nstart_time\030\017 \001(\004\022\020\n" +
+      "\010end_time\030\020 \001(\004\022\023\n\013sample_step\030\021 \001(\r\022\025\n\r" +
+      "map_available\030\022 \001(\010\022\023\n\013map_message\030\023 \001(\t" +
+      "\022\023\n\013map_version\030\024 \001(\r\022\030\n\020map_source_widt" +
+      "h\030\025 \001(\r\022\031\n\021map_source_height\030\026 \001(\r\022\026\n\016ma" +
+      "p_resolution\030\027 \001(\002\022#\n\nmap_origin\030\030 \001(\0132\017" +
+      ".sl_link.Pose2D\022\024\n\014map_frame_id\030\031 \001(\t\022\030\n" +
+      "\020map_image_format\030\032 \001(\t\022\027\n\017map_image_wid" +
+      "th\030\033 \001(\r\022\030\n\020map_image_height\030\034 \001(\r\022\033\n\023ma" +
+      "p_preview_scale_x\030\035 \001(\002\022\033\n\023map_preview_s" +
+      "cale_y\030\036 \001(\002\022\026\n\016map_image_data\030\037 \001(\014\022\035\n\025" +
+      "map_image_chunk_index\030  \001(\r\022\036\n\026map_image" +
+      "_total_chunks\030! \001(\r\022\031\n\021alignment_yaw_deg" +
+      "\030\" \001(\002\022\030\n\020app_rotation_deg\030# \001(\002\022$\n\034rota" +
+      "tion_alignment_delta_deg\030$ \001(\002\"\032\n\030LiveMa" +
+      "pCacheClearRequest\"Q\n\031LiveMapCacheClearR" +
+      "esponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Result" +
+      "Code\022\017\n\007message\030\002 \001(\t\"h\n\027SystemCacheClea" +
+      "rRequest\022\032\n\022clear_memory_cache\030\001 \001(\010\022\035\n\025" +
+      "clear_temporary_files\030\002 \001(\010\022\022\n\nclear_log" +
+      "s\030\003 \001(\010\"\376\001\n\030SystemCacheClearResponse\022#\n\006" +
+      "result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mes" +
+      "sage\030\002 \001(\t\022\034\n\024memory_cache_cleared\030\003 \001(\010" +
+      "\022\037\n\027temporary_files_cleared\030\004 \001(\r\022 \n\030tem" +
+      "porary_bytes_released\030\005 \001(\004\022\031\n\021log_files" +
+      "_cleared\030\006 \001(\r\022\032\n\022log_bytes_released\030\007 \001" +
+      "(\004\022\024\n\014failed_items\030\010 \001(\r\"\033\n\031RadarMapCach" +
+      "eClearRequest\"R\n\032RadarMapCacheClearRespo" +
+      "nse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode" +
+      "\022\017\n\007message\030\002 \001(\t\"\032\n\030RadarSystemStatusRe" +
+      "quest\"\212\001\n\031RadarSystemStatusResponse\022#\n\006r" +
+      "esult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mess" +
+      "age\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016\n\006status\030\004" +
+      " \001(\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023RadarMapSy" +
+      "ncRequest\"Z\n\024RadarMapSyncResponse\022#\n\006res" +
+      "ult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messag" +
+      "e\030\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\313\001\n\032RadarRelocaliz" +
+      "ationRequest\022\036\n\026initial_pose_available\030\001" +
+      " \001(\010\022%\n\014initial_pose\030\002 \001(\0132\017.sl_link.Pos" +
+      "e2D\022@\n\027initial_pose_covariance\030\003 \001(\0132\037.s" +
+      "l_link.LocalizationCovariance\022\016\n\006map_id\030" +
+      "\004 \001(\t\022\024\n\014map_revision\030\005 \001(\t\"\264\001\n\033RadarRel" +
+      "ocalizationResponse\022#\n\006result\030\001 \001(\0162\023.sl" +
+      "_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\020\n\010acc" +
+      "epted\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\016\n\006map_id\030\005 " +
+      "\001(\t\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle_s" +
+      "tate\030\007 \001(\t\"\"\n RadarRelocalizationStatusR" +
+      "equest\"\353\003\n!RadarRelocalizationStatusResp" +
+      "onse\022\022\n\nraw_status\030\005 \001(\t\022\024\n\014timestamp_ns" +
+      "\030\n \001(\004\022\027\n\017lifecycle_state\030\013 \001(\t\022\016\n\006detai" +
+      "l\030\014 \001(\t\022\016\n\006map_id\030\r \001(\t\022\024\n\014map_revision\030" +
+      "\016 \001(\t\022\023\n\013good_frames\030\017 \001(\r\022\027\n\017required_f" +
+      "rames\030\020 \001(\r\022\"\n\032registration_quality_vali" +
+      "d\030\021 \001(\010\022\034\n\024registration_fitness\030\022 \001(\002\022!\n" +
+      "\031registration_inlier_ratio\030\023 \001(\002\022\026\n\016resi" +
+      "dual_nodes\030\024 \003(\tJ\004\010\001\020\002J\004\010\002\020\003J\004\010\003\020\004J\004\010\004\020\005" +
+      "J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020\nR\006resultR\007messag" +
+      "eR\tavailableR\006statusR\rsystem_statusR\016odo" +
+      "m_availableR\025odom_linear_speed_mpsR\030odom" +
+      "_angular_speed_radps\"<\n\017DiscLiftControl\022" +
+      ")\n\007command\030\001 \001(\0162\030.sl_link.DiscLiftComma" +
+      "nd\"\"\n\017LightingControl\022\017\n\007enabled\030\001 \001(\010\"&" +
+      "\n\023ChassisPowerControl\022\017\n\007enabled\030\001 \001(\010\"1" +
+      "\n\013DiscControl\022\017\n\007enabled\030\001 \001(\010\022\021\n\tspeed_" +
+      "rpm\030\002 \001(\r\"y\n\025ChannelSessionRequest\022-\n\006ac" +
+      "tion\030\001 \001(\0162\035.sl_link.ChannelSessionActio" +
+      "n\022\"\n\004role\030\002 \001(\0162\024.sl_link.ChannelRole\022\r\n" +
+      "\005token\030\003 \001(\t\"\363\001\n\026ChannelSessionResponse\022" +
+      "#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007" +
+      "message\030\002 \001(\t\022\"\n\004role\030\003 \001(\0162\024.sl_link.Ch" +
+      "annelRole\022\r\n\005token\030\004 \001(\t\022\035\n\025heartbeat_in" +
+      "terval_ms\030\005 \001(\r\022\032\n\022session_timeout_ms\030\006 " +
+      "\001(\r\022\025\n\rcontrol_ready\030\007 \001(\010\022\036\n\026emergency_" +
+      "stop_latched\030\010 \001(\010\"\'\n\024EmergencyStopContr" +
+      "ol\022\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualDriveContr" +
+      "ol\022,\n\006motion\030\001 \001(\0162\034.sl_link.ManualMotio" +
+      "nCommand\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n\010remote_" +
+      "x\030\003 \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax_speed_m" +
+      "ps\030\005 \001(\002\022\034\n\024max_turn_speed_ratio\030\006 \001(\002\"\313" +
+      "\002\n\016ControlCommand\022-\n\tdisc_lift\030\001 \001(\0132\030.s" +
+      "l_link.DiscLiftControlH\000\022,\n\010lighting\030\002 \001" +
+      "(\0132\030.sl_link.LightingControlH\000\0223\n\014manual" +
+      "_drive\030\003 \001(\0132\033.sl_link.ManualDriveContro" +
+      "lH\000\0225\n\rchassis_power\030\004 \001(\0132\034.sl_link.Cha" +
+      "ssisPowerControlH\000\022,\n\014disc_control\030\005 \001(\013" +
+      "2\024.sl_link.DiscControlH\000\0227\n\016emergency_st" +
+      "op\030\006 \001(\0132\035.sl_link.EmergencyStopControlH" +
+      "\000B\t\n\007command\"\200\001\n\026ControlCommandResponse\022" +
+      "#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007" +
+      "message\030\002 \001(\t\0220\n\017applied_command\030\003 \001(\0132\027" +
+      ".sl_link.ControlCommand*\204\025\n\tMessageId\022\022\n" +
+      "\016MSG_ID_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020" +
+      "\201\004\022\036\n\031MSG_ID_WIFI_STATUS_REPORT\020\202\004\022!\n\034MS" +
+      "G_ID_SETTINGS_READ_REQUEST\020\203\004\022\"\n\035MSG_ID_" +
+      "SETTINGS_READ_RESPONSE\020\204\004\022\"\n\035MSG_ID_SETT" +
+      "INGS_WRITE_REQUEST\020\205\004\022#\n\036MSG_ID_SETTINGS" +
+      "_WRITE_RESPONSE\020\206\004\022 \n\033MSG_ID_DEVICE_STAT" +
+      "US_REPORT\020\201\006\022 \n\033MSG_ID_CAMERA_FRAME_REQU" +
+      "EST\020\202\006\022\036\n\031MSG_ID_CAMERA_FRAME_CHUNK\020\203\006\022\027" +
+      "\n\022MSG_ID_MAP_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_CH" +
+      "UNK\020\205\006\022\036\n\031MSG_ID_MAP_REQUEST_RESULT\020\206\006\022\033" +
+      "\n\026MSG_ID_CONTROL_COMMAND\020\201\010\022$\n\037MSG_ID_CO" +
+      "NTROL_COMMAND_RESPONSE\020\202\010\022#\n\036MSG_ID_CHAN" +
+      "NEL_SESSION_REQUEST\020\203\010\022$\n\037MSG_ID_CHANNEL" +
+      "_SESSION_RESPONSE\020\204\010\022\027\n\022MSG_ID_TASK_CONF" +
+      "IG\020\200\n\022 \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201\n\022" +
+      "\030\n\023MSG_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TASK" +
+      "_COMMAND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_STAT" +
+      "US_REPORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN_R" +
+      "EQUEST\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RESP" +
+      "ONSE\020\206\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020\207\n" +
+      "\022 \n\033MSG_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027MS" +
+      "G_ID_MAP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP_E" +
+      "DIT_RESPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STATU" +
+      "S_REPORT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INFO_" +
+      "REQUEST\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO_R" +
+      "ESPONSE\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST\020\216" +
+      "\n\022\036\n\031MSG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027MSG" +
+      "_ID_MAP_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_SY" +
+      "NC_RESPONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQUES" +
+      "T\020\222\n\022\035\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n\032M" +
+      "SG_ID_MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID_M" +
+      "AP_CATALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_DEL" +
+      "ETE_REQUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RESP" +
+      "ONSE\020\227\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022\035\n" +
+      "\030MSG_ID_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID_M" +
+      "AP_METRICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_METR" +
+      "ICS_RESPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_RE" +
+      "QUEST\020\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONSE\020" +
+      "\235\n\022(\n#MSG_ID_LIVE_MAP_CACHE_CLEAR_REQUES" +
+      "T\020\236\n\022)\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RESP" +
+      "ONSE\020\237\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEAR_" +
+      "REQUEST\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_CLE" +
+      "AR_RESPONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO_R" +
+      "ADAR_REQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_TO_" +
+      "RADAR_RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNMEN" +
+      "T_REQUEST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_RES" +
+      "PONSE\020\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS_R" +
+      "EQUEST\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATUS_" +
+      "RESPONSE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_REQ" +
+      "UEST\020\250\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPONS" +
+      "E\020\251\n\022(\n#MSG_ID_RADAR_RELOCALIZATION_REQU" +
+      "EST\020\252\n\022)\n$MSG_ID_RADAR_RELOCALIZATION_RE" +
+      "SPONSE\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATION" +
+      "_STATUS_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_RELOC" +
+      "ALIZATION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID_M" +
+      "AP_REGION_POINT_REQUEST\020\256\n\022%\n MSG_ID_MAP" +
+      "_REGION_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TASK" +
+      "_EXECUTION_HISTORY_REQUEST\020\260\n\022(\n#MSG_ID_" +
+      "TASK_EXECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG_I" +
+      "D_TASK_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID_T" +
+      "ASK_TRAJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK_E" +
+      "XECUTION_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_TAS" +
+      "K_EXECUTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_ID" +
+      "_SYSTEM_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_ID" +
+      "_SYSTEM_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG_I" +
+      "D_TASK_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%MS" +
+      "G_ID_TASK_RUNTIME_SETTINGS_RESPONSE\020\271\n*X" +
+      "\n\010DeviceId\022\023\n\017DEVICE_RESERVED\020\000\022\016\n\nDEVIC" +
+      "E_APP\020\001\022\020\n\014DEVICE_LOWER\020\020\022\025\n\020DEVICE_BROA" +
+      "DCAST\020\377\001*v\n\013ComponentId\022\017\n\013COMP_SYSTEM\020\000" +
+      "\022\r\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\nCO" +
+      "MP_MEDIA\020\006\022\020\n\014COMP_CONTROL\020\007\022\022\n\016COMP_SCH" +
+      "EDULER\020\010*v\n\nResultCode\022\022\n\016RESULT_SUCCESS" +
+      "\020\000\022\030\n\024RESULT_INVALID_PARAM\020\001\022\026\n\022RESULT_U" +
+      "NSUPPORTED\020\002\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESULT_" +
+      "FAILED\020\004*;\n\014SystemStatus\022\025\n\021SYS_STATUS_N" +
+      "ORMAL\020\000\022\024\n\020SYS_STATUS_ERROR\020\001*Q\n\nWifiRes" +
+      "ult\022\020\n\014WIFI_PENDING\020\000\022\020\n\014WIFI_SUCCESS\020\001\022" +
+      "\r\n\tWIFI_FAIL\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010Work" +
+      "Mode\022\025\n\021WORK_MODE_UNKNOWN\020\000\022\024\n\020WORK_MODE" +
+      "_MANUAL\020\001\022\022\n\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_MO" +
+      "DE_EDGE\020\003\022\022\n\016WORK_MODE_DOCK\020\004*z\n\rDiscLif" +
+      "tState\022\033\n\027DISC_LIFT_STATE_UNKNOWN\020\000\022\026\n\022D" +
+      "ISC_LIFT_STATE_UP\020\001\022\030\n\024DISC_LIFT_STATE_D" +
+      "OWN\020\002\022\032\n\026DISC_LIFT_STATE_MOVING\020\003*W\n\017Dis" +
+      "cLiftCommand\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024\n\020" +
+      "DISC_LIFT_CMD_UP\020\001\022\026\n\022DISC_LIFT_CMD_DOWN" +
+      "\020\002*\350\001\n\023ManualMotionCommand\022\026\n\022MANUAL_MOT" +
+      "ION_STOP\020\000\022\031\n\025MANUAL_MOTION_FORWARD\020\001\022\032\n" +
+      "\026MANUAL_MOTION_BACKWARD\020\002\022\036\n\032MANUAL_MOTI" +
+      "ON_FORWARD_LEFT\020\003\022\037\n\033MANUAL_MOTION_FORWA" +
+      "RD_RIGHT\020\004\022\037\n\033MANUAL_MOTION_BACKWARD_LEF" +
+      "T\020\005\022 \n\034MANUAL_MOTION_BACKWARD_RIGHT\020\006*;\n" +
+      "\013CameraCodec\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n\021C" +
+      "AMERA_CODEC_H264\020\001*[\n\013MapEncoding\022\037\n\033MAP" +
+      "_ENCODING_OCCUPANCY_GRID\020\000\022\024\n\020MAP_ENCODI" +
+      "NG_PNG\020\001\022\025\n\021MAP_ENCODING_JSON\020\002*\202\001\n\nRegi" +
+      "onType\022\027\n\023REGION_TYPE_UNKNOWN\020\000\022\024\n\020REGIO" +
+      "N_TYPE_WORK\020\001\022\030\n\024REGION_TYPE_OBSTACLE\020\002\022" +
+      "\025\n\021REGION_TYPE_ERASE\020\003\022\024\n\020REGION_TYPE_CR" +
+      "OP\020\004*\306\001\n\tTaskState\022\023\n\017TASK_STATE_IDLE\020\000\022" +
+      "\024\n\020TASK_STATE_READY\020\001\022\027\n\023TASK_STATE_PLAN" +
+      "NING\020\002\022\026\n\022TASK_STATE_RUNNING\020\003\022\025\n\021TASK_S" +
+      "TATE_PAUSED\020\004\022\030\n\024TASK_STATE_COMPLETED\020\005\022" +
+      "\026\n\022TASK_STATE_STOPPED\020\006\022\024\n\020TASK_STATE_ER" +
+      "ROR\020\007*a\n\017TaskCommandType\022\022\n\016TASK_CMD_STA" +
+      "RT\020\000\022\022\n\016TASK_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_RES" +
+      "UME\020\002\022\021\n\rTASK_CMD_STOP\020\003*\337\002\n\020MapEditOper" +
+      "ation\022\027\n\023MAP_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_ED" +
+      "IT_OP_UPSERT_WORK_REGION\020\001\022&\n\"MAP_EDIT_O" +
+      "P_UPSERT_OBSTACLE_REGION\020\002\022\035\n\031MAP_EDIT_O" +
+      "P_DELETE_REGION\020\003\022\032\n\026MAP_EDIT_OP_PAINT_F" +
+      "REE\020\004\022\036\n\032MAP_EDIT_OP_PAINT_OCCUPIED\020\005\022\035\n" +
+      "\031MAP_EDIT_OP_PAINT_UNKNOWN\020\006\022#\n\037MAP_EDIT" +
+      "_OP_CLEAR_OVERLAY_PATCH\020\007\022#\n\037MAP_EDIT_OP" +
+      "_UPSERT_ERASE_REGION\020\010\022\"\n\036MAP_EDIT_OP_UP" +
+      "SERT_CROP_REGION\020\t*s\n\020MapSyncOperation\022\027" +
+      "\n\023MAP_SYNC_OP_UNKNOWN\020\000\022$\n MAP_SYNC_OP_D" +
+      "OWNLOAD_FROM_AURORA\020\001\022 \n\034MAP_SYNC_OP_UPL" +
+      "OAD_TO_AURORA\020\002*T\n\013MapModeType\022\024\n\020MAP_MO" +
+      "DE_UNKNOWN\020\000\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025MA" +
+      "P_MODE_LOCALIZATION\020\002*\262\001\n\020MapRequestStat" +
+      "us\022\036\n\032MAP_REQUEST_STATUS_UNKNOWN\020\000\022\034\n\030MA" +
+      "P_REQUEST_STATUS_READY\020\001\022 \n\034MAP_REQUEST_" +
+      "STATUS_NOT_READY\020\002\022 \n\034MAP_REQUEST_STATUS" +
+      "_NOT_FOUND\020\003\022\034\n\030MAP_REQUEST_STATUS_ERROR" +
+      "\020\004*>\n\013ChannelRole\022\025\n\021CHANNEL_ROLE_DATA\020\000" +
+      "\022\030\n\024CHANNEL_ROLE_CONTROL\020\001*\243\001\n\024ChannelSe" +
+      "ssionAction\022\030\n\024CHANNEL_SESSION_OPEN\020\000\022\030\n" +
+      "\024CHANNEL_SESSION_BIND\020\001\022\035\n\031CHANNEL_SESSI" +
+      "ON_HEARTBEAT\020\002\022\033\n\027CHANNEL_SESSION_RELEAS" +
+      "E\020\003\022\033\n\027CHANNEL_SESSION_RECOVER\020\004:-\n\004unit" +
+      "\022\035.google.protobuf.FieldOptions\030\321\206\003 \001(\t:" +
+      ".\n\005scale\022\035.google.protobuf.FieldOptions\030" +
+      "\322\206\003 \001(\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -121273,555 +123685,561 @@ public final class SlLink {
     internal_static_sl_link_PolygonRegion_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_PolygonRegion_descriptor,
-        new java.lang.String[] { "Name", "Points", "RegionId", "Priority", "Enabled", "ColorArgb", "Closed", "RegionType", "GlobalDirection", });
+        new java.lang.String[] { "Name", "Points", "RegionId", "Priority", "Enabled", "ColorArgb", "Closed", "RegionType", "GlobalDirection", "Process", });
     internal_static_sl_link_ChassisSettings_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_sl_link_ChassisSettings_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ChassisSettings_descriptor,
         new java.lang.String[] { "RunSpeed", "DiscSpeedRpm", "DiscEnabled", "WorkMode", "MaxTurnSpeedRatio", });
-    internal_static_sl_link_MapSettings_descriptor =
+    internal_static_sl_link_MapProcessSettings_descriptor =
       getDescriptor().getMessageTypes().get(5);
+    internal_static_sl_link_MapProcessSettings_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_sl_link_MapProcessSettings_descriptor,
+        new java.lang.String[] { "RunSpeed", "DiscSpeedRpm", "ProcessType", "GrindingParameter", "ConcreteStrength", "Pressure", });
+    internal_static_sl_link_MapSettings_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_sl_link_MapSettings_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSettings_descriptor,
         new java.lang.String[] { "VehicleWidth", "VehicleLength", "DefaultPathSpacing", "TurnRadius", "OverlapRatio", "InflationRadius", "ObstacleRegions", "WorkRegions", "Footprint", "BaseLaserX", "BaseLaserY", "BaseLaserZ", "BaseLaserRollDeg", "BaseLaserPitchDeg", "BaseLaserYawDeg", "EndpointMargin", "OutputPointSpacing", "AlignedObstacleInflation", "AlignedObstacleMaxExtent", "ObstacleCornerAngleDeg", "ObstacleAvoidanceDistance", });
     internal_static_sl_link_RppSettings_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_sl_link_RppSettings_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RppSettings_descriptor,
         new java.lang.String[] { "DesiredLinearVel", "MaxLinearVel", "MaxAngularVel", "MaxLinearAccel", "MaxAngularAccel", "LookaheadDist", "MinLookaheadDist", "MaxLookaheadDist", "CurvatureLookaheadDist", "RegulatedLinearScalingMinRadius", "RegulatedLinearScalingMinSpeed", "UseCollisionDetection", "UseFootprintExpansionCollisionDetection", "CollisionFrontClearanceM", "CollisionSideClearanceM", "MaxAllowedTimeToCollisionUpToCarrot", "CollisionConfirmScans", "CollisionClearConfirmScans", "UseRotateToHeading", "RotateToHeadingAngularVel", "RotateToHeadingMinAngle", "GoalDistTol", "AngleTol", "AllowReversing", "UseFixedCurvatureLookahead", "UseRegulatedLinearVelocityScaling", "UseFixedDistanceCollisionDetection", "CollisionStopDistanceM", "CollisionScanHalfAngleRad", "CollisionScanTimeoutS", "PredictionCollisionConfirmCycles", "UseCostRegulatedLinearVelocityScaling", "CostScalingDist", "CostScalingGain", "LookaheadTime", "UseVelocityScaledLookaheadDist", "UseApproachVelocityScaling", "ApproachVelocityScalingDist", "MinApproachLinearVelocity", "CollisionMinValidPoints", "UseCommandVelocityForAccelLimit", "UseCommandAngularVelocityForAccelLimit", "CommandVelocityMemoryTimeout", "MaxRobotPoseSearchDist", "TransStoppedVel", "ThetaStoppedVel", "CollisionSideOnlyWhenTurning", "CollisionSideTurningMinAngularVel", "UseCornerAwareRotateToHeading", "RotateToHeadingExitAngle", "RotateToHeadingStableCycles", "RotateToHeadingCornerDistance", });
     internal_static_sl_link_SettingsReadRequest_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_sl_link_SettingsReadRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SettingsReadRequest_descriptor,
         new java.lang.String[] { "ReadChassis", "ReadMap", "ReadRpp", });
     internal_static_sl_link_SettingsReadResponse_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_sl_link_SettingsReadResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SettingsReadResponse_descriptor,
         new java.lang.String[] { "Result", "Chassis", "Map", "Message", "Rpp", });
     internal_static_sl_link_SettingsWriteRequest_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_sl_link_SettingsWriteRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SettingsWriteRequest_descriptor,
-        new java.lang.String[] { "Chassis", "Map", "Rpp", "ApplyRppTemporarily", "SaveRppDefault", "RppFieldMask", });
+        new java.lang.String[] { "Chassis", "Map", "Rpp", "ApplyRppTemporarily", "SaveRppDefault", "RppFieldMask", "Process", "ProcessMapId", "ProcessRegionId", });
     internal_static_sl_link_SettingsWriteResponse_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_sl_link_SettingsWriteResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SettingsWriteResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "Chassis", "Map", "Rpp", "RppApplied", "RppSaved", "GeometryRequiresRestart", });
+        new java.lang.String[] { "Result", "Message", "Chassis", "Map", "Rpp", "RppApplied", "RppSaved", "GeometryRequiresRestart", "Process", "ProcessMapId", "ProcessRegionId", });
     internal_static_sl_link_Pose2D_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_sl_link_Pose2D_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_Pose2D_descriptor,
         new java.lang.String[] { "X", "Y", "HeadingDeg", });
     internal_static_sl_link_LocalizationCovariance_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_sl_link_LocalizationCovariance_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_LocalizationCovariance_descriptor,
         new java.lang.String[] { "Valid", "XVariance", "YVariance", "YawVariance", "XyCovariance", "XYawCovariance", "YYawCovariance", });
     internal_static_sl_link_DeviceStatusReport_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_sl_link_DeviceStatusReport_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_DeviceStatusReport_descriptor,
         new java.lang.String[] { "UtcTime", "SystemStatus", "WifiStatus", "WorkMode", "LeftWheelSpeed", "RightWheelSpeed", "DiscSpeedRpm", "DiscEnabled", "DiscLiftState", "LightEnabled", "Position", "ChassisEnabled", "AlignmentYawDeg", "LocalizationCovariance", "LocalizationQualityAvailable", "LocalizationQuality", "CollisionImminent", "RadarSystemStatusAvailable", "RadarSystemStatus", "VehicleSpeed", "ChassisConnected", "EmergencyStopLatched", "LocalizationReady", "LocalizationPauseLatched", "LocalizationStatusReason", "LeftMotorFaultCode", "RightMotorFaultCode", "SystemHealth", });
     internal_static_sl_link_SystemHealth_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_sl_link_SystemHealth_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SystemHealth_descriptor,
         new java.lang.String[] { "CpuTemperatureC", "CpuUsagePercent", "MemoryUsagePercent", "MemoryTotalBytes", "MemoryAvailableBytes", "DiskUsagePercent", "DiskFreeBytes", "UptimeSeconds", "CellularSignalPercent", "CellularState", "CellularAccessTechnology", });
     internal_static_sl_link_CameraFrameRequest_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_sl_link_CameraFrameRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_CameraFrameRequest_descriptor,
         new java.lang.String[] { "Snapshot", "MaxChunkSize", });
     internal_static_sl_link_CameraFrameChunk_descriptor =
-      getDescriptor().getMessageTypes().get(16);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_sl_link_CameraFrameChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_CameraFrameChunk_descriptor,
         new java.lang.String[] { "FrameId", "UtcTime", "Width", "Height", "Codec", "ChunkIndex", "TotalChunks", "Data", });
     internal_static_sl_link_MapRequest_descriptor =
-      getDescriptor().getMessageTypes().get(17);
+      getDescriptor().getMessageTypes().get(18);
     internal_static_sl_link_MapRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapRequest_descriptor,
         new java.lang.String[] { "Snapshot", "MaxChunkSize", "MapId", "RequestId", });
     internal_static_sl_link_MapRequestResult_descriptor =
-      getDescriptor().getMessageTypes().get(18);
+      getDescriptor().getMessageTypes().get(19);
     internal_static_sl_link_MapRequestResult_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapRequestResult_descriptor,
         new java.lang.String[] { "RequestId", "Status", "MapId", "SnapshotId", "TotalChunks", "PayloadSize", "PayloadCrc32", "RetryAfterMs", "Message", });
     internal_static_sl_link_MapChunk_descriptor =
-      getDescriptor().getMessageTypes().get(19);
+      getDescriptor().getMessageTypes().get(20);
     internal_static_sl_link_MapChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapChunk_descriptor,
         new java.lang.String[] { "MapId", "UtcTime", "Encoding", "Width", "Height", "Resolution", "ChunkIndex", "TotalChunks", "Data", "Origin", "FrameId", "PreviewScaleX", "PreviewScaleY", "LocalizationCovariance", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", "MapVersion", "RequestId", "SnapshotId", });
     internal_static_sl_link_PathPoint2D_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+      getDescriptor().getMessageTypes().get(21);
     internal_static_sl_link_PathPoint2D_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_PathPoint2D_descriptor,
         new java.lang.String[] { "X", "Y", "PathType", });
     internal_static_sl_link_RegionRepeatItem_descriptor =
-      getDescriptor().getMessageTypes().get(21);
+      getDescriptor().getMessageTypes().get(22);
     internal_static_sl_link_RegionRepeatItem_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RegionRepeatItem_descriptor,
         new java.lang.String[] { "RegionId", "Repeat", });
     internal_static_sl_link_TaskConfig_descriptor =
-      getDescriptor().getMessageTypes().get(22);
+      getDescriptor().getMessageTypes().get(23);
     internal_static_sl_link_TaskConfig_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskConfig_descriptor,
         new java.lang.String[] { "TaskId", "WorkRegions", "ObstacleRegions", "DefaultPathSpacing", "TurnRadius", "OverlapRatio", "InflationRadius", "MapId", "SelectedWorkRegionIds", "RegionRepeats", });
     internal_static_sl_link_TaskConfigResponse_descriptor =
-      getDescriptor().getMessageTypes().get(23);
+      getDescriptor().getMessageTypes().get(24);
     internal_static_sl_link_TaskConfigResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskConfigResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "TaskId", });
     internal_static_sl_link_TaskCommand_descriptor =
-      getDescriptor().getMessageTypes().get(24);
+      getDescriptor().getMessageTypes().get(25);
     internal_static_sl_link_TaskCommand_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskCommand_descriptor,
         new java.lang.String[] { "TaskId", "Command", });
     internal_static_sl_link_TaskCommandResponse_descriptor =
-      getDescriptor().getMessageTypes().get(25);
+      getDescriptor().getMessageTypes().get(26);
     internal_static_sl_link_TaskCommandResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskCommandResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "TaskId", });
     internal_static_sl_link_TaskRuntimeSettingsRequest_descriptor =
-      getDescriptor().getMessageTypes().get(26);
+      getDescriptor().getMessageTypes().get(27);
     internal_static_sl_link_TaskRuntimeSettingsRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskRuntimeSettingsRequest_descriptor,
         new java.lang.String[] { "TaskId", "RunSpeed", "DiscSpeedRpm", });
     internal_static_sl_link_TaskRuntimeSettingsResponse_descriptor =
-      getDescriptor().getMessageTypes().get(27);
+      getDescriptor().getMessageTypes().get(28);
     internal_static_sl_link_TaskRuntimeSettingsResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskRuntimeSettingsResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "TaskId", "RunSpeed", "DiscSpeedRpm", "MaxRunSpeed", "MaxDiscSpeedRpm", "Temporary", });
     internal_static_sl_link_TaskStatusReport_descriptor =
-      getDescriptor().getMessageTypes().get(28);
+      getDescriptor().getMessageTypes().get(29);
     internal_static_sl_link_TaskStatusReport_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskStatusReport_descriptor,
         new java.lang.String[] { "TaskId", "State", "Progress", "MapVersion", "Message", "Position", "ReplanRequested", "PathPointCount", "PathVersion", "TotalWorkAreaM2", "RemainingWorkAreaM2", "RemainingTimeS", "CurrentRegionId", "CurrentRegionRepeatIndex", "CurrentRegionRepeatTotal", "AlignmentYawDeg", "LocalizationCovariance", });
     internal_static_sl_link_PathPointPlanRequest_descriptor =
-      getDescriptor().getMessageTypes().get(29);
+      getDescriptor().getMessageTypes().get(30);
     internal_static_sl_link_PathPointPlanRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_PathPointPlanRequest_descriptor,
         new java.lang.String[] { "TaskId", "MaxChunkSize", "RequestId", "ForceReplan", "StartPose", "EndPose", "GlobalDirection", "MapId", });
     internal_static_sl_link_PathPointPlanResponse_descriptor =
-      getDescriptor().getMessageTypes().get(30);
+      getDescriptor().getMessageTypes().get(31);
     internal_static_sl_link_PathPointPlanResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_PathPointPlanResponse_descriptor,
         new java.lang.String[] { "TaskId", "ChunkIndex", "TotalChunks", "PathVersion", "Data", "RequestId", "MapId", "Result", "Message", "Planned", "MapVersion", "PathPointCount", "PathLengthM", "TotalWorkAreaM2", "EstimatedTimeS", "FrameId", });
     internal_static_sl_link_MapPreviewRequest_descriptor =
-      getDescriptor().getMessageTypes().get(31);
+      getDescriptor().getMessageTypes().get(32);
     internal_static_sl_link_MapPreviewRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapPreviewRequest_descriptor,
         new java.lang.String[] { "MaxEdge", "ImageFormat", "IncludeOverlay", "MapId", });
     internal_static_sl_link_MapPreviewResponse_descriptor =
-      getDescriptor().getMessageTypes().get(32);
+      getDescriptor().getMessageTypes().get(33);
     internal_static_sl_link_MapPreviewResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapPreviewResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapVersion", "Width", "Height", "Resolution", "Origin", "FrameId", "ImageData", "OverlayJson", "PreviewScaleX", "PreviewScaleY", "LocalizationCovariance", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", "MapId", "MapRevision", });
     internal_static_sl_link_MapRegionPointRequest_descriptor =
-      getDescriptor().getMessageTypes().get(33);
+      getDescriptor().getMessageTypes().get(34);
     internal_static_sl_link_MapRegionPointRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapRegionPointRequest_descriptor,
         new java.lang.String[] { "MapId", });
     internal_static_sl_link_WorkRegionPointInfo_descriptor =
-      getDescriptor().getMessageTypes().get(34);
+      getDescriptor().getMessageTypes().get(35);
     internal_static_sl_link_WorkRegionPointInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_WorkRegionPointInfo_descriptor,
         new java.lang.String[] { "Region", "StartPoseAvailable", "StartPose", "EndPoseAvailable", "EndPose", });
     internal_static_sl_link_MapRegionPointResponse_descriptor =
-      getDescriptor().getMessageTypes().get(35);
+      getDescriptor().getMessageTypes().get(36);
     internal_static_sl_link_MapRegionPointResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapRegionPointResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "MapVersion", "WorkRegions", "ObstacleRegions", "EraseRegions", "CropRegionAvailable", "CropRegion", });
     internal_static_sl_link_MapEditCommand_descriptor =
-      getDescriptor().getMessageTypes().get(36);
+      getDescriptor().getMessageTypes().get(37);
     internal_static_sl_link_MapEditCommand_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapEditCommand_descriptor,
         new java.lang.String[] { "EditId", "Operation", "RegionName", "Region", "Polygon", "BrushRadius", "PaintValue", "TargetRegionId", "TargetRegionType", "ExpectedMapVersion", "DryRun", "StartPose", "EndPose", "MapId", });
     internal_static_sl_link_MapEditResponse_descriptor =
-      getDescriptor().getMessageTypes().get(37);
+      getDescriptor().getMessageTypes().get(38);
     internal_static_sl_link_MapEditResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapEditResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapVersion", });
     internal_static_sl_link_MapEditStatusReport_descriptor =
-      getDescriptor().getMessageTypes().get(38);
+      getDescriptor().getMessageTypes().get(39);
     internal_static_sl_link_MapEditStatusReport_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapEditStatusReport_descriptor,
         new java.lang.String[] { "MapVersion", "AppliedToPlanner", "Message", });
     internal_static_sl_link_VideoStreamInfoRequest_descriptor =
-      getDescriptor().getMessageTypes().get(39);
+      getDescriptor().getMessageTypes().get(40);
     internal_static_sl_link_VideoStreamInfoRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_VideoStreamInfoRequest_descriptor,
         new java.lang.String[] { "IncludeDebug", });
     internal_static_sl_link_VideoStreamInfoResponse_descriptor =
-      getDescriptor().getMessageTypes().get(40);
+      getDescriptor().getMessageTypes().get(41);
     internal_static_sl_link_VideoStreamInfoResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_VideoStreamInfoResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "StreamUrl", "Codec", "Width", "Height", "Online", "UtcTime", });
     internal_static_sl_link_PathPlanRequest_descriptor =
-      getDescriptor().getMessageTypes().get(41);
+      getDescriptor().getMessageTypes().get(42);
     internal_static_sl_link_PathPlanRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_PathPlanRequest_descriptor,
         new java.lang.String[] { "RequestId", "TaskId", "ForceReplan", "ReturnPathChunks", "MaxChunkSize", "StartPose", "EndPose", "GlobalDirection", "MapId", });
     internal_static_sl_link_PathPlanResponse_descriptor =
-      getDescriptor().getMessageTypes().get(42);
+      getDescriptor().getMessageTypes().get(43);
     internal_static_sl_link_PathPlanResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_PathPlanResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "RequestId", "TaskId", "MapVersion", "PathVersion", "PathPointCount", "PathLengthM", "Planned", "PathChunked", "PreviewImage", "PreviewFormat", "Width", "Height", "Resolution", "Origin", "FrameId", "PreviewScaleX", "PreviewScaleY", "TotalWorkAreaM2", "EstimatedTimeS", "LocalizationCovariance", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", });
     internal_static_sl_link_MapSyncRequest_descriptor =
-      getDescriptor().getMessageTypes().get(43);
+      getDescriptor().getMessageTypes().get(44);
     internal_static_sl_link_MapSyncRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSyncRequest_descriptor,
         new java.lang.String[] { "Operation", "MapId", "UpdateNavigationMap", });
     internal_static_sl_link_MapSyncResponse_descriptor =
-      getDescriptor().getMessageTypes().get(44);
+      getDescriptor().getMessageTypes().get(45);
     internal_static_sl_link_MapSyncResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSyncResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "Operation", "MapId", "MapName", "MapRevision", "MapYamlPath", "MapImagePath", "NavigationMapReloaded", "LifecycleState", });
     internal_static_sl_link_MapImportToRadarRequest_descriptor =
-      getDescriptor().getMessageTypes().get(45);
+      getDescriptor().getMessageTypes().get(46);
     internal_static_sl_link_MapImportToRadarRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapImportToRadarRequest_descriptor,
         new java.lang.String[] { "MapId", });
     internal_static_sl_link_MapImportToRadarResponse_descriptor =
-      getDescriptor().getMessageTypes().get(46);
+      getDescriptor().getMessageTypes().get(47);
     internal_static_sl_link_MapImportToRadarResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapImportToRadarResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "MapName", "Imported", "MapRevision", "LifecycleState", });
     internal_static_sl_link_MapModeRequest_descriptor =
-      getDescriptor().getMessageTypes().get(47);
+      getDescriptor().getMessageTypes().get(48);
     internal_static_sl_link_MapModeRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapModeRequest_descriptor,
         new java.lang.String[] { "Mode", "Enabled", "MapKind", });
     internal_static_sl_link_MapModeResponse_descriptor =
-      getDescriptor().getMessageTypes().get(48);
+      getDescriptor().getMessageTypes().get(49);
     internal_static_sl_link_MapModeResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapModeResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "Mode", "Enabled", "MapKind", "LifecycleState", "MapId", "MapRevision", "ResidualNodes", });
     internal_static_sl_link_MapAlignmentRequest_descriptor =
-      getDescriptor().getMessageTypes().get(49);
+      getDescriptor().getMessageTypes().get(50);
     internal_static_sl_link_MapAlignmentRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapAlignmentRequest_descriptor,
         new java.lang.String[] { "MapId", "RotationDeg", });
     internal_static_sl_link_MapAlignmentResponse_descriptor =
-      getDescriptor().getMessageTypes().get(50);
+      getDescriptor().getMessageTypes().get(51);
     internal_static_sl_link_MapAlignmentResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapAlignmentResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "RotationDeg", "RotationRad", "AlignmentYawDeg", "RotationAlignmentDeltaDeg", });
     internal_static_sl_link_MapCatalogRequest_descriptor =
-      getDescriptor().getMessageTypes().get(51);
+      getDescriptor().getMessageTypes().get(52);
     internal_static_sl_link_MapCatalogRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapCatalogRequest_descriptor,
         new java.lang.String[] { });
     internal_static_sl_link_MapCatalogItem_descriptor =
-      getDescriptor().getMessageTypes().get(52);
+      getDescriptor().getMessageTypes().get(53);
     internal_static_sl_link_MapCatalogItem_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapCatalogItem_descriptor,
         new java.lang.String[] { "MapId", "Name", "SizeBytes", "SavedAt", "TotalWorkAreaM2", "EstimatedTimeS", "ThumbnailFormat", "ThumbnailWidth", "ThumbnailHeight", "ThumbnailImageB64", "CreatedAt", "MapRevision", });
     internal_static_sl_link_MapCatalogResponse_descriptor =
-      getDescriptor().getMessageTypes().get(53);
+      getDescriptor().getMessageTypes().get(54);
     internal_static_sl_link_MapCatalogResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapCatalogResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "TotalCount", "Items", });
     internal_static_sl_link_MapDeleteRequest_descriptor =
-      getDescriptor().getMessageTypes().get(54);
+      getDescriptor().getMessageTypes().get(55);
     internal_static_sl_link_MapDeleteRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapDeleteRequest_descriptor,
         new java.lang.String[] { "MapId", });
     internal_static_sl_link_MapDeleteResponse_descriptor =
-      getDescriptor().getMessageTypes().get(55);
+      getDescriptor().getMessageTypes().get(56);
     internal_static_sl_link_MapDeleteResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapDeleteResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "MapName", "Deleted", "LocalDeleted", "RemoteDeleted", "RemoteDeletePending", });
     internal_static_sl_link_MapSaveRequest_descriptor =
-      getDescriptor().getMessageTypes().get(56);
+      getDescriptor().getMessageTypes().get(57);
     internal_static_sl_link_MapSaveRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSaveRequest_descriptor,
         new java.lang.String[] { "MapName", "MapId", "HasRotationDeg", "RotationDeg", });
     internal_static_sl_link_MapSaveResponse_descriptor =
-      getDescriptor().getMessageTypes().get(57);
+      getDescriptor().getMessageTypes().get(58);
     internal_static_sl_link_MapSaveResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapSaveResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "MapName", "MapYamlPath", "MapImagePath", "NavigationMapReloaded", "TotalWorkAreaM2", "EstimatedTimeS", "CreatedAt", "MapRevision", "LifecycleState", "MappingStopped", "LocalizationStarted", "ResidualNodes", });
     internal_static_sl_link_MapMetricsRequest_descriptor =
-      getDescriptor().getMessageTypes().get(58);
+      getDescriptor().getMessageTypes().get(59);
     internal_static_sl_link_MapMetricsRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapMetricsRequest_descriptor,
         new java.lang.String[] { "MapId", });
     internal_static_sl_link_RegionMetricsItem_descriptor =
-      getDescriptor().getMessageTypes().get(59);
+      getDescriptor().getMessageTypes().get(60);
     internal_static_sl_link_RegionMetricsItem_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RegionMetricsItem_descriptor,
         new java.lang.String[] { "RegionId", "RegionName", "Repeat", "AreaM2", "EstimatedTimeH", });
     internal_static_sl_link_MapMetricsResponse_descriptor =
-      getDescriptor().getMessageTypes().get(60);
+      getDescriptor().getMessageTypes().get(61);
     internal_static_sl_link_MapMetricsResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapMetricsResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "MapName", "RegionMetrics", });
     internal_static_sl_link_TaskResultRequest_descriptor =
-      getDescriptor().getMessageTypes().get(61);
+      getDescriptor().getMessageTypes().get(62);
     internal_static_sl_link_TaskResultRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskResultRequest_descriptor,
         new java.lang.String[] { "MapId", "TaskId", "MaxExecutionRecords", });
     internal_static_sl_link_TaskResultRegionItem_descriptor =
-      getDescriptor().getMessageTypes().get(62);
+      getDescriptor().getMessageTypes().get(63);
     internal_static_sl_link_TaskResultRegionItem_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskResultRegionItem_descriptor,
         new java.lang.String[] { "RegionId", "RegionName", "TargetRepeat", "ExecutedRepeat", "Completed", "UnfinishedReason", });
     internal_static_sl_link_TaskExecutionRecord_descriptor =
-      getDescriptor().getMessageTypes().get(63);
+      getDescriptor().getMessageTypes().get(64);
     internal_static_sl_link_TaskExecutionRecord_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskExecutionRecord_descriptor,
         new java.lang.String[] { "ExecutionId", "MapId", "TaskId", "FinalState", "StopReason", "StartedAt", "FinishedAt", "PlannedAreaM2", "ExecutedAreaM2", "Progress", "PathVersion", "AllCompleted", });
     internal_static_sl_link_TaskResultResponse_descriptor =
-      getDescriptor().getMessageTypes().get(64);
+      getDescriptor().getMessageTypes().get(65);
     internal_static_sl_link_TaskResultResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskResultResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MapId", "TaskId", "FinalState", "AllCompleted", "StopReason", "PathVersion", "ImageFormat", "ImageData", "ImageWidth", "ImageHeight", "FinishedAt", "SelectedWorkRegionIds", "RegionResults", "LocalizationCovariance", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", "ExecutionId", "StartedAt", "PlannedAreaM2", "ExecutedAreaM2", "ExecutionProgress", "ExecutionRecords", });
     internal_static_sl_link_TaskExecutionHistoryRequest_descriptor =
-      getDescriptor().getMessageTypes().get(65);
+      getDescriptor().getMessageTypes().get(66);
     internal_static_sl_link_TaskExecutionHistoryRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskExecutionHistoryRequest_descriptor,
         new java.lang.String[] { "MapId", "TaskId", "StartTime", "EndTime", "MaxChunkSize", });
     internal_static_sl_link_TaskExecutionHistoryChunk_descriptor =
-      getDescriptor().getMessageTypes().get(66);
+      getDescriptor().getMessageTypes().get(67);
     internal_static_sl_link_TaskExecutionHistoryChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskExecutionHistoryChunk_descriptor,
         new java.lang.String[] { "Result", "Message", "ChunkIndex", "TotalChunks", "TotalRecordCount", "Data", "StartTime", "EndTime", });
     internal_static_sl_link_TaskExecutionDeleteRequest_descriptor =
-      getDescriptor().getMessageTypes().get(67);
+      getDescriptor().getMessageTypes().get(68);
     internal_static_sl_link_TaskExecutionDeleteRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskExecutionDeleteRequest_descriptor,
         new java.lang.String[] { "ExecutionId", });
     internal_static_sl_link_TaskExecutionDeleteResponse_descriptor =
-      getDescriptor().getMessageTypes().get(68);
+      getDescriptor().getMessageTypes().get(69);
     internal_static_sl_link_TaskExecutionDeleteResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskExecutionDeleteResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "ExecutionId", "TaskId", "MapId", "Deleted", "ExecutionFilesDeleted", });
     internal_static_sl_link_TaskTrajectoryRequest_descriptor =
-      getDescriptor().getMessageTypes().get(69);
+      getDescriptor().getMessageTypes().get(70);
     internal_static_sl_link_TaskTrajectoryRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskTrajectoryRequest_descriptor,
         new java.lang.String[] { "ExecutionId", "TaskId", "StartTime", "EndTime", "StartIndex", "MaxPoints", "SampleStep", "MaxChunkSize", });
     internal_static_sl_link_TaskTrajectoryPoint_descriptor =
-      getDescriptor().getMessageTypes().get(70);
+      getDescriptor().getMessageTypes().get(71);
     internal_static_sl_link_TaskTrajectoryPoint_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskTrajectoryPoint_descriptor,
         new java.lang.String[] { "Index", "OffsetMs", "XMm", "YMm", "HeadingMdeg", "LinearSpeedMmps", "AngularSpeedMradps", "DiscSpeedRpm", "SpeedAvailable", "DiscEnabled", "TaskState", });
     internal_static_sl_link_TaskTrajectoryChunk_descriptor =
-      getDescriptor().getMessageTypes().get(71);
+      getDescriptor().getMessageTypes().get(72);
     internal_static_sl_link_TaskTrajectoryChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_TaskTrajectoryChunk_descriptor,
         new java.lang.String[] { "Result", "Message", "ExecutionId", "ChunkIndex", "TotalChunks", "TotalPointCount", "ReturnedPointCount", "StartIndex", "NextIndex", "HasMore", "StartedAtMs", "Points", "TaskId", "MapId", "StartTime", "EndTime", "SampleStep", "MapAvailable", "MapMessage", "MapVersion", "MapSourceWidth", "MapSourceHeight", "MapResolution", "MapOrigin", "MapFrameId", "MapImageFormat", "MapImageWidth", "MapImageHeight", "MapPreviewScaleX", "MapPreviewScaleY", "MapImageData", "MapImageChunkIndex", "MapImageTotalChunks", "AlignmentYawDeg", "AppRotationDeg", "RotationAlignmentDeltaDeg", });
     internal_static_sl_link_LiveMapCacheClearRequest_descriptor =
-      getDescriptor().getMessageTypes().get(72);
+      getDescriptor().getMessageTypes().get(73);
     internal_static_sl_link_LiveMapCacheClearRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_LiveMapCacheClearRequest_descriptor,
         new java.lang.String[] { });
     internal_static_sl_link_LiveMapCacheClearResponse_descriptor =
-      getDescriptor().getMessageTypes().get(73);
+      getDescriptor().getMessageTypes().get(74);
     internal_static_sl_link_LiveMapCacheClearResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_LiveMapCacheClearResponse_descriptor,
         new java.lang.String[] { "Result", "Message", });
     internal_static_sl_link_SystemCacheClearRequest_descriptor =
-      getDescriptor().getMessageTypes().get(74);
+      getDescriptor().getMessageTypes().get(75);
     internal_static_sl_link_SystemCacheClearRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SystemCacheClearRequest_descriptor,
         new java.lang.String[] { "ClearMemoryCache", "ClearTemporaryFiles", "ClearLogs", });
     internal_static_sl_link_SystemCacheClearResponse_descriptor =
-      getDescriptor().getMessageTypes().get(75);
+      getDescriptor().getMessageTypes().get(76);
     internal_static_sl_link_SystemCacheClearResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_SystemCacheClearResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "MemoryCacheCleared", "TemporaryFilesCleared", "TemporaryBytesReleased", "LogFilesCleared", "LogBytesReleased", "FailedItems", });
     internal_static_sl_link_RadarMapCacheClearRequest_descriptor =
-      getDescriptor().getMessageTypes().get(76);
+      getDescriptor().getMessageTypes().get(77);
     internal_static_sl_link_RadarMapCacheClearRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarMapCacheClearRequest_descriptor,
         new java.lang.String[] { });
     internal_static_sl_link_RadarMapCacheClearResponse_descriptor =
-      getDescriptor().getMessageTypes().get(77);
+      getDescriptor().getMessageTypes().get(78);
     internal_static_sl_link_RadarMapCacheClearResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarMapCacheClearResponse_descriptor,
         new java.lang.String[] { "Result", "Message", });
     internal_static_sl_link_RadarSystemStatusRequest_descriptor =
-      getDescriptor().getMessageTypes().get(78);
+      getDescriptor().getMessageTypes().get(79);
     internal_static_sl_link_RadarSystemStatusRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarSystemStatusRequest_descriptor,
         new java.lang.String[] { });
     internal_static_sl_link_RadarSystemStatusResponse_descriptor =
-      getDescriptor().getMessageTypes().get(79);
+      getDescriptor().getMessageTypes().get(80);
     internal_static_sl_link_RadarSystemStatusResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarSystemStatusResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "Available", "Status", "TimestampNs", });
     internal_static_sl_link_RadarMapSyncRequest_descriptor =
-      getDescriptor().getMessageTypes().get(80);
+      getDescriptor().getMessageTypes().get(81);
     internal_static_sl_link_RadarMapSyncRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarMapSyncRequest_descriptor,
         new java.lang.String[] { });
     internal_static_sl_link_RadarMapSyncResponse_descriptor =
-      getDescriptor().getMessageTypes().get(81);
+      getDescriptor().getMessageTypes().get(82);
     internal_static_sl_link_RadarMapSyncResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarMapSyncResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "Sent", });
     internal_static_sl_link_RadarRelocalizationRequest_descriptor =
-      getDescriptor().getMessageTypes().get(82);
+      getDescriptor().getMessageTypes().get(83);
     internal_static_sl_link_RadarRelocalizationRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationRequest_descriptor,
         new java.lang.String[] { "InitialPoseAvailable", "InitialPose", "InitialPoseCovariance", "MapId", "MapRevision", });
     internal_static_sl_link_RadarRelocalizationResponse_descriptor =
-      getDescriptor().getMessageTypes().get(83);
+      getDescriptor().getMessageTypes().get(84);
     internal_static_sl_link_RadarRelocalizationResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "Accepted", "Status", "MapId", "MapRevision", "LifecycleState", });
     internal_static_sl_link_RadarRelocalizationStatusRequest_descriptor =
-      getDescriptor().getMessageTypes().get(84);
+      getDescriptor().getMessageTypes().get(85);
     internal_static_sl_link_RadarRelocalizationStatusRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationStatusRequest_descriptor,
         new java.lang.String[] { });
     internal_static_sl_link_RadarRelocalizationStatusResponse_descriptor =
-      getDescriptor().getMessageTypes().get(85);
+      getDescriptor().getMessageTypes().get(86);
     internal_static_sl_link_RadarRelocalizationStatusResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_RadarRelocalizationStatusResponse_descriptor,
         new java.lang.String[] { "RawStatus", "TimestampNs", "LifecycleState", "Detail", "MapId", "MapRevision", "GoodFrames", "RequiredFrames", "RegistrationQualityValid", "RegistrationFitness", "RegistrationInlierRatio", "ResidualNodes", });
     internal_static_sl_link_DiscLiftControl_descriptor =
-      getDescriptor().getMessageTypes().get(86);
+      getDescriptor().getMessageTypes().get(87);
     internal_static_sl_link_DiscLiftControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_DiscLiftControl_descriptor,
         new java.lang.String[] { "Command", });
     internal_static_sl_link_LightingControl_descriptor =
-      getDescriptor().getMessageTypes().get(87);
+      getDescriptor().getMessageTypes().get(88);
     internal_static_sl_link_LightingControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_LightingControl_descriptor,
         new java.lang.String[] { "Enabled", });
     internal_static_sl_link_ChassisPowerControl_descriptor =
-      getDescriptor().getMessageTypes().get(88);
+      getDescriptor().getMessageTypes().get(89);
     internal_static_sl_link_ChassisPowerControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ChassisPowerControl_descriptor,
         new java.lang.String[] { "Enabled", });
     internal_static_sl_link_DiscControl_descriptor =
-      getDescriptor().getMessageTypes().get(89);
+      getDescriptor().getMessageTypes().get(90);
     internal_static_sl_link_DiscControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_DiscControl_descriptor,
         new java.lang.String[] { "Enabled", "SpeedRpm", });
     internal_static_sl_link_ChannelSessionRequest_descriptor =
-      getDescriptor().getMessageTypes().get(90);
+      getDescriptor().getMessageTypes().get(91);
     internal_static_sl_link_ChannelSessionRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ChannelSessionRequest_descriptor,
         new java.lang.String[] { "Action", "Role", "Token", });
     internal_static_sl_link_ChannelSessionResponse_descriptor =
-      getDescriptor().getMessageTypes().get(91);
+      getDescriptor().getMessageTypes().get(92);
     internal_static_sl_link_ChannelSessionResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ChannelSessionResponse_descriptor,
         new java.lang.String[] { "Result", "Message", "Role", "Token", "HeartbeatIntervalMs", "SessionTimeoutMs", "ControlReady", "EmergencyStopLatched", });
     internal_static_sl_link_EmergencyStopControl_descriptor =
-      getDescriptor().getMessageTypes().get(92);
+      getDescriptor().getMessageTypes().get(93);
     internal_static_sl_link_EmergencyStopControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_EmergencyStopControl_descriptor,
         new java.lang.String[] { "Enabled", });
     internal_static_sl_link_ManualDriveControl_descriptor =
-      getDescriptor().getMessageTypes().get(93);
+      getDescriptor().getMessageTypes().get(94);
     internal_static_sl_link_ManualDriveControl_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ManualDriveControl_descriptor,
         new java.lang.String[] { "Motion", "SpeedRatio", "RemoteX", "RemoteY", "MaxSpeedMps", "MaxTurnSpeedRatio", });
     internal_static_sl_link_ControlCommand_descriptor =
-      getDescriptor().getMessageTypes().get(94);
+      getDescriptor().getMessageTypes().get(95);
     internal_static_sl_link_ControlCommand_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ControlCommand_descriptor,
         new java.lang.String[] { "DiscLift", "Lighting", "ManualDrive", "ChassisPower", "DiscControl", "EmergencyStop", "Command", });
     internal_static_sl_link_ControlCommandResponse_descriptor =
-      getDescriptor().getMessageTypes().get(95);
+      getDescriptor().getMessageTypes().get(96);
     internal_static_sl_link_ControlCommandResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_ControlCommandResponse_descriptor,

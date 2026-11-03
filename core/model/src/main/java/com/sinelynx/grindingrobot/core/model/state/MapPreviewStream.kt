@@ -9,11 +9,17 @@ data class MapPreviewPointPayload(
     val y: Float
 )
 
+data class WorkRegionProcessSettingsPayload(
+    val runSpeed: Float, val discSpeedRpm: Int, val processType: String,
+    val grindingParameter: String, val concreteStrength: String, val pressure: Float
+)
+
 data class MapPreviewRegionPayload(
     val regionId: String,
     val regionName: String,
     val points: List<MapPreviewPointPayload>,
-    val enabled: Boolean = true
+    val enabled: Boolean = true,
+    val processSettings: WorkRegionProcessSettingsPayload? = null
 )
 
 /**

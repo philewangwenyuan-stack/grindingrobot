@@ -10,6 +10,8 @@ import com.sinelynx.grindingrobot.core.model.state.MapImagePayload
 import com.sinelynx.grindingrobot.core.model.state.MapRequestOutcome
 import com.sinelynx.grindingrobot.core.model.state.MapRequestResultPayload
 import com.sinelynx.grindingrobot.core.model.state.MapBuildSessionStream
+import com.sinelynx.grindingrobot.core.model.state.TaskSchedulerStream
+import com.sinelynx.grindingrobot.core.model.state.manualTaskGate
 import com.sinelynx.grindingrobot.core.util.toast.ToastUtils
 import android.graphics.BitmapFactory
 import com.sinelynx.grindingrobot.core.tcp.TcpManager
@@ -78,7 +80,7 @@ class MapViewModel @Inject constructor(
         scope = viewModelScope,
         canControl = { screenActive && tcpManager.isControlReady() &&
             appState.runtimeTaskState.value.emergencyStopLatched != true &&
-            appState.runtimeTaskState.value.workMode != SlLink.WorkMode.WORK_MODE_AUTO.number },
+            TaskSchedulerStream.taskStatusReport.value.manualTaskGate().canDriveWithoutTakeover },
         send = { target -> tcpManager.sendManualDriveCommand(target.remoteX, target.remoteY,
             target.speedRatio, target.maxSpeedMps, target.maxTurnSpeedRatio) },
         onStateChanged = { value -> _uiState.update { it.copy(drive = value) } },
@@ -89,11 +91,12 @@ class MapViewModel @Inject constructor(
             tcpManager.manualCancellation.collect { controller.stop() }
         }
         viewModelScope.launch {
-            combine(tcpManager.channelStatus, appState.runtimeTaskState) { connection, runtime ->
-                connection to runtime
-            }.collect { (connection, runtime) ->
+            combine(tcpManager.channelStatus, appState.runtimeTaskState,
+                TaskSchedulerStream.taskStatusReport) { connection, runtime, report ->
+                Triple(connection, runtime, report)
+            }.collect { (connection, runtime, report) ->
                 if (!connection.controlReady || runtime.emergencyStopLatched == true ||
-                    runtime.workMode == SlLink.WorkMode.WORK_MODE_AUTO.number) controller.stop()
+                    !report.manualTaskGate().canDriveWithoutTakeover) controller.stop()
                 controller.refreshAvailability()
             }
         }

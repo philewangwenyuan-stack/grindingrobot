@@ -8,6 +8,7 @@
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceFixtures.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceBenchmarkTest.kt
 /src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/*
+!/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/ManualTakeoverDialogTest.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/ManualDriveUiTest.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/TaskPathCacheRenderTest.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/PathPerformanceFixtures.kt
@@ -16,3 +17,7 @@
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/EraseSubmissionGeometryTest.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/AdjustmentRepeatTest.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/EraseEditorUiTest.kt
+
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/
+/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/*
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/ProcessPresetTest.kt

@@ -15,7 +15,8 @@ import com.sinelynx.grindingrobot.feature.main.viewmodel.RemoteSettingsViewModel
 @Composable
 fun RemoteSettingsScreen(viewModel: RemoteSettingsViewModel, modifier: Modifier = Modifier) {
     val uiState by viewModel.uiState.collectAsState()
-    ManualDriveLifecycle(viewModel::onScreenEnter, viewModel::onScreenExit)
+    ManualDriveLifecycle(viewModel::onScreenEnter, viewModel::onScreenExit,
+        viewModel::onWindowFocusLost, viewModel::onWindowFocusGained)
     CompositionLocalProvider(LocalManualFeedbackAllowed provides viewModel::acceptsManualFeedback) {
     ManualRemoteControlContent(
         state = uiState.drive, discRpm = uiState.turnCount,
@@ -33,10 +34,11 @@ fun RemoteSettingsScreen(viewModel: RemoteSettingsViewModel, modifier: Modifier 
     if (uiState.showAutoModeJoystickDialog) {
         ConfirmOverlayDialog(
             title = "确定退出自动驾驶?",
-            message = "机器人将停止自动研磨，切换为手动操作。",
+            message = "机器人将停止自动任务和磨盘。完成后请重新操作遥控。",
             confirmText = "确 定", cancelText = "取 消",
             onConfirm = viewModel::confirmAutoModeJoystickDialog,
             onCancel = viewModel::cancelAutoModeJoystickDialog,
+            confirmEnabled = !uiState.manualTakeoverPending,
         )
     }
 }

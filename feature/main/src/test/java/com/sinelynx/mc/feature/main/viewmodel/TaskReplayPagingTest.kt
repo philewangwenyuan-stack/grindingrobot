@@ -2,52 +2,17 @@ package com.sinelynx.grindingrobot.feature.main.viewmodel
 
 import com.sinelynx.grindingrobot.core.model.state.TaskTrajectoryPagePayload
 import com.sinelynx.grindingrobot.core.model.state.TaskTrajectoryPointPayload
-import com.sinelynx.grindingrobot.core.model.state.TaskPathPayload
-import com.sinelynx.grindingrobot.core.model.state.TaskPathPointPayload
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
 class TaskReplayPagingTest {
     @Test
-    fun plannedPathTimeoutIsThreeMinutes() {
-        assertEquals(180_000L, TASK_REPLAY_PATH_TIMEOUT_MS)
-    }
-
-    @Test
-    fun plannedPathErrorsDistinguishSendTimeoutEmptyAndValidResults() {
-        val empty = TaskPathPayload(
-            taskId = "task",
-            pathVersion = 1,
-            frameId = "map",
-            alignmentYawDeg = 0f,
-            points = emptyList()
-        )
-        val valid = empty.copy(points = listOf(TaskPathPointPayload(1f, 2f)))
-
-        assertEquals("规划路径请求发送失败", replayPlannedPathError(sent = false, path = null))
-        assertEquals("规划路径加载超时", replayPlannedPathError(sent = true, path = null))
-        assertEquals("规划路径未返回数据", replayPlannedPathError(sent = true, path = empty))
-        assertEquals("设备未保存路径", replayPlannedPathError(
-            sent = true,
-            path = empty.copy(message = "设备未保存路径")
-        ))
-        assertNull(replayPlannedPathError(sent = true, path = valid))
-    }
-
-    @Test
-    fun plannedPathResponseOnlyMatchesCurrentRequestId() {
-        val path = TaskPathPayload(
-            taskId = "task",
-            pathVersion = 1,
-            frameId = "map",
-            alignmentYawDeg = 0f,
-            points = listOf(TaskPathPointPayload(1f, 2f)),
-            requestId = "current-request"
-        )
-
-        assertEquals(true, path.matchesReplayPathRequest("current-request"))
-        assertEquals(false, path.matchesReplayPathRequest("old-request"))
+    fun historyHasNoPendingReplanAndExplainsMissingArchive() {
+        val state = TaskReplayUiState()
+        assertEquals(false, state.isPathLoading)
+        assertNull(state.plannedPath)
+        assertEquals("该记录未提供归档规划路径，仅显示实际轨迹", state.pathError)
     }
 
     @Test

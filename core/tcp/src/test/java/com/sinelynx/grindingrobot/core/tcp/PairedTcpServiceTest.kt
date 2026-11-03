@@ -183,6 +183,21 @@ class PairedTcpServiceTest {
         }
     }
 
+    @Test fun nineHundredMillisecondAckGapDoesNotCancelManualControl() {
+        Board().use { board ->
+            board.manualAckDelayMs = 900
+            val runtime = Runtime()
+            val service = paired(board, runtime)
+            try {
+                assertTrue(service.sendManualData(command(1f), false))
+                until(1800) { board.movementTimes.size >= 12 }
+                assertTrue(service.isControlReady())
+                assertEquals(0L,service.manualCancellation.value)
+                assertTrue(runtime.traces.none { it.startsWith("channel_close reason=遥控确认超时") })
+            } finally { service.release() }
+        }
+    }
+
     @Test fun backgroundSenderRenewsWithoutFurtherUiCallsAndStopsOnBackground() {
         Board().use { board ->
             val service = paired(board, Runtime())
@@ -297,7 +312,7 @@ class PairedTcpServiceTest {
                 assertFalse("fixture-tablet-token" in close)
                 until { service.isControlReady() }
                 val sentBeforeRecovery = board.movements().count { it > 0 }
-                assertTrue("Outstanding renewals must stay bounded", sentBeforeRecovery in 1..8)
+                assertTrue("One-second ACK deadline must bound outstanding renewals", sentBeforeRecovery in 1..13)
                 Thread.sleep(200)
                 assertEquals(sentBeforeRecovery, board.movements().count { it > 0 })
                 assertFalse(service.sendManualData(command(1f), false))

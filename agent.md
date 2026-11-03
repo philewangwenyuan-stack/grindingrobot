@@ -152,3 +152,7 @@ OTA 修改后至少检查：
 - 若修改导航、构建、协议、公共状态或依赖，运行更大范围的构建/测试。
 - 检查是否引入明文密钥、固定设备标识、生产地址或不应提交的构建产物。
 - 在最终说明中列出修改内容、验证命令和因环境限制未执行的验证。
+
+区域工艺保存与确认：`core:tcp/MapProcessSettings.kt`、`SlLinkManager.mapProcessReplies`；`MapScreenStep3ViewModel` 按map_id+region_id保存并确认区域工艺，MapRegionPoint查询按区域恢复草稿，启动/进入区域时由板端恢复；`MapProcessSettingsTest`。历史回放 `TaskReplayViewModel` 只读轨迹/底图，不调用规划接口；未归档规划路径明确提示。
+
+区域工艺读回DTO：`core:model/state/MapPreviewStream.kt: WorkRegionProcessSettingsPayload`，`core:tcp/SlLinkManager.kt: parseMapRegionPoints`；只绑定当前返回的region_id，不从其他区补齐。
