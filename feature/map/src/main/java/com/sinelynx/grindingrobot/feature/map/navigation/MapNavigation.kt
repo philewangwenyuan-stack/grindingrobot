@@ -68,13 +68,25 @@ fun NavGraphBuilder.mapGraph(
             onNextStep = {
                 LogUtils.d("MapAlignment_Debug: MapNavigation composable Step2 onNextStep callback 触发！正在跳转到 Step3...")
                 navController.navigate(
-                    MapRoutes.Step3(
+                    MapRoutes.DrawingImport(
                         mapId = route.mapId,
                         mapName = route.mapName
                     )
                 )
             }
         )
+    }
+
+    composable<MapRoutes.DrawingImport> { backStackEntry ->
+        val route = backStackEntry.toRoute<MapRoutes.DrawingImport>()
+        val drawingViewModel: com.sinelynx.grindingrobot.feature.map.viewmodel.DrawingImportViewModel = hiltViewModel()
+        com.sinelynx.grindingrobot.feature.map.ui.DrawingImportScreen(drawingViewModel, route.mapId,
+            onPrevious = { navController.popBackStack() },
+            onContinue = { navController.navigate(MapRoutes.Step3(route.mapId,route.mapName)) },
+            onCancel = {
+                MapBuildSessionStream.clear()
+                navController.navigate(MapRoutes.Home) { popUpTo(MapRoutes.Home) { inclusive = false }; launchSingleTop = true }
+            })
     }
 
     composable<MapRoutes.Step3> { backStackEntry ->

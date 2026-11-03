@@ -18,15 +18,16 @@ import com.sinelynx.grindingrobot.feature.common.component.GlobalTopBar
 internal fun workflowSideWidth(width: androidx.compose.ui.unit.Dp) = (width * 0.15f).coerceIn(132.dp, 172.dp)
 
 @Composable
-internal fun MapWorkflowHeader(step: Int, onEmergencyStop: () -> Unit) {
+internal fun MapWorkflowHeader(step: Int, onEmergencyStop: () -> Unit, drawing: Boolean = false) {
+    val displayStep = if(drawing) 3 else if(step>=3) step+1 else step
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         GlobalTopBar(onEmergencyClick = onEmergencyStop, title = {
             Text("扫描建图", color = Color(0xFF202937), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }, modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            listOf("1  扫描地图", "2  选择工作区", "3  划分工作区", "4  保存地图").forEachIndexed { index, text ->
-                Text(text, color = if (index + 1 == step) Color(0xFF00A0E9) else Color(0xFF9DA3AF),
-                    fontSize = 13.sp, fontWeight = if (index + 1 == step) FontWeight.Bold else FontWeight.Normal)
+            listOf("1  扫描地图", "2  选择工作区", "3  图纸障碍", "4  划分工作区", "5  保存地图").forEachIndexed { index, text ->
+                Text(text, color = if (index + 1 == displayStep) Color(0xFF00A0E9) else Color(0xFF9DA3AF),
+                    fontSize = 13.sp, fontWeight = if (index + 1 == displayStep) FontWeight.Bold else FontWeight.Normal)
             }
         }
     }

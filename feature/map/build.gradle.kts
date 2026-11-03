@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.dxf)
     implementation(projects.core.tcp)
     implementation(projects.core.model)
     implementation(projects.core.database)

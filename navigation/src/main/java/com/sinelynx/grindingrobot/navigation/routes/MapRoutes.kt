@@ -30,6 +30,9 @@ object MapRoutes {
     )
 
     @Serializable
+    data class DrawingImport(val mapId: String? = null, val mapName: String? = null)
+
+    @Serializable
     data class Step4(
         val mapId: String? = null,
         val mapName: String? = null,

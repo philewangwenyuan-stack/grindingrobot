@@ -254,6 +254,7 @@ fun MapHomeScreen(
             onRelocalizationCommandEnd = onRelocalizationCommandEnd,
             onRelocalizationPositionChanged = onRelocalizationPositionChanged,
             onDismiss = { startTaskMap = null },
+            onRealignDrawing = { startTaskMap=null;onCloseStartGrinding();onEditMap(target.mapId,target.mapName) },
             onRequestPlanPreview = { taskId, taskName, regionRepeats, obstacles ->
                 onRequestPlanPreview(target.mapId, taskId, taskName, regionRepeats, obstacles)
             },
@@ -425,6 +426,7 @@ private fun MapItemRow(
                 color = Color(0xFF202937),
                 fontWeight = FontWeight.Medium
             )
+            if(map.drawingLayerStatus==2)Text("图纸障碍需重新对齐",color=Color(0xFFD89516),fontSize=12.sp)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,

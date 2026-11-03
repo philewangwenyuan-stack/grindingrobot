@@ -96,7 +96,8 @@ internal fun StartGrindingScreen(
     onRelocalizationPositionChanged: (JoystickPosition) -> Unit,
     onDismiss: () -> Unit,
     onRequestPlanPreview: (String, String, Map<String, Int>, List<TaskObstacleRegionConfig>) -> Unit,
-    onStart: (String, String, Map<String, Int>, List<TaskObstacleRegionConfig>) -> Unit
+    onStart: (String, String, Map<String, Int>, List<TaskObstacleRegionConfig>) -> Unit,
+    onRealignDrawing: () -> Unit = onDismiss
 ) {
     val mapPreview = session.mapPreview
     val planPreview = session.plan
@@ -106,6 +107,7 @@ internal fun StartGrindingScreen(
     }
     val obstacleRegionSequence = remember { LocalTime.now().toSecondOfDay().toLong() }
     var step by remember { mutableStateOf(StartTaskStep.Workspace) }
+    var drawingSkipConfirmation by remember { mutableStateOf(false) }
     var obstacleMode by remember { mutableStateOf(TaskObstacleMode.Rectangle) }
     var obstacleShapes by remember { mutableStateOf<List<TaskObstacleShape>>(emptyList()) }
     var editingObstacleIndex by remember { mutableStateOf<Int?>(null) }
@@ -194,7 +196,7 @@ internal fun StartGrindingScreen(
     }
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.revoke(taskId); onDismiss() },
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
@@ -337,7 +339,7 @@ internal fun StartGrindingScreen(
 
             TaskBottomActions(
                 step = step,
-                onCancel = onDismiss,
+                onCancel = { com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.revoke(taskId); onDismiss() },
                 onPrevious = {
                     step = when (step) {
                         StartTaskStep.Workspace -> StartTaskStep.Workspace
@@ -350,6 +352,12 @@ internal fun StartGrindingScreen(
                 canStart = session.canStart && planPreview?.regionRepeats == currentSelectedRegionRepeats(),
                 onNext = next@{
                     if (!session.canContinue || currentSelectedRegionRepeats().isEmpty()) return@next
+                    val drawing=session.regions?.drawingLayer
+                    if(step==StartTaskStep.Obstacle && drawing?.stale==true &&
+                        !com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.allows(taskId,session.mapId.orEmpty(),drawing.version)) {
+                        drawingSkipConfirmation=true
+                        return@next
+                    }
                     step = when (step) {
                         StartTaskStep.Workspace -> StartTaskStep.TaskParams
                         StartTaskStep.TaskParams -> StartTaskStep.Obstacle
@@ -374,6 +382,16 @@ internal fun StartGrindingScreen(
                     .fillMaxWidth()
             )
         }
+    }
+
+    if(drawingSkipConfirmation) {
+        DrawingConfirmDialog("图纸障碍已失效",
+            "${session.regions?.drawingLayer?.staleReason.orEmpty()}\n本次跳过后，规划不会避开图纸地基。请确认现场条件允许。",
+            "本次跳过",onConfirm={
+                val layer=session.regions?.drawingLayer
+                if(layer!=null)com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.grant(taskId,session.mapId.orEmpty(),layer.version)
+                drawingSkipConfirmation=false;step=StartTaskStep.Preview
+            },onCancel={drawingSkipConfirmation=false;onRealignDrawing()},cancelText="重新对齐",onDismiss={drawingSkipConfirmation=false})
     }
 
     if (step == StartTaskStep.Preview && legacyPreview.isVisible) {

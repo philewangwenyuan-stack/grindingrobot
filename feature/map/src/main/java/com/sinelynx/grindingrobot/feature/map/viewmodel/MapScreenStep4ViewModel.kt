@@ -255,16 +255,19 @@ class MapScreenStep4ViewModel @Inject constructor(
                 _uiState.update { it.copy(isRegionsLoading = false, regionError = error,
                     workRegions = regions?.workRegions.orEmpty(),
                     previewWorkRegions = regions?.workRegions.orEmpty().map { info -> info.region.toUiItem() },
-                    previewObstacleRegions = regions?.obstacleRegions.orEmpty().map { region -> region.toUiItem() },
+                    previewObstacleRegions = drawingPreviewRegions(mapId,regions?.obstacleRegions.orEmpty()),
                     previewEraseRegions = regions?.eraseRegions.orEmpty().map { region -> region.toUiItem() }) }
             }
             launch {
+                val drawingDraft=DrawingWorkflowDrafts.get(mapId)
                 val (sent, result) = awaitStep4PathPointPlan(TaskPathStream.results, send = { requestId ->
                     tcpManager.requestPathPointPlan(taskId = "",
                         mapId = snapshot.requestedMapId.ifEmpty { "LIVE_MAP" },
-                        requestId = requestId, forceReplan = true)
+                        requestId = requestId, forceReplan = true,
+                        drawingDraftId = drawingDraft?.draftId.orEmpty(), drawingDraftVersion = drawingDraft?.version ?: 0)
                 })
-                val error = step4PathError(sent, result)
+                val error = if(result!=null && drawingDraft!=null && result.drawingDraftVersion!=drawingDraft.version)
+                    "图纸草稿与规划版本不一致，请重新预览" else step4PathError(sent, result)
                 _uiState.update { it.copy(isPlanning = false, planningError = error,
                     plannedPath = result?.takeIf { path -> path.hasRenderablePoints },
                     planningTaskId = result?.taskId.orEmpty(), planningPathVersion = result?.pathVersion ?: 0,
@@ -327,11 +330,15 @@ class MapScreenStep4ViewModel @Inject constructor(
             return
         }
         if (_uiState.value.isSaving) return
-        val draft = createSaveMapDraft(mapId)
+        val drawingDraft=DrawingWorkflowDrafts.get(mapId)
+        val initialDraft = createSaveMapDraft(mapId)
+        val draft = if(drawingDraft!=null)initialDraft.copy(mapId=drawingDraft.targetMapId)else initialDraft
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }
             MapSaveStream.reset()
-            val sent = tcpManager.requestSaveMap(draft.mapId, draft.mapName)
+            val sent = tcpManager.requestSaveMap(draft.mapId, draft.mapName,
+                drawingDraftId=drawingDraft?.draftId.orEmpty(),drawingDraftVersion=drawingDraft?.version?:0,
+                requestId=drawingDraft?.saveRequestId.orEmpty())
             if (!sent) {
                 ToastUtils.show("地图保存请求发送失败")
                 _uiState.update { it.copy(isSaving = false) }
@@ -339,7 +346,7 @@ class MapScreenStep4ViewModel @Inject constructor(
             }
 
             val response = withTimeoutOrNull(MAP_TCP_REQUEST_TIMEOUT_MS) {
-                MapSaveStream.payload.filterNotNull().first()
+                MapSaveStream.payload.filterNotNull().first { drawingDraft==null || it.requestId==drawingDraft.saveRequestId }
             }
             if (response == null) {
                 ToastUtils.show("地图保存超时，请重试")
@@ -352,7 +359,8 @@ class MapScreenStep4ViewModel @Inject constructor(
                 return@launch
             }
 
-            val persistSuccess = todoPersistSaveMapDraft(draft)
+            val actualDraft=draft.copy(mapId=response.mapId.takeIf { it.isNotBlank() }?:draft.mapId)
+            val persistSuccess = todoPersistSaveMapDraft(actualDraft)
             _uiState.update { it.copy(isSaving = false) }
             if (persistSuccess) {
                 val stopResult = if (response.mappingStopped) "建图节点已停止" else "建图停止未确认"
@@ -366,7 +374,8 @@ class MapScreenStep4ViewModel @Inject constructor(
                 ToastUtils.show("地图已保存$revision；$stopResult；$localizationResult$residuals")
                 // 设备保存和本地持久化都成功后结束建图会话，防止下次建图继承旧图片和角度。
                 MapBuildSessionStream.clear()
-                onSave(draft)
+                drawingDraft?.let { DrawingWorkflowDrafts.remove(it.sessionId) }
+                onSave(actualDraft)
             }
         }
     }

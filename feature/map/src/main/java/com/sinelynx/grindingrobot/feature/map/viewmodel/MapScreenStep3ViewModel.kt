@@ -369,7 +369,7 @@ class MapScreenStep3ViewModel @Inject constructor(
             }
             _uiState.update { it.copy(isMapLoading = false, workspaces = workspaces,
                 previewWorkRegions = payload.workRegions.map { info -> info.region.toUiItem() },
-                previewObstacleRegions = payload.obstacleRegions.map { region -> region.toUiItem() },
+                previewObstacleRegions = drawingPreviewRegions(mapId,payload.obstacleRegions),
                 previewEraseRegions = payload.eraseRegions.map { region -> region.toUiItem() }) }
         }
     }

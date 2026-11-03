@@ -16,6 +16,7 @@
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/EraseBrushGeometryTest.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/EraseSubmissionGeometryTest.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/AdjustmentRepeatTest.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/ui/DrawingProjectionTest.kt
 !/src/androidTest/java/com/sinelynx/grindingrobot/feature/map/ui/EraseEditorUiTest.kt
 
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/

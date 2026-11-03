@@ -176,7 +176,8 @@ data class MapHomeListItem(
     val createTime: String?,
     val mapArea: Float?,
     val base64Image: String,
-    val mapRevision: String = ""
+    val mapRevision: String = "",
+    val drawingLayerStatus: Int = 0
 )
 
 data class MapWorkspaceMetricsItem(
@@ -196,7 +197,10 @@ data class MapPreviewRegionItem(
     val regionId: String,
     val regionName: String,
     val points: List<MapPreviewPointItem>,
-    val enabled: Boolean = true
+    val enabled: Boolean = true,
+    val source: String = "",
+    val inflationM: Float = 0f,
+    val drawingAction: Int = 0
 )
 
 internal fun MapPreviewRegionPayload.toUiItem(): MapPreviewRegionItem {
@@ -204,7 +208,8 @@ internal fun MapPreviewRegionPayload.toUiItem(): MapPreviewRegionItem {
         regionId = regionId,
         regionName = regionName,
         points = points.map { point -> MapPreviewPointItem(x = point.x, y = point.y) },
-        enabled = enabled
+        enabled = enabled,
+        source = source, inflationM = inflationM, drawingAction = drawingAction
     )
 }
 
@@ -521,7 +526,8 @@ class MapHomeViewModel @Inject constructor(
                         createTime = item.createdAt,
                         mapArea = item.totalWorkAreaM2,
                         base64Image = item.base64Image,
-                        mapRevision = item.mapRevision
+                        mapRevision = item.mapRevision,
+                        drawingLayerStatus = item.drawingLayerStatus
                     )
                 }
                 _uiState.update { it.copy(maps = items, isMapCatalogLoading = false) }

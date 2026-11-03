@@ -3,6 +3,9 @@ package com.sinelynx.grindingrobot.feature.map.ui
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
@@ -17,7 +20,8 @@ import kotlin.math.sin
 internal enum class MapRegionOverlayKind {
     Erase,
     Work,
-    Obstacle
+    Obstacle,
+    Foundation
 }
 
 internal val MapEraseBorderColor = Color(0xFFFFFFFF)
@@ -28,13 +32,27 @@ private val MapConfirmedObstacleColor = Color(0xFF808080)
 
 /** Per viewport cache; independent of zoom, pan and display rotation. No global geometry retention. */
 internal class MapRegionPathCache {
+    private var partitionSource: List<MapPreviewRegionItem>? = null
+    private var partition = emptyList<MapPreviewRegionItem>() to emptyList<MapPreviewRegionItem>()
+    private val buffers = mutableMapOf<String,Triple<Path,Float,Path>>()
+    fun partitionDrawing(regions: List<MapPreviewRegionItem>): Pair<List<MapPreviewRegionItem>,List<MapPreviewRegionItem>> {
+        if(partitionSource !== regions) {partitionSource=regions;partition=regions.partition {it.source!="drawing"}}
+        return partition
+    }
+    fun expanded(id:String,path:Path,margin:Float):Path {
+        buffers[id]?.let {if(it.first===path&&it.second==margin)return it.third}
+        val result=expandedFoundationPath(path,margin)
+        buffers[id]=Triple(path,margin,result)
+        return result
+    }
     private data class Entry(val regions: List<MapPreviewRegionItem>, val projection: Any?, val paths: List<Pair<String, Path>>)
     private val entries = mutableMapOf<MapRegionOverlayKind, Entry>()
     fun paths(kind: MapRegionOverlayKind, regions: List<MapPreviewRegionItem>, projection: Any?,
               mapper: (MapPreviewPointItem) -> Offset?): List<Pair<String, Path>> {
         entries[kind]?.let { if (it.regions === regions && it.projection == projection) return it.paths }
         val eraseFill = if (kind == MapRegionOverlayKind.Erase) Path() else null
-        val paths = regions.filter { it.enabled }.mapNotNull { region ->
+        if(kind==MapRegionOverlayKind.Foundation)buffers.clear()
+        val paths = regions.filter { it.enabled || kind==MapRegionOverlayKind.Foundation&&it.drawingAction==1 }.mapNotNull { region ->
             val points = region.points.map { mapper(it) }
             if (points.size < 3 || points.any { it == null }) null
             else {
@@ -104,16 +122,24 @@ internal fun DrawScope.drawMapRegionOverlays(
     projectionKey: Any? = null
 ) {
     val safeScale = contentScale.coerceAtLeast(0.0001f)
+    if(kind==MapRegionOverlayKind.Obstacle&&regions.any {it.source=="drawing"}) {
+        val (ordinary,drawing)=cache?.partitionDrawing(regions)?:regions.partition {it.source!="drawing"}
+        drawMapRegionOverlays(ordinary,kind,pointMapper,contentScale,selectedRegionIds,drawBorder,workFillColor,cache,projectionKey)
+        drawFoundationOverlays(drawing,pointMapper,safeScale,cache,projectionKey)
+        return
+    }
     if (cache != null) {
         val fill = when (kind) {
             MapRegionOverlayKind.Erase -> Color.White
             MapRegionOverlayKind.Work -> workFillColor
             MapRegionOverlayKind.Obstacle -> MapConfirmedObstacleColor
+            MapRegionOverlayKind.Foundation -> Color(0xFFFF9500)
         }
         val border = when (kind) {
             MapRegionOverlayKind.Erase -> MapEraseBorderColor
             MapRegionOverlayKind.Work -> MapWorkBorderColor
             MapRegionOverlayKind.Obstacle -> MapConfirmedObstacleColor
+            MapRegionOverlayKind.Foundation -> Color(0xFFFF9500)
         }
         cache.paths(kind, regions, projectionKey, pointMapper).forEach { (id, path) ->
             if (fill.alpha > 0f) drawPath(path, fill)
@@ -136,6 +162,7 @@ internal fun DrawScope.drawMapRegionOverlays(
                 MapRegionOverlayKind.Erase -> Color.White
                 MapRegionOverlayKind.Work -> workFillColor
                 MapRegionOverlayKind.Obstacle -> MapConfirmedObstacleColor
+                MapRegionOverlayKind.Foundation -> Color(0xFFFF9500)
             }
             if (fillColor.alpha > 0f) {
                 drawPath(path = path, color = fillColor)
@@ -144,6 +171,7 @@ internal fun DrawScope.drawMapRegionOverlays(
                 MapRegionOverlayKind.Erase -> MapEraseBorderColor
                 MapRegionOverlayKind.Work -> MapWorkBorderColor
                 MapRegionOverlayKind.Obstacle -> MapConfirmedObstacleColor
+                MapRegionOverlayKind.Foundation -> Color(0xFFFF9500)
             }
             val selected = kind == MapRegionOverlayKind.Work && region.regionId in selectedRegionIds
             if (drawBorder) drawPath(
@@ -152,6 +180,38 @@ internal fun DrawScope.drawMapRegionOverlays(
                 style = Stroke(width = (if (selected) 2.dp else 1.dp).toPx() / safeScale)
             )
         }
+}
+
+internal fun expandedFoundationPath(path:Path,marginPixels:Float):Path {
+    if(marginPixels<=0)return path
+    val paint=android.graphics.Paint().apply {style=android.graphics.Paint.Style.FILL_AND_STROKE;strokeWidth=marginPixels*2;strokeJoin=android.graphics.Paint.Join.ROUND;strokeCap=android.graphics.Paint.Cap.ROUND}
+    val output=android.graphics.Path();paint.getFillPath(path.asAndroidPath(),output)
+    return output.asComposePath()
+}
+
+private fun DrawScope.drawFoundationOverlays(regions:List<MapPreviewRegionItem>,mapper:(MapPreviewPointItem)->Offset?,scale:Float,
+    cache:MapRegionPathCache?,projection:Any?) {
+    val paths=cache?.paths(MapRegionOverlayKind.Foundation,regions,projection,mapper)?:regions.mapNotNull { region ->
+        val points=region.points.mapNotNull(mapper)
+        if(points.size<3)null else region.regionId to Path().apply {moveTo(points.first().x,points.first().y);points.drop(1).forEach {lineTo(it.x,it.y)};close()}
+    }
+    val byId=regions.associateBy {it.regionId}
+    paths.forEach { (id,path)->val region=byId[id]?:return@forEach
+        val ignored=region.drawingAction==1
+        val color=if(ignored)Color(0xFF9DA3AF)else Color(0xFFFF9500)
+        if(!ignored)drawPath(path,color.copy(alpha=.28f))
+        val dash=PathEffect.dashPathEffect(floatArrayOf(5.dp.toPx()/scale,4.dp.toPx()/scale))
+        drawPath(path,color,style=Stroke(1.2.dp.toPx()/scale,pathEffect=if(ignored)dash else null))
+        if(!ignored&&region.inflationM>0) {
+            val first=region.points.firstOrNull()?:return@forEach
+            val a=mapper(first);val b=mapper(first.copy(x=first.x+1f))
+            if(a!=null&&b!=null) {
+                val margin=(b-a).getDistance()*region.inflationM
+                val expanded=cache?.expanded(id,path,margin)?:expandedFoundationPath(path,margin)
+                drawPath(expanded,color,style=Stroke(1.dp.toPx()/scale,pathEffect=dash))
+            }
+        }
+    }
 }
 
 internal fun DrawScope.drawConfirmedObstaclePath(path: Path, contentScale: Float = 1f) {
