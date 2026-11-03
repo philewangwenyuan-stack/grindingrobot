@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     // Kotlin Android插件，支持Kotlin语言开发
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     // Kotlin Compose插件，用于Jetpack Compose UI开发
     alias(libs.plugins.kotlin.compose) apply false
     // Kotlin Serialization插件
