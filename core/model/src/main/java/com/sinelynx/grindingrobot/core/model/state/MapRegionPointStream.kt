@@ -22,7 +22,8 @@ data class MapRegionPointPayload(
     val obstacleRegions: List<MapPreviewRegionPayload>,
     val eraseRegions: List<MapPreviewRegionPayload>,
     // 保留裁剪区供后续业务使用；当前建图页面不新增裁剪区图层。
-    val cropRegion: MapPreviewRegionPayload?
+    val cropRegion: MapPreviewRegionPayload?,
+    val drawingLayer: DrawingLayerState? = null
 )
 
 /** 不重放历史响应；调用方必须先订阅再发请求，避免收到旧区域或漏掉立即返回的响应。 */

@@ -13,7 +13,9 @@ class MapCatalogItemPayload(
     val estimatedTimeS: Float,
     val base64Image: String,
     val saveAt: Long,
-    val mapRevision: String = ""
+    val mapRevision: String = "",
+    val drawingLayerStatus: Int = 0,
+    val drawingLayerVersion: Int = 0
 )
 
 class MapCatalogPayload(

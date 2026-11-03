@@ -19,7 +19,13 @@ data class MapPreviewRegionPayload(
     val regionName: String,
     val points: List<MapPreviewPointPayload>,
     val enabled: Boolean = true,
-    val processSettings: WorkRegionProcessSettingsPayload? = null
+    val processSettings: WorkRegionProcessSettingsPayload? = null,
+    val source: String = "",
+    val inflationM: Float = 0f,
+    val drawingRef: String = "",
+    val layerVersion: Int = 0,
+    val drawingAction: Int = 0,
+    val geometryErrorM: Float = 0f
 )
 
 /**

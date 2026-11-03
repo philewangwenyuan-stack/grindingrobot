@@ -16,7 +16,9 @@ class MapSavePayload(
     val lifecycleState: String = "",
     val mappingStopped: Boolean = false,
     val localizationStarted: Boolean = false,
-    val residualNodes: List<String> = emptyList()
+    val residualNodes: List<String> = emptyList(),
+    val requestId: String = "",
+    val drawingLayerVersion: Int = 0
 )
 
 object MapSaveStream {

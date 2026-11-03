@@ -144,6 +144,8 @@ class SlLinkManager @Inject constructor(
     }
 
     fun clearMapTransfer(reason: String = "地图数据连接已重置，请重试") {
+        com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.clear()
+        mapRegionReplyAssembler.clear()
         val cancelledId = synchronized(mapTransferLock) {
             val requestId = activeMapRequestId
             activeMapRequestId = null
@@ -156,6 +158,7 @@ class SlLinkManager @Inject constructor(
             outcome = MapRequestOutcome.ERROR, retryAfterMs = 0, message = reason))
     }
     private val taskPathChunkAssembler = TaskPathChunkAssembler()
+    private val mapRegionReplyAssembler = MapRegionReplyAssembler()
     private val taskPathTransferLock = Any()
     private val taskPathDecoder = TaskPathDecodeQueue(
         scope = CoroutineScope(applicationScope.coroutineContext + Dispatchers.Default),
@@ -462,13 +465,16 @@ class SlLinkManager @Inject constructor(
             MSG_ID_MAP_PREVIEW_RESPONSE -> handleMapPreviewResponse(frame)
             // 区域响应独立分发，建图页面可刷新区域而不更新已冻结的图片。
             0x052F -> runCatching {
-                MapRegionPointStream.publish(parseMapRegionPoints(SlLink.MapRegionPointResponse.parseFrom(frame.payload)))
+                mapRegionReplyAssembler.accept(SlLink.MapRegionPointResponse.parseFrom(frame.payload))?.let {
+                    MapRegionPointStream.publish(parseMapRegionPoints(it))
+                }
             }.onFailure { LogUtils.e("解析地图区域点响应失败: ${it.message}") }
             MSG_ID_MAP_EDIT_RESPONSE -> handleMapEditResponse(frame)
             MSG_ID_MAP_CATALOG_RESPONSE -> handleMapCatalogResponse(frame)
             MSG_ID_VIDEO_STREAM_INFO_RESPONSE -> handleVideoStreamInfoResponse(frame)
             MSG_ID_PATH_PLAN_RESPONSE -> handlePathPlanResponse(frame)
             MSG_ID_MAP_SAVE_RESPONSE -> handleMapSaveResponse(frame)
+            0x053B -> DrawingReplies.responses.tryEmit(SlLink.DrawingDraftResponse.parseFrom(frame.payload))
             MSG_ID_MAP_DELETE_RESPONSE -> handleMapDeleteResponse(frame)
             MSG_ID_TASK_CONFIG_RESPONSE -> handleTaskConfigResponse(frame)
             MSG_ID_TASK_COMMAND_RESPONSE -> handleTaskCommandResponse(frame)
@@ -1034,7 +1040,9 @@ class SlLinkManager @Inject constructor(
                     lifecycleState = response.lifecycleState,
                     mappingStopped = response.mappingStopped,
                     localizationStarted = response.localizationStarted,
-                    residualNodes = response.residualNodesList
+                    residualNodes = response.residualNodesList,
+                    requestId = response.requestId,
+                    drawingLayerVersion = response.drawingLayerVersion
                 )
             )
         } catch (e: Exception) {
@@ -1070,7 +1078,9 @@ class SlLinkManager @Inject constructor(
                             estimatedTimeS = it.estimatedTimeS,
                             base64Image = it.thumbnailImageB64 ?: "",
                             saveAt = it.savedAt,
-                            mapRevision = it.mapRevision
+                            mapRevision = it.mapRevision,
+                            drawingLayerStatus = it.drawingLayerStatusValue,
+                            drawingLayerVersion = it.drawingLayerVersion
                         )
                     }
                 )
@@ -1713,6 +1723,7 @@ class SlLinkManager @Inject constructor(
                 return
             }
             val report = SlLink.TaskStatusReport.parseFrom(payload)
+            if(report.stateValue in 5..7)com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.revoke(report.taskId)
             val pos = if (report.hasPosition()) report.position else null
 //            LogUtils.d("任务状态上报 state=${report.state}")
             report.currentRegionId
@@ -2122,6 +2133,8 @@ internal fun parseMapRegionPoints(response: SlLink.MapRegionPointResponse): MapR
             require(point.x.isFinite() && point.y.isFinite()) { "区域顶点无效" }
             MapPreviewPointPayload(point.x, point.y)
         }, enabled = enabled,
+        source = source, inflationM = inflationM, drawingRef = drawingRef,
+        layerVersion = layerVersion, drawingAction = drawingActionValue, geometryErrorM = geometryErrorM,
         processSettings = if (hasProcess()) com.sinelynx.grindingrobot.core.model.state.WorkRegionProcessSettingsPayload(
             process.runSpeed, process.discSpeedRpm, process.processType, process.grindingParameter,
             process.concreteStrength, process.pressure
@@ -2142,7 +2155,11 @@ internal fun parseMapRegionPoints(response: SlLink.MapRegionPointResponse): MapR
         },
         obstacleRegions = response.obstacleRegionsList.map { it.region() },
         eraseRegions = response.eraseRegionsList.map { it.region() },
-        cropRegion = if (response.cropRegionAvailable && response.hasCropRegion()) response.cropRegion.region() else null
-    )
+        cropRegion = if (response.cropRegionAvailable && response.hasCropRegion()) response.cropRegion.region() else null,
+        drawingLayer = if (response.hasDrawingLayer()) response.drawingLayer.let { layer ->
+            com.sinelynx.grindingrobot.core.model.state.DrawingLayerState(layer.layerId,layer.version,layer.statusValue,
+                layer.staleReason,layer.sourceFile,layer.sourceSha256,java.util.Base64.getEncoder().encodeToString(layer.toByteArray()))
+        } else null
+    ).also { if(it.isSuccess) com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy.update(it.mapId,it.drawingLayer) }
 }
 

@@ -885,14 +885,18 @@ class TcpManager @Inject constructor(
         dstId: UByte = 0x10u,
         requestId: String = UUID.randomUUID().toString(),
         mapId: String? = null,
-        forceReplan: Boolean = false
+        forceReplan: Boolean = false,
+        drawingDraftId: String = "",
+        drawingDraftVersion: Int = 0
     ): Boolean {
         val payload = buildPathPointPlanRequest(
             taskId,
             maxChunkSize,
             requestId,
             mapId,
-            forceReplan
+            forceReplan,
+            drawingDraftId,
+            drawingDraftVersion
         ).toByteArray()
         val frameData = slLinkManager.requestPathPointPlan(payload, dstId)
         return sendData(frameData) {
@@ -903,9 +907,11 @@ class TcpManager @Inject constructor(
     /**
      * 请求保存地图
      */
-    fun requestSaveMap(mapId: String, mapName: String, dstId: UByte = 0x10u): Boolean {
+    fun requestSaveMap(mapId: String, mapName: String, dstId: UByte = 0x10u,
+        drawingDraftId: String = "", drawingDraftVersion: Int = 0, requestId: String = ""): Boolean {
         val builder = SlLink.MapSaveRequest.newBuilder()
         builder.setMapId(mapId).setMapName(mapName)
+        builder.setDrawingDraftId(drawingDraftId).setDrawingDraftVersion(drawingDraftVersion).setRequestId(requestId)
         val frameData = slLinkManager.requestMapSave(builder.build().toByteArray(), dstId)
         return sendData(frameData)
     }
@@ -940,7 +946,11 @@ class TcpManager @Inject constructor(
         dstId: UByte = 0x10u
     ): Boolean {
         if (taskName.isBlank()) return false
-        val taskConfig = buildTaskConfig(taskId, taskName, mapId, regionRepeats, obstacles)
+        val policy = com.sinelynx.grindingrobot.core.model.state.DrawingTaskPolicy
+        val layer = policy.layer(mapId)
+        val taskConfig = buildTaskConfig(taskId, taskName, mapId, regionRepeats, obstacles).toBuilder()
+            .setExpectedDrawingLayerVersion(layer?.version ?: 0)
+            .setSkipStaleDrawingLayer(layer?.stale == true && policy.allows(taskId.orEmpty(), mapId, layer.version)).build()
         val serializedObstacles = taskConfig.obstacleRegionsList.joinToString(
             prefix = "[",
             postfix = "]"
@@ -1238,13 +1248,17 @@ internal fun buildPathPointPlanRequest(
     maxChunkSize: Int = 4096,
     requestId: String = UUID.randomUUID().toString(),
     mapId: String? = null,
-    forceReplan: Boolean = false
+    forceReplan: Boolean = false,
+    drawingDraftId: String = "",
+    drawingDraftVersion: Int = 0
 ): SlLink.PathPointPlanRequest = SlLink.PathPointPlanRequest.newBuilder()
     .setTaskId(taskId)
     .setMaxChunkSize(maxChunkSize.coerceIn(256, 4096))
     .setRequestId(requestId)
     .setMapId(mapId.orEmpty())
     .setForceReplan(forceReplan)
+    .setDrawingDraftId(drawingDraftId)
+    .setDrawingDraftVersion(drawingDraftVersion)
     .build()
 
 /** 抽出纯构造函数以验证默认协议兼容性；测试预览不设置 forceReplan，也不下发任务执行指令。 */

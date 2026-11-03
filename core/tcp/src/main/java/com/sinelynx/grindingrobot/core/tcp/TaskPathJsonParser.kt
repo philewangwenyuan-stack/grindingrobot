@@ -20,7 +20,8 @@ internal object TaskPathJsonParser {
         planned = response.planned, result = response.result.name, message = message,
         pathPointCount = response.pathPointCount,
         pathLengthM = response.pathLengthM.takeIf { it.isFinite() } ?: 0f,
-        requestId = response.requestId, mapId = response.mapId, mapVersion = response.mapVersion
+        requestId = response.requestId, mapId = response.mapId, mapVersion = response.mapVersion,
+        drawingLayerVersion = response.drawingLayerVersion, drawingDraftVersion = response.drawingDraftVersion
     )
 
     fun parse(

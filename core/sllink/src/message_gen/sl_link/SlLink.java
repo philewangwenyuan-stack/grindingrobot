@@ -55653,6 +55653,58 @@ public final class SlLink {
      * <code>.sl_link.DrawingObstacleLayerInfo drawing_layer = 10;</code>
      */
     sl_link.SlLink.DrawingObstacleLayerInfoOrBuilder getDrawingLayerOrBuilder();
+
+    /**
+     * <pre>
+     * Large annotation snapshots are serialized once, then carried in bounded
+     * envelopes on the same message ID. Publish only after SHA-256 verification.
+     * </pre>
+     *
+     * <code>string transfer_id = 11;</code>
+     * @return The transferId.
+     */
+    java.lang.String getTransferId();
+    /**
+     * <pre>
+     * Large annotation snapshots are serialized once, then carried in bounded
+     * envelopes on the same message ID. Publish only after SHA-256 verification.
+     * </pre>
+     *
+     * <code>string transfer_id = 11;</code>
+     * @return The bytes for transferId.
+     */
+    com.google.protobuf.ByteString
+        getTransferIdBytes();
+
+    /**
+     * <code>uint32 chunk_index = 12;</code>
+     * @return The chunkIndex.
+     */
+    int getChunkIndex();
+
+    /**
+     * <code>uint32 total_chunks = 13;</code>
+     * @return The totalChunks.
+     */
+    int getTotalChunks();
+
+    /**
+     * <code>bytes chunk_data = 14;</code>
+     * @return The chunkData.
+     */
+    com.google.protobuf.ByteString getChunkData();
+
+    /**
+     * <code>string payload_sha256 = 15;</code>
+     * @return The payloadSha256.
+     */
+    java.lang.String getPayloadSha256();
+    /**
+     * <code>string payload_sha256 = 15;</code>
+     * @return The bytes for payloadSha256.
+     */
+    com.google.protobuf.ByteString
+        getPayloadSha256Bytes();
   }
   /**
    * Protobuf type {@code sl_link.MapRegionPointResponse}
@@ -55673,6 +55725,9 @@ public final class SlLink {
       workRegions_ = java.util.Collections.emptyList();
       obstacleRegions_ = java.util.Collections.emptyList();
       eraseRegions_ = java.util.Collections.emptyList();
+      transferId_ = "";
+      chunkData_ = com.google.protobuf.ByteString.EMPTY;
+      payloadSha256_ = "";
     }
 
     @java.lang.Override
@@ -55989,6 +56044,127 @@ public final class SlLink {
       return drawingLayer_ == null ? sl_link.SlLink.DrawingObstacleLayerInfo.getDefaultInstance() : drawingLayer_;
     }
 
+    public static final int TRANSFER_ID_FIELD_NUMBER = 11;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object transferId_ = "";
+    /**
+     * <pre>
+     * Large annotation snapshots are serialized once, then carried in bounded
+     * envelopes on the same message ID. Publish only after SHA-256 verification.
+     * </pre>
+     *
+     * <code>string transfer_id = 11;</code>
+     * @return The transferId.
+     */
+    @java.lang.Override
+    public java.lang.String getTransferId() {
+      java.lang.Object ref = transferId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        transferId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Large annotation snapshots are serialized once, then carried in bounded
+     * envelopes on the same message ID. Publish only after SHA-256 verification.
+     * </pre>
+     *
+     * <code>string transfer_id = 11;</code>
+     * @return The bytes for transferId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTransferIdBytes() {
+      java.lang.Object ref = transferId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        transferId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CHUNK_INDEX_FIELD_NUMBER = 12;
+    private int chunkIndex_ = 0;
+    /**
+     * <code>uint32 chunk_index = 12;</code>
+     * @return The chunkIndex.
+     */
+    @java.lang.Override
+    public int getChunkIndex() {
+      return chunkIndex_;
+    }
+
+    public static final int TOTAL_CHUNKS_FIELD_NUMBER = 13;
+    private int totalChunks_ = 0;
+    /**
+     * <code>uint32 total_chunks = 13;</code>
+     * @return The totalChunks.
+     */
+    @java.lang.Override
+    public int getTotalChunks() {
+      return totalChunks_;
+    }
+
+    public static final int CHUNK_DATA_FIELD_NUMBER = 14;
+    private com.google.protobuf.ByteString chunkData_ = com.google.protobuf.ByteString.EMPTY;
+    /**
+     * <code>bytes chunk_data = 14;</code>
+     * @return The chunkData.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getChunkData() {
+      return chunkData_;
+    }
+
+    public static final int PAYLOAD_SHA256_FIELD_NUMBER = 15;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object payloadSha256_ = "";
+    /**
+     * <code>string payload_sha256 = 15;</code>
+     * @return The payloadSha256.
+     */
+    @java.lang.Override
+    public java.lang.String getPayloadSha256() {
+      java.lang.Object ref = payloadSha256_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        payloadSha256_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string payload_sha256 = 15;</code>
+     * @return The bytes for payloadSha256.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPayloadSha256Bytes() {
+      java.lang.Object ref = payloadSha256_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        payloadSha256_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -56032,6 +56208,21 @@ public final class SlLink {
       }
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeMessage(10, getDrawingLayer());
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(transferId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, transferId_);
+      }
+      if (chunkIndex_ != 0) {
+        output.writeUInt32(12, chunkIndex_);
+      }
+      if (totalChunks_ != 0) {
+        output.writeUInt32(13, totalChunks_);
+      }
+      if (!chunkData_.isEmpty()) {
+        output.writeBytes(14, chunkData_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(payloadSha256_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 15, payloadSha256_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -56080,6 +56271,24 @@ public final class SlLink {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(10, getDrawingLayer());
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(transferId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, transferId_);
+      }
+      if (chunkIndex_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(12, chunkIndex_);
+      }
+      if (totalChunks_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(13, totalChunks_);
+      }
+      if (!chunkData_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(14, chunkData_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(payloadSha256_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, payloadSha256_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -56120,6 +56329,16 @@ public final class SlLink {
         if (!getDrawingLayer()
             .equals(other.getDrawingLayer())) return false;
       }
+      if (!getTransferId()
+          .equals(other.getTransferId())) return false;
+      if (getChunkIndex()
+          != other.getChunkIndex()) return false;
+      if (getTotalChunks()
+          != other.getTotalChunks()) return false;
+      if (!getChunkData()
+          .equals(other.getChunkData())) return false;
+      if (!getPayloadSha256()
+          .equals(other.getPayloadSha256())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -56162,6 +56381,16 @@ public final class SlLink {
         hash = (37 * hash) + DRAWING_LAYER_FIELD_NUMBER;
         hash = (53 * hash) + getDrawingLayer().hashCode();
       }
+      hash = (37 * hash) + TRANSFER_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getTransferId().hashCode();
+      hash = (37 * hash) + CHUNK_INDEX_FIELD_NUMBER;
+      hash = (53 * hash) + getChunkIndex();
+      hash = (37 * hash) + TOTAL_CHUNKS_FIELD_NUMBER;
+      hash = (53 * hash) + getTotalChunks();
+      hash = (37 * hash) + CHUNK_DATA_FIELD_NUMBER;
+      hash = (53 * hash) + getChunkData().hashCode();
+      hash = (37 * hash) + PAYLOAD_SHA256_FIELD_NUMBER;
+      hash = (53 * hash) + getPayloadSha256().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -56339,6 +56568,11 @@ public final class SlLink {
           drawingLayerBuilder_.dispose();
           drawingLayerBuilder_ = null;
         }
+        transferId_ = "";
+        chunkIndex_ = 0;
+        totalChunks_ = 0;
+        chunkData_ = com.google.protobuf.ByteString.EMPTY;
+        payloadSha256_ = "";
         return this;
       }
 
@@ -56430,6 +56664,21 @@ public final class SlLink {
               ? drawingLayer_
               : drawingLayerBuilder_.build();
           to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.transferId_ = transferId_;
+        }
+        if (((from_bitField0_ & 0x00000800) != 0)) {
+          result.chunkIndex_ = chunkIndex_;
+        }
+        if (((from_bitField0_ & 0x00001000) != 0)) {
+          result.totalChunks_ = totalChunks_;
+        }
+        if (((from_bitField0_ & 0x00002000) != 0)) {
+          result.chunkData_ = chunkData_;
+        }
+        if (((from_bitField0_ & 0x00004000) != 0)) {
+          result.payloadSha256_ = payloadSha256_;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -56581,6 +56830,25 @@ public final class SlLink {
         if (other.hasDrawingLayer()) {
           mergeDrawingLayer(other.getDrawingLayer());
         }
+        if (!other.getTransferId().isEmpty()) {
+          transferId_ = other.transferId_;
+          bitField0_ |= 0x00000400;
+          onChanged();
+        }
+        if (other.getChunkIndex() != 0) {
+          setChunkIndex(other.getChunkIndex());
+        }
+        if (other.getTotalChunks() != 0) {
+          setTotalChunks(other.getTotalChunks());
+        }
+        if (other.getChunkData() != com.google.protobuf.ByteString.EMPTY) {
+          setChunkData(other.getChunkData());
+        }
+        if (!other.getPayloadSha256().isEmpty()) {
+          payloadSha256_ = other.payloadSha256_;
+          bitField0_ |= 0x00004000;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -56685,6 +56953,31 @@ public final class SlLink {
                 bitField0_ |= 0x00000200;
                 break;
               } // case 82
+              case 90: {
+                transferId_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000400;
+                break;
+              } // case 90
+              case 96: {
+                chunkIndex_ = input.readUInt32();
+                bitField0_ |= 0x00000800;
+                break;
+              } // case 96
+              case 104: {
+                totalChunks_ = input.readUInt32();
+                bitField0_ |= 0x00001000;
+                break;
+              } // case 104
+              case 114: {
+                chunkData_ = input.readBytes();
+                bitField0_ |= 0x00002000;
+                break;
+              } // case 114
+              case 122: {
+                payloadSha256_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00004000;
+                break;
+              } // case 122
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -57923,6 +58216,271 @@ public final class SlLink {
           drawingLayer_ = null;
         }
         return drawingLayerBuilder_;
+      }
+
+      private java.lang.Object transferId_ = "";
+      /**
+       * <pre>
+       * Large annotation snapshots are serialized once, then carried in bounded
+       * envelopes on the same message ID. Publish only after SHA-256 verification.
+       * </pre>
+       *
+       * <code>string transfer_id = 11;</code>
+       * @return The transferId.
+       */
+      public java.lang.String getTransferId() {
+        java.lang.Object ref = transferId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          transferId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Large annotation snapshots are serialized once, then carried in bounded
+       * envelopes on the same message ID. Publish only after SHA-256 verification.
+       * </pre>
+       *
+       * <code>string transfer_id = 11;</code>
+       * @return The bytes for transferId.
+       */
+      public com.google.protobuf.ByteString
+          getTransferIdBytes() {
+        java.lang.Object ref = transferId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          transferId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Large annotation snapshots are serialized once, then carried in bounded
+       * envelopes on the same message ID. Publish only after SHA-256 verification.
+       * </pre>
+       *
+       * <code>string transfer_id = 11;</code>
+       * @param value The transferId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTransferId(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        transferId_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Large annotation snapshots are serialized once, then carried in bounded
+       * envelopes on the same message ID. Publish only after SHA-256 verification.
+       * </pre>
+       *
+       * <code>string transfer_id = 11;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTransferId() {
+        transferId_ = getDefaultInstance().getTransferId();
+        bitField0_ = (bitField0_ & ~0x00000400);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Large annotation snapshots are serialized once, then carried in bounded
+       * envelopes on the same message ID. Publish only after SHA-256 verification.
+       * </pre>
+       *
+       * <code>string transfer_id = 11;</code>
+       * @param value The bytes for transferId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTransferIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        transferId_ = value;
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return this;
+      }
+
+      private int chunkIndex_ ;
+      /**
+       * <code>uint32 chunk_index = 12;</code>
+       * @return The chunkIndex.
+       */
+      @java.lang.Override
+      public int getChunkIndex() {
+        return chunkIndex_;
+      }
+      /**
+       * <code>uint32 chunk_index = 12;</code>
+       * @param value The chunkIndex to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChunkIndex(int value) {
+
+        chunkIndex_ = value;
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 chunk_index = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearChunkIndex() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        chunkIndex_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int totalChunks_ ;
+      /**
+       * <code>uint32 total_chunks = 13;</code>
+       * @return The totalChunks.
+       */
+      @java.lang.Override
+      public int getTotalChunks() {
+        return totalChunks_;
+      }
+      /**
+       * <code>uint32 total_chunks = 13;</code>
+       * @param value The totalChunks to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTotalChunks(int value) {
+
+        totalChunks_ = value;
+        bitField0_ |= 0x00001000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 total_chunks = 13;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTotalChunks() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        totalChunks_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString chunkData_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes chunk_data = 14;</code>
+       * @return The chunkData.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getChunkData() {
+        return chunkData_;
+      }
+      /**
+       * <code>bytes chunk_data = 14;</code>
+       * @param value The chunkData to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChunkData(com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        chunkData_ = value;
+        bitField0_ |= 0x00002000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes chunk_data = 14;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearChunkData() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        chunkData_ = getDefaultInstance().getChunkData();
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object payloadSha256_ = "";
+      /**
+       * <code>string payload_sha256 = 15;</code>
+       * @return The payloadSha256.
+       */
+      public java.lang.String getPayloadSha256() {
+        java.lang.Object ref = payloadSha256_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          payloadSha256_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string payload_sha256 = 15;</code>
+       * @return The bytes for payloadSha256.
+       */
+      public com.google.protobuf.ByteString
+          getPayloadSha256Bytes() {
+        java.lang.Object ref = payloadSha256_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          payloadSha256_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string payload_sha256 = 15;</code>
+       * @param value The payloadSha256 to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPayloadSha256(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        payloadSha256_ = value;
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string payload_sha256 = 15;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPayloadSha256() {
+        payloadSha256_ = getDefaultInstance().getPayloadSha256();
+        bitField0_ = (bitField0_ & ~0x00004000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string payload_sha256 = 15;</code>
+       * @param value The bytes for payloadSha256 to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPayloadSha256Bytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        payloadSha256_ = value;
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return this;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -136880,7 +137438,7 @@ public final class SlLink {
       "_pose_available\030\002 \001(\010\022#\n\nstart_pose\030\003 \001(" +
       "\0132\017.sl_link.Pose2D\022\032\n\022end_pose_available" +
       "\030\004 \001(\010\022!\n\010end_pose\030\005 \001(\0132\017.sl_link.Pose2" +
-      "D\"\216\003\n\026MapRegionPointResponse\022#\n\006result\030\001" +
+      "D\"\372\003\n\026MapRegionPointResponse\022#\n\006result\030\001" +
       " \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001" +
       "(\t\022\016\n\006map_id\030\003 \001(\t\022\023\n\013map_version\030\004 \001(\r\022" +
       "2\n\014work_regions\030\005 \003(\0132\034.sl_link.WorkRegi" +
@@ -136890,474 +137448,477 @@ public final class SlLink {
       "ion_available\030\010 \001(\010\022+\n\013crop_region\030\t \001(\013" +
       "2\026.sl_link.PolygonRegion\0228\n\rdrawing_laye" +
       "r\030\n \001(\0132!.sl_link.DrawingObstacleLayerIn" +
-      "fo\"\261\003\n\016MapEditCommand\022\017\n\007edit_id\030\001 \001(\t\022," +
-      "\n\toperation\030\002 \001(\0162\031.sl_link.MapEditOpera" +
-      "tion\022\023\n\013region_name\030\003 \001(\t\022&\n\006region\030\004 \001(" +
-      "\0132\026.sl_link.PolygonRegion\022&\n\007polygon\030\005 \003" +
-      "(\0132\025.sl_link.PolygonPoint\022\024\n\014brush_radiu" +
-      "s\030\006 \001(\002\022\023\n\013paint_value\030\007 \001(\005\022\030\n\020target_r" +
-      "egion_id\030\010 \001(\t\022/\n\022target_region_type\030\t \001" +
-      "(\0162\023.sl_link.RegionType\022\034\n\024expected_map_" +
-      "version\030\n \001(\r\022\017\n\007dry_run\030\013 \001(\010\022#\n\nstart_" +
-      "pose\030\014 \001(\0132\017.sl_link.Pose2D\022!\n\010end_pose\030" +
-      "\r \001(\0132\017.sl_link.Pose2D\022\016\n\006map_id\030\016 \001(\t\"\\" +
-      "\n\017MapEditResponse\022#\n\006result\030\001 \001(\0162\023.sl_l" +
-      "ink.ResultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013map_v" +
-      "ersion\030\003 \001(\r\"W\n\023MapEditStatusReport\022\023\n\013m" +
-      "ap_version\030\001 \001(\r\022\032\n\022applied_to_planner\030\002" +
-      " \001(\010\022\017\n\007message\030\003 \001(\t\"/\n\026VideoStreamInfo" +
-      "Request\022\025\n\rinclude_debug\030\001 \001(\010\"\263\001\n\027Video" +
-      "StreamInfoResponse\022#\n\006result\030\001 \001(\0162\023.sl_" +
-      "link.ResultCode\022\017\n\007message\030\002 \001(\t\022\022\n\nstre" +
-      "am_url\030\003 \001(\t\022\r\n\005codec\030\004 \001(\t\022\r\n\005width\030\005 \001" +
-      "(\r\022\016\n\006height\030\006 \001(\r\022\016\n\006online\030\007 \001(\010\022\020\n\010ut" +
-      "c_time\030\010 \001(\r\"\253\002\n\017PathPlanRequest\022\022\n\nrequ" +
-      "est_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\024\n\014force_r" +
-      "eplan\030\003 \001(\010\022\032\n\022return_path_chunks\030\004 \001(\010\022" +
-      "\026\n\016max_chunk_size\030\005 \001(\r\022#\n\nstart_pose\030\006 " +
-      "\001(\0132\017.sl_link.Pose2D\022!\n\010end_pose\030\007 \001(\0132\017" +
-      ".sl_link.Pose2D\022\030\n\020global_direction\030\010 \001(" +
-      "\t\022\016\n\006map_id\030\t \001(\t\022\030\n\020drawing_draft_id\030\n " +
-      "\001(\t\022\035\n\025drawing_draft_version\030\013 \001(\r\"\355\005\n\020P" +
-      "athPlanResponse\022#\n\006result\030\001 \001(\0162\023.sl_lin" +
-      "k.ResultCode\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest" +
-      "_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\023\n\013map_versio" +
-      "n\030\005 \001(\r\022\024\n\014path_version\030\006 \001(\r\022\030\n\020path_po" +
-      "int_count\030\007 \001(\r\022\025\n\rpath_length_m\030\010 \001(\002\022\017" +
-      "\n\007planned\030\t \001(\010\022\024\n\014path_chunked\030\n \001(\010\022\025\n" +
-      "\rpreview_image\030\013 \001(\014\022\026\n\016preview_format\030\014" +
-      " \001(\t\022\r\n\005width\030\r \001(\r\022\016\n\006height\030\016 \001(\r\022\022\n\nr" +
-      "esolution\030\017 \001(\002\022\037\n\006origin\030\020 \001(\0132\017.sl_lin" +
-      "k.Pose2D\022\020\n\010frame_id\030\021 \001(\t\022\027\n\017preview_sc" +
-      "ale_x\030\022 \001(\002\022\027\n\017preview_scale_y\030\023 \001(\002\022-\n\022" +
-      "total_work_area_m2\030\024 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000" +
-      "\000\360?\022*\n\020estimated_time_s\030\025 \001(\002B\020\212\265\030\001s\221\265\030\000" +
-      "\000\000\000\000\000\360?\022@\n\027localization_covariance\030\026 \001(\013" +
-      "2\037.sl_link.LocalizationCovariance\022\031\n\021ali" +
-      "gnment_yaw_deg\030\027 \001(\002\022\030\n\020app_rotation_deg" +
-      "\030\030 \001(\002\022$\n\034rotation_alignment_delta_deg\030\031" +
-      " \001(\002\022\035\n\025drawing_layer_version\030\032 \001(\r\022\035\n\025d" +
-      "rawing_draft_version\030\033 \001(\r\"m\n\016MapSyncReq" +
-      "uest\022,\n\toperation\030\001 \001(\0162\031.sl_link.MapSyn" +
-      "cOperation\022\016\n\006map_id\030\002 \001(\t\022\035\n\025update_nav" +
-      "igation_map\030\003 \001(\010\"\226\002\n\017MapSyncResponse\022#\n" +
-      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
-      "ssage\030\002 \001(\t\022,\n\toperation\030\003 \001(\0162\031.sl_link" +
-      ".MapSyncOperation\022\016\n\006map_id\030\004 \001(\t\022\020\n\010map" +
-      "_name\030\010 \001(\t\022\024\n\014map_revision\030\t \001(\t\022\025\n\rmap" +
-      "_yaml_path\030\005 \001(\t\022\026\n\016map_image_path\030\006 \001(\t" +
-      "\022\037\n\027navigation_map_reloaded\030\007 \001(\010\022\027\n\017lif" +
-      "ecycle_state\030\n \001(\t\")\n\027MapImportToRadarRe" +
-      "quest\022\016\n\006map_id\030\001 \001(\t\"\263\001\n\030MapImportToRad" +
-      "arResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Res" +
-      "ultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t" +
-      "\022\020\n\010map_name\030\004 \001(\t\022\020\n\010imported\030\005 \001(\010\022\024\n\014" +
-      "map_revision\030\006 \001(\t\022\027\n\017lifecycle_state\030\007 " +
-      "\001(\t\"W\n\016MapModeRequest\022\"\n\004mode\030\001 \001(\0162\024.sl" +
-      "_link.MapModeType\022\017\n\007enabled\030\002 \001(\010\022\020\n\010ma" +
-      "p_kind\030\003 \001(\005\"\345\001\n\017MapModeResponse\022#\n\006resu" +
-      "lt\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
-      "\030\002 \001(\t\022\"\n\004mode\030\003 \001(\0162\024.sl_link.MapModeTy" +
-      "pe\022\017\n\007enabled\030\004 \001(\010\022\020\n\010map_kind\030\005 \001(\005\022\027\n" +
-      "\017lifecycle_state\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022\024" +
-      "\n\014map_revision\030\010 \001(\t\022\026\n\016residual_nodes\030\t" +
-      " \003(\t\";\n\023MapAlignmentRequest\022\016\n\006map_id\030\001 " +
-      "\001(\t\022\024\n\014rotation_deg\030\002 \001(\002\"\311\001\n\024MapAlignme" +
-      "ntResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Res" +
-      "ultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t" +
-      "\022\024\n\014rotation_deg\030\004 \001(\002\022\024\n\014rotation_rad\030\005" +
-      " \001(\002\022\031\n\021alignment_yaw_deg\030\006 \001(\002\022$\n\034rotat" +
-      "ion_alignment_delta_deg\030\007 \001(\002\"\023\n\021MapCata" +
-      "logRequest\"\235\003\n\016MapCatalogItem\022\016\n\006map_id\030" +
-      "\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\022\n\nsize_bytes\030\003 \001(\004\022" +
-      "\020\n\010saved_at\030\004 \001(\004\022-\n\022total_work_area_m2\030" +
-      "\005 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_ti" +
-      "me_s\030\006 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030\n\020thumbnai" +
-      "l_format\030\007 \001(\t\022\027\n\017thumbnail_width\030\010 \001(\r\022",
-      "\030\n\020thumbnail_height\030\t \001(\r\022\033\n\023thumbnail_i" +
-      "mage_b64\030\n \001(\t\022\022\n\ncreated_at\030\013 \001(\t\022\024\n\014ma" +
-      "p_revision\030\014 \001(\t\0229\n\024drawing_layer_status" +
-      "\030\r \001(\0162\033.sl_link.DrawingLayerStatus\022\035\n\025d" +
-      "rawing_layer_version\030\016 \001(\r\"\207\001\n\022MapCatalo" +
-      "gResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
-      "ltCode\022\017\n\007message\030\002 \001(\t\022\023\n\013total_count\030\003" +
-      " \001(\r\022&\n\005items\030\004 \003(\0132\027.sl_link.MapCatalog" +
-      "Item\"\"\n\020MapDeleteRequest\022\016\n\006map_id\030\001 \001(\t" +
-      "\"\312\001\n\021MapDeleteResponse\022#\n\006result\030\001 \001(\0162\023" +
-      ".sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006" +
-      "map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022\017\n\007delete" +
-      "d\030\005 \001(\010\022\025\n\rlocal_deleted\030\006 \001(\010\022\026\n\016remote" +
-      "_deleted\030\007 \001(\010\022\035\n\025remote_delete_pending\030" +
-      "\010 \001(\010\"\257\001\n\016MapSaveRequest\022\020\n\010map_name\030\001 \001" +
-      "(\t\022\016\n\006map_id\030\002 \001(\t\022\030\n\020has_rotation_deg\030\003" +
-      " \001(\010\022\024\n\014rotation_deg\030\004 \001(\002\022\030\n\020drawing_dr" +
-      "aft_id\030\005 \001(\t\022\035\n\025drawing_draft_version\030\006 " +
-      "\001(\r\022\022\n\nrequest_id\030\007 \001(\t\"\331\003\n\017MapSaveRespo" +
-      "nse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode" +
-      "\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map" +
-      "_name\030\004 \001(\t\022\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016ma" +
-      "p_image_path\030\006 \001(\t\022\037\n\027navigation_map_rel" +
-      "oaded\030\007 \001(\010\022-\n\022total_work_area_m2\030\010 \001(\002B" +
-      "\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030\t" +
-      " \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\022\n\ncreated_at\030\n \001" +
-      "(\t\022\024\n\014map_revision\030\013 \001(\t\022\027\n\017lifecycle_st" +
-      "ate\030\014 \001(\t\022\027\n\017mapping_stopped\030\r \001(\010\022\034\n\024lo" +
-      "calization_started\030\016 \001(\010\022\026\n\016residual_nod" +
-      "es\030\017 \003(\t\022\022\n\nrequest_id\030\020 \001(\t\022\035\n\025drawing_" +
-      "layer_version\030\021 \001(\r\"#\n\021MapMetricsRequest" +
-      "\022\016\n\006map_id\030\001 \001(\t\"\233\001\n\021RegionMetricsItem\022\021" +
-      "\n\tregion_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\016" +
-      "\n\006repeat\030\003 \001(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2\221" +
-      "\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_h\030\005 \001(\002B\020\212\265" +
-      "\030\001h\221\265\030\000\000\000\000\000\000\360?\"\240\001\n\022MapMetricsResponse\022#\n" +
-      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
-      "ssage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030" +
-      "\004 \001(\t\0222\n\016region_metrics\030\005 \003(\0132\032.sl_link." +
-      "RegionMetricsItem\"S\n\021TaskResultRequest\022\016" +
-      "\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_e" +
-      "xecution_records\030\003 \001(\r\"\234\001\n\024TaskResultReg" +
-      "ionItem\022\021\n\tregion_id\030\001 \001(\t\022\023\n\013region_nam" +
-      "e\030\002 \001(\t\022\025\n\rtarget_repeat\030\003 \001(\r\022\027\n\017execut" +
-      "ed_repeat\030\004 \001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021un" +
-      "finished_reason\030\006 \001(\t\"\341\002\n\023TaskExecutionR" +
-      "ecord\022\024\n\014execution_id\030\001 \001(\t\022\016\n\006map_id\030\002 " +
-      "\001(\t\022\017\n\007task_id\030\003 \001(\t\022\'\n\013final_state\030\004 \001(" +
-      "\0162\022.sl_link.TaskState\022\023\n\013stop_reason\030\005 \001" +
-      "(\t\022\022\n\nstarted_at\030\006 \001(\004\022\023\n\013finished_at\030\007 " +
-      "\001(\004\022*\n\017planned_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000" +
-      "\000\000\000\000\000\360?\022+\n\020executed_area_m2\030\t \001(\002B\021\212\265\030\002m" +
-      "2\221\265\030\000\000\000\000\000\000\360?\022&\n\010progress\030\n \001(\002B\024\212\265\030\005rati" +
-      "o\221\265\030\000\000\000\000\000\000\360?\022\024\n\014path_version\030\013 \001(\r\022\025\n\ral" +
-      "l_completed\030\014 \001(\010\"\244\006\n\022TaskResultResponse" +
-      "\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n" +
-      "\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_i" +
-      "d\030\004 \001(\t\022\'\n\013final_state\030\005 \001(\0162\022.sl_link.T" +
-      "askState\022\025\n\rall_completed\030\006 \001(\010\022\023\n\013stop_" +
-      "reason\030\007 \001(\t\022\024\n\014path_version\030\010 \001(\r\022\024\n\014im" +
-      "age_format\030\t \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n\013" +
-      "image_width\030\013 \001(\r\022\024\n\014image_height\030\014 \001(\r\022" +
-      "\023\n\013finished_at\030\r \001(\004\022 \n\030selected_work_re" +
-      "gion_ids\030\016 \003(\t\0225\n\016region_results\030\017 \003(\0132\035" +
-      ".sl_link.TaskResultRegionItem\022@\n\027localiz" +
-      "ation_covariance\030\020 \001(\0132\037.sl_link.Localiz" +
-      "ationCovariance\022\031\n\021alignment_yaw_deg\030\021 \001" +
-      "(\002\022\030\n\020app_rotation_deg\030\022 \001(\002\022$\n\034rotation" +
-      "_alignment_delta_deg\030\023 \001(\002\022\024\n\014execution_" +
-      "id\030\024 \001(\t\022\022\n\nstarted_at\030\025 \001(\004\022*\n\017planned_" +
-      "area_m2\030\026 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020exec" +
-      "uted_area_m2\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220\n" +
-      "\022execution_progress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030\000" +
-      "\000\000\000\000\000\360?\0227\n\021execution_records\030\031 \003(\0132\034.sl_" +
-      "link.TaskExecutionRecord\"|\n\033TaskExecutio" +
-      "nHistoryRequest\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_" +
-      "id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010end_time" +
-      "\030\004 \001(\004\022\026\n\016max_chunk_size\030\005 \001(\r\"\314\001\n\031TaskE" +
-      "xecutionHistoryChunk\022#\n\006result\030\001 \001(\0162\023.s" +
-      "l_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\023\n\013ch" +
-      "unk_index\030\003 \001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032\n" +
-      "\022total_record_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014\022" +
-      "\022\n\nstart_time\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2\n" +
-      "\032TaskExecutionDeleteRequest\022\024\n\014execution" +
-      "_id\030\001 \001(\t\"\274\001\n\033TaskExecutionDeleteRespons" +
-      "e\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017" +
-      "\n\007message\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017\n" +
-      "\007task_id\030\004 \001(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007delete" +
-      "d\030\006 \001(\010\022\037\n\027execution_files_deleted\030\007 \001(\010" +
-      "\"\272\001\n\025TaskTrajectoryRequest\022\024\n\014execution_" +
-      "id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\022\n\nstart_time\030" +
-      "\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\023\n\013start_index\030\005" +
-      " \001(\r\022\022\n\nmax_points\030\006 \001(\r\022\023\n\013sample_step\030" +
-      "\007 \001(\r\022\026\n\016max_chunk_size\030\010 \001(\r\"\221\002\n\023TaskTr" +
-      "ajectoryPoint\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_m" +
-      "s\030\002 \001(\r\022\014\n\004x_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014h" +
-      "eading_mdeg\030\005 \001(\021\022\031\n\021linear_speed_mmps\030\006" +
-      " \001(\021\022\034\n\024angular_speed_mradps\030\007 \001(\021\022\026\n\016di" +
-      "sc_speed_rpm\030\010 \001(\r\022\027\n\017speed_available\030\t " +
-      "\001(\010\022\024\n\014disc_enabled\030\n \001(\010\022&\n\ntask_state\030" +
-      "\013 \001(\0162\022.sl_link.TaskState\"\243\007\n\023TaskTrajec" +
-      "toryChunk\022#\n\006result\030\001 \001(\0162\023.sl_link.Resu" +
-      "ltCode\022\017\n\007message\030\002 \001(\t\022\024\n\014execution_id\030" +
-      "\003 \001(\t\022\023\n\013chunk_index\030\004 \001(\r\022\024\n\014total_chun" +
-      "ks\030\005 \001(\r\022\031\n\021total_point_count\030\006 \001(\r\022\034\n\024r" +
-      "eturned_point_count\030\007 \001(\r\022\023\n\013start_index" +
-      "\030\010 \001(\r\022\022\n\nnext_index\030\t \001(\r\022\020\n\010has_more\030\n" +
-      " \001(\010\022\025\n\rstarted_at_ms\030\013 \001(\004\022,\n\006points\030\014 " +
-      "\003(\0132\034.sl_link.TaskTrajectoryPoint\022\017\n\007tas" +
-      "k_id\030\r \001(\t\022\016\n\006map_id\030\016 \001(\t\022\022\n\nstart_time" +
-      "\030\017 \001(\004\022\020\n\010end_time\030\020 \001(\004\022\023\n\013sample_step\030" +
-      "\021 \001(\r\022\025\n\rmap_available\030\022 \001(\010\022\023\n\013map_mess" +
-      "age\030\023 \001(\t\022\023\n\013map_version\030\024 \001(\r\022\030\n\020map_so" +
-      "urce_width\030\025 \001(\r\022\031\n\021map_source_height\030\026 " +
-      "\001(\r\022\026\n\016map_resolution\030\027 \001(\002\022#\n\nmap_origi" +
-      "n\030\030 \001(\0132\017.sl_link.Pose2D\022\024\n\014map_frame_id" +
-      "\030\031 \001(\t\022\030\n\020map_image_format\030\032 \001(\t\022\027\n\017map_" +
-      "image_width\030\033 \001(\r\022\030\n\020map_image_height\030\034 " +
-      "\001(\r\022\033\n\023map_preview_scale_x\030\035 \001(\002\022\033\n\023map_" +
-      "preview_scale_y\030\036 \001(\002\022\026\n\016map_image_data\030" +
-      "\037 \001(\014\022\035\n\025map_image_chunk_index\030  \001(\r\022\036\n\026" +
-      "map_image_total_chunks\030! \001(\r\022\031\n\021alignmen" +
-      "t_yaw_deg\030\" \001(\002\022\030\n\020app_rotation_deg\030# \001(" +
-      "\002\022$\n\034rotation_alignment_delta_deg\030$ \001(\002\"" +
-      "\032\n\030LiveMapCacheClearRequest\"Q\n\031LiveMapCa" +
-      "cheClearResponse\022#\n\006result\030\001 \001(\0162\023.sl_li" +
-      "nk.ResultCode\022\017\n\007message\030\002 \001(\t\"h\n\027System" +
-      "CacheClearRequest\022\032\n\022clear_memory_cache\030" +
-      "\001 \001(\010\022\035\n\025clear_temporary_files\030\002 \001(\010\022\022\n\n" +
-      "clear_logs\030\003 \001(\010\"\376\001\n\030SystemCacheClearRes" +
+      "fo\022\023\n\013transfer_id\030\013 \001(\t\022\023\n\013chunk_index\030\014" +
+      " \001(\r\022\024\n\014total_chunks\030\r \001(\r\022\022\n\nchunk_data" +
+      "\030\016 \001(\014\022\026\n\016payload_sha256\030\017 \001(\t\"\261\003\n\016MapEd" +
+      "itCommand\022\017\n\007edit_id\030\001 \001(\t\022,\n\toperation\030" +
+      "\002 \001(\0162\031.sl_link.MapEditOperation\022\023\n\013regi" +
+      "on_name\030\003 \001(\t\022&\n\006region\030\004 \001(\0132\026.sl_link." +
+      "PolygonRegion\022&\n\007polygon\030\005 \003(\0132\025.sl_link" +
+      ".PolygonPoint\022\024\n\014brush_radius\030\006 \001(\002\022\023\n\013p" +
+      "aint_value\030\007 \001(\005\022\030\n\020target_region_id\030\010 \001" +
+      "(\t\022/\n\022target_region_type\030\t \001(\0162\023.sl_link" +
+      ".RegionType\022\034\n\024expected_map_version\030\n \001(" +
+      "\r\022\017\n\007dry_run\030\013 \001(\010\022#\n\nstart_pose\030\014 \001(\0132\017" +
+      ".sl_link.Pose2D\022!\n\010end_pose\030\r \001(\0132\017.sl_l" +
+      "ink.Pose2D\022\016\n\006map_id\030\016 \001(\t\"\\\n\017MapEditRes" +
       "ponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCo" +
-      "de\022\017\n\007message\030\002 \001(\t\022\034\n\024memory_cache_clea" +
-      "red\030\003 \001(\010\022\037\n\027temporary_files_cleared\030\004 \001" +
-      "(\r\022 \n\030temporary_bytes_released\030\005 \001(\004\022\031\n\021" +
-      "log_files_cleared\030\006 \001(\r\022\032\n\022log_bytes_rel" +
-      "eased\030\007 \001(\004\022\024\n\014failed_items\030\010 \001(\r\"\033\n\031Rad" +
-      "arMapCacheClearRequest\"R\n\032RadarMapCacheC" +
-      "learResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.R" +
-      "esultCode\022\017\n\007message\030\002 \001(\t\"\032\n\030RadarSyste" +
-      "mStatusRequest\"\212\001\n\031RadarSystemStatusResp" +
-      "onse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCod" +
-      "e\022\017\n\007message\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016\n" +
-      "\006status\030\004 \001(\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023R" +
-      "adarMapSyncRequest\"Z\n\024RadarMapSyncRespon" +
-      "se\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022" +
-      "\017\n\007message\030\002 \001(\t\022\014\n\004sent\030\003 \001(\010\"\313\001\n\032Radar" +
-      "RelocalizationRequest\022\036\n\026initial_pose_av" +
-      "ailable\030\001 \001(\010\022%\n\014initial_pose\030\002 \001(\0132\017.sl" +
-      "_link.Pose2D\022@\n\027initial_pose_covariance\030" +
-      "\003 \001(\0132\037.sl_link.LocalizationCovariance\022\016" +
-      "\n\006map_id\030\004 \001(\t\022\024\n\014map_revision\030\005 \001(\t\"\264\001\n" +
-      "\033RadarRelocalizationResponse\022#\n\006result\030\001" +
+      "de\022\017\n\007message\030\002 \001(\t\022\023\n\013map_version\030\003 \001(\r" +
+      "\"W\n\023MapEditStatusReport\022\023\n\013map_version\030\001" +
+      " \001(\r\022\032\n\022applied_to_planner\030\002 \001(\010\022\017\n\007mess" +
+      "age\030\003 \001(\t\"/\n\026VideoStreamInfoRequest\022\025\n\ri" +
+      "nclude_debug\030\001 \001(\010\"\263\001\n\027VideoStreamInfoRe" +
+      "sponse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultC" +
+      "ode\022\017\n\007message\030\002 \001(\t\022\022\n\nstream_url\030\003 \001(\t" +
+      "\022\r\n\005codec\030\004 \001(\t\022\r\n\005width\030\005 \001(\r\022\016\n\006height" +
+      "\030\006 \001(\r\022\016\n\006online\030\007 \001(\010\022\020\n\010utc_time\030\010 \001(\r" +
+      "\"\253\002\n\017PathPlanRequest\022\022\n\nrequest_id\030\001 \001(\t" +
+      "\022\017\n\007task_id\030\002 \001(\t\022\024\n\014force_replan\030\003 \001(\010\022" +
+      "\032\n\022return_path_chunks\030\004 \001(\010\022\026\n\016max_chunk" +
+      "_size\030\005 \001(\r\022#\n\nstart_pose\030\006 \001(\0132\017.sl_lin" +
+      "k.Pose2D\022!\n\010end_pose\030\007 \001(\0132\017.sl_link.Pos" +
+      "e2D\022\030\n\020global_direction\030\010 \001(\t\022\016\n\006map_id\030" +
+      "\t \001(\t\022\030\n\020drawing_draft_id\030\n \001(\t\022\035\n\025drawi" +
+      "ng_draft_version\030\013 \001(\r\"\355\005\n\020PathPlanRespo" +
+      "nse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode" +
+      "\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(\t\022\017\n" +
+      "\007task_id\030\004 \001(\t\022\023\n\013map_version\030\005 \001(\r\022\024\n\014p" +
+      "ath_version\030\006 \001(\r\022\030\n\020path_point_count\030\007 " +
+      "\001(\r\022\025\n\rpath_length_m\030\010 \001(\002\022\017\n\007planned\030\t " +
+      "\001(\010\022\024\n\014path_chunked\030\n \001(\010\022\025\n\rpreview_ima" +
+      "ge\030\013 \001(\014\022\026\n\016preview_format\030\014 \001(\t\022\r\n\005widt" +
+      "h\030\r \001(\r\022\016\n\006height\030\016 \001(\r\022\022\n\nresolution\030\017 " +
+      "\001(\002\022\037\n\006origin\030\020 \001(\0132\017.sl_link.Pose2D\022\020\n\010" +
+      "frame_id\030\021 \001(\t\022\027\n\017preview_scale_x\030\022 \001(\002\022" +
+      "\027\n\017preview_scale_y\030\023 \001(\002\022-\n\022total_work_a" +
+      "rea_m2\030\024 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estim" +
+      "ated_time_s\030\025 \001(\002B\020\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022@\n\027l" +
+      "ocalization_covariance\030\026 \001(\0132\037.sl_link.L" +
+      "ocalizationCovariance\022\031\n\021alignment_yaw_d" +
+      "eg\030\027 \001(\002\022\030\n\020app_rotation_deg\030\030 \001(\002\022$\n\034ro" +
+      "tation_alignment_delta_deg\030\031 \001(\002\022\035\n\025draw" +
+      "ing_layer_version\030\032 \001(\r\022\035\n\025drawing_draft" +
+      "_version\030\033 \001(\r\"m\n\016MapSyncRequest\022,\n\toper" +
+      "ation\030\001 \001(\0162\031.sl_link.MapSyncOperation\022\016" +
+      "\n\006map_id\030\002 \001(\t\022\035\n\025update_navigation_map\030" +
+      "\003 \001(\010\"\226\002\n\017MapSyncResponse\022#\n\006result\030\001 \001(" +
+      "\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022" +
+      ",\n\toperation\030\003 \001(\0162\031.sl_link.MapSyncOper" +
+      "ation\022\016\n\006map_id\030\004 \001(\t\022\020\n\010map_name\030\010 \001(\t\022" +
+      "\024\n\014map_revision\030\t \001(\t\022\025\n\rmap_yaml_path\030\005" +
+      " \001(\t\022\026\n\016map_image_path\030\006 \001(\t\022\037\n\027navigati" +
+      "on_map_reloaded\030\007 \001(\010\022\027\n\017lifecycle_state" +
+      "\030\n \001(\t\")\n\027MapImportToRadarRequest\022\016\n\006map" +
+      "_id\030\001 \001(\t\"\263\001\n\030MapImportToRadarResponse\022#" +
+      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
+      "essage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name" +
+      "\030\004 \001(\t\022\020\n\010imported\030\005 \001(\010\022\024\n\014map_revision" +
+      "\030\006 \001(\t\022\027\n\017lifecycle_state\030\007 \001(\t\"W\n\016MapMo" +
+      "deRequest\022\"\n\004mode\030\001 \001(\0162\024.sl_link.MapMod" +
+      "eType\022\017\n\007enabled\030\002 \001(\010\022\020\n\010map_kind\030\003 \001(\005" +
+      "\"\345\001\n\017MapModeResponse\022#\n\006result\030\001 \001(\0162\023.s" +
+      "l_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\"\n\004mo" +
+      "de\030\003 \001(\0162\024.sl_link.MapModeType\022\017\n\007enable" +
+      "d\030\004 \001(\010\022\020\n\010map_kind\030\005 \001(\005\022\027\n\017lifecycle_s" +
+      "tate\030\006 \001(\t\022\016\n\006map_id\030\007 \001(\t\022\024\n\014map_revisi" +
+      "on\030\010 \001(\t\022\026\n\016residual_nodes\030\t \003(\t\";\n\023MapA" +
+      "lignmentRequest\022\016\n\006map_id\030\001 \001(\t\022\024\n\014rotat" +
+      "ion_deg\030\002 \001(\002\"\311\001\n\024MapAlignmentResponse\022#" +
+      "\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007m" +
+      "essage\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\024\n\014rotation" +
+      "_deg\030\004 \001(\002\022\024\n\014rotation_rad\030\005 \001(\002\022\031\n\021alig" +
+      "nment_yaw_deg\030\006 \001(\002\022$\n\034rotation_alignmen" +
+      "t_delta_deg\030\007 \001(\002\"\023\n\021MapCatalogRequest\"\235" +
+      "\003\n\016MapCatalogItem\022\016\n\006map_id\030\001 \001(\t\022\014\n\004nam" +
+      "e\030\002 \001(\t\022\022\n\nsize_bytes\030\003 \001(\004\022\020\n\010saved_at\030" +
+      "\004 \001(\004\022-\n\022total_work_area_m2\030\005 \001(\002B\021\212\265\030\002m",
+      "2\221\265\030\000\000\000\000\000\000\360?\022*\n\020estimated_time_s\030\006 \001(\002B\020" +
+      "\212\265\030\001s\221\265\030\000\000\000\000\000\000\360?\022\030\n\020thumbnail_format\030\007 \001" +
+      "(\t\022\027\n\017thumbnail_width\030\010 \001(\r\022\030\n\020thumbnail" +
+      "_height\030\t \001(\r\022\033\n\023thumbnail_image_b64\030\n \001" +
+      "(\t\022\022\n\ncreated_at\030\013 \001(\t\022\024\n\014map_revision\030\014" +
+      " \001(\t\0229\n\024drawing_layer_status\030\r \001(\0162\033.sl_" +
+      "link.DrawingLayerStatus\022\035\n\025drawing_layer" +
+      "_version\030\016 \001(\r\"\207\001\n\022MapCatalogResponse\022#\n" +
+      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
+      "ssage\030\002 \001(\t\022\023\n\013total_count\030\003 \001(\r\022&\n\005item" +
+      "s\030\004 \003(\0132\027.sl_link.MapCatalogItem\"\"\n\020MapD" +
+      "eleteRequest\022\016\n\006map_id\030\001 \001(\t\"\312\001\n\021MapDele" +
+      "teResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.Res" +
+      "ultCode\022\017\n\007message\030\002 \001(\t\022\016\n\006map_id\030\003 \001(\t" +
+      "\022\020\n\010map_name\030\004 \001(\t\022\017\n\007deleted\030\005 \001(\010\022\025\n\rl" +
+      "ocal_deleted\030\006 \001(\010\022\026\n\016remote_deleted\030\007 \001" +
+      "(\010\022\035\n\025remote_delete_pending\030\010 \001(\010\"\257\001\n\016Ma" +
+      "pSaveRequest\022\020\n\010map_name\030\001 \001(\t\022\016\n\006map_id" +
+      "\030\002 \001(\t\022\030\n\020has_rotation_deg\030\003 \001(\010\022\024\n\014rota" +
+      "tion_deg\030\004 \001(\002\022\030\n\020drawing_draft_id\030\005 \001(\t" +
+      "\022\035\n\025drawing_draft_version\030\006 \001(\r\022\022\n\nreque" +
+      "st_id\030\007 \001(\t\"\331\003\n\017MapSaveResponse\022#\n\006resul" +
+      "t\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030" +
+      "\002 \001(\t\022\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\022" +
+      "\025\n\rmap_yaml_path\030\005 \001(\t\022\026\n\016map_image_path" +
+      "\030\006 \001(\t\022\037\n\027navigation_map_reloaded\030\007 \001(\010\022" +
+      "-\n\022total_work_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000" +
+      "\000\000\000\000\360?\022*\n\020estimated_time_s\030\t \001(\002B\020\212\265\030\001s\221" +
+      "\265\030\000\000\000\000\000\000\360?\022\022\n\ncreated_at\030\n \001(\t\022\024\n\014map_re" +
+      "vision\030\013 \001(\t\022\027\n\017lifecycle_state\030\014 \001(\t\022\027\n" +
+      "\017mapping_stopped\030\r \001(\010\022\034\n\024localization_s" +
+      "tarted\030\016 \001(\010\022\026\n\016residual_nodes\030\017 \003(\t\022\022\n\n" +
+      "request_id\030\020 \001(\t\022\035\n\025drawing_layer_versio" +
+      "n\030\021 \001(\r\"#\n\021MapMetricsRequest\022\016\n\006map_id\030\001" +
+      " \001(\t\"\233\001\n\021RegionMetricsItem\022\021\n\tregion_id\030" +
+      "\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\016\n\006repeat\030\003 \001" +
+      "(\r\022\"\n\007area_m2\030\004 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022*" +
+      "\n\020estimated_time_h\030\005 \001(\002B\020\212\265\030\001h\221\265\030\000\000\000\000\000\000" +
+      "\360?\"\240\001\n\022MapMetricsResponse\022#\n\006result\030\001 \001(" +
+      "\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022" +
+      "\016\n\006map_id\030\003 \001(\t\022\020\n\010map_name\030\004 \001(\t\0222\n\016reg" +
+      "ion_metrics\030\005 \003(\0132\032.sl_link.RegionMetric" +
+      "sItem\"S\n\021TaskResultRequest\022\016\n\006map_id\030\001 \001" +
+      "(\t\022\017\n\007task_id\030\002 \001(\t\022\035\n\025max_execution_rec" +
+      "ords\030\003 \001(\r\"\234\001\n\024TaskResultRegionItem\022\021\n\tr" +
+      "egion_id\030\001 \001(\t\022\023\n\013region_name\030\002 \001(\t\022\025\n\rt" +
+      "arget_repeat\030\003 \001(\r\022\027\n\017executed_repeat\030\004 " +
+      "\001(\r\022\021\n\tcompleted\030\005 \001(\010\022\031\n\021unfinished_rea" +
+      "son\030\006 \001(\t\"\341\002\n\023TaskExecutionRecord\022\024\n\014exe" +
+      "cution_id\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\022\017\n\007task_" +
+      "id\030\003 \001(\t\022\'\n\013final_state\030\004 \001(\0162\022.sl_link." +
+      "TaskState\022\023\n\013stop_reason\030\005 \001(\t\022\022\n\nstarte" +
+      "d_at\030\006 \001(\004\022\023\n\013finished_at\030\007 \001(\004\022*\n\017plann" +
+      "ed_area_m2\030\010 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020e" +
+      "xecuted_area_m2\030\t \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?" +
+      "\022&\n\010progress\030\n \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?" +
+      "\022\024\n\014path_version\030\013 \001(\r\022\025\n\rall_completed\030" +
+      "\014 \001(\010\"\244\006\n\022TaskResultResponse\022#\n\006result\030\001" +
       " \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 \001" +
-      "(\t\022\020\n\010accepted\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\016\n\006" +
-      "map_id\030\005 \001(\t\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017li" +
-      "fecycle_state\030\007 \001(\t\"\"\n RadarRelocalizati" +
-      "onStatusRequest\"\353\003\n!RadarRelocalizationS" +
-      "tatusResponse\022\022\n\nraw_status\030\005 \001(\t\022\024\n\014tim" +
-      "estamp_ns\030\n \001(\004\022\027\n\017lifecycle_state\030\013 \001(\t" +
-      "\022\016\n\006detail\030\014 \001(\t\022\016\n\006map_id\030\r \001(\t\022\024\n\014map_" +
-      "revision\030\016 \001(\t\022\023\n\013good_frames\030\017 \001(\r\022\027\n\017r" +
-      "equired_frames\030\020 \001(\r\022\"\n\032registration_qua" +
-      "lity_valid\030\021 \001(\010\022\034\n\024registration_fitness" +
-      "\030\022 \001(\002\022!\n\031registration_inlier_ratio\030\023 \001(" +
-      "\002\022\026\n\016residual_nodes\030\024 \003(\tJ\004\010\001\020\002J\004\010\002\020\003J\004\010" +
-      "\003\020\004J\004\010\004\020\005J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020\nR\006resul" +
-      "tR\007messageR\tavailableR\006statusR\rsystem_st" +
-      "atusR\016odom_availableR\025odom_linear_speed_" +
-      "mpsR\030odom_angular_speed_radps\"<\n\017DiscLif" +
-      "tControl\022)\n\007command\030\001 \001(\0162\030.sl_link.Disc" +
-      "LiftCommand\"\"\n\017LightingControl\022\017\n\007enable" +
-      "d\030\001 \001(\010\"&\n\023ChassisPowerControl\022\017\n\007enable" +
-      "d\030\001 \001(\010\"1\n\013DiscControl\022\017\n\007enabled\030\001 \001(\010\022" +
-      "\021\n\tspeed_rpm\030\002 \001(\r\"y\n\025ChannelSessionRequ" +
-      "est\022-\n\006action\030\001 \001(\0162\035.sl_link.ChannelSes" +
-      "sionAction\022\"\n\004role\030\002 \001(\0162\024.sl_link.Chann" +
-      "elRole\022\r\n\005token\030\003 \001(\t\"\363\001\n\026ChannelSession" +
-      "Response\022#\n\006result\030\001 \001(\0162\023.sl_link.Resul" +
-      "tCode\022\017\n\007message\030\002 \001(\t\022\"\n\004role\030\003 \001(\0162\024.s" +
-      "l_link.ChannelRole\022\r\n\005token\030\004 \001(\t\022\035\n\025hea" +
-      "rtbeat_interval_ms\030\005 \001(\r\022\032\n\022session_time" +
-      "out_ms\030\006 \001(\r\022\025\n\rcontrol_ready\030\007 \001(\010\022\036\n\026e" +
-      "mergency_stop_latched\030\010 \001(\010\"\'\n\024Emergency" +
-      "StopControl\022\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualD" +
-      "riveControl\022,\n\006motion\030\001 \001(\0162\034.sl_link.Ma" +
-      "nualMotionCommand\022\023\n\013speed_ratio\030\002 \001(\002\022\020" +
-      "\n\010remote_x\030\003 \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rma" +
-      "x_speed_mps\030\005 \001(\002\022\034\n\024max_turn_speed_rati" +
-      "o\030\006 \001(\002\"\313\002\n\016ControlCommand\022-\n\tdisc_lift\030" +
-      "\001 \001(\0132\030.sl_link.DiscLiftControlH\000\022,\n\010lig" +
-      "hting\030\002 \001(\0132\030.sl_link.LightingControlH\000\022" +
-      "3\n\014manual_drive\030\003 \001(\0132\033.sl_link.ManualDr" +
-      "iveControlH\000\0225\n\rchassis_power\030\004 \001(\0132\034.sl" +
-      "_link.ChassisPowerControlH\000\022,\n\014disc_cont" +
-      "rol\030\005 \001(\0132\024.sl_link.DiscControlH\000\0227\n\016eme" +
-      "rgency_stop\030\006 \001(\0132\035.sl_link.EmergencySto" +
-      "pControlH\000B\t\n\007command\"\200\001\n\026ControlCommand" +
-      "Response\022#\n\006result\030\001 \001(\0162\023.sl_link.Resul" +
-      "tCode\022\017\n\007message\030\002 \001(\t\0220\n\017applied_comman" +
-      "d\030\003 \001(\0132\027.sl_link.ControlCommand\"\206\001\n\023Dra" +
-      "wingControlPoint\022\024\n\014drawing_x_mm\030\001 \001(\001\022\024" +
-      "\n\014drawing_y_mm\030\002 \001(\001\022\017\n\007map_x_m\030\003 \001(\001\022\017\n" +
-      "\007map_y_m\030\004 \001(\001\022\022\n\nresidual_m\030\005 \001(\001\022\r\n\005la" +
-      "bel\030\006 \001(\t\"\303\001\n\020DrawingTransform\022\021\n\ttheta_" +
-      "deg\030\001 \001(\001\022\014\n\004tx_m\030\002 \001(\001\022\014\n\004ty_m\030\003 \001(\001\022\r\n" +
-      "\005scale\030\004 \001(\001\022\r\n\005rms_m\030\005 \001(\001\0224\n\016control_p" +
-      "oints\030\006 \003(\0132\034.sl_link.DrawingControlPoin" +
-      "t\022\024\n\014scale_locked\030\007 \001(\010\022\026\n\016measured_scal" +
-      "e\030\010 \001(\001\"\247\001\n\021DrawingMapBinding\022\r\n\005width\030\001" +
-      " \001(\r\022\016\n\006height\030\002 \001(\r\022\022\n\nresolution\030\003 \001(\001" +
-      "\022\020\n\010origin_x\030\004 \001(\001\022\020\n\010origin_y\030\005 \001(\001\022\023\n\013" +
-      "heading_deg\030\006 \001(\001\022\020\n\010frame_id\030\007 \001(\t\022\024\n\014m" +
-      "ap_revision\030\010 \001(\t\"\240\002\n\030DrawingObstacleLay" +
-      "erInfo\022\020\n\010layer_id\030\001 \001(\t\022\017\n\007version\030\002 \001(" +
-      "\r\022+\n\006status\030\003 \001(\0162\033.sl_link.DrawingLayer" +
-      "Status\022\024\n\014stale_reason\030\004 \001(\t\022\023\n\013source_f" +
-      "ile\030\005 \001(\t\022\025\n\rsource_sha256\030\006 \001(\t\022,\n\ttran" +
-      "sform\030\007 \001(\0132\031.sl_link.DrawingTransform\022\027" +
-      "\n\017published_at_ms\030\010 \001(\004\022+\n\007binding\030\t \001(\013" +
-      "2\032.sl_link.DrawingMapBinding\"\211\001\n\023Drawing" +
-      "LayerPayload\022/\n\004info\030\001 \001(\0132!.sl_link.Dra" +
-      "wingObstacleLayerInfo\022+\n\013foundations\030\002 \003" +
-      "(\0132\026.sl_link.PolygonRegion\022\024\n\014remove_lay" +
-      "er\030\003 \001(\010\"\206\002\n\023DrawingDraftRequest\022\022\n\nrequ" +
-      "est_id\030\001 \001(\t\022\016\n\006map_id\030\002 \001(\t\0221\n\toperatio" +
-      "n\030\003 \001(\0162\036.sl_link.DrawingDraftOperation\022" +
-      "\020\n\010draft_id\030\004 \001(\t\022\025\n\rdraft_version\030\005 \001(\r" +
-      "\022\014\n\004data\030\006 \001(\014\022\023\n\013chunk_index\030\007 \001(\r\022\024\n\014t" +
-      "otal_chunks\030\010 \001(\r\022\026\n\016payload_sha256\030\t \001(" +
-      "\t\022\036\n\026expected_layer_version\030\n \001(\r\"|\n\020Dra" +
-      "wingCheckItem\022\r\n\005level\030\001 \001(\t\022\014\n\004code\030\002 \001" +
-      "(\t\022\021\n\tregion_id\030\003 \001(\t\022\017\n\007message\030\004 \001(\t\022\'" +
-      "\n\010position\030\005 \001(\0132\025.sl_link.PolygonPoint\"" +
-      "\252\002\n\024DrawingDraftResponse\022#\n\006result\030\001 \001(\016" +
-      "2\023.sl_link.ResultCode\022\017\n\007message\030\002 \001(\t\022\022" +
-      "\n\nrequest_id\030\003 \001(\t\022\020\n\010draft_id\030\004 \001(\t\022\025\n\r" +
-      "draft_version\030\005 \001(\r\022\020\n\010complete\030\006 \001(\010\022)\n" +
-      "\006checks\030\007 \003(\0132\031.sl_link.DrawingCheckItem" +
-      "\022\027\n\017feature_version\030\010 \001(\r\022\027\n\017max_chunk_b" +
-      "ytes\030\t \001(\r\0220\n\005layer\030\n \001(\0132!.sl_link.Draw" +
-      "ingObstacleLayerInfo*\313\025\n\tMessageId\022\022\n\016MS" +
-      "G_ID_UNKNOWN\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020\201\004\022" +
-      "\036\n\031MSG_ID_WIFI_STATUS_REPORT\020\202\004\022!\n\034MSG_I" +
-      "D_SETTINGS_READ_REQUEST\020\203\004\022\"\n\035MSG_ID_SET" +
-      "TINGS_READ_RESPONSE\020\204\004\022\"\n\035MSG_ID_SETTING" +
-      "S_WRITE_REQUEST\020\205\004\022#\n\036MSG_ID_SETTINGS_WR" +
-      "ITE_RESPONSE\020\206\004\022 \n\033MSG_ID_DEVICE_STATUS_" +
-      "REPORT\020\201\006\022 \n\033MSG_ID_CAMERA_FRAME_REQUEST" +
-      "\020\202\006\022\036\n\031MSG_ID_CAMERA_FRAME_CHUNK\020\203\006\022\027\n\022M" +
-      "SG_ID_MAP_REQUEST\020\204\006\022\025\n\020MSG_ID_MAP_CHUNK" +
-      "\020\205\006\022\036\n\031MSG_ID_MAP_REQUEST_RESULT\020\206\006\022\033\n\026M" +
-      "SG_ID_CONTROL_COMMAND\020\201\010\022$\n\037MSG_ID_CONTR" +
-      "OL_COMMAND_RESPONSE\020\202\010\022#\n\036MSG_ID_CHANNEL" +
-      "_SESSION_REQUEST\020\203\010\022$\n\037MSG_ID_CHANNEL_SE" +
-      "SSION_RESPONSE\020\204\010\022\027\n\022MSG_ID_TASK_CONFIG\020" +
-      "\200\n\022 \n\033MSG_ID_TASK_CONFIG_RESPONSE\020\201\n\022\030\n\023" +
-      "MSG_ID_TASK_COMMAND\020\202\n\022!\n\034MSG_ID_TASK_CO" +
-      "MMAND_RESPONSE\020\203\n\022\036\n\031MSG_ID_TASK_STATUS_" +
-      "REPORT\020\204\n\022#\n\036MSG_ID_PATH_POINT_PLAN_REQU" +
-      "EST\020\205\n\022$\n\037MSG_ID_PATH_POINT_PLAN_RESPONS" +
-      "E\020\206\n\022\037\n\032MSG_ID_MAP_PREVIEW_REQUEST\020\207\n\022 \n" +
-      "\033MSG_ID_MAP_PREVIEW_RESPONSE\020\210\n\022\034\n\027MSG_I" +
-      "D_MAP_EDIT_COMMAND\020\211\n\022\035\n\030MSG_ID_MAP_EDIT" +
-      "_RESPONSE\020\212\n\022\"\n\035MSG_ID_MAP_EDIT_STATUS_R" +
-      "EPORT\020\213\n\022%\n MSG_ID_VIDEO_STREAM_INFO_REQ" +
-      "UEST\020\214\n\022&\n!MSG_ID_VIDEO_STREAM_INFO_RESP" +
-      "ONSE\020\215\n\022\035\n\030MSG_ID_PATH_PLAN_REQUEST\020\216\n\022\036" +
-      "\n\031MSG_ID_PATH_PLAN_RESPONSE\020\217\n\022\034\n\027MSG_ID" +
-      "_MAP_SYNC_REQUEST\020\220\n\022\035\n\030MSG_ID_MAP_SYNC_" +
-      "RESPONSE\020\221\n\022\034\n\027MSG_ID_MAP_MODE_REQUEST\020\222" +
-      "\n\022\035\n\030MSG_ID_MAP_MODE_RESPONSE\020\223\n\022\037\n\032MSG_" +
-      "ID_MAP_CATALOG_REQUEST\020\224\n\022 \n\033MSG_ID_MAP_" +
-      "CATALOG_RESPONSE\020\225\n\022\036\n\031MSG_ID_MAP_DELETE" +
-      "_REQUEST\020\226\n\022\037\n\032MSG_ID_MAP_DELETE_RESPONS" +
-      "E\020\227\n\022\034\n\027MSG_ID_MAP_SAVE_REQUEST\020\230\n\022\035\n\030MS" +
-      "G_ID_MAP_SAVE_RESPONSE\020\231\n\022\037\n\032MSG_ID_MAP_" +
-      "METRICS_REQUEST\020\232\n\022 \n\033MSG_ID_MAP_METRICS" +
-      "_RESPONSE\020\233\n\022\037\n\032MSG_ID_TASK_RESULT_REQUE" +
-      "ST\020\234\n\022 \n\033MSG_ID_TASK_RESULT_RESPONSE\020\235\n\022" +
-      "(\n#MSG_ID_LIVE_MAP_CACHE_CLEAR_REQUEST\020\236" +
-      "\n\022)\n$MSG_ID_LIVE_MAP_CACHE_CLEAR_RESPONS" +
-      "E\020\237\n\022)\n$MSG_ID_RADAR_MAP_CACHE_CLEAR_REQ" +
-      "UEST\020\240\n\022*\n%MSG_ID_RADAR_MAP_CACHE_CLEAR_" +
-      "RESPONSE\020\241\n\022\'\n\"MSG_ID_MAP_IMPORT_TO_RADA" +
-      "R_REQUEST\020\242\n\022(\n#MSG_ID_MAP_IMPORT_TO_RAD" +
-      "AR_RESPONSE\020\243\n\022!\n\034MSG_ID_MAP_ALIGNMENT_R" +
-      "EQUEST\020\244\n\022\"\n\035MSG_ID_MAP_ALIGNMENT_RESPON" +
-      "SE\020\245\n\022\'\n\"MSG_ID_RADAR_SYSTEM_STATUS_REQU" +
-      "EST\020\246\n\022(\n#MSG_ID_RADAR_SYSTEM_STATUS_RES" +
-      "PONSE\020\247\n\022\"\n\035MSG_ID_RADAR_MAP_SYNC_REQUES" +
-      "T\020\250\n\022#\n\036MSG_ID_RADAR_MAP_SYNC_RESPONSE\020\251" +
-      "\n\022(\n#MSG_ID_RADAR_RELOCALIZATION_REQUEST" +
-      "\020\252\n\022)\n$MSG_ID_RADAR_RELOCALIZATION_RESPO" +
-      "NSE\020\253\n\022/\n*MSG_ID_RADAR_RELOCALIZATION_ST" +
-      "ATUS_REQUEST\020\254\n\0220\n+MSG_ID_RADAR_RELOCALI" +
-      "ZATION_STATUS_RESPONSE\020\255\n\022$\n\037MSG_ID_MAP_" +
-      "REGION_POINT_REQUEST\020\256\n\022%\n MSG_ID_MAP_RE" +
-      "GION_POINT_RESPONSE\020\257\n\022*\n%MSG_ID_TASK_EX" +
-      "ECUTION_HISTORY_REQUEST\020\260\n\022(\n#MSG_ID_TAS" +
-      "K_EXECUTION_HISTORY_CHUNK\020\261\n\022#\n\036MSG_ID_T" +
-      "ASK_TRAJECTORY_REQUEST\020\262\n\022!\n\034MSG_ID_TASK" +
-      "_TRAJECTORY_CHUNK\020\263\n\022)\n$MSG_ID_TASK_EXEC" +
-      "UTION_DELETE_REQUEST\020\264\n\022*\n%MSG_ID_TASK_E" +
-      "XECUTION_DELETE_RESPONSE\020\265\n\022&\n!MSG_ID_SY" +
-      "STEM_CACHE_CLEAR_REQUEST\020\266\n\022\'\n\"MSG_ID_SY" +
-      "STEM_CACHE_CLEAR_RESPONSE\020\267\n\022)\n$MSG_ID_T" +
-      "ASK_RUNTIME_SETTINGS_REQUEST\020\270\n\022*\n%MSG_I" +
-      "D_TASK_RUNTIME_SETTINGS_RESPONSE\020\271\n\022!\n\034M" +
-      "SG_ID_DRAWING_DRAFT_REQUEST\020\272\n\022\"\n\035MSG_ID" +
-      "_DRAWING_DRAFT_RESPONSE\020\273\n*X\n\010DeviceId\022\023" +
-      "\n\017DEVICE_RESERVED\020\000\022\016\n\nDEVICE_APP\020\001\022\020\n\014D" +
-      "EVICE_LOWER\020\020\022\025\n\020DEVICE_BROADCAST\020\377\001*v\n\013" +
-      "ComponentId\022\017\n\013COMP_SYSTEM\020\000\022\r\n\tCOMP_WIF" +
-      "I\020\004\022\021\n\rCOMP_SETTINGS\020\005\022\016\n\nCOMP_MEDIA\020\006\022\020" +
-      "\n\014COMP_CONTROL\020\007\022\022\n\016COMP_SCHEDULER\020\010*v\n\n" +
-      "ResultCode\022\022\n\016RESULT_SUCCESS\020\000\022\030\n\024RESULT" +
-      "_INVALID_PARAM\020\001\022\026\n\022RESULT_UNSUPPORTED\020\002" +
-      "\022\017\n\013RESULT_BUSY\020\003\022\021\n\rRESULT_FAILED\020\004*;\n\014" +
-      "SystemStatus\022\025\n\021SYS_STATUS_NORMAL\020\000\022\024\n\020S" +
-      "YS_STATUS_ERROR\020\001*Q\n\nWifiResult\022\020\n\014WIFI_" +
-      "PENDING\020\000\022\020\n\014WIFI_SUCCESS\020\001\022\r\n\tWIFI_FAIL" +
-      "\020\002\022\020\n\014WIFI_TIMEOUT\020\003*s\n\010WorkMode\022\025\n\021WORK" +
-      "_MODE_UNKNOWN\020\000\022\024\n\020WORK_MODE_MANUAL\020\001\022\022\n" +
-      "\016WORK_MODE_AUTO\020\002\022\022\n\016WORK_MODE_EDGE\020\003\022\022\n" +
-      "\016WORK_MODE_DOCK\020\004*z\n\rDiscLiftState\022\033\n\027DI" +
-      "SC_LIFT_STATE_UNKNOWN\020\000\022\026\n\022DISC_LIFT_STA" +
-      "TE_UP\020\001\022\030\n\024DISC_LIFT_STATE_DOWN\020\002\022\032\n\026DIS" +
-      "C_LIFT_STATE_MOVING\020\003*W\n\017DiscLiftCommand" +
-      "\022\026\n\022DISC_LIFT_CMD_STOP\020\000\022\024\n\020DISC_LIFT_CM" +
-      "D_UP\020\001\022\026\n\022DISC_LIFT_CMD_DOWN\020\002*\350\001\n\023Manua" +
-      "lMotionCommand\022\026\n\022MANUAL_MOTION_STOP\020\000\022\031" +
-      "\n\025MANUAL_MOTION_FORWARD\020\001\022\032\n\026MANUAL_MOTI" +
-      "ON_BACKWARD\020\002\022\036\n\032MANUAL_MOTION_FORWARD_L" +
-      "EFT\020\003\022\037\n\033MANUAL_MOTION_FORWARD_RIGHT\020\004\022\037" +
-      "\n\033MANUAL_MOTION_BACKWARD_LEFT\020\005\022 \n\034MANUA" +
-      "L_MOTION_BACKWARD_RIGHT\020\006*;\n\013CameraCodec" +
-      "\022\025\n\021CAMERA_CODEC_JPEG\020\000\022\025\n\021CAMERA_CODEC_" +
-      "H264\020\001*[\n\013MapEncoding\022\037\n\033MAP_ENCODING_OC" +
-      "CUPANCY_GRID\020\000\022\024\n\020MAP_ENCODING_PNG\020\001\022\025\n\021" +
-      "MAP_ENCODING_JSON\020\002*\202\001\n\nRegionType\022\027\n\023RE" +
-      "GION_TYPE_UNKNOWN\020\000\022\024\n\020REGION_TYPE_WORK\020" +
-      "\001\022\030\n\024REGION_TYPE_OBSTACLE\020\002\022\025\n\021REGION_TY" +
-      "PE_ERASE\020\003\022\024\n\020REGION_TYPE_CROP\020\004*\306\001\n\tTas" +
-      "kState\022\023\n\017TASK_STATE_IDLE\020\000\022\024\n\020TASK_STAT" +
-      "E_READY\020\001\022\027\n\023TASK_STATE_PLANNING\020\002\022\026\n\022TA" +
-      "SK_STATE_RUNNING\020\003\022\025\n\021TASK_STATE_PAUSED\020" +
-      "\004\022\030\n\024TASK_STATE_COMPLETED\020\005\022\026\n\022TASK_STAT" +
-      "E_STOPPED\020\006\022\024\n\020TASK_STATE_ERROR\020\007*a\n\017Tas" +
-      "kCommandType\022\022\n\016TASK_CMD_START\020\000\022\022\n\016TASK" +
-      "_CMD_PAUSE\020\001\022\023\n\017TASK_CMD_RESUME\020\002\022\021\n\rTAS" +
-      "K_CMD_STOP\020\003*\337\002\n\020MapEditOperation\022\027\n\023MAP" +
-      "_EDIT_OP_UNKNOWN\020\000\022\"\n\036MAP_EDIT_OP_UPSERT" +
-      "_WORK_REGION\020\001\022&\n\"MAP_EDIT_OP_UPSERT_OBS" +
-      "TACLE_REGION\020\002\022\035\n\031MAP_EDIT_OP_DELETE_REG" +
-      "ION\020\003\022\032\n\026MAP_EDIT_OP_PAINT_FREE\020\004\022\036\n\032MAP" +
-      "_EDIT_OP_PAINT_OCCUPIED\020\005\022\035\n\031MAP_EDIT_OP" +
-      "_PAINT_UNKNOWN\020\006\022#\n\037MAP_EDIT_OP_CLEAR_OV" +
-      "ERLAY_PATCH\020\007\022#\n\037MAP_EDIT_OP_UPSERT_ERAS" +
-      "E_REGION\020\010\022\"\n\036MAP_EDIT_OP_UPSERT_CROP_RE" +
-      "GION\020\t*s\n\020MapSyncOperation\022\027\n\023MAP_SYNC_O" +
-      "P_UNKNOWN\020\000\022$\n MAP_SYNC_OP_DOWNLOAD_FROM" +
-      "_AURORA\020\001\022 \n\034MAP_SYNC_OP_UPLOAD_TO_AUROR" +
-      "A\020\002*T\n\013MapModeType\022\024\n\020MAP_MODE_UNKNOWN\020\000" +
-      "\022\024\n\020MAP_MODE_MAPPING\020\001\022\031\n\025MAP_MODE_LOCAL" +
-      "IZATION\020\002*\262\001\n\020MapRequestStatus\022\036\n\032MAP_RE" +
-      "QUEST_STATUS_UNKNOWN\020\000\022\034\n\030MAP_REQUEST_ST" +
-      "ATUS_READY\020\001\022 \n\034MAP_REQUEST_STATUS_NOT_R" +
-      "EADY\020\002\022 \n\034MAP_REQUEST_STATUS_NOT_FOUND\020\003" +
-      "\022\034\n\030MAP_REQUEST_STATUS_ERROR\020\004*>\n\013Channe" +
-      "lRole\022\025\n\021CHANNEL_ROLE_DATA\020\000\022\030\n\024CHANNEL_" +
-      "ROLE_CONTROL\020\001*\243\001\n\024ChannelSessionAction\022" +
-      "\030\n\024CHANNEL_SESSION_OPEN\020\000\022\030\n\024CHANNEL_SES" +
-      "SION_BIND\020\001\022\035\n\031CHANNEL_SESSION_HEARTBEAT" +
-      "\020\002\022\033\n\027CHANNEL_SESSION_RELEASE\020\003\022\033\n\027CHANN" +
-      "EL_SESSION_RECOVER\020\004*>\n\025DrawingObstacleA" +
-      "ction\022\021\n\rDRAWING_AVOID\020\000\022\022\n\016DRAWING_IGNO" +
-      "RE\020\001*P\n\022DrawingLayerStatus\022\020\n\014DRAWING_NO" +
-      "NE\020\000\022\025\n\021DRAWING_PUBLISHED\020\001\022\021\n\rDRAWING_S" +
-      "TALE\020\002*p\n\025DrawingDraftOperation\022\030\n\024DRAWI" +
-      "NG_CAPABILITIES\020\000\022\022\n\016DRAWING_UPLOAD\020\001\022\024\n" +
-      "\020DRAWING_VALIDATE\020\002\022\023\n\017DRAWING_DISCARD\020\003" +
-      ":-\n\004unit\022\035.google.protobuf.FieldOptions\030" +
-      "\321\206\003 \001(\t:.\n\005scale\022\035.google.protobuf.Field" +
-      "Options\030\322\206\003 \001(\001b\006proto3"
+      "(\t\022\016\n\006map_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001(\t\022\'\n\013f" +
+      "inal_state\030\005 \001(\0162\022.sl_link.TaskState\022\025\n\r" +
+      "all_completed\030\006 \001(\010\022\023\n\013stop_reason\030\007 \001(\t" +
+      "\022\024\n\014path_version\030\010 \001(\r\022\024\n\014image_format\030\t" +
+      " \001(\t\022\022\n\nimage_data\030\n \001(\014\022\023\n\013image_width\030" +
+      "\013 \001(\r\022\024\n\014image_height\030\014 \001(\r\022\023\n\013finished_" +
+      "at\030\r \001(\004\022 \n\030selected_work_region_ids\030\016 \003" +
+      "(\t\0225\n\016region_results\030\017 \003(\0132\035.sl_link.Tas" +
+      "kResultRegionItem\022@\n\027localization_covari" +
+      "ance\030\020 \001(\0132\037.sl_link.LocalizationCovaria" +
+      "nce\022\031\n\021alignment_yaw_deg\030\021 \001(\002\022\030\n\020app_ro" +
+      "tation_deg\030\022 \001(\002\022$\n\034rotation_alignment_d" +
+      "elta_deg\030\023 \001(\002\022\024\n\014execution_id\030\024 \001(\t\022\022\n\n" +
+      "started_at\030\025 \001(\004\022*\n\017planned_area_m2\030\026 \001(" +
+      "\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\022+\n\020executed_area_m2" +
+      "\030\027 \001(\002B\021\212\265\030\002m2\221\265\030\000\000\000\000\000\000\360?\0220\n\022execution_p" +
+      "rogress\030\030 \001(\002B\024\212\265\030\005ratio\221\265\030\000\000\000\000\000\000\360?\0227\n\021e" +
+      "xecution_records\030\031 \003(\0132\034.sl_link.TaskExe" +
+      "cutionRecord\"|\n\033TaskExecutionHistoryRequ" +
+      "est\022\016\n\006map_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\022\n\n" +
+      "start_time\030\003 \001(\004\022\020\n\010end_time\030\004 \001(\004\022\026\n\016ma" +
+      "x_chunk_size\030\005 \001(\r\"\314\001\n\031TaskExecutionHist" +
+      "oryChunk\022#\n\006result\030\001 \001(\0162\023.sl_link.Resul" +
+      "tCode\022\017\n\007message\030\002 \001(\t\022\023\n\013chunk_index\030\003 " +
+      "\001(\r\022\024\n\014total_chunks\030\004 \001(\r\022\032\n\022total_recor" +
+      "d_count\030\005 \001(\r\022\014\n\004data\030\006 \001(\014\022\022\n\nstart_tim" +
+      "e\030\007 \001(\004\022\020\n\010end_time\030\010 \001(\004\"2\n\032TaskExecuti" +
+      "onDeleteRequest\022\024\n\014execution_id\030\001 \001(\t\"\274\001" +
+      "\n\033TaskExecutionDeleteResponse\022#\n\006result\030" +
+      "\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002 " +
+      "\001(\t\022\024\n\014execution_id\030\003 \001(\t\022\017\n\007task_id\030\004 \001" +
+      "(\t\022\016\n\006map_id\030\005 \001(\t\022\017\n\007deleted\030\006 \001(\010\022\037\n\027e" +
+      "xecution_files_deleted\030\007 \001(\010\"\272\001\n\025TaskTra" +
+      "jectoryRequest\022\024\n\014execution_id\030\001 \001(\t\022\017\n\007" +
+      "task_id\030\002 \001(\t\022\022\n\nstart_time\030\003 \001(\004\022\020\n\010end" +
+      "_time\030\004 \001(\004\022\023\n\013start_index\030\005 \001(\r\022\022\n\nmax_" +
+      "points\030\006 \001(\r\022\023\n\013sample_step\030\007 \001(\r\022\026\n\016max" +
+      "_chunk_size\030\010 \001(\r\"\221\002\n\023TaskTrajectoryPoin" +
+      "t\022\r\n\005index\030\001 \001(\r\022\021\n\toffset_ms\030\002 \001(\r\022\014\n\004x" +
+      "_mm\030\003 \001(\021\022\014\n\004y_mm\030\004 \001(\021\022\024\n\014heading_mdeg\030" +
+      "\005 \001(\021\022\031\n\021linear_speed_mmps\030\006 \001(\021\022\034\n\024angu" +
+      "lar_speed_mradps\030\007 \001(\021\022\026\n\016disc_speed_rpm" +
+      "\030\010 \001(\r\022\027\n\017speed_available\030\t \001(\010\022\024\n\014disc_" +
+      "enabled\030\n \001(\010\022&\n\ntask_state\030\013 \001(\0162\022.sl_l" +
+      "ink.TaskState\"\243\007\n\023TaskTrajectoryChunk\022#\n" +
+      "\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007me" +
+      "ssage\030\002 \001(\t\022\024\n\014execution_id\030\003 \001(\t\022\023\n\013chu" +
+      "nk_index\030\004 \001(\r\022\024\n\014total_chunks\030\005 \001(\r\022\031\n\021" +
+      "total_point_count\030\006 \001(\r\022\034\n\024returned_poin" +
+      "t_count\030\007 \001(\r\022\023\n\013start_index\030\010 \001(\r\022\022\n\nne" +
+      "xt_index\030\t \001(\r\022\020\n\010has_more\030\n \001(\010\022\025\n\rstar" +
+      "ted_at_ms\030\013 \001(\004\022,\n\006points\030\014 \003(\0132\034.sl_lin" +
+      "k.TaskTrajectoryPoint\022\017\n\007task_id\030\r \001(\t\022\016" +
+      "\n\006map_id\030\016 \001(\t\022\022\n\nstart_time\030\017 \001(\004\022\020\n\010en" +
+      "d_time\030\020 \001(\004\022\023\n\013sample_step\030\021 \001(\r\022\025\n\rmap" +
+      "_available\030\022 \001(\010\022\023\n\013map_message\030\023 \001(\t\022\023\n" +
+      "\013map_version\030\024 \001(\r\022\030\n\020map_source_width\030\025" +
+      " \001(\r\022\031\n\021map_source_height\030\026 \001(\r\022\026\n\016map_r" +
+      "esolution\030\027 \001(\002\022#\n\nmap_origin\030\030 \001(\0132\017.sl" +
+      "_link.Pose2D\022\024\n\014map_frame_id\030\031 \001(\t\022\030\n\020ma" +
+      "p_image_format\030\032 \001(\t\022\027\n\017map_image_width\030" +
+      "\033 \001(\r\022\030\n\020map_image_height\030\034 \001(\r\022\033\n\023map_p" +
+      "review_scale_x\030\035 \001(\002\022\033\n\023map_preview_scal" +
+      "e_y\030\036 \001(\002\022\026\n\016map_image_data\030\037 \001(\014\022\035\n\025map" +
+      "_image_chunk_index\030  \001(\r\022\036\n\026map_image_to" +
+      "tal_chunks\030! \001(\r\022\031\n\021alignment_yaw_deg\030\" " +
+      "\001(\002\022\030\n\020app_rotation_deg\030# \001(\002\022$\n\034rotatio" +
+      "n_alignment_delta_deg\030$ \001(\002\"\032\n\030LiveMapCa" +
+      "cheClearRequest\"Q\n\031LiveMapCacheClearResp" +
+      "onse\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCod" +
+      "e\022\017\n\007message\030\002 \001(\t\"h\n\027SystemCacheClearRe" +
+      "quest\022\032\n\022clear_memory_cache\030\001 \001(\010\022\035\n\025cle" +
+      "ar_temporary_files\030\002 \001(\010\022\022\n\nclear_logs\030\003" +
+      " \001(\010\"\376\001\n\030SystemCacheClearResponse\022#\n\006res" +
+      "ult\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007messag" +
+      "e\030\002 \001(\t\022\034\n\024memory_cache_cleared\030\003 \001(\010\022\037\n" +
+      "\027temporary_files_cleared\030\004 \001(\r\022 \n\030tempor" +
+      "ary_bytes_released\030\005 \001(\004\022\031\n\021log_files_cl" +
+      "eared\030\006 \001(\r\022\032\n\022log_bytes_released\030\007 \001(\004\022" +
+      "\024\n\014failed_items\030\010 \001(\r\"\033\n\031RadarMapCacheCl" +
+      "earRequest\"R\n\032RadarMapCacheClearResponse" +
+      "\022#\n\006result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n" +
+      "\007message\030\002 \001(\t\"\032\n\030RadarSystemStatusReque" +
+      "st\"\212\001\n\031RadarSystemStatusResponse\022#\n\006resu" +
+      "lt\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message" +
+      "\030\002 \001(\t\022\021\n\tavailable\030\003 \001(\010\022\016\n\006status\030\004 \001(" +
+      "\t\022\024\n\014timestamp_ns\030\005 \001(\004\"\025\n\023RadarMapSyncR" +
+      "equest\"Z\n\024RadarMapSyncResponse\022#\n\006result" +
+      "\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007message\030\002" +
+      " \001(\t\022\014\n\004sent\030\003 \001(\010\"\313\001\n\032RadarRelocalizati" +
+      "onRequest\022\036\n\026initial_pose_available\030\001 \001(" +
+      "\010\022%\n\014initial_pose\030\002 \001(\0132\017.sl_link.Pose2D" +
+      "\022@\n\027initial_pose_covariance\030\003 \001(\0132\037.sl_l" +
+      "ink.LocalizationCovariance\022\016\n\006map_id\030\004 \001" +
+      "(\t\022\024\n\014map_revision\030\005 \001(\t\"\264\001\n\033RadarReloca" +
+      "lizationResponse\022#\n\006result\030\001 \001(\0162\023.sl_li" +
+      "nk.ResultCode\022\017\n\007message\030\002 \001(\t\022\020\n\010accept" +
+      "ed\030\003 \001(\010\022\016\n\006status\030\004 \001(\t\022\016\n\006map_id\030\005 \001(\t" +
+      "\022\024\n\014map_revision\030\006 \001(\t\022\027\n\017lifecycle_stat" +
+      "e\030\007 \001(\t\"\"\n RadarRelocalizationStatusRequ" +
+      "est\"\353\003\n!RadarRelocalizationStatusRespons" +
+      "e\022\022\n\nraw_status\030\005 \001(\t\022\024\n\014timestamp_ns\030\n " +
+      "\001(\004\022\027\n\017lifecycle_state\030\013 \001(\t\022\016\n\006detail\030\014" +
+      " \001(\t\022\016\n\006map_id\030\r \001(\t\022\024\n\014map_revision\030\016 \001" +
+      "(\t\022\023\n\013good_frames\030\017 \001(\r\022\027\n\017required_fram" +
+      "es\030\020 \001(\r\022\"\n\032registration_quality_valid\030\021" +
+      " \001(\010\022\034\n\024registration_fitness\030\022 \001(\002\022!\n\031re" +
+      "gistration_inlier_ratio\030\023 \001(\002\022\026\n\016residua" +
+      "l_nodes\030\024 \003(\tJ\004\010\001\020\002J\004\010\002\020\003J\004\010\003\020\004J\004\010\004\020\005J\004\010" +
+      "\006\020\007J\004\010\007\020\010J\004\010\010\020\tJ\004\010\t\020\nR\006resultR\007messageR\t" +
+      "availableR\006statusR\rsystem_statusR\016odom_a" +
+      "vailableR\025odom_linear_speed_mpsR\030odom_an" +
+      "gular_speed_radps\"<\n\017DiscLiftControl\022)\n\007" +
+      "command\030\001 \001(\0162\030.sl_link.DiscLiftCommand\"" +
+      "\"\n\017LightingControl\022\017\n\007enabled\030\001 \001(\010\"&\n\023C" +
+      "hassisPowerControl\022\017\n\007enabled\030\001 \001(\010\"1\n\013D" +
+      "iscControl\022\017\n\007enabled\030\001 \001(\010\022\021\n\tspeed_rpm" +
+      "\030\002 \001(\r\"y\n\025ChannelSessionRequest\022-\n\006actio" +
+      "n\030\001 \001(\0162\035.sl_link.ChannelSessionAction\022\"" +
+      "\n\004role\030\002 \001(\0162\024.sl_link.ChannelRole\022\r\n\005to" +
+      "ken\030\003 \001(\t\"\363\001\n\026ChannelSessionResponse\022#\n\006" +
+      "result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mes" +
+      "sage\030\002 \001(\t\022\"\n\004role\030\003 \001(\0162\024.sl_link.Chann" +
+      "elRole\022\r\n\005token\030\004 \001(\t\022\035\n\025heartbeat_inter" +
+      "val_ms\030\005 \001(\r\022\032\n\022session_timeout_ms\030\006 \001(\r" +
+      "\022\025\n\rcontrol_ready\030\007 \001(\010\022\036\n\026emergency_sto" +
+      "p_latched\030\010 \001(\010\"\'\n\024EmergencyStopControl\022" +
+      "\017\n\007enabled\030\001 \001(\010\"\260\001\n\022ManualDriveControl\022" +
+      ",\n\006motion\030\001 \001(\0162\034.sl_link.ManualMotionCo" +
+      "mmand\022\023\n\013speed_ratio\030\002 \001(\002\022\020\n\010remote_x\030\003" +
+      " \001(\002\022\020\n\010remote_y\030\004 \001(\002\022\025\n\rmax_speed_mps\030" +
+      "\005 \001(\002\022\034\n\024max_turn_speed_ratio\030\006 \001(\002\"\313\002\n\016" +
+      "ControlCommand\022-\n\tdisc_lift\030\001 \001(\0132\030.sl_l" +
+      "ink.DiscLiftControlH\000\022,\n\010lighting\030\002 \001(\0132" +
+      "\030.sl_link.LightingControlH\000\0223\n\014manual_dr" +
+      "ive\030\003 \001(\0132\033.sl_link.ManualDriveControlH\000" +
+      "\0225\n\rchassis_power\030\004 \001(\0132\034.sl_link.Chassi" +
+      "sPowerControlH\000\022,\n\014disc_control\030\005 \001(\0132\024." +
+      "sl_link.DiscControlH\000\0227\n\016emergency_stop\030" +
+      "\006 \001(\0132\035.sl_link.EmergencyStopControlH\000B\t" +
+      "\n\007command\"\200\001\n\026ControlCommandResponse\022#\n\006" +
+      "result\030\001 \001(\0162\023.sl_link.ResultCode\022\017\n\007mes" +
+      "sage\030\002 \001(\t\0220\n\017applied_command\030\003 \001(\0132\027.sl" +
+      "_link.ControlCommand\"\206\001\n\023DrawingControlP" +
+      "oint\022\024\n\014drawing_x_mm\030\001 \001(\001\022\024\n\014drawing_y_" +
+      "mm\030\002 \001(\001\022\017\n\007map_x_m\030\003 \001(\001\022\017\n\007map_y_m\030\004 \001" +
+      "(\001\022\022\n\nresidual_m\030\005 \001(\001\022\r\n\005label\030\006 \001(\t\"\303\001" +
+      "\n\020DrawingTransform\022\021\n\ttheta_deg\030\001 \001(\001\022\014\n" +
+      "\004tx_m\030\002 \001(\001\022\014\n\004ty_m\030\003 \001(\001\022\r\n\005scale\030\004 \001(\001" +
+      "\022\r\n\005rms_m\030\005 \001(\001\0224\n\016control_points\030\006 \003(\0132" +
+      "\034.sl_link.DrawingControlPoint\022\024\n\014scale_l" +
+      "ocked\030\007 \001(\010\022\026\n\016measured_scale\030\010 \001(\001\"\247\001\n\021" +
+      "DrawingMapBinding\022\r\n\005width\030\001 \001(\r\022\016\n\006heig" +
+      "ht\030\002 \001(\r\022\022\n\nresolution\030\003 \001(\001\022\020\n\010origin_x" +
+      "\030\004 \001(\001\022\020\n\010origin_y\030\005 \001(\001\022\023\n\013heading_deg\030" +
+      "\006 \001(\001\022\020\n\010frame_id\030\007 \001(\t\022\024\n\014map_revision\030" +
+      "\010 \001(\t\"\240\002\n\030DrawingObstacleLayerInfo\022\020\n\010la" +
+      "yer_id\030\001 \001(\t\022\017\n\007version\030\002 \001(\r\022+\n\006status\030" +
+      "\003 \001(\0162\033.sl_link.DrawingLayerStatus\022\024\n\014st" +
+      "ale_reason\030\004 \001(\t\022\023\n\013source_file\030\005 \001(\t\022\025\n" +
+      "\rsource_sha256\030\006 \001(\t\022,\n\ttransform\030\007 \001(\0132" +
+      "\031.sl_link.DrawingTransform\022\027\n\017published_" +
+      "at_ms\030\010 \001(\004\022+\n\007binding\030\t \001(\0132\032.sl_link.D" +
+      "rawingMapBinding\"\211\001\n\023DrawingLayerPayload" +
+      "\022/\n\004info\030\001 \001(\0132!.sl_link.DrawingObstacle" +
+      "LayerInfo\022+\n\013foundations\030\002 \003(\0132\026.sl_link" +
+      ".PolygonRegion\022\024\n\014remove_layer\030\003 \001(\010\"\206\002\n" +
+      "\023DrawingDraftRequest\022\022\n\nrequest_id\030\001 \001(\t" +
+      "\022\016\n\006map_id\030\002 \001(\t\0221\n\toperation\030\003 \001(\0162\036.sl" +
+      "_link.DrawingDraftOperation\022\020\n\010draft_id\030" +
+      "\004 \001(\t\022\025\n\rdraft_version\030\005 \001(\r\022\014\n\004data\030\006 \001" +
+      "(\014\022\023\n\013chunk_index\030\007 \001(\r\022\024\n\014total_chunks\030" +
+      "\010 \001(\r\022\026\n\016payload_sha256\030\t \001(\t\022\036\n\026expecte" +
+      "d_layer_version\030\n \001(\r\"|\n\020DrawingCheckIte" +
+      "m\022\r\n\005level\030\001 \001(\t\022\014\n\004code\030\002 \001(\t\022\021\n\tregion" +
+      "_id\030\003 \001(\t\022\017\n\007message\030\004 \001(\t\022\'\n\010position\030\005" +
+      " \001(\0132\025.sl_link.PolygonPoint\"\252\002\n\024DrawingD" +
+      "raftResponse\022#\n\006result\030\001 \001(\0162\023.sl_link.R" +
+      "esultCode\022\017\n\007message\030\002 \001(\t\022\022\n\nrequest_id" +
+      "\030\003 \001(\t\022\020\n\010draft_id\030\004 \001(\t\022\025\n\rdraft_versio" +
+      "n\030\005 \001(\r\022\020\n\010complete\030\006 \001(\010\022)\n\006checks\030\007 \003(" +
+      "\0132\031.sl_link.DrawingCheckItem\022\027\n\017feature_" +
+      "version\030\010 \001(\r\022\027\n\017max_chunk_bytes\030\t \001(\r\0220" +
+      "\n\005layer\030\n \001(\0132!.sl_link.DrawingObstacleL" +
+      "ayerInfo*\313\025\n\tMessageId\022\022\n\016MSG_ID_UNKNOWN" +
+      "\020\000\022\027\n\022MSG_ID_WIFI_CONFIG\020\201\004\022\036\n\031MSG_ID_WI" +
+      "FI_STATUS_REPORT\020\202\004\022!\n\034MSG_ID_SETTINGS_R" +
+      "EAD_REQUEST\020\203\004\022\"\n\035MSG_ID_SETTINGS_READ_R" +
+      "ESPONSE\020\204\004\022\"\n\035MSG_ID_SETTINGS_WRITE_REQU" +
+      "EST\020\205\004\022#\n\036MSG_ID_SETTINGS_WRITE_RESPONSE" +
+      "\020\206\004\022 \n\033MSG_ID_DEVICE_STATUS_REPORT\020\201\006\022 \n" +
+      "\033MSG_ID_CAMERA_FRAME_REQUEST\020\202\006\022\036\n\031MSG_I" +
+      "D_CAMERA_FRAME_CHUNK\020\203\006\022\027\n\022MSG_ID_MAP_RE" +
+      "QUEST\020\204\006\022\025\n\020MSG_ID_MAP_CHUNK\020\205\006\022\036\n\031MSG_I" +
+      "D_MAP_REQUEST_RESULT\020\206\006\022\033\n\026MSG_ID_CONTRO" +
+      "L_COMMAND\020\201\010\022$\n\037MSG_ID_CONTROL_COMMAND_R" +
+      "ESPONSE\020\202\010\022#\n\036MSG_ID_CHANNEL_SESSION_REQ" +
+      "UEST\020\203\010\022$\n\037MSG_ID_CHANNEL_SESSION_RESPON" +
+      "SE\020\204\010\022\027\n\022MSG_ID_TASK_CONFIG\020\200\n\022 \n\033MSG_ID" +
+      "_TASK_CONFIG_RESPONSE\020\201\n\022\030\n\023MSG_ID_TASK_" +
+      "COMMAND\020\202\n\022!\n\034MSG_ID_TASK_COMMAND_RESPON" +
+      "SE\020\203\n\022\036\n\031MSG_ID_TASK_STATUS_REPORT\020\204\n\022#\n" +
+      "\036MSG_ID_PATH_POINT_PLAN_REQUEST\020\205\n\022$\n\037MS" +
+      "G_ID_PATH_POINT_PLAN_RESPONSE\020\206\n\022\037\n\032MSG_" +
+      "ID_MAP_PREVIEW_REQUEST\020\207\n\022 \n\033MSG_ID_MAP_" +
+      "PREVIEW_RESPONSE\020\210\n\022\034\n\027MSG_ID_MAP_EDIT_C" +
+      "OMMAND\020\211\n\022\035\n\030MSG_ID_MAP_EDIT_RESPONSE\020\212\n" +
+      "\022\"\n\035MSG_ID_MAP_EDIT_STATUS_REPORT\020\213\n\022%\n " +
+      "MSG_ID_VIDEO_STREAM_INFO_REQUEST\020\214\n\022&\n!M" +
+      "SG_ID_VIDEO_STREAM_INFO_RESPONSE\020\215\n\022\035\n\030M" +
+      "SG_ID_PATH_PLAN_REQUEST\020\216\n\022\036\n\031MSG_ID_PAT" +
+      "H_PLAN_RESPONSE\020\217\n\022\034\n\027MSG_ID_MAP_SYNC_RE" +
+      "QUEST\020\220\n\022\035\n\030MSG_ID_MAP_SYNC_RESPONSE\020\221\n\022" +
+      "\034\n\027MSG_ID_MAP_MODE_REQUEST\020\222\n\022\035\n\030MSG_ID_" +
+      "MAP_MODE_RESPONSE\020\223\n\022\037\n\032MSG_ID_MAP_CATAL" +
+      "OG_REQUEST\020\224\n\022 \n\033MSG_ID_MAP_CATALOG_RESP" +
+      "ONSE\020\225\n\022\036\n\031MSG_ID_MAP_DELETE_REQUEST\020\226\n\022" +
+      "\037\n\032MSG_ID_MAP_DELETE_RESPONSE\020\227\n\022\034\n\027MSG_" +
+      "ID_MAP_SAVE_REQUEST\020\230\n\022\035\n\030MSG_ID_MAP_SAV" +
+      "E_RESPONSE\020\231\n\022\037\n\032MSG_ID_MAP_METRICS_REQU" +
+      "EST\020\232\n\022 \n\033MSG_ID_MAP_METRICS_RESPONSE\020\233\n" +
+      "\022\037\n\032MSG_ID_TASK_RESULT_REQUEST\020\234\n\022 \n\033MSG" +
+      "_ID_TASK_RESULT_RESPONSE\020\235\n\022(\n#MSG_ID_LI" +
+      "VE_MAP_CACHE_CLEAR_REQUEST\020\236\n\022)\n$MSG_ID_" +
+      "LIVE_MAP_CACHE_CLEAR_RESPONSE\020\237\n\022)\n$MSG_" +
+      "ID_RADAR_MAP_CACHE_CLEAR_REQUEST\020\240\n\022*\n%M" +
+      "SG_ID_RADAR_MAP_CACHE_CLEAR_RESPONSE\020\241\n\022" +
+      "\'\n\"MSG_ID_MAP_IMPORT_TO_RADAR_REQUEST\020\242\n" +
+      "\022(\n#MSG_ID_MAP_IMPORT_TO_RADAR_RESPONSE\020" +
+      "\243\n\022!\n\034MSG_ID_MAP_ALIGNMENT_REQUEST\020\244\n\022\"\n" +
+      "\035MSG_ID_MAP_ALIGNMENT_RESPONSE\020\245\n\022\'\n\"MSG" +
+      "_ID_RADAR_SYSTEM_STATUS_REQUEST\020\246\n\022(\n#MS" +
+      "G_ID_RADAR_SYSTEM_STATUS_RESPONSE\020\247\n\022\"\n\035" +
+      "MSG_ID_RADAR_MAP_SYNC_REQUEST\020\250\n\022#\n\036MSG_" +
+      "ID_RADAR_MAP_SYNC_RESPONSE\020\251\n\022(\n#MSG_ID_" +
+      "RADAR_RELOCALIZATION_REQUEST\020\252\n\022)\n$MSG_I" +
+      "D_RADAR_RELOCALIZATION_RESPONSE\020\253\n\022/\n*MS" +
+      "G_ID_RADAR_RELOCALIZATION_STATUS_REQUEST" +
+      "\020\254\n\0220\n+MSG_ID_RADAR_RELOCALIZATION_STATU" +
+      "S_RESPONSE\020\255\n\022$\n\037MSG_ID_MAP_REGION_POINT" +
+      "_REQUEST\020\256\n\022%\n MSG_ID_MAP_REGION_POINT_R" +
+      "ESPONSE\020\257\n\022*\n%MSG_ID_TASK_EXECUTION_HIST" +
+      "ORY_REQUEST\020\260\n\022(\n#MSG_ID_TASK_EXECUTION_" +
+      "HISTORY_CHUNK\020\261\n\022#\n\036MSG_ID_TASK_TRAJECTO" +
+      "RY_REQUEST\020\262\n\022!\n\034MSG_ID_TASK_TRAJECTORY_" +
+      "CHUNK\020\263\n\022)\n$MSG_ID_TASK_EXECUTION_DELETE" +
+      "_REQUEST\020\264\n\022*\n%MSG_ID_TASK_EXECUTION_DEL" +
+      "ETE_RESPONSE\020\265\n\022&\n!MSG_ID_SYSTEM_CACHE_C" +
+      "LEAR_REQUEST\020\266\n\022\'\n\"MSG_ID_SYSTEM_CACHE_C" +
+      "LEAR_RESPONSE\020\267\n\022)\n$MSG_ID_TASK_RUNTIME_" +
+      "SETTINGS_REQUEST\020\270\n\022*\n%MSG_ID_TASK_RUNTI" +
+      "ME_SETTINGS_RESPONSE\020\271\n\022!\n\034MSG_ID_DRAWIN" +
+      "G_DRAFT_REQUEST\020\272\n\022\"\n\035MSG_ID_DRAWING_DRA" +
+      "FT_RESPONSE\020\273\n*X\n\010DeviceId\022\023\n\017DEVICE_RES" +
+      "ERVED\020\000\022\016\n\nDEVICE_APP\020\001\022\020\n\014DEVICE_LOWER\020" +
+      "\020\022\025\n\020DEVICE_BROADCAST\020\377\001*v\n\013ComponentId\022" +
+      "\017\n\013COMP_SYSTEM\020\000\022\r\n\tCOMP_WIFI\020\004\022\021\n\rCOMP_" +
+      "SETTINGS\020\005\022\016\n\nCOMP_MEDIA\020\006\022\020\n\014COMP_CONTR" +
+      "OL\020\007\022\022\n\016COMP_SCHEDULER\020\010*v\n\nResultCode\022\022" +
+      "\n\016RESULT_SUCCESS\020\000\022\030\n\024RESULT_INVALID_PAR" +
+      "AM\020\001\022\026\n\022RESULT_UNSUPPORTED\020\002\022\017\n\013RESULT_B" +
+      "USY\020\003\022\021\n\rRESULT_FAILED\020\004*;\n\014SystemStatus" +
+      "\022\025\n\021SYS_STATUS_NORMAL\020\000\022\024\n\020SYS_STATUS_ER" +
+      "ROR\020\001*Q\n\nWifiResult\022\020\n\014WIFI_PENDING\020\000\022\020\n" +
+      "\014WIFI_SUCCESS\020\001\022\r\n\tWIFI_FAIL\020\002\022\020\n\014WIFI_T" +
+      "IMEOUT\020\003*s\n\010WorkMode\022\025\n\021WORK_MODE_UNKNOW" +
+      "N\020\000\022\024\n\020WORK_MODE_MANUAL\020\001\022\022\n\016WORK_MODE_A" +
+      "UTO\020\002\022\022\n\016WORK_MODE_EDGE\020\003\022\022\n\016WORK_MODE_D" +
+      "OCK\020\004*z\n\rDiscLiftState\022\033\n\027DISC_LIFT_STAT" +
+      "E_UNKNOWN\020\000\022\026\n\022DISC_LIFT_STATE_UP\020\001\022\030\n\024D" +
+      "ISC_LIFT_STATE_DOWN\020\002\022\032\n\026DISC_LIFT_STATE" +
+      "_MOVING\020\003*W\n\017DiscLiftCommand\022\026\n\022DISC_LIF" +
+      "T_CMD_STOP\020\000\022\024\n\020DISC_LIFT_CMD_UP\020\001\022\026\n\022DI" +
+      "SC_LIFT_CMD_DOWN\020\002*\350\001\n\023ManualMotionComma" +
+      "nd\022\026\n\022MANUAL_MOTION_STOP\020\000\022\031\n\025MANUAL_MOT" +
+      "ION_FORWARD\020\001\022\032\n\026MANUAL_MOTION_BACKWARD\020" +
+      "\002\022\036\n\032MANUAL_MOTION_FORWARD_LEFT\020\003\022\037\n\033MAN" +
+      "UAL_MOTION_FORWARD_RIGHT\020\004\022\037\n\033MANUAL_MOT" +
+      "ION_BACKWARD_LEFT\020\005\022 \n\034MANUAL_MOTION_BAC" +
+      "KWARD_RIGHT\020\006*;\n\013CameraCodec\022\025\n\021CAMERA_C" +
+      "ODEC_JPEG\020\000\022\025\n\021CAMERA_CODEC_H264\020\001*[\n\013Ma" +
+      "pEncoding\022\037\n\033MAP_ENCODING_OCCUPANCY_GRID" +
+      "\020\000\022\024\n\020MAP_ENCODING_PNG\020\001\022\025\n\021MAP_ENCODING" +
+      "_JSON\020\002*\202\001\n\nRegionType\022\027\n\023REGION_TYPE_UN" +
+      "KNOWN\020\000\022\024\n\020REGION_TYPE_WORK\020\001\022\030\n\024REGION_" +
+      "TYPE_OBSTACLE\020\002\022\025\n\021REGION_TYPE_ERASE\020\003\022\024" +
+      "\n\020REGION_TYPE_CROP\020\004*\306\001\n\tTaskState\022\023\n\017TA" +
+      "SK_STATE_IDLE\020\000\022\024\n\020TASK_STATE_READY\020\001\022\027\n" +
+      "\023TASK_STATE_PLANNING\020\002\022\026\n\022TASK_STATE_RUN" +
+      "NING\020\003\022\025\n\021TASK_STATE_PAUSED\020\004\022\030\n\024TASK_ST" +
+      "ATE_COMPLETED\020\005\022\026\n\022TASK_STATE_STOPPED\020\006\022" +
+      "\024\n\020TASK_STATE_ERROR\020\007*a\n\017TaskCommandType" +
+      "\022\022\n\016TASK_CMD_START\020\000\022\022\n\016TASK_CMD_PAUSE\020\001" +
+      "\022\023\n\017TASK_CMD_RESUME\020\002\022\021\n\rTASK_CMD_STOP\020\003" +
+      "*\337\002\n\020MapEditOperation\022\027\n\023MAP_EDIT_OP_UNK" +
+      "NOWN\020\000\022\"\n\036MAP_EDIT_OP_UPSERT_WORK_REGION" +
+      "\020\001\022&\n\"MAP_EDIT_OP_UPSERT_OBSTACLE_REGION" +
+      "\020\002\022\035\n\031MAP_EDIT_OP_DELETE_REGION\020\003\022\032\n\026MAP" +
+      "_EDIT_OP_PAINT_FREE\020\004\022\036\n\032MAP_EDIT_OP_PAI" +
+      "NT_OCCUPIED\020\005\022\035\n\031MAP_EDIT_OP_PAINT_UNKNO" +
+      "WN\020\006\022#\n\037MAP_EDIT_OP_CLEAR_OVERLAY_PATCH\020" +
+      "\007\022#\n\037MAP_EDIT_OP_UPSERT_ERASE_REGION\020\010\022\"" +
+      "\n\036MAP_EDIT_OP_UPSERT_CROP_REGION\020\t*s\n\020Ma" +
+      "pSyncOperation\022\027\n\023MAP_SYNC_OP_UNKNOWN\020\000\022" +
+      "$\n MAP_SYNC_OP_DOWNLOAD_FROM_AURORA\020\001\022 \n" +
+      "\034MAP_SYNC_OP_UPLOAD_TO_AURORA\020\002*T\n\013MapMo" +
+      "deType\022\024\n\020MAP_MODE_UNKNOWN\020\000\022\024\n\020MAP_MODE" +
+      "_MAPPING\020\001\022\031\n\025MAP_MODE_LOCALIZATION\020\002*\262\001" +
+      "\n\020MapRequestStatus\022\036\n\032MAP_REQUEST_STATUS" +
+      "_UNKNOWN\020\000\022\034\n\030MAP_REQUEST_STATUS_READY\020\001" +
+      "\022 \n\034MAP_REQUEST_STATUS_NOT_READY\020\002\022 \n\034MA" +
+      "P_REQUEST_STATUS_NOT_FOUND\020\003\022\034\n\030MAP_REQU" +
+      "EST_STATUS_ERROR\020\004*>\n\013ChannelRole\022\025\n\021CHA" +
+      "NNEL_ROLE_DATA\020\000\022\030\n\024CHANNEL_ROLE_CONTROL" +
+      "\020\001*\243\001\n\024ChannelSessionAction\022\030\n\024CHANNEL_S" +
+      "ESSION_OPEN\020\000\022\030\n\024CHANNEL_SESSION_BIND\020\001\022" +
+      "\035\n\031CHANNEL_SESSION_HEARTBEAT\020\002\022\033\n\027CHANNE" +
+      "L_SESSION_RELEASE\020\003\022\033\n\027CHANNEL_SESSION_R" +
+      "ECOVER\020\004*>\n\025DrawingObstacleAction\022\021\n\rDRA" +
+      "WING_AVOID\020\000\022\022\n\016DRAWING_IGNORE\020\001*P\n\022Draw" +
+      "ingLayerStatus\022\020\n\014DRAWING_NONE\020\000\022\025\n\021DRAW" +
+      "ING_PUBLISHED\020\001\022\021\n\rDRAWING_STALE\020\002*p\n\025Dr" +
+      "awingDraftOperation\022\030\n\024DRAWING_CAPABILIT" +
+      "IES\020\000\022\022\n\016DRAWING_UPLOAD\020\001\022\024\n\020DRAWING_VAL" +
+      "IDATE\020\002\022\023\n\017DRAWING_DISCARD\020\003:-\n\004unit\022\035.g" +
+      "oogle.protobuf.FieldOptions\030\321\206\003 \001(\t:.\n\005s" +
+      "cale\022\035.google.protobuf.FieldOptions\030\322\206\003 " +
+      "\001(\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -137585,7 +138146,7 @@ public final class SlLink {
     internal_static_sl_link_MapRegionPointResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_sl_link_MapRegionPointResponse_descriptor,
-        new java.lang.String[] { "Result", "Message", "MapId", "MapVersion", "WorkRegions", "ObstacleRegions", "EraseRegions", "CropRegionAvailable", "CropRegion", "DrawingLayer", });
+        new java.lang.String[] { "Result", "Message", "MapId", "MapVersion", "WorkRegions", "ObstacleRegions", "EraseRegions", "CropRegionAvailable", "CropRegion", "DrawingLayer", "TransferId", "ChunkIndex", "TotalChunks", "ChunkData", "PayloadSha256", });
     internal_static_sl_link_MapEditCommand_descriptor =
       getDescriptor().getMessageTypes().get(37);
     internal_static_sl_link_MapEditCommand_fieldAccessorTable = new

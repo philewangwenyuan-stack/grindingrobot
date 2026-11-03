@@ -50,7 +50,9 @@ data class TaskPathPayload(
     // 请求关联只取响应外层 request_id，不能由路径 JSON 的辅助字段覆盖。
     val requestId: String = "",
     val mapId: String = "",
-    val mapVersion: Int = 0
+    val mapVersion: Int = 0,
+    val drawingLayerVersion: Int = 0,
+    val drawingDraftVersion: Int = 0
 ) {
     // 只判断是否存在有效坐标；实际是否落在底图范围内由绘制层的投影函数决定。
     val hasRenderablePoints: Boolean get() = points.any { it.x.isFinite() && it.y.isFinite() }
