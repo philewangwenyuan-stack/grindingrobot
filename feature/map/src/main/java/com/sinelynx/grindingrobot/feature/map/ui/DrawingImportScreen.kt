@@ -72,8 +72,9 @@ fun DrawingImportScreen(viewModel:DrawingImportViewModel,mapId:String?,onPreviou
                 TextButton(onClick={viewModel.skip();onContinue()}) {Text(if(state.existingCount>0)"保留现有图纸"else "跳过图纸",color=Color(0xFF647080))}
                 Spacer(Modifier.weight(1f))
                 MapWorkflowAction("上一步",false,{if(state.step==0)onPrevious()else viewModel.previous()})
-                MapWorkflowAction(if(state.step==3)"保存草稿并继续"else "下一步",true,
-                    {if(state.step==3){if(viewModel.confirm())onContinue()}else viewModel.next()},enabled=state.canContinue)
+                MapWorkflowAction(if(state.step==3)"保存草稿并继续"else if(state.step==1&&state.controls.size<3)"添加控制点"else "下一步",true,
+                    {if(state.step==3){if(viewModel.confirm())onContinue()}else viewModel.next()},
+                    enabled=state.canContinue||(state.step==1&&!state.busy))
             }
         }
     }
@@ -90,7 +91,17 @@ private fun DrawingGuide(s:DrawingImportUiState,vm:DrawingImportViewModel,modifi
             DrawingToolButton("查看 / 缩放",s.tool==DrawingTool.Pan){vm.tool(DrawingTool.Pan)}
             if(s.step==1) {
                 DrawingToolButton("拖动图纸",s.tool==DrawingTool.MoveDrawing){vm.tool(DrawingTool.MoveDrawing)}
-                Row { TextButton(onClick={vm.coarse(degrees=-1.0)}){Text("旋转−")};TextButton(onClick={vm.coarse(degrees=1.0)}){Text("旋转＋")} }
+                var rotationStep by remember {mutableDoubleStateOf(.005)}
+                Text("角度 %.3f°".format(s.transform.thetaDeg),fontSize=13.sp,color=DrawingInk)
+                Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(3.dp)) {
+                    listOf(1.0,.1,.005).forEach {step->Surface(onClick={rotationStep=step},
+                        color=if(rotationStep==step)DrawingBlue else Color.White,shape=RoundedCornerShape(8.dp),modifier=Modifier.weight(1f)) {
+                        Text("${step}°",Modifier.padding(vertical=8.dp),fontSize=11.sp,color=if(rotationStep==step)Color.White else DrawingInk,textAlign=androidx.compose.ui.text.style.TextAlign.Center)
+                    } }
+                }
+                Row { TextButton(onClick={vm.coarse(degrees=-rotationStep)},modifier=Modifier.weight(1f)){Text("旋转−")};TextButton(onClick={vm.coarse(degrees=rotationStep)},modifier=Modifier.weight(1f)){Text("旋转＋")} }
+                if(s.controls.isEmpty())Text(if(s.pendingDrawing!=null)"围绕已选图纸点旋转"else "围绕图纸中心旋转",fontSize=11.sp,color=Color(0xFF647080))
+                Text(if(s.controls.isEmpty())"先旋转、拖动粗对齐，再添加控制点"else "控制点已锁定变换；重新粗调请先清空控制点",fontSize=11.sp,color=Color(0xFF647080))
                 DrawingToolButton("添加控制点",s.tool==DrawingTool.Control){vm.tool(DrawingTool.Control)}
                 Row(verticalAlignment=Alignment.CenterVertically){Checkbox(s.snapEnabled,vm::snap);Text("图纸角点吸附",fontSize=12.sp,color=DrawingInk)}
                 if(s.tool==DrawingTool.Control)Text(if(s.pendingDrawing==null)"当前：选图纸点"else "当前：地图手动选点",fontSize=13.sp,color=DrawingBlue)
@@ -147,17 +158,21 @@ private fun DrawingInspector(s:DrawingImportUiState,vm:DrawingImportViewModel,on
                 Text("地图配准",color=DrawingInk,fontSize=18.sp,fontWeight=FontWeight.Bold)
                 Row(verticalAlignment=Alignment.CenterVertically){Checkbox(s.transform.scaleLocked,vm::lockScale);Text("锁定比例",fontSize=14.sp,color=DrawingInk)}
                 Text("控制点 ${s.controls.size} 对",fontSize=14.sp,color=DrawingInk)
+                if(s.pendingMap!=null)DrawingToolButton("确认这一对（P${s.controls.size+1}）",true,vm::confirmPair)
                 s.controls.forEachIndexed { n,p->
                     Row(verticalAlignment=Alignment.CenterVertically) {
                         Text(p.label,Modifier.weight(1f),color=DrawingInk,fontSize=13.sp)
-                        Text(s.transform.residualsM.getOrNull(n)?.let { "%.1f cm".format(it*100) }?:"待求解",color=if((s.transform.residualsM.getOrNull(n)?:0.0)>.2)Color(0xFFD82B2A)else Color(0xFF24BE1C),fontSize=13.sp)
+                        val residual=if(s.registrationSolved)s.transform.residualsM.getOrNull(n)else null
+                        Text(residual?.let { "%.1f cm".format(it*100) }?:"待求解",color=if(residual==null)Color(0xFF647080)else if(residual>.2)Color(0xFFD82B2A)else Color(0xFF24BE1C),fontSize=13.sp)
                         TextButton(onClick={vm.removePair(n)}){Text("删除",fontSize=12.sp)}
                     }
                 }
                 TextButton(onClick=vm::clearPairs){Text("清空控制点")}
-                Text("RMS %.1f cm".format(s.transform.rmsM*100),fontSize=15.sp,color=if(s.transform.blocked)Color(0xFFD82B2A)else Color(0xFF24BE1C))
-                Text("自检比例 %.5f".format(s.transform.measuredScale),fontSize=13.sp,color=DrawingInk)
-                if(s.transform.blocked)Text("比例或误差超限，请核对单位并重选控制点",fontSize=13.sp,color=Color(0xFFD82B2A))
+                if(s.registrationSolved) {
+                    Text("RMS %.1f cm".format(s.transform.rmsM*100),fontSize=15.sp,color=if(s.transform.blocked)Color(0xFFD82B2A)else if(s.transform.warning)DrawingOrange else Color(0xFF24BE1C))
+                    Text("自检比例 %.5f".format(s.transform.measuredScale),fontSize=13.sp,color=DrawingInk)
+                } else Text("RMS — · 配准未完成",fontSize=15.sp,color=Color(0xFF647080))
+                s.registrationHint?.let {Text(it,fontSize=13.sp,color=if(s.controls.size>=3)Color(0xFFD82B2A)else DrawingOrange)}
                 Text("图纸透明度 ${(s.opacity*100).toInt()}%",color=DrawingInk,fontSize=13.sp)
                 Slider(s.opacity,vm::opacity,valueRange=.1f..1f)
             }

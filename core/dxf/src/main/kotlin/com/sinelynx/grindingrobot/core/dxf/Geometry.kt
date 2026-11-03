@@ -42,6 +42,13 @@ data class DrawingTransform(
         val a = Math.toRadians(thetaDeg); val p = m - PointD(txM, tyM)
         return PointD(cos(a) * p.x + sin(a) * p.y, -sin(a) * p.x + cos(a) * p.y) * (1000.0 / scale)
     }
+    fun rotatedAround(pivotMm:PointD,degrees:Double):DrawingTransform {
+        require(degrees.isFinite() && pivotMm.finite())
+        val fixed=forward(pivotMm)
+        val rotated=copy(thetaDeg=thetaDeg+degrees)
+        val moved=rotated.forward(pivotMm)
+        return rotated.copy(txM=rotated.txM+fixed.x-moved.x,tyM=rotated.tyM+fixed.y-moved.y)
+    }
     val blocked get() = !rmsM.isFinite() || rmsM > 0.20 || measuredScale !in 0.995..1.005
     val warning get() = !blocked && rmsM > 0.10
 }

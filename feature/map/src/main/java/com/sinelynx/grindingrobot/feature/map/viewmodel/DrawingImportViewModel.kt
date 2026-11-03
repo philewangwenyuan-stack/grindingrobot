@@ -40,7 +40,16 @@ data class DrawingImportUiState(
     val canUndo:Boolean=false,val canRedo:Boolean=false,val existingCount:Int=0,
     val removeLayer:Boolean=false
 ) {
-    val registrationReady get()=controls.size>=3&&!transform.blocked
+    val registrationSolved get()=controls.size>=3&&transform.residualsM.size==controls.size&&transform.rmsM.isFinite()
+    val registrationReady get()=registrationSolved&&!transform.blocked
+    val registrationHint get()=when {
+        controls.size<3&&pendingMap!=null->"请点击「确认这一对」，至少需要三对控制点"
+        controls.size<3&&pendingDrawing!=null->"已选图纸点，请在地图上点选同一位置，再确认这一对"
+        controls.size<3->"还需 ${3-controls.size} 对控制点：选图纸点 → 选地图同一点 → 确认这一对"
+        !registrationSolved->"配准尚未成功，请检查重复控制点或等待求解完成"
+        transform.blocked->"配准比例或误差超限，请检查单位和控制点"
+        else->null
+    }
     val canContinue get()=!busy && when(step) {
         0->supported&&drawing!=null&&drawing.units!=DxfUnits.UNKNOWN
         1->registrationReady
@@ -193,7 +202,12 @@ class DrawingImportViewModel @Inject constructor(
     fun opacity(value:Float){_state.update { it.copy(opacity=value) }}
     fun coarse(delta:PointD=PointD(0.0,0.0),degrees:Double=0.0){
         if(_state.value.controls.isNotEmpty()){_state.update { it.copy(error="已有控制点，请清空后再粗对齐") };return}
-        _state.update { it.copy(transform=it.transform.copy(txM=it.transform.txM+delta.x,tyM=it.transform.tyM+delta.y,thetaDeg=it.transform.thetaDeg+degrees)) };invalidate()
+        _state.update {
+            val bounds=it.drawing?.extentMm
+            val pivot=it.pendingDrawing?:bounds?.let {b->PointD((b.left+b.right)/2,(b.bottom+b.top)/2)}?:PointD(0.0,0.0)
+            val rotated=if(degrees==0.0)it.transform else it.transform.rotatedAround(pivot,degrees)
+            it.copy(transform=rotated.copy(txM=rotated.txM+delta.x,tyM=rotated.tyM+delta.y))
+        };invalidate()
     }
     fun drawingControl(world:PointD,radiusMm:Double) {
         val s=_state.value;val raw=s.transform.inverse(world)
@@ -247,7 +261,10 @@ class DrawingImportViewModel @Inject constructor(
     private fun rebuildIndex(){val drawing=_state.value.drawing?:return;viewModelScope.launch {val index=withContext(Dispatchers.Default){DrawingIndex(drawing.entities)}
         if(_state.value.drawing===drawing)_state.update { it.copy(index=index) }} }
     fun previous(){workJob?.cancel();_state.update { it.copy(step=(it.step-1).coerceAtLeast(0),busy=false,checked=false,tool=DrawingTool.Pan) }}
-    fun next(){val s=_state.value;if(!s.canContinue)return
+    fun next(){val s=_state.value;if(!s.canContinue){
+        if(s.step==1&&!s.busy)_state.update {it.copy(error=s.registrationHint,tool=if(s.controls.size<3)DrawingTool.Control else s.tool)}
+        return
+    }
         if(s.step==2){_state.update { it.copy(step=3,tool=DrawingTool.Pan) };validate()}
         else if(s.step<2)_state.update { it.copy(step=it.step+1,tool=if(it.step==0)DrawingTool.Pan else DrawingTool.Point) }
         persist()
