@@ -156,3 +156,5 @@ OTA 修改后至少检查：
 区域工艺保存与确认：`core:tcp/MapProcessSettings.kt`、`SlLinkManager.mapProcessReplies`；`MapScreenStep3ViewModel` 按map_id+region_id保存并确认区域工艺，MapRegionPoint查询按区域恢复草稿，启动/进入区域时由板端恢复；`MapProcessSettingsTest`。历史回放 `TaskReplayViewModel` 只读轨迹/底图，不调用规划接口；未归档规划路径明确提示。
 
 区域工艺读回DTO：`core:model/state/MapPreviewStream.kt: WorkRegionProcessSettingsPayload`，`core:tcp/SlLinkManager.kt: parseMapRegionPoints`；只绑定当前返回的region_id，不从其他区补齐。
+
+图纸地基导入：见 `docs/drawing_obstacles.md`。入口 `DrawingImportScreen` / `DrawingImportViewModel`、`core:dxf`、`core:tcp/DrawingGateway`。独立向量层只合入全局规划内存副本，不得写普通地图禁区或导航PGM；检查确认不发路径规划请求。
