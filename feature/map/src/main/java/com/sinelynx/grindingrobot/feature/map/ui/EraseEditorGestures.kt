@@ -25,7 +25,8 @@ internal data class EraseEditorCallbacks(
     val alignedBounds: Rect,
     val totalScale: Float,
     val brushRadius: Float,
-    val handleRadius: Float
+    val handleRadius: Float,
+    val onBrushCursor: (Offset?) -> Unit = {}
 )
 
 /** One recognizer owns editing and navigation. After a second finger, suppress editing until all lift. */
@@ -48,6 +49,7 @@ internal suspend fun PointerInputScope.detectEraseEditorGestures(current: () -> 
         var lastScreen = down.position
         var newRectangle: Rect? = null
         try {
+            if (brush) current().onBrushCursor(down.position)
             do {
                 val event = awaitPointerEvent()
                 val pressed = event.changes.count { it.pressed }
@@ -55,6 +57,7 @@ internal suspend fun PointerInputScope.detectEraseEditorGestures(current: () -> 
                     navigating = true
                     if (rect == null) { newRectangle = null; current().onCancelNewRectangle() }
                     samples.clear(); preview.clear(); current().onBrushPreview(emptyList())
+                    current().onBrushCursor(null)
                     if (event.changes.count { it.pressed && it.previousPressed } >= 2) {
                         current().onTransform(event.calculateCentroid(useCurrent = false), event.calculatePan(), event.calculateZoom())
                     }
@@ -63,6 +66,7 @@ internal suspend fun PointerInputScope.detectEraseEditorGestures(current: () -> 
                     if (event.changes.any { it.isConsumed }) { cancelled = true; break }
                     val pointer = event.changes.firstOrNull { it.id == down.id } ?: break
                     val point = pointer.position
+                    if (brush) current().onBrushCursor(if (pointer.pressed) point else null)
                     val delta = point - down.position
                     if (delta.getDistance() > viewConfiguration.touchSlop) dragged = true
                     if (dragged) {
@@ -107,6 +111,7 @@ internal suspend fun PointerInputScope.detectEraseEditorGestures(current: () -> 
                 } else if (!dragged) current().onTap(down.position)
             }
         } finally {
+            current().onBrushCursor(null)
             current().onBrushPreview(emptyList())
             if (cancelled && rect == null) current().onCancelNewRectangle()
             // Keep the most recent valid rectangle when a gesture is cancelled or another finger arrives.

@@ -369,6 +369,7 @@ internal fun MapEditingPanel(
     }) }
     var brushSizeDp by remember { mutableStateOf(32f) }
     var liveBrush by remember { mutableStateOf<List<List<Offset>>>(emptyList()) }
+    var brushCursor by remember(mapImageBitmap, toolMode) { mutableStateOf<Offset?>(null) }
     val bounds = Rect(0f, 0f, mapWidthPx, mapHeightPx)
     val density = LocalDensity.current
     val regionCache = remember { MapRegionPathCache() }
@@ -399,7 +400,8 @@ internal fun MapEditingPanel(
         onBrushPreview = { liveBrush = it }, onBrush = onBrushStroke,
         bounds = bounds, alignedBounds = rotatedMapBounds(mapWidthPx, mapHeightPx, alignmentYaw),
         totalScale = baseScale * zoom, brushRadius = with(density) { brushSizeDp.dp.toPx() } / (2 * baseScale * zoom),
-        handleRadius = with(density) { 24.dp.toPx() } / (baseScale * zoom)
+        handleRadius = with(density) { 24.dp.toPx() } / (baseScale * zoom),
+        onBrushCursor = { brushCursor = it }
     ))
     Box(Modifier.fillMaxSize().onSizeChanged { viewportSize = it }.clip(RoundedCornerShape(12.dp))
         .background(Color(0xFFDDE5EE))
@@ -464,6 +466,12 @@ internal fun MapEditingPanel(
                     lineTo(center.x + r * .12f, center.y + r * .55f)
                 }
                 drawPath(arrow, Color.White, style = Stroke(3.dp.toPx()))
+            }
+            if (toolMode == EditToolMode.Brush) brushCursor?.let { center ->
+                // The eraser diameter is fixed in screen dp; draw outside the map matrix.
+                val radius = brushSizeDp.dp.toPx() / 2
+                drawCircle(Color.White, radius, center, style = Stroke(3.dp.toPx()))
+                drawCircle(Color(0xFF00A0E9), radius, center, style = Stroke(1.5.dp.toPx()))
             }
         }
         robotPoseToBitmapPoint(
