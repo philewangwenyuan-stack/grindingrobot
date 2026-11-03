@@ -7,6 +7,10 @@ import java.nio.ByteOrder
  * SL-LinkA message builder for creating protocol frames.
  */
 object SlMessageBuilder {
+    fun buildDrawingDraftRequestRaw(serializedData: ByteArray, dstId: UByte): ByteArray {
+        require(serializedData.size<=65535) { "Drawing request exceeds frame payload limit" }
+        return buildFrame(0x053Au, serializedData, dstId, 0x08u)
+    }
 
     private var sequenceNumber: UShort = 0u
     private var sourceId: UByte = 0x01u
