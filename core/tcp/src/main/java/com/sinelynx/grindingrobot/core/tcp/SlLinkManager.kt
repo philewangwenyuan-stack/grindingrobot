@@ -1,5 +1,7 @@
 package com.sinelynx.grindingrobot.core.tcp
 
+import com.sinelynx.grindingrobot.core.model.state.MapEditSession
+
 import com.sinelynx.grindingrobot.core.data.state.AppState
 import com.sinelynx.grindingrobot.core.data.di.ApplicationScope
 import com.sinelynx.grindingrobot.core.model.state.DevicePosePayload
@@ -254,7 +256,9 @@ class SlLinkManager @Inject constructor(
      * @param dstId 目标设备ID
      */
     fun sendMapEditCommand(serializedData: ByteArray, dstId: UByte = 0x10u): ByteArray {
-        return SlMessageBuilder.buildMapEditCommandRaw(serializedData, dstId)
+        val request = SlLink.MapEditCommand.parseFrom(serializedData).toBuilder()
+        MapEditSession.forMap(request.mapId)?.let { request.setEditBinding(it.toProto()) }
+        return SlMessageBuilder.buildMapEditCommandRaw(request.build().toByteArray(), dstId)
     }
 
     /**
@@ -338,18 +342,24 @@ class SlLinkManager @Inject constructor(
      * @param dstId 目标设备ID
      */
     fun requestPathPlan(serializedData: ByteArray, dstId: UByte = 0x10u): ByteArray {
-        return SlMessageBuilder.buildPathPlanRequestRaw(serializedData, dstId)
+        val request = SlLink.PathPlanRequest.parseFrom(serializedData).toBuilder()
+        MapEditSession.forMap(request.mapId)?.let { request.setEditBinding(it.toProto()) }
+        return SlMessageBuilder.buildPathPlanRequestRaw(request.build().toByteArray(), dstId)
     }
 
     fun requestPathPointPlan(serializedData: ByteArray, dstId: UByte = 0x10u): ByteArray {
-        return SlMessageBuilder.buildPathPointPlanRequestRaw(serializedData, dstId)
+        val request = SlLink.PathPointPlanRequest.parseFrom(serializedData).toBuilder()
+        MapEditSession.forMap(request.mapId)?.let { request.setEditBinding(it.toProto()) }
+        return SlMessageBuilder.buildPathPointPlanRequestRaw(request.build().toByteArray(), dstId)
     }
 
     /**
      * 请求保存地图
      */
     fun requestMapSave(serializedData: ByteArray, dstId: UByte = 0x10u): ByteArray {
-        return SlMessageBuilder.buildMapSaveRequestRaw(serializedData, dstId)
+        val request = SlLink.MapSaveRequest.parseFrom(serializedData).toBuilder()
+        MapEditSession.forMap(request.mapId)?.let { request.setEditBinding(it.toProto()) }
+        return SlMessageBuilder.buildMapSaveRequestRaw(request.build().toByteArray(), dstId)
     }
 
     /**
@@ -368,7 +378,9 @@ class SlLinkManager @Inject constructor(
 
     /** 仅负责封装 SL-Link 帧；rotationDeg 的业务含义在 TcpManager 组装 protobuf 时确定。 */
     fun requestMapAlignment(serializedData: ByteArray, dstId: UByte = 0x10u): ByteArray {
-        return SlMessageBuilder.buildMapAlignmentRequestRaw(serializedData, dstId)
+        val request = SlLink.MapAlignmentRequest.parseFrom(serializedData).toBuilder()
+        MapEditSession.forMap(request.mapId)?.let { request.setEditBinding(it.toProto()) }
+        return SlMessageBuilder.buildMapAlignmentRequestRaw(request.build().toByteArray(), dstId)
     }
 
     /** 查询雷达系统状态。 */
@@ -417,7 +429,9 @@ class SlLinkManager @Inject constructor(
      * 参数写入 （APP -> LOWER)
      */
     fun requestSettingWrite(serializedData: ByteArray, dstId: UByte = 0x10u): ByteArray {
-        return SlMessageBuilder.buildSettingsWriteRequestRaw(serializedData, dstId)
+        val request = SlLink.SettingsWriteRequest.parseFrom(serializedData).toBuilder()
+        MapEditSession.forMap(request.processMapId)?.let { request.setEditBinding(it.toProto()) }
+        return SlMessageBuilder.buildSettingsWriteRequestRaw(request.build().toByteArray(), dstId)
     }
 
     /**
@@ -474,6 +488,7 @@ class SlLinkManager @Inject constructor(
             MSG_ID_VIDEO_STREAM_INFO_RESPONSE -> handleVideoStreamInfoResponse(frame)
             MSG_ID_PATH_PLAN_RESPONSE -> handlePathPlanResponse(frame)
             MSG_ID_MAP_SAVE_RESPONSE -> handleMapSaveResponse(frame)
+            0x053D -> MapDraftReplies.responses.tryEmit(SlLink.MapDraftResponse.parseFrom(frame.payload))
             0x053B -> DrawingReplies.responses.tryEmit(SlLink.DrawingDraftResponse.parseFrom(frame.payload))
             MSG_ID_MAP_DELETE_RESPONSE -> handleMapDeleteResponse(frame)
             MSG_ID_TASK_CONFIG_RESPONSE -> handleTaskConfigResponse(frame)
@@ -875,6 +890,9 @@ class SlLinkManager @Inject constructor(
             }
 
             val response = SlLink.MapEditResponse.parseFrom(payload)
+            if (response.result == SlLink.ResultCode.RESULT_SUCCESS && response.hasEditBinding()) {
+                acknowledgeMapDraftEdit(response.result, response.editBinding)
+            }
             LogUtils.d(
                 "地图编辑响应: " +
                     "result=${response.result}, " +
@@ -1832,6 +1850,7 @@ class SlLinkManager @Inject constructor(
                 return
             }
             val response = SlLink.SettingsWriteResponse.parseFrom(payload)
+            acknowledgeMapDraftEdit(response.result, response.editBinding)
             mapProcessReplies.complete(
                 ackSeq = frame.ackSeq.toInt(), sourceId = frame.srcId.toInt(), taskId = "",
                 reply = mapProcessReply(response), allowUnsequenced = false, requireExactAck = true

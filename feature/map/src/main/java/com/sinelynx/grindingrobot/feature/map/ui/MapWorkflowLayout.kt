@@ -51,7 +51,7 @@ internal fun MapWorkflowActions(onCancel: () -> Unit, onPrevious: () -> Unit,
     onNext: () -> Unit, save: Boolean = false, enabled: Boolean = true) {
     Row(Modifier.fillMaxWidth().height(80.dp), verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-        MapWorkflowAction("取消建图", false, onCancel)
+        MapWorkflowAction("退出编辑", false, onCancel)
         Spacer(Modifier.weight(1f))
         MapWorkflowAction("上一步", false, onPrevious)
         MapWorkflowAction(if (save) "保存地图" else "下一步", true, onNext, enabled)

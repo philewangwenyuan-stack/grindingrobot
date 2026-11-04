@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
     implementation(projects.core.dxf)
     implementation(projects.core.tcp)
     implementation(projects.core.model)

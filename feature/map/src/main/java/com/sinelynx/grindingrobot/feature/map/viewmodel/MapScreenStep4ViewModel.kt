@@ -175,9 +175,11 @@ internal fun PathPlanPayload.toLegacyPreview(decodeSize: (ByteArray) -> Pair<Int
 class MapScreenStep4ViewModel @Inject constructor(
     private val mapDataSource: MapDataSource,
     private val tcpManager: TcpManager,
+    private val checkpoints: MapEditCheckpoints,
     private val appState: com.sinelynx.grindingrobot.core.data.state.AppState
 ) : ViewModel() {
 
+    private var editingMapId: String? = null
     private val _uiState = MutableStateFlow(MapScreenStep4UiState())
     val uiState: StateFlow<MapScreenStep4UiState> = _uiState.asStateFlow()
 
@@ -228,6 +230,8 @@ class MapScreenStep4ViewModel @Inject constructor(
     fun emergencyStop() { tcpManager.sendEmergencyStop() }
 
     fun loadMapData(mapId: String? = null) {
+        editingMapId = mapId
+        checkpoints.read(mapId, "step4-name")?.let { name -> _uiState.update { it.copy(mapName = name) } }
         val snapshot = MapBuildSessionStream.snapshotFor(mapId)
         val key = mapId to snapshot
         if (loadJob?.isActive == true && pendingLoadKey == key) return
@@ -286,7 +290,7 @@ class MapScreenStep4ViewModel @Inject constructor(
     /** 取消建图时同时通知板端停止 Super-LIO 建图节点。 */
     fun onCancelBuild() {
         cancelMapLoading()
-        val sent = tcpManager.stopMappingMode()
+        val sent = if (MapBuildSessionStream.snapshot.value?.requestedMapId.isNullOrBlank()) tcpManager.stopMappingMode() else true
         if (!sent) {
             LogUtils.w("MapScreenStep4ViewModel", "stopMappingMode 发送失败")
         }
@@ -294,6 +298,7 @@ class MapScreenStep4ViewModel @Inject constructor(
 
     fun updateMapName(mapName: String) {
         _uiState.update { it.copy(mapName = mapName) }
+        runCatching { checkpoints.write(editingMapId, "step4-name", mapName) }
     }
 
     fun prefillMapName(mapName: String?) {
@@ -332,13 +337,14 @@ class MapScreenStep4ViewModel @Inject constructor(
         if (_uiState.value.isSaving) return
         val drawingDraft=DrawingWorkflowDrafts.get(mapId)
         val initialDraft = createSaveMapDraft(mapId)
+        val publishRequestId = drawingDraft?.saveRequestId ?: "publish_${mapId}_${com.sinelynx.grindingrobot.core.model.state.MapEditSession.forMap(mapId)?.baseRevision.orEmpty()}"
         val draft = if(drawingDraft!=null)initialDraft.copy(mapId=drawingDraft.targetMapId)else initialDraft
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }
             MapSaveStream.reset()
             val sent = tcpManager.requestSaveMap(draft.mapId, draft.mapName,
                 drawingDraftId=drawingDraft?.draftId.orEmpty(),drawingDraftVersion=drawingDraft?.version?:0,
-                requestId=drawingDraft?.saveRequestId.orEmpty())
+                requestId=publishRequestId)
             if (!sent) {
                 ToastUtils.show("地图保存请求发送失败")
                 _uiState.update { it.copy(isSaving = false) }
@@ -346,7 +352,7 @@ class MapScreenStep4ViewModel @Inject constructor(
             }
 
             val response = withTimeoutOrNull(MAP_TCP_REQUEST_TIMEOUT_MS) {
-                MapSaveStream.payload.filterNotNull().first { drawingDraft==null || it.requestId==drawingDraft.saveRequestId }
+                MapSaveStream.payload.filterNotNull().first { it.requestId == publishRequestId }
             }
             if (response == null) {
                 ToastUtils.show("地图保存超时，请重试")
@@ -374,6 +380,7 @@ class MapScreenStep4ViewModel @Inject constructor(
                 ToastUtils.show("地图已保存$revision；$stopResult；$localizationResult$residuals")
                 // 设备保存和本地持久化都成功后结束建图会话，防止下次建图继承旧图片和角度。
                 MapBuildSessionStream.clear()
+                com.sinelynx.grindingrobot.core.model.state.MapEditSession.adopt(null)
                 drawingDraft?.let { DrawingWorkflowDrafts.remove(it.sessionId) }
                 onSave(actualDraft)
             }

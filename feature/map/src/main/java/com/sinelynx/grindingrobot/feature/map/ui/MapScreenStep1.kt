@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -54,9 +55,16 @@ fun MapScreenStep1(
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var confirmRestart by remember { mutableStateOf(false) }
+    if (confirmRestart) AlertDialog(
+        onDismissRequest = { confirmRestart = false },
+        title = { Text("重新扫描？") },
+        text = { Text("将开始新的扫描，旧草稿保留。新地图需要重新擦除、对齐图纸和划区。") },
+        confirmButton = { TextButton(onClick = { confirmRestart = false; viewModel.restartScanning() }) { Text("重新扫描") } },
+        dismissButton = { TextButton(onClick = { confirmRestart = false }) { Text("返回编辑") } }
+    )
     ManualDriveLifecycle(viewModel::onControlScreenEnter, viewModel::onControlScreenExit)
     DisposableEffect(viewModel, mapId) {
-        viewModel.requestLiveMapCacheClearOnNewMapEnter(mapId)
         viewModel.startMapSnapshotLoop(mapId)
         onDispose {
             viewModel.onControlScreenExit()
@@ -74,8 +82,9 @@ fun MapScreenStep1(
         onEmergencyStop = viewModel::emergencyStop,
         onRadarMapSync = viewModel::requestRadarMapSync,
         onCancelBuild = { viewModel.onCancelBuild(); onCancelBuild() },
-        onNextStep = { if (viewModel.onNextStep()) onNextStep() },
-        modifier = modifier, mapId = mapId,
+        onNextStep = { viewModel.onNextStep(onNextStep) },
+        onRestart = { confirmRestart = true },
+        modifier = modifier, mapId = viewModel.editingMapId,
     )
 }
 
@@ -92,6 +101,7 @@ internal fun MapScreenContent(
     onRadarMapSync: () -> Unit,
     onCancelBuild: () -> Unit,
     onNextStep: () -> Unit,
+    onRestart: () -> Unit,
     modifier: Modifier = Modifier,
     mapId: String? = null,
 ) {
@@ -137,9 +147,10 @@ internal fun MapScreenContent(
             }
             Row(Modifier.fillMaxWidth().height(80.dp), verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                MapWorkflowAction("取消建图", false, onCancelBuild)
+                MapWorkflowAction(if (uiState.isFrozen) "退出编辑" else "退出扫描", false, onCancelBuild)
+                if (uiState.isFrozen || uiState.mapLoadFailed) MapWorkflowAction("重新扫描", false, onRestart, enabled = !uiState.workflowBusy)
                 ManualDriveFooter(uiState.drive, onStop, Modifier.weight(1f))
-                MapWorkflowAction("下一步", true, onNextStep)
+                MapWorkflowAction(if (uiState.workflowBusy) "保存草稿中…" else "下一步", true, onNextStep, enabled = !uiState.workflowBusy)
             }
         }
     }

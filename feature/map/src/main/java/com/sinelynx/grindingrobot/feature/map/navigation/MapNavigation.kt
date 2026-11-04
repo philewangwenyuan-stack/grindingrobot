@@ -26,7 +26,7 @@ import com.sinelynx.grindingrobot.core.model.state.MapBuildSessionStream
 fun NavGraphBuilder.mapGraph(
     navController: NavHostController
 ) {
-    // 普通“上一步”保留会话以复用底图；各取消入口清理快照，重新进入 Step1 时由其 ViewModel 开启新会话。
+    // “上一步”复用固定底图；退出仅清理 APP 显示缓存，设备草稿保留，重新进入时恢复。
     composable<MapRoutes.Step1> { backStackEntry ->
         val route = backStackEntry.toRoute<MapRoutes.Step1>()
         val mapViewModel: MapViewModel = hiltViewModel()
@@ -43,7 +43,7 @@ fun NavGraphBuilder.mapGraph(
             onNextStep = {
                 navController.navigate(
                     MapRoutes.Step2(
-                        mapId = route.mapId,
+                        mapId = mapViewModel.editingMapId ?: route.mapId,
                         mapName = route.mapName
                     )
                 )

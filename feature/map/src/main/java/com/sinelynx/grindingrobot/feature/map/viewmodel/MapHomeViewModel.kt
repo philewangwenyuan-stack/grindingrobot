@@ -281,6 +281,7 @@ data class MapPreviewUiState(
 @HiltViewModel
 class MapHomeViewModel @Inject constructor(
     private val tcpManager: TcpManager,
+    private val mapDrafts: com.sinelynx.grindingrobot.core.tcp.MapDraftGateway,
     private val appState: AppState
 ) : ViewModel() {
 
@@ -1094,7 +1095,7 @@ class MapHomeViewModel @Inject constructor(
     }
 
     /**
-     * 新建地图前先让设备进入建图模式，收到 0x0513 成功响应后再通知页面导航。
+     * 先恢复未完成草稿；没有草稿时才启动建图，成功响应后再通知页面导航。
      */
     fun startMappingMode() {
         // 先同步置位再启动协程，修复快速双击时两个协程都通过旧状态检查的问题。
@@ -1102,6 +1103,19 @@ class MapHomeViewModel @Inject constructor(
         _uiState.update { it.copy(isStartingMapping = true, mappingError = null) }
 
         mapModeStartJob = viewModelScope.launch {
+            try {
+                val unfinished = mapDrafts.query()
+                if (unfinished.exists) {
+                    _uiState.update { it.copy(isStartingMapping = false, mappingError = null) }
+                    _mapModeEvents.emit(MapModeStartEvent.Ready)
+                    return@launch
+                }
+            } catch (error: Exception) {
+                if (error is kotlinx.coroutines.CancellationException) throw error
+                finishMappingStart(error.message ?: "查询未完成地图失败，请检查设备连接")
+                return@launch
+            }
+            com.sinelynx.grindingrobot.core.model.state.MapEditSession.adopt(null)
             MapModeStream.reset()
 
             val sent = tcpManager.requestMapMode(

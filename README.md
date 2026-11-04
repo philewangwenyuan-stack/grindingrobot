@@ -238,3 +238,16 @@ TaskRuntimeSettings的显式临时任务参数保持更高优先级；切区更�
 
 需配套更新APP与板端。旧区域须逐个确认保存工艺。本次仅源码和离线验证，未部署、未安装、未进行实机作业验收。
 回归：scheduler `test_history_process.py`、`test_execution_settings.py`、`test_task_runtime_parameters.py`、急停/续跑回归；APP `core:tcp/MapProcessSettingsTest`、`feature:map/MapProcessSettingsTest`。
+
+
+## 固定地图编辑草稿（2026-11-04）
+
+新建地图入口先查询设备端未发布草稿：有草稿则恢复，没有才启动扫描。扫描页“下一步”调用 0x053C/D 固定设备端二维/三维地图并确认建图停止，再加载该草稿的离线底图进入编辑；不再只冻结 APP 中的一张实时图片。
+
+- 后续步骤携带实际草稿 ID、固定底图 revision、编辑版本；设备校验/规划/保存使用同一底图。
+- “上一步”返回只读固定地图视图，遥控在冻结/保存期间禁用；“重新扫描”需要确认，新扫描不继承旧擦除、图纸配准或区域。旧草稿资产保留。
+- “退出编辑”保留设备草稿。已确认编辑在设备持久化；尚未提交的擦除/撤销、工作区草稿及地图名在本机私有目录按草稿 ID 和底图 revision 原子保存，重新进入按步骤恢复。图纸源文件、选择和配准沿用图纸草稿缓存，重新打开后校验确认。换平板只恢复设备已确认的编辑。
+- 最后保存发布当前草稿，成功后清理 APP 活跃会话；草稿发布前不显示在正式列表，不允许启动任务，不上传云端。已发布地图仍可按原离线方式编辑。
+- 新 APP 与板端必须同步升级协议；设备不支持或操作超时会显示错误，不退回不一致的旧工作流。草稿保存超时可重试；同一请求不会重复捕获/发布。
+
+入口：`core/tcp/.../MapDraftGateway.kt`、`core/model/.../MapEditSession.kt`、`feature/map/.../MapEditCheckpoints.kt`。模型/协议/检查点 JVM 测试分别为 `MapEditSessionTest`、`MapDraftProtocolTest`、`MapEditCheckpointTest`。本改动不修改地图高度切片、地图尺寸、实时避障或自动启动定位。

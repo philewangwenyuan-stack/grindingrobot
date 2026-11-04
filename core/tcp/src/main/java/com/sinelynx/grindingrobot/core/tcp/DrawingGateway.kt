@@ -1,6 +1,7 @@
 package com.sinelynx.grindingrobot.core.tcp
 
 import com.google.protobuf.ByteString
+import com.sinelynx.grindingrobot.core.model.state.MapEditSession
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
@@ -20,11 +21,14 @@ internal object DrawingReplies {
 class DrawingGateway @Inject constructor(private val tcp: TcpManager) {
     private val mutex=Mutex()
     private suspend fun exchange(request: SlLink.DrawingDraftRequest, timeout:Long=15000):SlLink.DrawingDraftResponse = coroutineScope {
+        val bound = request.toBuilder().also { builder ->
+            MapEditSession.forMap(request.mapId)?.let { builder.setEditBinding(it.toProto()) }
+        }.build()
         val wait=async(start=CoroutineStart.UNDISPATCHED) {
             withTimeout(timeout) { DrawingReplies.responses.first { it.requestId==request.requestId } }
         }
         try {
-            check(tcp.sendData(SlMessageBuilder.buildDrawingDraftRequestRaw(request.toByteArray(),0x10u))) { "图纸请求发送失败，请检查连接" }
+            check(tcp.sendData(SlMessageBuilder.buildDrawingDraftRequestRaw(bound.toByteArray(),0x10u))) { "图纸请求发送失败，请检查连接" }
             wait.await().also { check(it.result==SlLink.ResultCode.RESULT_SUCCESS) {
                 it.checksList.filter { c->c.level=="error" }.joinToString("；") { c->c.message }.ifBlank { it.message.ifBlank { "设备拒绝图纸请求" } }
             } }

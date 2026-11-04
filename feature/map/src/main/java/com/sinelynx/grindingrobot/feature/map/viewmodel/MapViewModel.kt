@@ -45,6 +45,8 @@ data class MapUiState(
     val mapGeo: MapGeo? = null,
     val mapLoadMessage: String = "地图加载中...",
     val mapLoadFailed: Boolean = false,
+    val isFrozen: Boolean = false,
+    val workflowBusy: Boolean = false,
     val robotPose: DevicePosePayload? = null,
     val robotWidth: Double? = null,
     val robotLength: Double? = null,
@@ -59,14 +61,17 @@ private sealed class MapTransferEvent {
 @HiltViewModel
 class MapViewModel @Inject constructor(
     private val tcpManager: TcpManager,
+    private val mapDrafts: com.sinelynx.grindingrobot.core.tcp.MapDraftGateway,
     private val appState: com.sinelynx.grindingrobot.core.data.state.AppState
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
     private var requestJob: Job? = null
+    private var transitionJob: Job? = null
+    val editingMapId: String? get() = currentMapId
     private var screenActive = false
-    private var hasClearedCacheOnEnter = false
+    private var capturePending = false
     // 离开 Step1 后立即关闭接收闸门；取消请求循环不代表网络中已发出的响应不会再到达。
     private var mapActive = false
     private var currentMapId: String? = null
@@ -78,7 +83,7 @@ class MapViewModel @Inject constructor(
 
     private val controller = ManualDriveController(
         scope = viewModelScope,
-        canControl = { screenActive && tcpManager.isControlReady() &&
+        canControl = { screenActive && !_uiState.value.isFrozen && !_uiState.value.workflowBusy && tcpManager.isControlReady() &&
             appState.runtimeTaskState.value.emergencyStopLatched != true &&
             TaskSchedulerStream.taskStatusReport.value.manualTaskGate().canDriveWithoutTakeover },
         send = { target -> tcpManager.sendManualDriveCommand(target.remoteX, target.remoteY,
@@ -171,16 +176,33 @@ class MapViewModel @Inject constructor(
 
     /** 进入建图 Step1（MapScreen）时启动；TCP 由首页 [HomeViewModel] 连接。 */
     fun startMapSnapshotLoop(mapId: String? = null) {
-        // 返回 Step1 也重新取帧，清除 StateFlow 的旧值，防止尚未收到新帧就再次“下一步”。
+        // Returning to Step1 resumes the device draft; page navigation never restarts scanning.
         stopMapSnapshotLoop()
         currentMapId = mapId
         lastFrame = null
-        MapBuildSessionStream.begin(mapId, preserveViewport = MapBuildSessionStream.snapshotFor(mapId) != null)
+        if (mapId.isNullOrBlank() && MapBuildSessionStream.snapshot.value == null) MapBuildSessionStream.begin(mapId)
         MapImageStream.reset()
         _uiState.update { it.copy(mapImageBytes = null, mapImageSize = null, mapGeo = null,
             mapLoadMessage = "地图加载中...", mapLoadFailed = false) }
         mapActive = true
         requestJob = viewModelScope.launch {
+            try {
+                val unfinished = if (mapId.isNullOrBlank()) mapDrafts.query() else null
+                capturePending = unfinished?.exists == true && !unfinished.mappingStopped
+                val stableId = mapId?.takeIf { it.isNotBlank() } ?: unfinished?.binding?.mapId?.takeIf { unfinished.mappingStopped }
+                if (stableId != null) {
+                    if (stableId.startsWith("draft_")) mapDrafts.resume(stableId)
+                    currentMapId = stableId
+                    mapActive = false
+                    loadStableFrame(stableId)
+                    return@launch
+                }
+            } catch (error: Exception) {
+                if (error is kotlinx.coroutines.CancellationException) throw error
+                mapActive = false
+                _uiState.update { it.copy(mapLoadFailed = true, mapLoadMessage = error.message ?: "恢复地图草稿失败") }
+                return@launch
+            }
             var notReadyAttempts = 0
             while (isActive && mapActive) {
                 if (!tcpManager.isConnected()) {
@@ -265,14 +287,6 @@ class MapViewModel @Inject constructor(
         while (mapEvents.tryReceive().isSuccess) { /* Discard prior view/session events. */ }
     }
 
-    fun requestLiveMapCacheClearOnNewMapEnter(mapId: String?) {
-        if (hasClearedCacheOnEnter) return
-        hasClearedCacheOnEnter = true
-        val sent = tcpManager.requestLiveMapCacheClear()
-        if (!sent) {
-            LogUtils.w("MapViewModel", "requestLiveMapCacheClear 发送失败")
-        }
-    }
 
     fun requestRadarMapSync() {
         val sent = tcpManager.requestRadarMapSync()
@@ -307,30 +321,87 @@ class MapViewModel @Inject constructor(
     fun onCancelBuild() {
         onControlScreenExit()
         MapBuildSessionStream.clear()
-        hasClearedCacheOnEnter = false
         stopMapSnapshotLoop()
-        val sent = tcpManager.stopMappingMode()
+        val sent = if (_uiState.value.isFrozen) true else tcpManager.stopMappingMode()
         if (!sent) {
             LogUtils.w("MapViewModel", "stopMappingMode 发送失败")
         }
     }
 
-    /** 先冻结图片和几何，再停止实时更新；返回值是页面能否进入 Step2 的唯一导航条件。 */
-    fun onNextStep(): Boolean {
-        controller.stop()
-        if (!mapActive) return false
-        val frame = lastFrame
-        if (frame == null || validatedFrame !== frame ||
-            !MapBuildSessionStream.freeze(currentMapId, frame, validatedSize)) {
-            ToastUtils.showError("请等待完整有效的地图帧")
-            return false
+    private suspend fun loadStableFrame(mapId: String) {
+        val cached = MapBuildSessionStream.snapshotFor(mapId)
+        val frame = cached?.frame ?: tcpManager.loadMapSnapshot(mapId, 30_000L)
+        val size = cached?.bitmapSize ?: withContext(Dispatchers.Default) {
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeByteArray(frame.imageBytes, 0, frame.imageBytes.size, bounds)
+            check(bounds.outWidth > 0 && bounds.outHeight > 0) { "草稿地图图片无效" }
+            bounds.outWidth to bounds.outHeight
         }
+        if (cached == null) {
+            MapBuildSessionStream.begin(mapId)
+            check(MapBuildSessionStream.freeze(mapId, frame, size)) { "冻结草稿底图失败" }
+        }
+        lastFrame = frame; validatedFrame = frame; validatedSize = size
+        _uiState.update { it.copy(mapImageBytes = frame.imageBytes, mapImageSize = size,
+            mapGeo = frame.toMapGeo(), isFrozen = true, mapLoadFailed = false,
+            mapLoadMessage = "扫描已完成，可编辑固定地图") }
+        controller.refreshAvailability()
+    }
+
+    fun onNextStep(onReady: () -> Unit) {
+        controller.stop()
+        if (_uiState.value.workflowBusy) return
+        if (_uiState.value.isFrozen) { onReady(); return }
+        val frame = lastFrame
+        if (!capturePending && (frame == null || validatedFrame !== frame)) {
+            ToastUtils.showError("请等待完整有效的地图帧")
+            return
+        }
+        _uiState.update { it.copy(workflowBusy = true, mapLoadMessage = "正在结束扫描并保存草稿，请稍候…") }
+        controller.refreshAvailability()
         stopMapSnapshotLoop()
-        return true
+        transitionJob = viewModelScope.launch {
+            try {
+                val draft = mapDrafts.freeze()
+                check(draft.exists && draft.mappingStopped) { "设备尚未确认停止建图" }
+                capturePending = false
+                currentMapId = draft.binding.mapId
+                loadStableFrame(draft.binding.mapId)
+                onReady()
+            } catch (error: Exception) {
+                if (error is kotlinx.coroutines.CancellationException) throw error
+                _uiState.update { it.copy(mapLoadMessage = error.message ?: "保存草稿失败，请重试下一步", mapLoadFailed = true) }
+                ToastUtils.showError(error.message ?: "保存草稿失败，请重试")
+            } finally {
+                _uiState.update { it.copy(workflowBusy = false) }
+                controller.refreshAvailability()
+            }
+        }
+    }
+
+    fun restartScanning() {
+        if (_uiState.value.workflowBusy) return
+        controller.stop()
+        _uiState.update { it.copy(workflowBusy = true) }
+        transitionJob = viewModelScope.launch {
+            try {
+                mapDrafts.restart()
+                MapBuildSessionStream.clear()
+                currentMapId = null
+                _uiState.update { it.copy(isFrozen = false) }
+                capturePending = false
+                startMapSnapshotLoop(null)
+            } catch (error: Exception) {
+                if (error is kotlinx.coroutines.CancellationException) throw error
+                ToastUtils.showError(error.message ?: "重新扫描失败，请重试")
+            } finally {
+                _uiState.update { it.copy(workflowBusy = false) }
+                controller.refreshAvailability()
+            }
+        }
     }
 
     override fun onCleared() {
-        MapBuildSessionStream.clear()
         stopMapSnapshotLoop()
         onControlScreenExit()
         super.onCleared()

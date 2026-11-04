@@ -187,6 +187,7 @@ internal fun WorkspaceDraft.withDiscSpeed(value: Int): WorkspaceDraft = copy(
 internal fun WorkspaceDraft.withDiscSpeedInput(input: String): WorkspaceDraft =
     input.toIntOrNull()?.let { withDiscSpeed(it) } ?: this
 
+@kotlinx.serialization.Serializable
 data class WorkspaceDraft(
     val areaCode: String = "001",
     val boundaryConfigured: Boolean = false,
@@ -257,6 +258,7 @@ data class MapScreenStep3UiState(
 @HiltViewModel
 class MapScreenStep3ViewModel @Inject constructor(
     private val tcpManager: TcpManager,
+    private val checkpoints: MapEditCheckpoints,
     private val appState: AppState
 ) : ViewModel() {
 
@@ -270,6 +272,12 @@ class MapScreenStep3ViewModel @Inject constructor(
     private var loadJob: Job? = null
 
     init {
+        viewModelScope.launch {
+            while (kotlinx.coroutines.currentCoroutineContext()[kotlinx.coroutines.Job]?.isActive == true) {
+                kotlinx.coroutines.delay(500)
+                if (loadedSessionId != null && !_uiState.value.isMapLoading && !_uiState.value.isWorkspaceSaving) saveCheckpoint()
+            }
+        }
         viewModelScope.launch {
             appState.robotSettings.collect { settings ->
                 _uiState.update { current ->
@@ -330,11 +338,18 @@ class MapScreenStep3ViewModel @Inject constructor(
         val frame = snapshot.frame
         val newSession = loadedSessionId != snapshot.sessionId
         loadedSessionId = snapshot.sessionId
+        val checkpoint = if (newSession) runCatching {
+            checkpoints.read(mapId, "step3")?.let { editCheckpointJson.decodeFromString(Step3Checkpoint.serializer(), it) }
+        }.getOrNull() else null
+        if (checkpoint != null) { nextWorkspaceId = checkpoint.nextId; nextProtocolRegionSequence = checkpoint.nextProtocolId }
         _uiState.update {
             val state = if (newSession) MapScreenStep3UiState(
                 robotPose = it.robotPose, robotWidth = it.robotWidth, robotLength = it.robotLength,
                 robotFootprint = it.robotFootprint
-            ) else it
+            ).let { state -> if (checkpoint == null) state else state.copy(workspaceDraft = checkpoint.draft,
+                panelMode = checkpoint.panelMode, editingWorkspaceRegionId = checkpoint.editingRegion,
+                pendingWorkspaceRegionId = checkpoint.pendingRegion, pendingObstacleRegionIds = checkpoint.pendingObstacles,
+                latestScanDirection = checkpoint.direction) } else it
             state.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
                 bitmapDecodeSize = MapBuildSessionStream.snapshotFor(mapId)?.bitmapSize, mapGeo = frame.toMapGeo(),
                 isMapLoading = true, mapLoadError = null,
@@ -374,12 +389,20 @@ class MapScreenStep3ViewModel @Inject constructor(
         }
     }
 
-    fun cancelMapLoading() { loadJob?.cancel() }
+    private fun saveCheckpoint() {
+        if (loadedSessionId == null) return
+        val s = _uiState.value
+        val checkpoint = Step3Checkpoint(s.workspaceDraft, s.panelMode, s.editingWorkspaceRegionId,
+            s.pendingWorkspaceRegionId, s.pendingObstacleRegionIds, s.latestScanDirection, nextWorkspaceId, nextProtocolRegionSequence)
+        runCatching { checkpoints.write(currentMapId, "step3", editCheckpointJson.encodeToString(Step3Checkpoint.serializer(), checkpoint)) }
+            .onFailure { LogUtils.w("MapEdit", "保存本地划区进度失败: ${it.message}") }
+    }
+    fun cancelMapLoading() { saveCheckpoint(); loadJob?.cancel() }
 
     /** 取消建图时同时通知板端停止 Super-LIO 建图节点。 */
     fun onCancelBuild() {
         cancelMapLoading()
-        val sent = tcpManager.stopMappingMode()
+        val sent = if (currentMapId.isNullOrBlank() || currentMapId == "LIVE_MAP") tcpManager.stopMappingMode() else true
         if (!sent) {
             LogUtils.w("MapScreenStep3ViewModel", "stopMappingMode 发送失败")
         }

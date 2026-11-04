@@ -131,6 +131,7 @@ data class MapScreenStep2UiState(
 @HiltViewModel
 class MapScreenStep2ViewModel @Inject constructor(
     private val tcpManager: TcpManager,
+    private val checkpoints: MapEditCheckpoints,
     private val appState: com.sinelynx.grindingrobot.core.data.state.AppState
 ) : ViewModel() {
     companion object {
@@ -147,9 +148,15 @@ class MapScreenStep2ViewModel @Inject constructor(
     private var loadJob: Job? = null
     private var submitJob: Job? = null
     private val acknowledgedEraseParts = mutableSetOf<Pair<Long, Int>>()
-    private val editBatchId = java.util.UUID.randomUUID().toString()
+    private var editBatchId = java.util.UUID.randomUUID().toString()
 
     init {
+        viewModelScope.launch {
+            while (kotlinx.coroutines.currentCoroutineContext()[kotlinx.coroutines.Job]?.isActive == true) {
+                kotlinx.coroutines.delay(500)
+                if (loadedSessionId != null && !_uiState.value.isMapLoading && !_uiState.value.isSubmitting) saveCheckpoint()
+            }
+        }
         viewModelScope.launch {
             DeviceStatusStream.pose.collect { pose ->
                 _uiState.update { it.copy(robotPose = pose) }
@@ -184,15 +191,25 @@ class MapScreenStep2ViewModel @Inject constructor(
         // 同会话返回页面保留未提交擦除和手动角度；新 Step1 会话才重置编辑态。
         val newSession = loadedSessionId != snapshot.sessionId
         if (newSession) acknowledgedEraseParts.clear()
+        val checkpoint = if (newSession) runCatching {
+            checkpoints.read(mapId, "step2")?.let { editCheckpointJson.decodeFromString(Step2Checkpoint.serializer(), it) }
+        }.getOrNull() else null
+        if (checkpoint != null) {
+            editBatchId = checkpoint.batchId; nextAreaId = checkpoint.nextId
+            acknowledgedEraseParts.addAll(checkpoint.acknowledged)
+        }
+
         loadedSessionId = snapshot.sessionId
         _uiState.update {
             val state = if (newSession) MapScreenStep2UiState(
                 robotPose = it.robotPose, robotWidth = it.robotWidth, robotLength = it.robotLength,
                 robotFootprint = it.robotFootprint
-            ) else it
+            ).let { state -> if (checkpoint == null) state else state.copy(
+                eraseAreas = checkpoint.areas.map { it.restore() }, undoAreas = checkpoint.undo.map { it.restore() },
+                redoAreas = checkpoint.redo.map { it.restore() }, alignmentYaw = checkpoint.angle) } else it
             state.copy(mapImageBytes = frame.imageBytes, mapImageSize = frame.mapWidth to frame.mapHeight,
                 bitmapDecodeSize = MapBuildSessionStream.snapshotFor(mapId)?.bitmapSize, mapGeo = frame.toMapGeo(),
-                alignmentYaw = if (newSession) frame.alignmentYawDeg + frame.rotationAlignmentDeltaDeg else state.alignmentYaw,
+                alignmentYaw = if (newSession && checkpoint == null) frame.alignmentYawDeg + frame.rotationAlignmentDeltaDeg else state.alignmentYaw,
                 isMapLoading = true, mapLoadError = null).refreshDerived()
         }
         loadJob = viewModelScope.launch {
@@ -211,7 +228,18 @@ class MapScreenStep2ViewModel @Inject constructor(
         }
     }
 
+    private fun saveCheckpoint() {
+        if (loadedSessionId == null) return
+        val state = _uiState.value
+        val checkpoint = Step2Checkpoint(editBatchId, nextAreaId, state.alignmentYaw,
+            state.eraseAreas.map { it.saved() }, state.undoAreas.map { it.saved() }, state.redoAreas.map { it.saved() },
+            acknowledgedEraseParts.toList())
+        runCatching { checkpoints.write(currentMapId, "step2", editCheckpointJson.encodeToString(Step2Checkpoint.serializer(), checkpoint)) }
+            .onFailure { LogUtils.w("MapEdit", "保存本地擦除进度失败: ${it.message}") }
+    }
+
     fun cancelPendingOperations() {
+        saveCheckpoint()
         loadJob?.cancel()
         submitJob?.cancel()
         _uiState.update { it.copy(isSubmitting = false) }
@@ -220,7 +248,7 @@ class MapScreenStep2ViewModel @Inject constructor(
     /** 取消建图时同时通知板端停止 Super-LIO 建图节点。 */
     fun onCancelBuild() {
         cancelPendingOperations()
-        val sent = tcpManager.stopMappingMode()
+        val sent = if (currentMapId.isNullOrBlank() || currentMapId == "LIVE_MAP") tcpManager.stopMappingMode() else true
         if (!sent) {
             LogUtils.w("MapScreenStep2ViewModel", "stopMappingMode 发送失败")
         }
