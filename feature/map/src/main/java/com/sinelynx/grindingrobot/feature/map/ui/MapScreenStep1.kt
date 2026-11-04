@@ -7,10 +7,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,12 +54,13 @@ fun MapScreenStep1(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var confirmRestart by remember { mutableStateOf(false) }
-    if (confirmRestart) AlertDialog(
-        onDismissRequest = { confirmRestart = false },
-        title = { Text("重新扫描？") },
-        text = { Text("将开始新的扫描，旧草稿保留。新地图需要重新擦除、对齐图纸和划区。") },
-        confirmButton = { TextButton(onClick = { confirmRestart = false; viewModel.restartScanning() }) { Text("重新扫描") } },
-        dismissButton = { TextButton(onClick = { confirmRestart = false }) { Text("返回编辑") } }
+    if (confirmRestart) DrawingConfirmDialog(
+        title = "重新扫描？",
+        message = "将开始新的扫描，旧草稿保留。新地图需要重新擦除、对齐图纸和划区。",
+        confirmText = "重新扫描",
+        onConfirm = { confirmRestart = false; viewModel.restartScanning() },
+        onCancel = { confirmRestart = false },
+        cancelText = "返回编辑"
     )
     ManualDriveLifecycle(viewModel::onControlScreenEnter, viewModel::onControlScreenExit)
     DisposableEffect(viewModel, mapId) {

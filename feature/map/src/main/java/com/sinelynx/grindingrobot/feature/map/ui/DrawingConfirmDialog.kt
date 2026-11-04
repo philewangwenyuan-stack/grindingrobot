@@ -35,13 +35,13 @@ internal fun DrawingConfirmDialog(title:String,message:String,confirmText:String
             Text(title,color=Color(0xFF202937),fontSize=24.sp,lineHeight=30.sp,fontWeight=FontWeight.Bold,
                 fontFamily=FontFamily.Default,textAlign=TextAlign.Center)
             Text(message,Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),color=Color(0xFF9DA3AF),
-                fontSize=20.sp,lineHeight=28.sp,fontFamily=FontFamily.Default,textAlign=TextAlign.Center)
+                fontSize=20.sp,lineHeight=28.sp,fontWeight=FontWeight.Normal,fontFamily=FontFamily.Default,textAlign=TextAlign.Center)
             Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(16.dp)) {
                 listOf(cancelText to onCancel,confirmText to onConfirm).forEachIndexed { index,(label,action)->
                     Surface(onClick=action,modifier=Modifier.weight(1f).height(56.dp),shape=RoundedCornerShape(1000.dp),
                         color=if(index==0)Color(0xFFE5E7EB)else Color(0xFFD82B2A)) {
                         Box(contentAlignment=Alignment.Center){Text(label,color=if(index==0)Color(0xFF647080)else Color.White,
-                            fontSize=18.sp,fontWeight=FontWeight.Bold,textAlign=TextAlign.Center)}
+                            fontSize=18.sp,lineHeight=24.sp,fontFamily=FontFamily.Default,fontWeight=FontWeight.Bold,textAlign=TextAlign.Center)}
                     }
                 }
             }
