@@ -79,9 +79,14 @@ data class MapScreenStep4UiState(
 internal fun step4EstimatedHours(seconds: Float?): Float? =
     seconds?.takeIf { it.isFinite() }?.let { if (it >= 0f) it / 3600f else -1f }
 
-internal fun step4PathError(sent: Boolean, path: TaskPathPayload?): String? = when {
+internal fun step4PathError(sent: Boolean, path: TaskPathPayload?, expectedDrawingDraftVersion: Int? = null): String? = when {
     !sent -> "路径规划请求发送失败"
-    path?.hasRenderablePoints != true -> "路径规划未返回数据"
+    path == null -> "路径规划未返回数据"
+    !path.planned || path.result.lowercase() !in setOf("success", "result_success") ->
+        path.message.ifBlank { "路径规划失败，请调整区域后重新预览" }
+    !path.hasRenderablePoints -> path.message.ifBlank { "路径规划未返回数据" }
+    expectedDrawingDraftVersion != null && path.drawingDraftVersion != expectedDrawingDraftVersion ->
+        "图纸草稿与规划版本不一致，请重新预览"
     else -> null
 }
 
@@ -270,8 +275,7 @@ class MapScreenStep4ViewModel @Inject constructor(
                         requestId = requestId, forceReplan = true,
                         drawingDraftId = drawingDraft?.draftId.orEmpty(), drawingDraftVersion = drawingDraft?.version ?: 0)
                 })
-                val error = if(result!=null && drawingDraft!=null && result.drawingDraftVersion!=drawingDraft.version)
-                    "图纸草稿与规划版本不一致，请重新预览" else step4PathError(sent, result)
+                val error = step4PathError(sent, result, drawingDraft?.version)
                 _uiState.update { it.copy(isPlanning = false, planningError = error,
                     plannedPath = result?.takeIf { path -> path.hasRenderablePoints },
                     planningTaskId = result?.taskId.orEmpty(), planningPathVersion = result?.pathVersion ?: 0,

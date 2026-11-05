@@ -209,22 +209,23 @@ internal class DeviceTaskMapController(
         val round = generation
         pathAttemptedVersion = requestedVersion
         _state.update { it.copy(loadingPath = true, pathError = null) }
-        // 已知路径失效时只清理规划线，不清理地图、区域、实际轨迹和小车。
-        updateSnapshot { it.copy(path = null) }
+        // 补取期间保留同一任务已有路线；失败不清空显示材料。
         try {
             val requestId = UUID.randomUUID().toString()
             val mapId = state.value.snapshot?.mapId ?: "LIVE_MAP"
             val path = request(paths, { sendPath(mapId, task, requestId) },
                 "路径请求发送失败", "路径规划未返回数据") { it.requestId == requestId }
+            if (!path.hasRenderablePoints) {
+                throw LoadFailure(path.message.ifBlank { "路径规划未返回数据" })
+            }
             updateSnapshot { current -> current.copy(
                 mapId = if (current.frame == null) path.mapId.ifBlank { current.mapId } else current.mapId,
-                path = path.takeIf { it.hasRenderablePoints },
+                path = path,
                 // 有任务配置时以用户选区为准；冷启动从路径恢复，失败/无标识时保留已恢复选区。
                 // 否则一次空路径就会连带让原本可见的工作区和起终点消失。
                 selectedRegionIds = if (current.hasTaskConfiguration) current.selectedRegionIds
                     else path.taskRegionIds().ifEmpty { current.selectedRegionIds }
             ) }
-            if (!path.hasRenderablePoints) _state.update { it.copy(pathError = "路径规划未返回数据") }
         } catch (cancelled: CancellationException) {
             // 取消是页面生命周期行为，不显示成请求失败，也不能继续执行后续加载阶段。
             throw cancelled

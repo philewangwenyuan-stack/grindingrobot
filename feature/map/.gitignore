@@ -24,3 +24,4 @@
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/ProcessPresetTest.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/DrawingAlignmentStateTest.kt
 !/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/MapEditCheckpointTest.kt
+!/src/test/java/com/sinelynx/grindingrobot/feature/map/viewmodel/Step4DrawingPreviewErrorTest.kt

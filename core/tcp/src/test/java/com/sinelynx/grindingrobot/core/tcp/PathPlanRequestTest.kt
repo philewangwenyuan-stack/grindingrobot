@@ -12,6 +12,17 @@ import sl_link.SlMessageBuilder
  * 只构造并解码报文，不实际发送；接口可能进行设备端规划，但不是机器人执行命令。
  */
 class PathPlanRequestTest {
+    @Test fun devicePathQuerySetsExplicitReadOnlyFlagWithoutReplanning() {
+        val request = buildPathPointPlanRequest(taskId = "task", mapId = "map",
+            requestId = "display-query", readOnly = true)
+        val decoded = SlLink.PathPointPlanRequest.parseFrom(request.toByteArray())
+        assertTrue(decoded.readOnly)
+        assertFalse(decoded.forceReplan)
+        assertEquals("task", decoded.taskId)
+        assertEquals("map", decoded.mapId)
+        assertEquals("display-query", decoded.requestId)
+        assertFalse(buildPathPointPlanRequest().readOnly)
+    }
     @Test fun existingCallsKeepTheirDefaultFields() {
         val expected = SlLink.PathPlanRequest.newBuilder().setReturnPathChunks(true)
             .setMaxChunkSize(2048).setMapId("map").setTaskId("task").build()

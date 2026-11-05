@@ -103,14 +103,14 @@ class DeviceTaskMapControllerTest {
         } finally { f.controller.close() }
     }
 
-    @Test fun versionZeroFailureClearsOnlyPathImmediatelyAndDoesNotLoopOnStatus() = runBlocking {
+    @Test fun versionZeroFailureKeepsExistingPathAndDoesNotLoopOnStatus() = runBlocking {
         val f = Fixture(this)
         try {
             f.warm(); f.open()
             f.path = f.path!!.copy(pathVersion = 0, points = emptyList(), planned = false)
             f.controller.onTask("task", 8); f.ready()
             assertEquals("路径规划未返回数据", f.controller.state.value.pathError)
-            assertNull(f.controller.state.value.snapshot!!.path)
+            assertEquals(7, f.controller.state.value.snapshot!!.path!!.pathVersion)
             assertNotNull(f.controller.state.value.snapshot!!.frame)
             assertNotNull(f.controller.state.value.snapshot!!.regions)
             repeat(10) { f.controller.onTask("task", 8) }; f.flush()
@@ -126,12 +126,14 @@ class DeviceTaskMapControllerTest {
             withTimeout(1000) { f.controller.state.first { it.pathError != null } }
             val old = f.requests.last()
             assertEquals("路径规划未返回数据", f.controller.state.value.pathError)
+            assertEquals(7, f.controller.state.value.snapshot!!.path!!.pathVersion)
             f.controller.retry()
             f.waitForRequests(2)
             val latest = f.requests.last()
             assertNotEquals(old.third, latest.third)
             f.paths.emit(f.snapshot.path!!.copy(requestId = old.third)); f.flush()
             assertTrue(f.controller.state.value.loadingPath)
+            assertEquals(7, f.controller.state.value.snapshot!!.path!!.pathVersion)
             f.paths.emit(f.snapshot.path!!.copy(requestId = latest.third, pathVersion = 8))
             f.ready()
             assertEquals(8, f.controller.state.value.snapshot!!.path!!.pathVersion)

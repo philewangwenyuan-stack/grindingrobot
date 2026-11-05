@@ -887,7 +887,8 @@ class TcpManager @Inject constructor(
         mapId: String? = null,
         forceReplan: Boolean = false,
         drawingDraftId: String = "",
-        drawingDraftVersion: Int = 0
+        drawingDraftVersion: Int = 0,
+        readOnly: Boolean = false
     ): Boolean {
         val payload = buildPathPointPlanRequest(
             taskId,
@@ -896,7 +897,8 @@ class TcpManager @Inject constructor(
             mapId,
             forceReplan,
             drawingDraftId,
-            drawingDraftVersion
+            drawingDraftVersion,
+            readOnly
         ).toByteArray()
         val frameData = slLinkManager.requestPathPointPlan(payload, dstId)
         return sendData(frameData) {
@@ -1250,7 +1252,8 @@ internal fun buildPathPointPlanRequest(
     mapId: String? = null,
     forceReplan: Boolean = false,
     drawingDraftId: String = "",
-    drawingDraftVersion: Int = 0
+    drawingDraftVersion: Int = 0,
+    readOnly: Boolean = false
 ): SlLink.PathPointPlanRequest = SlLink.PathPointPlanRequest.newBuilder()
     .setTaskId(taskId)
     .setMaxChunkSize(maxChunkSize.coerceIn(256, 4096))
@@ -1259,6 +1262,7 @@ internal fun buildPathPointPlanRequest(
     .setForceReplan(forceReplan)
     .setDrawingDraftId(drawingDraftId)
     .setDrawingDraftVersion(drawingDraftVersion)
+    .setReadOnly(readOnly)
     .build()
 
 /** 抽出纯构造函数以验证默认协议兼容性；测试预览不设置 forceReplan，也不下发任务执行指令。 */

@@ -185,8 +185,8 @@ class DeviceStatusViewModel @Inject constructor(
         sendMap = { tcpManager.requestMapSnapshot(it) },
         sendRegions = { tcpManager.requestMapRegionPoints(it) },
         sendPath = { mapId, taskId, requestId ->
-            // 状态展示不强制重规划；false 允许设备复用有效缓存，不意味着协议绝对只读。
-            tcpManager.requestPathPointPlan(taskId = taskId, mapId = mapId, requestId = requestId, forceReplan = false)
+            // 导航页只读取现有任务路径，运行中也不触发规划或改变执行状态。
+            tcpManager.requestPathPointPlan(taskId = taskId, mapId = mapId, requestId = requestId, readOnly = true)
         },
         decodeSize = { bytes ->
             BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let { bitmap ->
