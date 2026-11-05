@@ -781,14 +781,20 @@ class MapScreenStep3ViewModel @Inject constructor(
         todoIntegrateStartPoint(point)
     }
 
-    fun confirmEndPoint(point: Pair<Float, Float>) {
+    fun confirmEndPoint(point: Pair<Float, Float>): Boolean {
+        val worldPoint = bitmapToWorld(point)
+        if (worldPoint == null) {
+            ToastUtils.showError("地图尚未加载完成，请稍后重新选择终点")
+            return false
+        }
         val x = String.format("%.2f", point.first)
         val y = String.format("%.2f", point.second)
         LogUtils.d("MapScreenStep3ViewModel", "End point confirmed (origin at top-left): ($x, $y)")
         _uiState.update { state ->
-            state.copy(workspaceDraft = state.workspaceDraft.copy(endPointM = bitmapToWorld(point)))
+            state.copy(workspaceDraft = state.workspaceDraft.copy(endConfigured = true, endPointM = worldPoint))
         }
         todoIntegrateEndPoint(point)
+        return true
     }
 
     fun bitmapPointToWorld(point: Pair<Float, Float>): Pair<Float, Float>? {

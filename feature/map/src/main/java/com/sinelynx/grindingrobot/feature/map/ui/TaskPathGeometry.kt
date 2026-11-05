@@ -18,7 +18,7 @@ import kotlin.math.sin
 
 internal val PlannedTaskPathColor = Color(0xFF00FF00)
 internal val ConnectingTaskPathColor = Color(0xFF1976D2)
-internal const val PlannedTaskPathStrokeWidthPx = 1.5f
+internal const val PlannedTaskPathStrokeWidthPx = 1f
 
 internal data class TaskPathRenderSegment(val points: List<TaskPathPointPayload>, val color: Color)
 

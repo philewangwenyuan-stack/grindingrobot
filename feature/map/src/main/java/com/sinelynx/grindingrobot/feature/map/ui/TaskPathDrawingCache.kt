@@ -124,7 +124,8 @@ internal fun DrawScope.drawCachedTaskPath(drawing: List<TaskPathStroke>, bitmapS
         translate((size.width - bitmapSize.first * fit) / 2f, (size.height - bitmapSize.second * fit) / 2f)
         scale(fit, fit, pivot = Offset.Zero)
     }) {
-        val width = PlannedTaskPathStrokeWidthPx / fit
+        // Keep the screen stroke thin when the map is zoomed in.
+        val width = PlannedTaskPathStrokeWidthPx / (fit * viewportScale)
         drawing.forEach { stroke ->
             drawPath(stroke.path, stroke.color, style = Stroke(width, cap = StrokeCap.Round, join = StrokeJoin.Round))
             if (stroke.isolated.isNotEmpty()) drawPoints(stroke.isolated, PointMode.Points,

@@ -1343,7 +1343,11 @@ fun MapScreenStep3(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .pointerInput(pendingAnchorPlacement, workspaceBounds) {
+                                    .pointerInput(
+                                        pendingAnchorPlacement, workspaceBounds,
+                                        mapZoom, mapPan, baseScale, baseOffset,
+                                        mapImageBitmap, mapPanelSize, uiState.mapGeo
+                                    ) {
                                         detectTapGestures { tapOffset ->
                                             if (!isTapInsideVisibleMap(tapOffset)) return@detectTapGestures
                                             val placement =
@@ -1391,11 +1395,11 @@ fun MapScreenStep3(
                                                 }
 
                                                 PendingAnchorPlacement.END -> {
-                                                    endPoint = clamped
-                                                    viewModel.setEndConfigured(true)
-                                                    viewModel.confirmEndPoint(
+                                                    val placed = viewModel.confirmEndPoint(
                                                         contentPairToBitmapPair(clamped.x to clamped.y)
                                                     )
+                                                    if (!placed) return@detectTapGestures
+                                                    endPoint = clamped
                                                 }
                                             }
                                             pendingAnchorPlacement = null
